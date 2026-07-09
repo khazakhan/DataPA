@@ -14,6 +14,8 @@ Usage:
 """
 
 import sys
+import os
+import json
 import argparse
 from collections import defaultdict
 
@@ -119,6 +121,66 @@ OP_ALIASES = {
 
 def cut(n):
     return (n + 5) % 10
+
+
+def build_family_map():
+    """Cut-pair family grouping (user-supplied, 2026-07-07): partitions 00-99
+    into 12 families -- 10 digit-pair families (each digit d paired with
+    cut(d)) of 8 members, a HALF-CUT family (digit2=cut(digit1)) of 10, and
+    a DOUBLE family (dd) of 10. Returns ({value: family_label}, [family order])."""
+    family = {}
+    order = []
+    digits5 = [1, 2, 3, 4, 5]
+    for i in range(len(digits5)):
+        for j in range(i + 1, len(digits5)):
+            d1, d2 = digits5[i], digits5[j]
+            label = f"{d1}{d2} FAMILY"
+            order.append(label)
+            s1, s2 = {d1, cut(d1)}, {d2, cut(d2)}
+            for a in s1:
+                for b in s2:
+                    family[a * 10 + b] = label
+                    family[b * 10 + a] = label
+    order.append("HALF CUT FAMILY")
+    for d in range(10):
+        c = cut(d)
+        family.setdefault(d * 10 + c, "HALF CUT FAMILY")
+        family.setdefault(c * 10 + d, "HALF CUT FAMILY")
+    order.append("DOUBLE FAMILY")
+    for d in range(10):
+        family[d * 10 + d] = "DOUBLE FAMILY"
+    return family, order
+
+
+FAMILY_MAP, FAMILY_ORDER = build_family_map()
+FAMILY_MEMBERS = {}
+for _v, _f in FAMILY_MAP.items():
+    FAMILY_MEMBERS.setdefault(_f, []).append(_v)
+for _f in FAMILY_MEMBERS:
+    FAMILY_MEMBERS[_f].sort()
+
+
+FAMILY_TRACKER_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                    "family_tracker_state.json")
+
+
+def update_family_tracker(covered):
+    """Persist the running family-coverage rate across rounds (2026-07-08,
+    user-requested reference tracker -- NOT used for prediction). Returns
+    (covered_count, total_count) after this update."""
+    state = {"covered": 0, "total": 0}
+    if os.path.exists(FAMILY_TRACKER_PATH):
+        try:
+            with open(FAMILY_TRACKER_PATH) as f:
+                state = json.load(f)
+        except (json.JSONDecodeError, OSError):
+            pass
+    state["total"] = state.get("total", 0) + 1
+    if covered:
+        state["covered"] = state.get("covered", 0) + 1
+    with open(FAMILY_TRACKER_PATH, "w") as f:
+        json.dump(state, f)
+    return state["covered"], state["total"]
 
 
 def apply_op(digit, op):
@@ -250,13 +312,30 @@ def show_result_analysis(root, result, ops_list, scores=None, top4=None):
     if scores is not None:
         rscore = len(scores.get(result, []))
         rank   = next((i + 1 for i, (v, _, _) in enumerate(top4 or []) if v == result), None)
+        all_vals = sorted(range(100), key=lambda v: len(scores.get(v, [])), reverse=True)
+        full_rank = all_vals.index(result) + 1
         if rank:
             rank_str = f"Rank #{rank} of {len(top4)}"
         else:
-            all_vals = sorted(range(100), key=lambda v: len(scores.get(v, [])), reverse=True)
-            full_rank = all_vals.index(result) + 1
             rank_str = f"Rank #{full_rank} of 100"
         print(f"  Score: {rscore}   {rank_str}")
+        # Finger-mark zone indicator: TOP 30 / TAIL 30 (ranks 71-100) / MIDDLE
+        if full_rank <= 30:
+            print(f"  \U0001F449 ZONE: TOP 30 (rank #{full_rank})")
+        elif full_rank > 70:
+            print(f"  \U0001F449 ZONE: TAIL 30 (rank #{full_rank} of 100)")
+        else:
+            print(f"  \U0001F449 ZONE: MIDDLE (rank #{full_rank} of 100 -- neither top-30 nor tail-30)")
+        # Family-coverage tracker (2026-07-08, reference only -- see
+        # feedback_output_format.md: backtested 92.0% vs 94.2% random
+        # baseline, i.e. NOT a predictive signal, just a running observation
+        # the user asked to watch for themselves).
+        _result_fam = FAMILY_MAP[result]
+        _top30_set = set(all_vals[:30])
+        _fam_covered = any(FAMILY_MAP[v] == _result_fam for v in _top30_set)
+        _fcov, _ftot = update_family_tracker(_fam_covered)
+        print(f"  Family-covered: {'YES' if _fam_covered else 'NO '} "
+              f"({_result_fam}; cumulative: {_fcov}/{_ftot} = {100*_fcov/_ftot:.1f}%)")
         sig_labels = list(dict.fromkeys(sorted(scores.get(result, []))))
         if sig_labels:
             print(f"  Signals: {' | '.join(sig_labels[:8])}")
@@ -1094,8 +1173,24 @@ def build_strong_predictions(root, ops_list, group_index, endpoint=None, rows=No
     # changed) or net-negative to remove (ChainMiss, NearMiss-1D, Rule11, repeat-pair,
     # DataFreq, ColFreq all hurt when removed) — left untouched. See ablation.py for the
     # full per-family breakdown and feedback_script_changes.md for the write-up.
+    #
+    # Third ablation study (2026-07-02, checkpoint audit at D497): tested every signal family
+    # across BOTH the D341-D446 (106 rounds) and D447-D497 (51 rounds) windows independently,
+    # then combined (157 rounds total, spanning a full dataset reset), on the ALREADY-FIXED
+    # engine above. ChainMiss (all 4 variants) was the only family showing a CONSISTENT
+    # positive effect on both independent windows when removed (+0.9pp on D341-D446, +7.9pp
+    # on D447-D497; combined 33.1%->36.3%, +5 hits over 157 rounds). AllChainBase and
+    # NearMiss-1D showed effects but flipped sign between windows (net noise, not touched,
+    # per Universal Coverage rule). Obs3 showed a small consistent positive effect but was
+    # fully redundant with the ChainMiss fix (identical combined hit count when both removed
+    # vs ChainMiss alone) — not added, to avoid an unnecessary extra filter with zero marginal
+    # benefit. ChainMiss had previously tested as protective on smaller single-window samples
+    # (D273-D330, D341-D446 alone) BEFORE the CompOp/Obs1 fix — signal interactions shifted
+    # once those were removed, which is why this is a re-test on the current engine, not a
+    # contradiction of past findings.
     _ablated_prefixes = ('CutBoth', 'CbRev', 'Reverse', 'CutUnits', 'CutTens', 'PredNeighbor', 'TableProx',
-                         'CompOp-xy', 'CompOp-yx', 'CompOp-sxy', 'CompOp-syx', 'Obs1', 'Obs1B')
+                         'CompOp-xy', 'CompOp-yx', 'CompOp-sxy', 'CompOp-syx', 'Obs1', 'Obs1B',
+                         'ChainMiss-x1D', 'ChainMiss-x1D-yx', 'ChainMiss-y1D', 'ChainMiss-y1D-yx')
     for _av in list(scores.keys()):
         _kept = [r for r in scores[_av] if not any(r.startswith(p) for p in _ablated_prefixes)]
         if _kept:
@@ -1103,8 +1198,7 @@ def build_strong_predictions(root, ops_list, group_index, endpoint=None, rows=No
         else:
             del scores[_av]
 
-    # Rank: sort by total weight — guarantee at least 5 TYPE B NEW (missing-set) slots in top-30.
-    # TYPE B NEW values score below the natural floor; forced slots ensure consistent coverage.
+    # Rank: sort by total weight.
     _missing_set_final = set(range(100)) - _tprox_set
     ranked = sorted(scores.items(), key=lambda kv: (len(kv[1]), -kv[0]), reverse=True)
     top4   = []
@@ -1117,11 +1211,26 @@ def build_strong_predictions(root, ops_list, group_index, endpoint=None, rows=No
             seen.add(val)
         if len(top4) == 30:
             break
-    # Force at least 10 missing-set (TYPE B NEW) candidates into top-30.
-    # Split: top-7 by score (CompOp/ChainMiss/DataFreq) + up to 3 range-sampled zero-signal
-    # values (one from each 33-value range). Covers component-absent TYPE B NEW blind spot.
+    # Forced missing-set (TYPE B NEW) slot injection — DISABLED (2026-07-05).
+    # Originally forced >=10 TYPE B NEW candidates into top-30 on the assumption
+    # that guaranteeing coverage would help, since ~68% of results are TYPE B.
+    # Backtest-verified across all 3 dataset windows (362 rounds) that this was
+    # net HARMFUL: it displaces genuinely-scored candidates near the bottom of
+    # the natural top-30 with low/zero-signal forced picks. Disabling (force_n=0,
+    # so this block never fires) improved every window: D341-D446 34->38 hits,
+    # D447-D592 47->51, D593-current 33->35 (+10 hits / 362 rounds combined,
+    # 31.5%->34.3%). See feedback_script_changes.md ("Forced TYPE B NEW slot
+    # injection removed") for the full investigation (started from a user
+    # question about whether TYPE B probability could be predicted in advance
+    # from table size — it can, table size correlates with TYPE B rate, but
+    # the actionable finding was that the existing forcing mechanism built on
+    # that same intuition was actively hurting, not that a smarter dynamic
+    # version helps — dynamic scaling by table size was tried first and also
+    # underperformed disabling it outright).
     _miss_in_top = sum(1 for v, _, _ in top4 if v in _missing_set_final)
-    _needed_miss = max(0, 10 - _miss_in_top)
+    _table_size = len(_tprox_set)
+    _force_n = 0
+    _needed_miss = max(0, _force_n - _miss_in_top)
     if _needed_miss > 0:
         _scored_miss = sorted(
             ((v, len(sc), list(dict.fromkeys(sc)))
@@ -1443,7 +1552,7 @@ def show_prediction(endpoint, root, ops_list, group_index, rows=None):
     sep('═')
     print()
     print("  ╔══════════════════════════════════════════════════════════════╗")
-    print("  ║             30  STRONG  PREDICTIONS                         ║")
+    print("  ║             30  STRONG  PREDICTIONS          🔴=top-16      ║")
     print("  ╠══════════════════════════════════════════════════════════════╣")
     for rank, (val, score, reasons) in enumerate(top4, 1):
         # Build compact reason labels: take first significant word of each unique signal
@@ -1454,9 +1563,21 @@ def show_prediction(endpoint, root, ops_list, group_index, rows=None):
             if key not in seen_r:
                 seen_r.add(key)
                 lbl_parts.append(key)
-        reason_str = " + ".join(lbl_parts)[:35]
-        print(f"  ║  #{rank:<2} →  {val:02d}   score={score:>2}   {reason_str:<35}║")
+        # 🔴 renders double-width in most terminals but counts as 1 char in
+        # Python's len() — trim the reason field by 1 on marked rows so the
+        # right border ║ still lines up with unmarked rows.
+        marked = rank <= 16
+        mark = "🔴" if marked else "  "
+        rwidth = 34 if marked else 35
+        reason_str = " + ".join(lbl_parts)[:rwidth]
+        line = f"  ║{mark}#{rank:<2} →  {val:02d}   score={score:>2}   {reason_str:<{rwidth}}║"
+        if marked:
+            print(f"\033[91m{line}\033[0m")
+        else:
+            print(line)
     print("  ╚══════════════════════════════════════════════════════════════╝")
+    print("  (🔴 = ranks 1-16, marked for visual grouping only — backtesting found")
+    print("   no accuracy difference between ranks 1-16 and 17-30; see memory)")
     print()
     # Cut-both transforms of predictions (display only — additive, no scoring change)
     _cut = lambda d: (d + 5) % 10
@@ -1568,7 +1689,12 @@ def run(data_source, user_x_op=None, user_y_op=None):
                     print(f"  {occurrence:>4}  Row {r+1:>3}, position {c+1:>2}"
                           f"   →   {nxt:02d}")
 
-    # ── Step 3: Group Index Array ─────────────────────────────────────────────
+    # ── Step 3 (silent compute): Root + Transition Operations ────────────────
+    # Computed here, without printing yet, so the STRONG PREDICTIONS box
+    # (Step "2b" below) can print BEFORE the Group Index Array/Chain Diagram/
+    # Last-rows tree/tables, matching the mandated display order — see
+    # feedback_output_format.md ("2026-07-08 addition — script now matches
+    # the chat-relay order").
     sep('═')
     if not group_index:
         print(f"\n  {endpoint:02d} ==►► [ empty — endpoint appears only once ]")
@@ -1577,11 +1703,27 @@ def run(data_source, user_x_op=None, user_y_op=None):
         print()
         return None, []
 
-    arr_str = ' │ '.join(f'{n:02d}' for n in group_index)
-    print(f"\n  {endpoint:02d} ==►► [ {arr_str} ]")
-
     root   = group_index[-1]
     rx, ry = root // 10, root % 10
+
+    ops_list = []
+    for i in range(len(group_index) - 1):
+        a, b       = group_index[i], group_index[i + 1]
+        ax, ay     = a // 10, a % 10
+        bx, by     = b // 10, b % 10
+        x_op, y_op = find_op(ax, bx), find_op(ay, by)
+        ops_list.append((x_op, y_op))
+
+    # ── Step 2b: EP/Root check + PREDICTION ANALYSIS + STRONG PREDICTIONS
+    # box — printed FIRST (before any tables), per the mandated order ───────
+    _last_top4, _last_scores = [], {}
+    if len(ops_list) >= 1:
+        show_prediction(endpoint, root, ops_list, group_index, rows=rows)
+        _last_top4, _last_scores = build_strong_predictions(root, ops_list, group_index, endpoint, rows=rows)
+
+    # ── Step 3: Group Index Array ─────────────────────────────────────────────
+    arr_str = ' │ '.join(f'{n:02d}' for n in group_index)
+    print(f"\n  {endpoint:02d} ==►► [ {arr_str} ]")
     print(f"\n  ROOT ELEMENT = {root:02d}   (x = {rx},  y = {ry})")
     sep('═')
 
@@ -1590,13 +1732,9 @@ def run(data_source, user_x_op=None, user_y_op=None):
     print(f"  {'Step':<10}  {'x operation':<14}  {'y operation'}")
     sep()
 
-    ops_list = []
     for i in range(len(group_index) - 1):
-        a, b         = group_index[i], group_index[i + 1]
-        ax, ay       = a // 10, a % 10
-        bx, by       = b // 10, b % 10
-        x_op, y_op   = find_op(ax, bx), find_op(ay, by)
-        ops_list.append((x_op, y_op))
+        a, b       = group_index[i], group_index[i + 1]
+        x_op, y_op = ops_list[i]
         print(f"  {a:02d} → {b:02d}     x:{x_op:<13}  y:{y_op}")
 
     sep('═')
@@ -1608,12 +1746,6 @@ def run(data_source, user_x_op=None, user_y_op=None):
 
     # ── Step 5b: Last 3 rows of data grid ────────────────────────────────────
     show_last_rows_diagram(rows)
-
-    # ── Step 6: Prediction Analysis ──────────────────────────────────────────
-    _last_top4, _last_scores = [], {}
-    if len(ops_list) >= 1:
-        show_prediction(endpoint, root, ops_list, group_index, rows=rows)
-        _last_top4, _last_scores = build_strong_predictions(root, ops_list, group_index, endpoint, rows=rows)
 
     # ── Step 7: User Operation (if provided) ─────────────────────────────────
     if user_x_op and user_y_op:
@@ -1714,12 +1846,142 @@ def run(data_source, user_x_op=None, user_y_op=None):
                 if key not in seen_r:
                     seen_r.add(key)
                     lbl_parts.append(key)
-            reason_str = " + ".join(lbl_parts)[:35]
-            print(f"  ║  #{rank:<2} →  {val:02d}   score={score:>2}   {reason_str:<35}║")
+            marked = rank <= 16
+            mark = "🔴" if marked else "  "
+            rwidth = 34 if marked else 35
+            reason_str = " + ".join(lbl_parts)[:rwidth]
+            line = f"  ║{mark}#{rank:<2} →  {val:02d}   score={score:>2}   {reason_str:<{rwidth}}║"
+            if marked:
+                print(f"\033[91m{line}\033[0m")
+            else:
+                print(line)
         if structural:
             note = structural.strip()[:58]
             print(f"  ║  NOTE: {note:<54}║")
         print("  ╚══════════════════════════════════════════════════════════════╝")
+
+        # ── Recommended pick callout (confidence tiered by top score, not just rank)
+        top_score = top4[0][1] if top4 else 0
+        if top_score >= 15:
+            tier = "HIGH CONFIDENCE"
+        elif top_score >= 8:
+            tier = "MODERATE CONFIDENCE"
+        else:
+            tier = "LOW CONFIDENCE — weak signal this round"
+        picks = ", ".join(f"{v:02d}" for v, _, _ in top4[:3])
+        print()
+        print(f"  ★ RECOMMENDED: {picks}  [{tier}]")
+
+        # ── MIDDLE 40 + TAIL 30 -- so all 100 candidates are visible ──────
+        # somewhere (TOP 30 above + MIDDLE 40 + TAIL 30 = 100, no gaps).
+        # Same full 0-99 ranking used for "Rank #X of 100" in --result mode
+        # (see show_result_analysis), so all three stay consistent. Uses
+        # computed padding (not hand-counted) so the border always matches
+        # content width exactly, regardless of text length.
+        _all_ranked = sorted(range(100), key=lambda v: len(_pred_scores.get(v, [])), reverse=True)
+        _middle40 = _all_ranked[30:70]
+        _tail30 = _all_ranked[70:100]
+
+        def _print_zone_box(title, values, start_rank):
+            hdr_text = f"  EP={endpoint:02d}  Root={root:02d}  Trans={len(ops_list)}  --  {title}"
+            body_lines = []
+            for i, val in enumerate(values):
+                zrank = start_rank + i
+                zscore = len(_pred_scores.get(val, []))
+                zreasons = _pred_scores.get(val, [])
+                seen_z = set()
+                zlbl_parts = []
+                for r in zreasons:
+                    key = r.split()[0]
+                    if key not in seen_z:
+                        seen_z.add(key)
+                        zlbl_parts.append(key)
+                zreason_str = (" + ".join(zlbl_parts) if zlbl_parts else "zero-signal")[:38]
+                body_lines.append(f"  #{zrank:<3} ->  {val:02d}   score={zscore:>2}   {zreason_str}")
+            # Two-pass: compute width from the LONGEST line (header or any
+            # body row) before printing anything, so no row can overflow
+            # the border regardless of how many signal labels it lists.
+            w = max([64, len(hdr_text)] + [len(line) for line in body_lines])
+            def _line(text=""):
+                print(f"  │{text:<{w}}│")
+            print()
+            print(f"  ┌{'─' * w}┐")
+            _line(hdr_text)
+            print(f"  ├{'─' * w}┤")
+            for line in body_lines:
+                _line(line)
+            print(f"  └{'─' * w}┘")
+
+        _print_zone_box("MIDDLE 40 (ranks 31-70)", _middle40, 31)
+        _print_zone_box("TAIL 30 (ranks 71-100, least likely)", _tail30, 71)
+
+        # ── ML CONFIDENCE (informational secondary signal only) ──────────
+        # NOT used to rank the FINAL PREDICTIONS above -- backtested
+        # accuracy of this model is lower than the rule-based system (see
+        # feedback_script_changes.md, "ML approach tested"). Shown for
+        # transparency/completeness only.
+        from ml_features import ml_confidence_ranking
+        _ml_ranked = ml_confidence_ranking(_last_scores, len(ops_list), len(_last_scores))
+        if _ml_ranked:
+            _mw = 64
+            def _mline(text=""):
+                print(f"  │{text:<{_mw}}│")
+            print()
+            print(f"  ┌{'─' * _mw}┐")
+            _mline("  ML CONFIDENCE (secondary, informational only)")
+            print(f"  ├{'─' * _mw}┤")
+            for i, (val, prob) in enumerate(_ml_ranked[:3], 1):
+                _mline(f"  #{i}  ->  {val:02d}   ML probability: {100*prob:5.1f}%")
+            _mline("  NOTE: this model's backtested accuracy is LOWER than the")
+            _mline("  rule-based ranking above -- shown for transparency, not")
+            _mline("  used to determine the FINAL PREDICTIONS or RECOMMENDED pick.")
+            print(f"  └{'─' * _mw}┘")
+
+        # ── TOP 30 BY DECADE -- same top-30 values, grouped 00-09/10-19/.../90-99
+        # for quick "is my number's decade in the list" scanning. Purely a
+        # re-presentation of the same top-30 list above -- does not change
+        # or add to it. Boxed (┌─┐/│ │/└─┘, two-pass width like the other
+        # zone boxes) to match the MIDDLE 40/TAIL 30/ML CONFIDENCE style
+        # instead of a bare dashed list (2026-07-08).
+        _top30_vals = sorted(v for v, _, _ in top4)
+        _decade_hdr = "  TOP 30 BY DECADE (ascending, same top-30 list above)"
+        _decade_lines = []
+        for _decade in range(10):
+            _lo, _hi = _decade * 10, _decade * 10 + 9
+            _in_decade = [v for v in _top30_vals if _lo <= v <= _hi]
+            _label = f"{_lo:02d}-{_hi:02d}"
+            _vals_str = ", ".join(f"{v:02d}" for v in _in_decade) if _in_decade else "--"
+            _decade_lines.append(f"  {_label} : {_vals_str}")
+        _dw = max([64, len(_decade_hdr)] + [len(l) for l in _decade_lines])
+        print()
+        print(f"  ┌{'─' * _dw}┐")
+        print(f"  │{_decade_hdr:<{_dw}}│")
+        print(f"  ├{'─' * _dw}┤")
+        for l in _decade_lines:
+            print(f"  │{l:<{_dw}}│")
+        print(f"  └{'─' * _dw}┘")
+
+        # ── TOP 30 BY FAMILY -- the SAME top-30 values as above, regrouped by
+        # cut-pair family instead of by decade (one row per family, only the
+        # top-30 members shown -- not the full 8-10 member family). Display
+        # only / reference, not a ranked or scored claim -- backtested
+        # 2026-07-07: family-covers-result rate (92.0%) is NOT better than a
+        # random 30-number list (94.2%), so this adds no prediction signal.
+        # Boxed for the same reason as TOP 30 BY DECADE above.
+        _family_hdr = "  TOP 30 BY FAMILY (same top-30 list above, grouped by family)"
+        _family_lines = []
+        for _fam in FAMILY_ORDER:
+            _in_fam = [v for v in _top30_vals if FAMILY_MAP[v] == _fam]
+            _vals_str = ", ".join(f"{v:02d}" for v in _in_fam) if _in_fam else "--"
+            _family_lines.append(f"  {_fam:<16}: {_vals_str}")
+        _fw = max([64, len(_family_hdr)] + [len(l) for l in _family_lines])
+        print()
+        print(f"  ┌{'─' * _fw}┐")
+        print(f"  │{_family_hdr:<{_fw}}│")
+        print(f"  ├{'─' * _fw}┤")
+        for l in _family_lines:
+            print(f"  │{l:<{_fw}}│")
+        print(f"  └{'─' * _fw}┘")
     print()
     return root, ops_list, _last_top4, _last_scores
 

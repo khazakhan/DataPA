@@ -21,8 +21,8 @@ from DataProcessing import load_data, find_op, get_next_number, build_strong_pre
 with open('temp_data.txt') as f:
     all_lines = [l for l in f if l.strip()]
 
-GRID_ROWS = 174  # fixed 7-value rows uploaded fresh at D341
-D_START = 341
+GRID_ROWS = 151
+D_START = 819
 
 def compute_state(rows):
     """Replicate run() steps 1-4: endpoint, group_index, root, ops_list."""

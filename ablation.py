@@ -19,21 +19,21 @@ uniformly to every config here (natural top-30 only), so this script's
 Relative differences BETWEEN configs are what this measures, not exact
 production replication.
 
-Covers D341-D446 (106 rounds) — every round with a known result in the
-current continuous dataset (uploaded fresh at D341, replacing D273-D340).
-The old digit-transform family (CutBoth/CbRev/Reverse/CutUnits/CutTens/
-PredNeighbor) and TableProx are already permanently filtered inside
-build_strong_predictions() (see the _ablated_prefixes block) so they never
-appear in `scores` here and are not re-tested.
+Covers D447-D497 (51 rounds) — every round with a known result in the
+current continuous dataset (uploaded fresh at D447, replacing D341-D446).
+The digit-transform family (CutBoth/CbRev/Reverse/CutUnits/CutTens/
+PredNeighbor), TableProx, CompOp, and Obs1/Obs1B are already permanently
+filtered inside build_strong_predictions() (see the _ablated_prefixes
+block) so they never appear in `scores` here and are not re-tested.
 """
 from DataProcessing import load_data, find_op, get_next_number, build_strong_predictions
 
 with open('temp_data.txt') as f:
     all_lines = [l for l in f if l.strip()]
 
-GRID_ROWS = 174
-D_START = 341
-N_ROUNDS = len(all_lines) - GRID_ROWS  # D341..current
+GRID_ROWS = 151
+D_START = 819
+N_ROUNDS = len(all_lines) - GRID_ROWS  # D447..current
 
 FAMILIES = {
     'AllChainBase': ['AllChainBase-sxy', 'AllChainBase-syx', 'AllChainBase-xy', 'AllChainBase-yx'],

@@ -1078,13 +1078,21 @@ def build_strong_predictions(root, ops_list, group_index, endpoint=None, rows=No
     # Signal 31 — Column-Frequency: boost values that historically appear often in this column.
     # Universal signal: orthogonal to chain signals, covers TYPE-B-NEW cases (~50% of results).
     # Weight: 3 for top-10 by column frequency, 2 for 11-20, 1 for 21-30.
+    # Grid width varies by dataset (5, 6, or 7 columns) -- detect it from the data
+    # instead of assuming 7, so this signal keeps working after a reset to a
+    # narrower grid (single-value appended-result lines are width 1 and excluded).
     if rows:
+        _width_counts = {}
+        for _row in rows[:-1]:
+            if len(_row) >= 5:
+                _width_counts[len(_row)] = _width_counts.get(len(_row), 0) + 1
+        _grid_width = max(_width_counts, key=_width_counts.get) if _width_counts else 7
         _col_idx = len(rows[-1])  # 0-indexed position of the prediction in its row
-        if _col_idx >= 7:
+        if _col_idx >= _grid_width:
             _col_idx = 0
         _col_freq = {}
         for _row in rows[:-1]:
-            if len(_row) == 7 and _col_idx < 7:
+            if len(_row) == _grid_width and _col_idx < _grid_width:
                 v = _row[_col_idx]
                 _col_freq[v] = _col_freq.get(v, 0) + 1
         _sorted_col = sorted(_col_freq.keys(), key=lambda v: -_col_freq[v])

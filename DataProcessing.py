@@ -183,6 +183,35 @@ def update_family_tracker(covered):
     return state["covered"], state["total"]
 
 
+HITRATE_TRACKER_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                     "hitrate_tracker_state.json")
+
+
+def update_hitrate_tracker(hit):
+    """Persist the running top-30 hit rate across rounds (2026-07-12,
+    user-requested progress bar so hit-rate trend is visible without asking
+    for a manual audit each time). Returns (hits, total) after this update."""
+    state = {"hits": 0, "total": 0}
+    if os.path.exists(HITRATE_TRACKER_PATH):
+        try:
+            with open(HITRATE_TRACKER_PATH) as f:
+                state = json.load(f)
+        except (json.JSONDecodeError, OSError):
+            pass
+    state["total"] = state.get("total", 0) + 1
+    if hit:
+        state["hits"] = state.get("hits", 0) + 1
+    with open(HITRATE_TRACKER_PATH, "w") as f:
+        json.dump(state, f)
+    return state["hits"], state["total"]
+
+
+def render_progress_bar(pct, width=20):
+    filled = round(pct / 100 * width)
+    filled = max(0, min(width, filled))
+    return '█' * filled + '░' * (width - filled)
+
+
 def apply_op(digit, op):
     d = int(digit) % 10
     if   op == 'no_change': return d
@@ -336,6 +365,14 @@ def show_result_analysis(root, result, ops_list, scores=None, top4=None):
         _fcov, _ftot = update_family_tracker(_fam_covered)
         print(f"  Family-covered: {'YES' if _fam_covered else 'NO '} "
               f"({_result_fam}; cumulative: {_fcov}/{_ftot} = {100*_fcov/_ftot:.1f}%)")
+        # Hit-rate progress bar (2026-07-12, reference only -- see
+        # feedback_output_format.md: user asked for a self-serve visual so
+        # they can see the trend without requesting a manual audit).
+        _hit = rank is not None
+        _hits, _htot = update_hitrate_tracker(_hit)
+        _hpct = 100 * _hits / _htot
+        print(f"  \U0001F4CA Hit Rate: [{render_progress_bar(_hpct)}] "
+              f"{_hpct:.1f}% ({_hits}/{_htot})")
         sig_labels = list(dict.fromkeys(sorted(scores.get(result, []))))
         if sig_labels:
             print(f"  Signals: {' | '.join(sig_labels[:8])}")

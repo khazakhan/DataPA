@@ -159,6 +159,43 @@ for _v, _f in FAMILY_MAP.items():
 for _f in FAMILY_MEMBERS:
     FAMILY_MEMBERS[_f].sort()
 
+# HALF CUT FAMILY and DOUBLE FAMILY are directly single-digit-cut-adjacent to
+# each other (every double dd's single-digit cuts land in HALF CUT, and vice
+# versa -- e.g. 55 -> 05/50) even though they're separate rows in the TOP 30
+# BY FAMILY display. User asked 2026-07-27 (D1607, "05 and 50 available...
+# show the 55 also") to bridge them for cycle-closure purposes -- this is a
+# closure-grouping change only, FAMILY_MAP/FAMILY_ORDER (and the 12-row
+# display) stay untouched, so each still gets filtered into its own row.
+_CLOSURE_GROUP = dict(FAMILY_MAP)
+for _v in _CLOSURE_GROUP:
+    if _CLOSURE_GROUP[_v] in ("HALF CUT FAMILY", "DOUBLE FAMILY"):
+        _CLOSURE_GROUP[_v] = "HALF CUT + DOUBLE"
+_CLOSURE_GROUPS = [f for f in FAMILY_ORDER if f not in ("HALF CUT FAMILY", "DOUBLE FAMILY")] + ["HALF CUT + DOUBLE"]
+
+
+def family_cycle_closure(top30_vals):
+    """Full cut-cycle closure of top30_vals, per family (same BFS logic used
+    by the TOP 30 BY FAMILY display box) — every family's 8/10 members split
+    into 4-member (or smaller) single-digit-cut cycles; a member is only
+    reachable if SOME cycle-mate is already in top30_vals. Returns the union
+    across all families (the same set backing TOP 30 + SIBLINGS BY DECADE)."""
+    all_extended = set()
+    for fam in _CLOSURE_GROUPS:
+        in_fam = [v for v in top30_vals if _CLOSURE_GROUP[v] == fam]
+        shown = set(in_fam)
+        frontier = list(in_fam)
+        while frontier:
+            next_frontier = []
+            for v in frontier:
+                x, y = v // 10, v % 10
+                for sib in (cut(x) * 10 + y, x * 10 + cut(y), cut(x) * 10 + cut(y)):
+                    if _CLOSURE_GROUP.get(sib) == fam and sib not in shown:
+                        shown.add(sib)
+                        next_frontier.append(sib)
+            frontier = next_frontier
+        all_extended |= shown
+    return all_extended
+
 
 FAMILY_TRACKER_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                     "family_tracker_state.json")
@@ -348,23 +385,84 @@ def show_result_analysis(root, result, ops_list, scores=None, top4=None):
         else:
             rank_str = f"Rank #{full_rank} of 100"
         print(f"  Score: {rscore}   {rank_str}")
-        # Finger-mark zone indicator: TOP 30 / TAIL 30 (ranks 71-100) / MIDDLE
-        if full_rank <= 30:
-            print(f"  \U0001F449 ZONE: TOP 30 (rank #{full_rank})")
+        # Finger-mark zone indicator: TOP 40 / TAIL 30 (ranks 71-100) / MIDDLE
+        # (widened from top-30 to top-40 on 2026-07-30, user request)
+        if full_rank <= 40:
+            print(f"  \U0001F449 ZONE: TOP 40 (rank #{full_rank})")
         elif full_rank > 70:
             print(f"  \U0001F449 ZONE: TAIL 30 (rank #{full_rank} of 100)")
         else:
-            print(f"  \U0001F449 ZONE: MIDDLE (rank #{full_rank} of 100 -- neither top-30 nor tail-30)")
+            print(f"  \U0001F449 ZONE: MIDDLE (rank #{full_rank} of 100 -- neither top-40 nor tail-30)")
         # Family-coverage tracker (2026-07-08, reference only -- see
         # feedback_output_format.md: backtested 92.0% vs 94.2% random
         # baseline, i.e. NOT a predictive signal, just a running observation
         # the user asked to watch for themselves).
+        # FIXED 2026-07-26: was checking "any same 8-member family value in
+        # top-30", which could say YES even when `result` sits in the OTHER
+        # 4-member cut-cycle from the one actually reachable/shown in the
+        # TOP 30 BY FAMILY box (e.g. D1575 result=71, family had 12/17
+        # present but those close only to {12,17,62,67} -- 71 is in the
+        # separate {21,26,71,76} cycle, never shown, yet the old check said
+        # "covered"). Now uses the SAME family_cycle_closure() the display
+        # box uses, so "covered" means "result actually appears in the
+        # printed family/siblings boxes this round" -- consistent with what
+        # the user sees, not a broader family-label coincidence.
         _result_fam = FAMILY_MAP[result]
-        _top30_set = set(all_vals[:30])
-        _fam_covered = any(FAMILY_MAP[v] == _result_fam for v in _top30_set)
+        _top30_set = set(all_vals[:40])
+        _all_extended = family_cycle_closure(_top30_set)
+        _fam_covered = result in _all_extended
         _fcov, _ftot = update_family_tracker(_fam_covered)
         print(f"  Family-covered: {'YES' if _fam_covered else 'NO '} "
               f"({_result_fam}; cumulative: {_fcov}/{_ftot} = {100*_fcov/_ftot:.1f}%)")
+        # RESULT LOCATION (2026-07-26): user asked to always be able to see
+        # where the result sits relative to the DECADE and FAMILY boxes,
+        # even on a miss where it wasn't printed there. Shows the result's
+        # decade + its own cut-cycle (via family_cycle_closure on just this
+        # one value) and states plainly whether that cycle was the one
+        # actually shown above this round. Reference/orientation only --
+        # does not change scoring or claim predictive power.
+        _result_decade = f"{(result // 10) * 10:02d}-{(result // 10) * 10 + 9:02d}"
+        _own_cycle = sorted(family_cycle_closure({result}))
+        _cycle_str = ", ".join(f"{v:02d}" for v in _own_cycle)
+        print(f"  RESULT LOCATION: decade {_result_decade} | {_result_fam} cycle "
+              f"[{_cycle_str}]"
+              f"{' (shown above)' if _fam_covered else ' (NOT shown above this round)'}")
+        # TOP 30 + SIBLINGS BY DECADE, result marked (2026-07-26): user asked
+        # to always see this specific box after scoring, with the actual
+        # result slotted into its decade row and marked in brackets --
+        # whether or not it was already covered -- instead of only getting
+        # the one-line RESULT LOCATION summary above. Reuses the same
+        # family_cycle_closure(_top30_set) the run() display box computed,
+        # so the set matches exactly; the result's own decade row gets the
+        # result inserted at its sorted position if missing, or bracketed
+        # in place if already present.
+        # Red-circle marks top-30 members here too (2026-07-29, same request
+        # as the run()-time box) -- combined with the existing [brackets]
+        # result marker, e.g. a result that's ALSO a top-30 member prints as
+        # "[🔴21]".
+        _res_dec_hdr = f"  TOP 40 + SIBLINGS BY DECADE ({len(_all_extended)} numbers, \U0001F534=top-40, result marked)"
+        _res_dec_lines = []
+        for _decade in range(10):
+            _lo, _hi = _decade * 10, _decade * 10 + 9
+            _in_decade = sorted(v for v in _all_extended if _lo <= v <= _hi and v != result)
+            _mark = lambda v: f"\U0001F534{v:02d}" if v in _top30_set else f"{v:02d}"
+            if _lo <= result <= _hi:
+                _row_vals = sorted(_in_decade + [result])
+                _vals_str = ", ".join(
+                    f"[{_mark(v)}]" if v == result else _mark(v) for v in _row_vals
+                )
+            else:
+                _vals_str = ", ".join(_mark(v) for v in _in_decade) if _in_decade else "--"
+            _label = f"{_lo:02d}-{_hi:02d}"
+            _res_dec_lines.append(f"  {_label} : {_vals_str}")
+        _rdw = max([64, len(_res_dec_hdr)] + [len(l) for l in _res_dec_lines])
+        print()
+        print(f"  ┌{'─' * _rdw}┐")
+        print(f"  │{_res_dec_hdr:<{_rdw}}│")
+        print(f"  ├{'─' * _rdw}┤")
+        for l in _res_dec_lines:
+            print(f"  │{l:<{_rdw}}│")
+        print(f"  └{'─' * _rdw}┘")
         # Hit-rate progress bar (2026-07-12, reference only -- see
         # feedback_output_format.md: user asked for a self-serve visual so
         # they can see the trend without requesting a manual audit).
@@ -378,6 +476,25 @@ def show_result_analysis(root, result, ops_list, scores=None, top4=None):
             print(f"  Signals: {' | '.join(sig_labels[:8])}")
         else:
             print(f"  Signals: none — zero-signal result")
+        # WHY MISSED diagnostic (2026-07-26): only fires when result missed
+        # top-30. Explains the numeric gap to the cutoff plus a cheap,
+        # honest structural check (does this value's x-op/y-op individually
+        # appear elsewhere in the chain — the same eligibility test CompOp
+        # uses) rather than a vague "no signal fired."
+        if full_rank > 40:
+            _cutoff_score = top4[-1][1] if top4 and len(top4) >= 40 else 0
+            _gap = max(0, _cutoff_score - rscore)
+            _res_x_op = find_op(rx, result // 10)
+            _res_y_op = find_op(ry, result % 10)
+            _x_ops_in_chain = {ox for ox, oy in ops_list}
+            _y_ops_in_chain = {oy for ox, oy in ops_list}
+            _x_comp = _res_x_op in _x_ops_in_chain
+            _y_comp = _res_y_op in _y_ops_in_chain
+            print(f"  WHY MISSED: score={rscore} vs #40 cutoff={_cutoff_score} "
+                  f"(short by {_gap} pt{'s' if _gap != 1 else ''})")
+            print(f"  x-op '{_res_x_op}' {'is' if _x_comp else 'NOT'} used elsewhere in chain"
+                  f" | y-op '{_res_y_op}' {'is' if _y_comp else 'NOT'} used elsewhere in chain"
+                  f"{' (both present but never paired — CompOp PATTERN, but CompOp is ablated: proven net-negative in backtest, deliberately NOT scored)' if _x_comp and _y_comp else ''}")
         # Digit-transform checks (display only — candidate patterns, not yet scored)
         rx_r, ry_r = result // 10, result % 10
         cut = lambda d: (d + 5) % 10
@@ -1254,7 +1371,7 @@ def build_strong_predictions(root, ops_list, group_index, endpoint=None, rows=No
                                                  for r in sorted(reasons)))
             top4.append((val, len(reasons), unique_reasons))
             seen.add(val)
-        if len(top4) == 30:
+        if len(top4) == 40:
             break
     # Forced missing-set (TYPE B NEW) slot injection — DISABLED (2026-07-05).
     # Originally forced >=10 TYPE B NEW candidates into top-30 on the assumption
@@ -1302,7 +1419,7 @@ def build_strong_predictions(root, ops_list, group_index, endpoint=None, rows=No
                 _all_force.append((_zv, 0, ["TypeBNEW-RangeCover"]))
                 _force_seen.add(_zv)
         _actual_force = _all_force[:_needed_miss]
-        top4 = top4[:30 - len(_actual_force)]
+        top4 = top4[:40 - len(_actual_force)]
         for _mv, _ms, _mr in _actual_force:
             top4.append((_mv, _ms, _mr))
             seen.add(_mv)
@@ -1881,7 +1998,7 @@ def run(data_source, user_x_op=None, user_y_op=None):
         print()
         hdr = f"EP={endpoint:02d}  Root={root:02d}  Trans={len(ops_list)}"
         print("  ╔══════════════════════════════════════════════════════════════╗")
-        print(f"  ║  {hdr}  ──  FINAL PREDICTIONS (30){'':<{30 - len(hdr)}}║")
+        print(f"  ║  {hdr}  ──  FINAL PREDICTIONS (40){'':<{30 - len(hdr)}}║")
         print("  ╠══════════════════════════════════════════════════════════════╣")
         for rank, (val, score, reasons) in enumerate(top4, 1):
             seen_r = set()
@@ -1917,14 +2034,45 @@ def run(data_source, user_x_op=None, user_y_op=None):
         print()
         print(f"  ★ RECOMMENDED: {picks}  [{tier}]")
 
-        # ── MIDDLE 40 + TAIL 30 -- so all 100 candidates are visible ──────
-        # somewhere (TOP 30 above + MIDDLE 40 + TAIL 30 = 100, no gaps).
+        # ── 4-column Rank/Val/Score summary table (added 2026-07-26 as
+        # 3 columns, widened to 4 columns on 2026-07-30 alongside the
+        # top-30->top-40 change so all 40 entries still fit in 10 rows):
+        # compact side-by-side re-layout of the SAME top-40 ranking shown
+        # in the FINAL PREDICTIONS box above (col1=#1-10, col2=#11-20,
+        # col3=#21-30, col4=#31-40, row-major) -- no new data, just easier
+        # to scan than one long vertical list with truncated reason text.
+        # Previously built by hand in chat every round; now native script
+        # output like the other boxes.
+        _rv_cw = 11
+        _rv_hdr = f"{'Rank Val Sc':^{_rv_cw}}"
+        print()
+        print(f"  ┌{'─' * _rv_cw}┬{'─' * _rv_cw}┬{'─' * _rv_cw}┬{'─' * _rv_cw}┐")
+        print(f"  │{_rv_hdr}│{_rv_hdr}│{_rv_hdr}│{_rv_hdr}│")
+        print(f"  ├{'─' * _rv_cw}┼{'─' * _rv_cw}┼{'─' * _rv_cw}┼{'─' * _rv_cw}┤")
+        for _r in range(10):
+            _cells = []
+            for _c in range(4):
+                _idx = _c * 10 + _r
+                if _idx < len(top4):
+                    _val, _score, _ = top4[_idx]
+                    _cell = f"#{_idx + 1:<2} {_val:02d}  s{_score:02d}"
+                else:
+                    _cell = ""
+                _cells.append(f"{_cell:^{_rv_cw}}")
+            print(f"  │{_cells[0]}│{_cells[1]}│{_cells[2]}│{_cells[3]}│")
+        print(f"  └{'─' * _rv_cw}┴{'─' * _rv_cw}┴{'─' * _rv_cw}┴{'─' * _rv_cw}┘")
+
+        # ── MIDDLE 30 + TAIL 30 -- so all 100 candidates are visible ──────
+        # somewhere (TOP 40 above + MIDDLE 30 + TAIL 30 = 100, no gaps).
+        # Widened from top-30 to top-40 on 2026-07-30 (user request) --
+        # MIDDLE shrank from ranks 31-70 (40 items) to ranks 41-70 (30 items)
+        # to keep the three zones covering 0-99 with no gaps or overlap.
         # Same full 0-99 ranking used for "Rank #X of 100" in --result mode
         # (see show_result_analysis), so all three stay consistent. Uses
         # computed padding (not hand-counted) so the border always matches
         # content width exactly, regardless of text length.
         _all_ranked = sorted(range(100), key=lambda v: len(_pred_scores.get(v, [])), reverse=True)
-        _middle40 = _all_ranked[30:70]
+        _middle40 = _all_ranked[40:70]
         _tail30 = _all_ranked[70:100]
 
         def _print_zone_box(title, values, start_rank):
@@ -1957,7 +2105,7 @@ def run(data_source, user_x_op=None, user_y_op=None):
                 _line(line)
             print(f"  └{'─' * w}┘")
 
-        _print_zone_box("MIDDLE 40 (ranks 31-70)", _middle40, 31)
+        _print_zone_box("MIDDLE 30 (ranks 41-70)", _middle40, 41)
         _print_zone_box("TAIL 30 (ranks 71-100, least likely)", _tail30, 71)
 
         # ── ML CONFIDENCE (informational secondary signal only) ──────────
@@ -1989,7 +2137,7 @@ def run(data_source, user_x_op=None, user_y_op=None):
         # zone boxes) to match the MIDDLE 40/TAIL 30/ML CONFIDENCE style
         # instead of a bare dashed list (2026-07-08).
         _top30_vals = sorted(v for v, _, _ in top4)
-        _decade_hdr = "  TOP 30 BY DECADE (ascending, same top-30 list above)"
+        _decade_hdr = "  TOP 40 BY DECADE (ascending, same top-40 list above)"
         _decade_lines = []
         for _decade in range(10):
             _lo, _hi = _decade * 10, _decade * 10 + 9
@@ -2013,11 +2161,20 @@ def run(data_source, user_x_op=None, user_y_op=None):
         # 2026-07-07: family-covers-result rate (92.0%) is NOT better than a
         # random 30-number list (94.2%), so this adds no prediction signal.
         # Boxed for the same reason as TOP 30 BY DECADE above.
-        _family_hdr = "  TOP 30 BY FAMILY (same top-30 list above, grouped by family)"
+        # Each row = top-30 members of that family PLUS the single-digit-cut
+        # sibling(s) of each present member (2026-07-25, corrected per user:
+        # "62 is there but also add 67" -- i.e. one-hop cut-tens/cut-units
+        # neighbor of a value already in top-30, NOT the full 8-10 member
+        # family and NOT a separate giant list). Bounded per-row, not
+        # universe-wide -- replaces the earlier FAMILY-EXTENDED LIST box
+        # (reverted, it expanded to the full family regardless of which
+        # members were reachable, ballooning to 100/100 some rounds).
+        _family_hdr = "  TOP 40 BY FAMILY (+ full cut-cycle closure of each value present)"
+        _all_extended = family_cycle_closure(_top30_vals)
         _family_lines = []
         for _fam in FAMILY_ORDER:
-            _in_fam = [v for v in _top30_vals if FAMILY_MAP[v] == _fam]
-            _vals_str = ", ".join(f"{v:02d}" for v in _in_fam) if _in_fam else "--"
+            _shown = sorted(v for v in _all_extended if FAMILY_MAP[v] == _fam)
+            _vals_str = ", ".join(f"{v:02d}" for v in _shown) if _shown else "--"
             _family_lines.append(f"  {_fam:<16}: {_vals_str}")
         _fw = max([64, len(_family_hdr)] + [len(l) for l in _family_lines])
         print()
@@ -2027,6 +2184,61 @@ def run(data_source, user_x_op=None, user_y_op=None):
         for l in _family_lines:
             print(f"  │{l:<{_fw}}│")
         print(f"  └{'─' * _fw}┘")
+
+        # ── Plain TOP 30 BY FAMILY, no cut-cycle closure (2026-07-30, user
+        # asked for this as a separate table alongside the closure version
+        # above): same 12-row FAMILY_ORDER layout, but only the raw top-30
+        # values themselves -- no sibling expansion. This is the box that
+        # existed before cut-cycle closure was added on 2026-07-25; kept
+        # here permanently as its own display, not a replacement.
+        _family_plain_hdr = "  TOP 40 BY FAMILY (top-40 only, no closure)"
+        _family_plain_lines = []
+        for _fam in FAMILY_ORDER:
+            _shown = sorted(v for v in _top30_vals if FAMILY_MAP[v] == _fam)
+            _vals_str = ", ".join(f"{v:02d}" for v in _shown) if _shown else "--"
+            _family_plain_lines.append(f"  {_fam:<16}: {_vals_str}")
+        _fpw = max([64, len(_family_plain_hdr)] + [len(l) for l in _family_plain_lines])
+        print()
+        print(f"  ┌{'─' * _fpw}┐")
+        print(f"  │{_family_plain_hdr:<{_fpw}}│")
+        print(f"  ├{'─' * _fpw}┤")
+        for l in _family_plain_lines:
+            print(f"  │{l:<{_fpw}}│")
+        print(f"  └{'─' * _fpw}┘")
+
+        # ── Same expanded list (top-30 + siblings), laid out in ascending
+        # decade rows instead of by family -- easier to scan "is my number
+        # in here" (2026-07-25, user requested "sequence order 10 rows").
+        # Widening this to top-40/50/70 basis was tested live 2026-07-26 and
+        # REJECTED: top-40 -> 69/100, top-50 -> 78/100, top-70 -> 92/100 --
+        # cut-cycle closure inflates fast because each family only has 4-10
+        # members, so a handful of extra starting points closes most
+        # families. 92/100 has essentially the same near-zero discriminating
+        # power as the 100/100 FAMILY-EXTENDED box already reverted earlier
+        # this project for that exact reason. Kept at top-30 basis.
+        # Red-circle marks values that are directly in the top-30 (same visual
+        # language as the FINAL PREDICTIONS box) so it's clear at a glance
+        # which numbers here were actually predicted vs. added only via
+        # family cut-cycle closure (2026-07-29, user requested).
+        _top30_set = set(_top30_vals)
+        _ext_dec_hdr = f"  TOP 40 + SIBLINGS BY DECADE ({len(_all_extended)} numbers, \U0001F534=top-40, ascending)"
+        _ext_dec_lines = []
+        for _decade in range(10):
+            _lo, _hi = _decade * 10, _decade * 10 + 9
+            _in_decade = sorted(v for v in _all_extended if _lo <= v <= _hi)
+            _label = f"{_lo:02d}-{_hi:02d}"
+            _vals_str = ", ".join(
+                f"\U0001F534{v:02d}" if v in _top30_set else f"{v:02d}" for v in _in_decade
+            ) if _in_decade else "--"
+            _ext_dec_lines.append(f"  {_label} : {_vals_str}")
+        _edw = max([64, len(_ext_dec_hdr)] + [len(l) for l in _ext_dec_lines])
+        print()
+        print(f"  ┌{'─' * _edw}┐")
+        print(f"  │{_ext_dec_hdr:<{_edw}}│")
+        print(f"  ├{'─' * _edw}┤")
+        for l in _ext_dec_lines:
+            print(f"  │{l:<{_edw}}│")
+        print(f"  └{'─' * _edw}┘")
     print()
     return root, ops_list, _last_top4, _last_scores
 

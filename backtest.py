@@ -21,8 +21,8 @@ from DataProcessing import load_data, find_op, get_next_number, build_strong_pre
 with open('temp_data.txt') as f:
     all_lines = [l for l in f if l.strip()]
 
-GRID_ROWS = 456
-D_START = 1387
+GRID_ROWS = 458
+D_START = 1629
 
 def compute_state(rows):
     """Replicate run() steps 1-4: endpoint, group_index, root, ops_list."""
@@ -77,7 +77,7 @@ for k in range(N_ROUNDS):  # D341 .. current
     hit = rank is not None
     results.append((d_num, endpoint, root, len(ops_list), actual, hit, rank, full_rank, rscore))
 
-print(f"{'D#':<6}{'EP':<5}{'Root':<6}{'Trans':<7}{'Result':<8}{'HIT?':<6}{'Rank(30)':<10}{'Rank(100)':<10}{'Score':<6}")
+print(f"{'D#':<6}{'EP':<5}{'Root':<6}{'Trans':<7}{'Result':<8}{'HIT?':<6}{'Rank(40)':<10}{'Rank(100)':<10}{'Score':<6}")
 hits = 0
 for row in results:
     if row[1] is None:
@@ -91,4 +91,4 @@ for row in results:
           f"{(str(rank) if rank else '-'):<10}{full_rank:<10}{rscore:<6}")
 
 valid = sum(1 for r in results if r[1] is not None)
-print(f"\nTotal rounds backtested: {valid}  |  HITs (in current top-30): {hits}  |  Hit rate: {hits/valid*100:.1f}%")
+print(f"\nTotal rounds backtested: {valid}  |  HITs (in current top-40): {hits}  |  Hit rate: {hits/valid*100:.1f}%")

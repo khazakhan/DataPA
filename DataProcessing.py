@@ -17,6 +17,7 @@ import sys
 import os
 import json
 import argparse
+import re
 from collections import defaultdict
 
 # ── Constants ─────────────────────────────────────────────────────────────────
@@ -463,6 +464,55 @@ def show_result_analysis(root, result, ops_list, scores=None, top4=None):
         for l in _res_dec_lines:
             print(f"  │{l:<{_rdw}}│")
         print(f"  └{'─' * _rdw}┘")
+
+        # RECOMMENDED BY DECADE / BY FAMILY, result marked (2026-08-02):
+        # user asked for these two score-threshold boxes (see run()'s
+        # version, added same day) to also appear here after scoring, with
+        # the actual result bracket-marked in place -- same pattern as the
+        # SIBLINGS box just above. No red-circle marks (removed from these
+        # two boxes per user request); brackets are the only marker.
+        _rec_cutoff_score = top4[-1][1] if top4 else 0
+        _rec_set = sorted(v for v in range(100) if len(scores.get(v, [])) >= _rec_cutoff_score)
+
+        def _rec_wrapped_rows(label, members, per_line=8):
+            _indent = " " * len(f"  {label} : ")
+            _rows = []
+            for i in range(0, len(members), per_line):
+                _chunk = ", ".join(
+                    f"[{v:02d}]" if v == result else f"{v:02d}" for v in members[i:i + per_line]
+                )
+                _prefix = f"  {label} : " if i == 0 else _indent
+                _rows.append(f"{_prefix}{_chunk}")
+            return _rows if members else [f"  {label} : --"]
+
+        def _print_rec_box(hdr, rows):
+            _w = max([64, len(hdr)] + [len(l) for l in rows])
+            print()
+            print(f"  ┌{'─' * _w}┐")
+            print(f"  │{hdr:<{_w}}│")
+            print(f"  ├{'─' * _w}┤")
+            for l in rows:
+                print(f"  │{l:<{_w}}│")
+            print(f"  └{'─' * _w}┘")
+
+        _rec_in_dec = sorted(set(_rec_set) | {result})
+        _rec_dec_hdr2 = (f"  RECOMMENDED BY DECADE ({len(_rec_set)} values, score>={_rec_cutoff_score}, "
+                          f"result marked)")
+        _rec_dec_lines2 = []
+        for _decade in range(10):
+            _lo, _hi = _decade * 10, _decade * 10 + 9
+            _in_decade = [v for v in _rec_in_dec if _lo <= v <= _hi]
+            _rec_dec_lines2.extend(_rec_wrapped_rows(f"{_lo:02d}-{_hi:02d}", _in_decade))
+        _print_rec_box(_rec_dec_hdr2, _rec_dec_lines2)
+
+        _rec_fam_hdr2 = (f"  RECOMMENDED BY FAMILY ({len(_rec_set)} values, score>={_rec_cutoff_score}, "
+                         f"result marked)")
+        _rec_fam_lines2 = []
+        for _fam in FAMILY_ORDER:
+            _members = [v for v in (set(_rec_set) | {result}) if FAMILY_MAP[v] == _fam]
+            _rec_fam_lines2.extend(_rec_wrapped_rows(f"{_fam:<16}", sorted(_members)))
+        _print_rec_box(_rec_fam_hdr2, _rec_fam_lines2)
+
         # Hit-rate progress bar (2026-07-12, reference only -- see
         # feedback_output_format.md: user asked for a self-serve visual so
         # they can see the trend without requesting a manual audit).
@@ -1248,6 +1298,8 @@ def build_strong_predictions(root, ops_list, group_index, endpoint=None, rows=No
         for _row in rows[:-1]:
             if len(_row) == _grid_width and _col_idx < _grid_width:
                 v = _row[_col_idx]
+                if v < 0:
+                    continue
                 _col_freq[v] = _col_freq.get(v, 0) + 1
         _sorted_col = sorted(_col_freq.keys(), key=lambda v: -_col_freq[v])
         for _rank_i, _v in enumerate(_sorted_col):
@@ -1769,10 +1821,70 @@ def show_prediction(endpoint, root, ops_list, group_index, rows=None):
 
 # ── Data I/O ──────────────────────────────────────────────────────────────────
 
-def load_data(source):
-    """Parse lines into 2-D list of ints, skipping non-numeric tokens."""
+_WEEK_HEADER_RE = re.compile(r'(\d{2}/\d{2}/\d{4})\s*\n\s*[Tt]o\s*\n\s*(\d{2}/\d{2}/\d{4})')
+
+
+def is_weekly_archive_format(text):
+    """Detect a real weekly result archive (dd/mm/yyyy ... To ... dd/mm/yyyy blocks,
+    each holding 7 days of open-panna/jodi/close-panna data) rather than a plain
+    numeric grid. At least 2 week-header matches avoids misfiring on a normal
+    grid that happens to contain one stray date-like token."""
+    return len(_WEEK_HEADER_RE.findall(text)) >= 2
+
+
+def parse_weekly_archive(text):
+    """Extract one JODI (the real 2-digit result) per day from a weekly archive.
+    Per-day data is a repeating [open-panna-digit, open-panna-digit,
+    open-panna-digit, JODI, close-panna-digit, close-panna-digit,
+    close-panna-digit] pattern, but panna digits are printed one-per-line
+    (single characters) while JODI is always a genuine 2-character token
+    (e.g. "08", "00") -- so filtering the whole stream for tokens matching
+    ^\\d{2}$ recovers the jodi reliably even when rigid 7-token positional
+    chunking would break near '*' void-day runs (confirmed 2026-08-06: a
+    week's '*' count doesn't always cleanly replace a whole multiple-of-7
+    span, so position-based chunking silently misaligns after the first
+    such week; the literal-2-digit-token filter doesn't have that failure
+    mode since it never assumes a fixed token count per day).
+    Weeks with fewer than 7 real values are padded with -1 at the end, per
+    the established missing-value convention -- EXCEPT the single LAST week,
+    which is left short if it comes up that way. A short week in the middle
+    of the archive means a real void/'*' day (confirmed missing, pad it);
+    a short LAST week means the live result for that day just hasn't
+    happened yet (it's pending, not missing) -- padding it would fabricate
+    a sentinel for a day that may still get a real result appended later,
+    and would also make the endpoint/root computation use a fake -1 instead
+    of the true last confirmed value (user-confirmed 2026-08-06 after a
+    resend without that day's value: the day wasn't final, so it should
+    reduce the window to end at the prior day, not get padded)."""
+    matches = list(_WEEK_HEADER_RE.finditer(text))
     rows = []
-    for line in source:
+    n = len(matches)
+    for i, m in enumerate(matches):
+        start = m.end()
+        end = matches[i + 1].start() if i + 1 < n else len(text)
+        toks = text[start:end].split()
+        jodis = [t for t in toks if re.fullmatch(r'\d{2}', t)]
+        is_last_week = (i == n - 1)
+        if not is_last_week:
+            while len(jodis) < 7:
+                jodis.append("-1")
+        rows.append([int(v) for v in jodis])
+    return rows
+
+
+def load_data(source):
+    """Parse lines into 2-D list of ints, skipping non-numeric tokens.
+    Auto-detects a real weekly result archive (date-range headers) and routes
+    it through parse_weekly_archive() instead of the normal per-line numeric
+    parser, since that format needs multi-line-per-record extraction, not
+    simple whitespace-split-and-int()."""
+    lines = [line for line in source]
+    text = "\n".join(lines)
+    if is_weekly_archive_format(text):
+        return parse_weekly_archive(text)
+
+    rows = []
+    for line in lines:
         line = line.strip()
         if not line:
             continue
@@ -1823,6 +1935,36 @@ def run(data_source, user_x_op=None, user_y_op=None):
         print("ERROR: No data loaded.")
         return
 
+    # Flag grid rows that don't match the grid's modal width. The grid body is
+    # defined by POSITION, not by each row's own length: it runs from row 0
+    # through the last row anywhere in the file with len >= 5 (live single-value
+    # append rows after that point are normal continuation lines, not grid rows).
+    # Using position rather than length means a badly-gapped grid row -- even one
+    # cut down to 3-4 tokens -- still gets checked, instead of being mistaken for
+    # a live append just because it's short. The single LAST grid row is exempt:
+    # exactly one row per dataset reset is allowed to be a genuinely short
+    # end-of-paste line (confirmed with the user at reset time), and it stays
+    # short permanently even after results get appended below it -- re-flagging
+    # it every round afterward would be noise, not a real anomaly. This doesn't
+    # guess or auto-pad -- whitespace-split parsing can't tell where a missing
+    # value belongs (a gap collapses just like a normal separator), so any real
+    # fix requires human confirmation. This just makes sure a width mismatch is
+    # never missed silently.
+    _last_grid_i = max((i for i, _row in enumerate(rows) if len(_row) >= 5), default=None)
+    if _last_grid_i is not None and _last_grid_i > 0:
+        _check_idx = range(_last_grid_i)  # grid body up to (excl.) the exempt last grid row
+        _width_counts = {}
+        for _i in _check_idx:
+            _w = len(rows[_i])
+            _width_counts[_w] = _width_counts.get(_w, 0) + 1
+        _modal_width = max(_width_counts, key=_width_counts.get)
+        _mismatches = [_i + 1 for _i in _check_idx if len(rows[_i]) != _modal_width]
+        if _mismatches:
+            print(f"  ⚠ WARNING: {len(_mismatches)} row(s) don't match the modal width "
+                  f"({_modal_width} cols): rows {_mismatches[:20]}"
+                  f"{' ...' if len(_mismatches) > 20 else ''}")
+            print("  Confirm with the user where each gap belongs before trusting this window.")
+
     # ── Step 1: EndPoint ──────────────────────────────────────────────────────
     endpoint     = rows[-1][-1]
     endpoint_pos = (len(rows) - 1, len(rows[-1]) - 1)
@@ -1846,7 +1988,10 @@ def run(data_source, user_x_op=None, user_y_op=None):
                       f"   →   ENDPOINT  (no next)")
             else:
                 nxt = get_next_number(rows, r, c)
-                if nxt is not None:
+                if nxt == -1:
+                    print(f"  {occurrence:>4}  Row {r+1:>3}, position {c+1:>2}"
+                          f"   →   ??  (unreadable cell, skipped)")
+                elif nxt is not None:
                     group_index.append(nxt)
                     print(f"  {occurrence:>4}  Row {r+1:>3}, position {c+1:>2}"
                           f"   →   {nxt:02d}")
@@ -1995,6 +2140,21 @@ def run(data_source, user_x_op=None, user_y_op=None):
             structural = "  ROOT=EP → predict NEW"
         elif ep_x == ep_y:
             structural = f"  EP x=y={ep_x} (coin-flip, not reliable)"
+        # ── Recommended pick callout (confidence tiered by top score, not just
+        # rank) -- printed BEFORE the FINAL PREDICTIONS box (2026-08-08,
+        # matches the chat-relay template order the user standardized on:
+        # ★ RECOMMENDED first, then the box, not the reverse).
+        top_score = top4[0][1] if top4 else 0
+        if top_score >= 15:
+            tier = "HIGH CONFIDENCE"
+        elif top_score >= 8:
+            tier = "MODERATE CONFIDENCE"
+        else:
+            tier = "LOW CONFIDENCE — weak signal this round"
+        picks = ", ".join(f"{v:02d}" for v, _, _ in top4[:3])
+        print()
+        print(f"  ★ RECOMMENDED: {picks}  [{tier}]")
+
         print()
         hdr = f"EP={endpoint:02d}  Root={root:02d}  Trans={len(ops_list)}"
         print("  ╔══════════════════════════════════════════════════════════════╗")
@@ -2022,17 +2182,44 @@ def run(data_source, user_x_op=None, user_y_op=None):
             print(f"  ║  NOTE: {note:<54}║")
         print("  ╚══════════════════════════════════════════════════════════════╝")
 
-        # ── Recommended pick callout (confidence tiered by top score, not just rank)
-        top_score = top4[0][1] if top4 else 0
-        if top_score >= 15:
-            tier = "HIGH CONFIDENCE"
-        elif top_score >= 8:
-            tier = "MODERATE CONFIDENCE"
-        else:
-            tier = "LOW CONFIDENCE — weak signal this round"
-        picks = ", ".join(f"{v:02d}" for v, _, _ in top4[:3])
+        # ── TOP 10 PICKS, color-tiered (2026-07-31, user requested a finer
+        # breakdown than the single 3-pick ★ RECOMMENDED line: "recommended
+        # and best suitable... 10 top results... color code Red, Green,
+        # Blue, Yellow"). Splits the top 10 of the SAME ranking above into
+        # 4 bands by rank position (not a new signal or re-ranking) --
+        # 🔴 ranks 1-3 (best), 🟢 4-6, 🔵 7-8, 🟡 9-10. Purely a display
+        # regrouping of already-computed scores, same as the 3-column table.
+        _top10 = top4[:10]
+        _tier_color = {}
+        for _i in range(len(_top10)):
+            if _i < 3:
+                _tier_color[_i] = "\U0001F534"  # red
+            elif _i < 6:
+                _tier_color[_i] = "\U0001F7E2"  # green
+            elif _i < 8:
+                _tier_color[_i] = "\U0001F535"  # blue
+            else:
+                _tier_color[_i] = "\U0001F7E1"  # yellow
+        _t10_hdr = "  TOP 10 PICKS (\U0001F534=ranks 1-3, \U0001F7E2=4-6, \U0001F535=7-8, \U0001F7E1=9-10)"
+        _t10_lines = []
+        for _i, (_v, _s, _r) in enumerate(_top10):
+            _seen_t = set()
+            _t_parts = []
+            for _rr in _r:
+                _key = _rr.split()[0]
+                if _key not in _seen_t:
+                    _seen_t.add(_key)
+                    _t_parts.append(_key)
+            _t_reason = " + ".join(_t_parts)[:34]
+            _t10_lines.append(f"  {_tier_color[_i]} #{_i + 1:<2} →  {_v:02d}   score={_s:>2}   {_t_reason}")
+        _t10w = max([64, len(_t10_hdr)] + [len(l) for l in _t10_lines])
         print()
-        print(f"  ★ RECOMMENDED: {picks}  [{tier}]")
+        print(f"  ┌{'─' * _t10w}┐")
+        print(f"  │{_t10_hdr:<{_t10w}}│")
+        print(f"  ├{'─' * _t10w}┤")
+        for l in _t10_lines:
+            print(f"  │{l:<{_t10w}}│")
+        print(f"  └{'─' * _t10w}┘")
 
         # ── 4-column Rank/Val/Score summary table (added 2026-07-26 as
         # 3 columns, widened to 4 columns on 2026-07-30 alongside the
@@ -2107,28 +2294,6 @@ def run(data_source, user_x_op=None, user_y_op=None):
 
         _print_zone_box("MIDDLE 30 (ranks 41-70)", _middle40, 41)
         _print_zone_box("TAIL 30 (ranks 71-100, least likely)", _tail30, 71)
-
-        # ── ML CONFIDENCE (informational secondary signal only) ──────────
-        # NOT used to rank the FINAL PREDICTIONS above -- backtested
-        # accuracy of this model is lower than the rule-based system (see
-        # feedback_script_changes.md, "ML approach tested"). Shown for
-        # transparency/completeness only.
-        from ml_features import ml_confidence_ranking
-        _ml_ranked = ml_confidence_ranking(_last_scores, len(ops_list), len(_last_scores))
-        if _ml_ranked:
-            _mw = 64
-            def _mline(text=""):
-                print(f"  │{text:<{_mw}}│")
-            print()
-            print(f"  ┌{'─' * _mw}┐")
-            _mline("  ML CONFIDENCE (secondary, informational only)")
-            print(f"  ├{'─' * _mw}┤")
-            for i, (val, prob) in enumerate(_ml_ranked[:3], 1):
-                _mline(f"  #{i}  ->  {val:02d}   ML probability: {100*prob:5.1f}%")
-            _mline("  NOTE: this model's backtested accuracy is LOWER than the")
-            _mline("  rule-based ranking above -- shown for transparency, not")
-            _mline("  used to determine the FINAL PREDICTIONS or RECOMMENDED pick.")
-            print(f"  └{'─' * _mw}┘")
 
         # ── TOP 30 BY DECADE -- same top-30 values, grouped 00-09/10-19/.../90-99
         # for quick "is my number's decade in the list" scanning. Purely a
@@ -2239,6 +2404,88 @@ def run(data_source, user_x_op=None, user_y_op=None):
         for l in _ext_dec_lines:
             print(f"  │{l:<{_edw}}│")
         print(f"  └{'─' * _edw}┘")
+
+        # ── RECOMMENDED BY DECADE / BY FAMILY, score-threshold (2026-08-02,
+        # replaces the ALL-100 boxes -- user correctly called those useless,
+        # "no use, you gave me 0-100"). This is the honest version of "no
+        # fixed range": instead of a hard top-40 COUNT cutoff (which silently
+        # drops any value tied with the #40 score), include every value
+        # whose score is >= the #40 cutoff score. Size floats round to round
+        # (measured range 40-55 over 41 backtested rounds here) instead of
+        # being forced to exactly 40. Backtested real hit rate: 39.0%
+        # (16/41) vs 34.1% (14/41) for the old fixed-40 cutoff -- a genuine
+        # improvement from not discarding ties, NOT a "no-miss" claim. This
+        # table still misses in roughly 6 of 10 rounds; only the full 100-
+        # value universe has zero misses, and that was already shown to be
+        # useless. Does not change build_strong_predictions() or top4 --
+        # display-only, reads the same _pred_scores dict.
+        _rec_cutoff_score = top4[-1][1] if top4 else 0
+        _rec_set = sorted(v for v in range(100) if len(_pred_scores.get(v, [])) >= _rec_cutoff_score)
+
+        def _val_tag(v):
+            return f"{v:02d}"
+
+        def _wrapped_rows(label, members, per_line=8):
+            _indent = " " * len(f"  {label} : ")
+            _rows = []
+            for i in range(0, len(members), per_line):
+                _chunk = ", ".join(_val_tag(v) for v in members[i:i + per_line])
+                _prefix = f"  {label} : " if i == 0 else _indent
+                _rows.append(f"{_prefix}{_chunk}")
+            return _rows if members else [f"  {label} : --"]
+
+        def _print_box(hdr, rows):
+            _w = max([64, len(hdr)] + [len(l) for l in rows])
+            print()
+            print(f"  ┌{'─' * _w}┐")
+            print(f"  │{hdr:<{_w}}│")
+            print(f"  ├{'─' * _w}┤")
+            for l in rows:
+                print(f"  │{l:<{_w}}│")
+            print(f"  └{'─' * _w}┘")
+
+        _rec_dec_hdr = (f"  RECOMMENDED BY DECADE ({len(_rec_set)} values, score>={_rec_cutoff_score}, "
+                         f"no fixed range)")
+        _rec_dec_lines = []
+        for _decade in range(10):
+            _lo, _hi = _decade * 10, _decade * 10 + 9
+            _label = f"{_lo:02d}-{_hi:02d}"
+            _in_decade = [v for v in _rec_set if _lo <= v <= _hi]
+            _rec_dec_lines.extend(_wrapped_rows(_label, _in_decade))
+        _print_box(_rec_dec_hdr, _rec_dec_lines)
+
+        _rec_fam_hdr = (f"  RECOMMENDED BY FAMILY ({len(_rec_set)} values, score>={_rec_cutoff_score}, "
+                        f"no fixed range)")
+        _rec_fam_lines = []
+        for _fam in FAMILY_ORDER:
+            _members = [v for v in _rec_set if FAMILY_MAP[v] == _fam]
+            _rec_fam_lines.extend(_wrapped_rows(f"{_fam:<16}", _members))
+        _print_box(_rec_fam_hdr, _rec_fam_lines)
+
+        # ── ML CONFIDENCE (informational secondary signal only) ──────────
+        # NOT used to rank the FINAL PREDICTIONS above -- backtested
+        # accuracy of this model is lower than the rule-based system (see
+        # feedback_script_changes.md, "ML approach tested"). Shown for
+        # transparency/completeness only. Moved to print LAST (2026-08-08,
+        # after RECOMMENDED BY FAMILY) to match the chat-relay template
+        # order the user standardized on -- was previously right after
+        # TAIL 30, ahead of the DECADE/FAMILY/SIBLINGS/RECOMMENDED boxes.
+        from ml_features import ml_confidence_ranking
+        _ml_ranked = ml_confidence_ranking(_last_scores, len(ops_list), len(_last_scores))
+        if _ml_ranked:
+            _mw = 64
+            def _mline(text=""):
+                print(f"  │{text:<{_mw}}│")
+            print()
+            print(f"  ┌{'─' * _mw}┐")
+            _mline("  ML CONFIDENCE (secondary, informational only)")
+            print(f"  ├{'─' * _mw}┤")
+            for i, (val, prob) in enumerate(_ml_ranked[:3], 1):
+                _mline(f"  #{i}  ->  {val:02d}   ML probability: {100*prob:5.1f}%")
+            _mline("  NOTE: this model's backtested accuracy is LOWER than the")
+            _mline("  rule-based ranking above -- shown for transparency, not")
+            _mline("  used to determine the FINAL PREDICTIONS or RECOMMENDED pick.")
+            print(f"  └{'─' * _mw}┘")
     print()
     return root, ops_list, _last_top4, _last_scores
 

@@ -32,7 +32,9 @@ from DataProcessing import load_data, find_op, get_next_number, build_strong_pre
 WINDOWS = [
     ('D341-D446', 'temp_data_d341_d446_backup.txt', 174, 341),
     ('D447-D592', 'temp_data_d447_d592_backup.txt', 169, 447),
-    ('D593-current', 'temp_data.txt', 151, 593),
+    ('D593-D818', 'temp_data_d593_d818_backup.txt', 151, 593),
+    ('D819-D1038', 'temp_data_d819_d1038_backup.txt', 151, 819),
+    ('D1708-current', 'temp_data.txt', 546, 1708),
 ]
 
 def compute_state_positions(rows):
@@ -314,7 +316,7 @@ if __name__ == '__main__':
     # bar the earlier signal-family ablation studies used ("helps on both
     # windows" not just combined-noise).
     print("\n" + "=" * 70)
-    print("CROSS-WINDOW CONSISTENCY CHECK (bar: rate>=18%, N>=15, in >=2/3 windows)")
+    print("CROSS-WINDOW CONSISTENCY CHECK (bar: rate>=18%, N>=15, in >=2 of 5 windows)")
     print("=" * 70)
     for tag, per_window in [("zero-signal misses", per_window_zero), ("all rounds", per_window_all)]:
         print(f"\n[{tag}]")

@@ -51,7 +51,7 @@ def compute_state_positions(rows):
             if (r, c) == endpoint_pos:
                 continue
             nxt = get_next_number(rows, r, c)
-            if nxt is not None:
+            if nxt is not None and nxt != -1:
                 group_index.append(nxt)
                 if c + 1 < len(row):
                     positions.append((r, c + 1))

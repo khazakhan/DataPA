@@ -36,7 +36,7 @@ def compute_state(rows):
             if (r, c) == endpoint_pos:
                 continue
             nxt = get_next_number(rows, r, c)
-            if nxt is not None:
+            if nxt is not None and nxt != -1:
                 group_index.append(nxt)
     if not group_index:
         return None

@@ -31,8 +31,8 @@ from DataProcessing import load_data, find_op, get_next_number, build_strong_pre
 with open('temp_data.txt') as f:
     all_lines = [l for l in f if l.strip()]
 
-GRID_ROWS = 188
-D_START = 1715
+GRID_ROWS = 525
+D_START = 1761
 N_ROUNDS = len(all_lines) - GRID_ROWS  # D447..current
 
 FAMILIES = {
@@ -77,7 +77,7 @@ def compute_state(rows):
             if (r, c) == endpoint_pos:
                 continue
             nxt = get_next_number(rows, r, c)
-            if nxt is not None:
+            if nxt is not None and nxt != -1:
                 group_index.append(nxt)
     if not group_index:
         return None

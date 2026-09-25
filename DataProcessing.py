@@ -795,17 +795,16 @@ def show_last_rows_diagram(rows):
         a, b = sequence[i], sequence[i + 1]
         trans_ops.append((find_op(a // 10, b // 10), find_op(a % 10, b % 10)))
 
-    # Mark transitions that cross row boundaries
-    boundary_set = set()
+    # Row start offsets within `sequence`, and which edges cross a row boundary
+    row_starts = []
     cumulative = 0
-    for row in last_seq[:-1]:
+    for row in last_seq:
+        row_starts.append(cumulative)
         cumulative += len(row)
-        boundary_set.add(cumulative - 1)
+    boundary_set = set(rs - 1 for rs in row_starts[1:])
 
-    PER_ROW = 5
-    n       = len(trans_ops)
-    CONN    = 9
-    CELL    = 15
+    CONN = 9
+    CELL = 15
 
     base_idx = split - len(lastN_complete)
     sep('═')
@@ -815,14 +814,25 @@ def show_last_rows_diagram(rows):
         print(f"  Row {rnum:>3}:  " + "   ".join(f"{v:02d}" for v in row))
     print()
 
-    for row_start in range(0, n, PER_ROW):
-        row_end  = min(row_start + PER_ROW, n)
+    # One diagram block per data row — each block starts with the incoming
+    # transition from the previous row's last value (if any), then runs
+    # through every transition inside that row, ending on the row's own
+    # last value. This keeps a row's full chain together instead of cutting
+    # it off mid-row at a fixed column width.
+    for ri, row in enumerate(last_seq):
+        row_start = row_starts[ri]
+        row_len   = len(row)
+        edge_from = row_start - 1 if ri > 0 else row_start
+        edge_to   = row_start + row_len - 1
+        if edge_to <= edge_from:
+            continue   # nothing to chain (e.g. a lone leading/pending value)
+
         top_line = '  '
         mid_line = '  '
         bot_line = '  '
         lbl_line = '  '
 
-        for i in range(row_start, row_end):
+        for i in range(edge_from, edge_to):
             node_val   = sequence[i]
             x_op, y_op = trans_ops[i]
             xab        = OP_ABBREV.get(x_op, x_op)
@@ -839,7 +849,7 @@ def show_last_rows_diagram(rows):
             marker    = '│' if i in boundary_set else ''
             lbl_line += f'[T{i+1}]{marker}'.ljust(CELL)
 
-        last_val  = sequence[row_end]
+        last_val  = sequence[edge_to]
         top_line += '┌────┐'
         mid_line += f'│ {last_val:02d} │'
         bot_line += '└────┘'

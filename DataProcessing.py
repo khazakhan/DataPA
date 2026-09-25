@@ -774,17 +774,17 @@ def show_chain_diagram(group_index, ops_list, root, internal_positions):
 
 
 def show_last_rows_diagram(rows):
-    """Print transition chain for the last 4 complete rows + trailing partial values."""
+    """Print transition chain for the last 10 complete rows + trailing partial values."""
     # Separate trailing single-value rows (partial results) from complete rows
     split = len(rows)
     while split > 0 and len(rows[split - 1]) == 1:
         split -= 1
-    last4_complete = rows[max(0, split - 4):split]
+    lastN_complete = rows[max(0, split - 10):split]
     trailing       = rows[split:]
-    last3          = last4_complete + trailing   # combined display sequence
+    last_seq       = lastN_complete + trailing   # combined display sequence
 
     sequence = []
-    for row in last3:
+    for row in last_seq:
         sequence.extend(row)
 
     if len(sequence) < 2:
@@ -798,7 +798,7 @@ def show_last_rows_diagram(rows):
     # Mark transitions that cross row boundaries
     boundary_set = set()
     cumulative = 0
-    for row in last3[:-1]:
+    for row in last_seq[:-1]:
         cumulative += len(row)
         boundary_set.add(cumulative - 1)
 
@@ -807,10 +807,10 @@ def show_last_rows_diagram(rows):
     CONN    = 9
     CELL    = 15
 
-    base_idx = split - len(last4_complete)
+    base_idx = split - len(lastN_complete)
     sep('═')
-    print("\n  Last 4 rows of data grid:\n")
-    for ri, row in enumerate(last3):
+    print("\n  Last 10 rows of data grid:\n")
+    for ri, row in enumerate(last_seq):
         rnum = base_idx + ri + 1
         print(f"  Row {rnum:>3}:  " + "   ".join(f"{v:02d}" for v in row))
     print()

@@ -2612,8 +2612,14 @@ def run(data_source, user_x_op=None, user_y_op=None):
             _in = [v for v in _merged if _lo <= v <= _hi]
             _cells = "  ".join(f"{v:02d}{_mtag(v)}" for v in _in) if _in else "--"
             _merge_lines.append(f"  {_lo:02d}-{_hi:02d} : {_cells}")
+        # TOTAL MERGE also adds each value's reverse (xy → yx) if missing,
+        # e.g. 29 present → 92 added.
+        _rev_added = sorted({(v % 10) * 10 + v // 10 for v in _merged} - set(_merged))
+        _total     = sorted(set(_merged) | set(_rev_added))
         _merge_lines.append("")
-        _merge_lines.extend(_wrapped_rows(f"TOTAL MERGE ({len(_merged)})", _merged, per_line=10))
+        _merge_lines.extend(_wrapped_rows(f"TOTAL MERGE ({len(_total)})", _total, per_line=10))
+        _merge_lines.append("")
+        _merge_lines.extend(_wrapped_rows(f"REVERSE ADDED ({len(_rev_added)})", _rev_added, per_line=10))
         _merge_lines.append("")
         _merge_lines.append(f"  B = both ({len(_both)})   R = Recommended only "
                             f"({len(_rec_only - _kk_only)})   K = KK only ({len(_kk_only - _rec_only)})")

@@ -1946,13 +1946,14 @@ def show_kk_special_family(rows):
                      "No bracket cells found in the last 10 rows.")
 
 
-def show_kk_chain_family(group_index, endpoint):
+def show_kk_chain_family(group_index):
     """Same KK bracket rule, run over the TRANSITION CHAIN instead of the
-    last 10 rows: chain cells whose tens digit is in the EP bracket lend their
-    transition op (Op N), applied to the EndPoint. Display only."""
-    if endpoint is None or endpoint < 0 or len(group_index) < 2:
+    last 10 rows: the chain's own last value is the EP (e.g. chain ends 56 →
+    bracket 5/0); chain cells whose tens digit is in that bracket lend their
+    transition op (Op N), applied to that last value. Display only."""
+    if len(group_index) < 2 or group_index[-1] < 0:
         return []
-    return _kk_table(list(group_index), endpoint, "KK CHAIN FAMILY RESULT", "Op",
+    return _kk_table(list(group_index), group_index[-1], "KK CHAIN FAMILY RESULT", "Op",
                      "No bracket cells found in the transition chain.")
 
 
@@ -2178,7 +2179,7 @@ def run(data_source, user_x_op=None, user_y_op=None):
     # ── Step 5b: Last 3 rows of data grid ────────────────────────────────────
     show_last_rows_diagram(rows)
     _kk_vals = show_kk_special_family(rows)
-    _kk_chain_vals = show_kk_chain_family(group_index, endpoint)
+    _kk_chain_vals = show_kk_chain_family(group_index)
 
     # ── Step 7: User Operation (if provided) ─────────────────────────────────
     if user_x_op and user_y_op:

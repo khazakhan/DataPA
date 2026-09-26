@@ -1909,6 +1909,84 @@ def load_data(source):
     return rows
 
 
+def show_kk_special_family(rows):
+    """KK Special family result — display only, does not affect scoring.
+
+    Over the same last-10-rows sequence shown in the diagram above, take the
+    EndPoint (last value). Its tens digit t defines the bracket {t, cut(t)}
+    (e.g. EP 08 → bracket 0/5). Every earlier cell whose tens digit is in that
+    bracket contributes its own transition (cell → next cell) as an operation,
+    which is applied to the EndPoint as xy / yx / sign+xy / sign+yx.
+    """
+    split = len(rows)
+    while split > 0 and len(rows[split - 1]) == 1:
+        split -= 1
+    sequence = []
+    for row in rows[max(0, split - 10):split] + rows[split:]:
+        sequence.extend(row)
+
+    if len(sequence) < 2 or sequence[-1] < 0:
+        return
+
+    ep      = sequence[-1]
+    t       = ep // 10
+    bracket = sorted({t, cut(t)})
+
+    entries = []
+    for i in range(len(sequence) - 1):
+        a, b = sequence[i], sequence[i + 1]
+        if a < 0 or b < 0 or a // 10 not in bracket:
+            continue
+        x_op, y_op = find_op(a // 10, b // 10), find_op(a % 10, b % 10)
+        if x_op == '?' or y_op == '?':
+            continue
+        entries.append((i + 1, a, b, x_op, y_op, compute_variants(ep, x_op, y_op)))
+
+    sep('═')
+    print(f"\n  KK SPECIAL FAMILY RESULT   (EP={ep:02d}, bracket starts with "
+          f"{' or '.join(str(d) for d in bracket)})\n")
+    if not entries:
+        print("  No bracket cells found in the last 10 rows.")
+        sep('═')
+        print()
+        return
+
+    print(f"  {'Pos':<7} {'Source':<9} {'x op':<7} {'y op':<7} "
+          f"{'xy':>4} {'yx':>4} {'sign+xy':>8} {'sign+yx':>8}")
+    sep()
+    counts = {}
+    for pos, a, b, x_op, y_op, (xy, yx, sxy, syx) in entries:
+        xab = OP_ABBREV.get(x_op, x_op)
+        yab = OP_ABBREV.get(y_op, y_op)
+        print(f"  {'[T' + str(pos) + ']':<7} {a:02d} → {b:02d}   {xab:<7} {yab:<7} "
+              + f"{xy:02d}".rjust(4) + f"{yx:02d}".rjust(5)
+              + f"{sxy:02d}".rjust(9) + f"{syx:02d}".rjust(9))
+        for v in {xy, yx, sxy, syx}:
+            counts[v] = counts.get(v, 0) + 1
+    sep()
+    ranked = sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))
+
+    # KK Special family result — boxed table, 3 entries per line
+    COLS  = 3
+    CELLW = 20
+    inner = COLS * CELLW
+    print()
+    print("  ╔" + "═" * inner + "╗")
+    title = f"KK SPECIAL FAMILY RESULT  ({len(ranked)} values)"
+    print("  ║" + title.center(inner) + "║")
+    print("  ╠" + "═" * inner + "╣")
+    print("  ║" + "".join(" #   Num   Count    ".ljust(CELLW) for _ in range(COLS)) + "║")
+    print("  ╟" + "─" * inner + "╢")
+    for start in range(0, len(ranked), COLS):
+        line = ""
+        for k, (v, c) in enumerate(ranked[start:start + COLS]):
+            line += f" {start + k + 1:>2}   {v:02d}    x{c}".ljust(CELLW)
+        print("  ║" + line.ljust(inner) + "║")
+    print("  ╚" + "═" * inner + "╝")
+    sep('═')
+    print()
+
+
 def get_next_number(rows, r, c):
     """Return the number that immediately follows position (r, c) in reading order."""
     row = rows[r]
@@ -2063,6 +2141,7 @@ def run(data_source, user_x_op=None, user_y_op=None):
 
     # ── Step 5b: Last 3 rows of data grid ────────────────────────────────────
     show_last_rows_diagram(rows)
+    show_kk_special_family(rows)
 
     # ── Step 7: User Operation (if provided) ─────────────────────────────────
     if user_x_op and user_y_op:

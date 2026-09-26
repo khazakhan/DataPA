@@ -2178,7 +2178,7 @@ def run(data_source, user_x_op=None, user_y_op=None):
     # ── Step 5b: Last 3 rows of data grid ────────────────────────────────────
     show_last_rows_diagram(rows)
     _kk_vals = show_kk_special_family(rows)
-    show_kk_chain_family(group_index, endpoint)
+    _kk_chain_vals = show_kk_chain_family(group_index, endpoint)
 
     # ── Step 7: User Operation (if provided) ─────────────────────────────────
     if user_x_op and user_y_op:
@@ -2614,20 +2614,23 @@ def run(data_source, user_x_op=None, user_y_op=None):
             print(f"  └{'─' * _mw}┘")
 
         # ── MERGE: Special family & Recommended (printed very last) ──────
-        # Unique union of RECOMMENDED BY FAMILY and KK SPECIAL FAMILY RESULT.
-        # Display only. Tag: B = in both, R = Recommended only, K = KK only.
-        _rec_only = set(_rec_set)
-        _kk_only  = set(_kk_vals)
-        _merged   = sorted(_rec_only | _kk_only)
-        _both     = _rec_only & _kk_only
+        # Unique union of RECOMMENDED BY FAMILY, KK SPECIAL FAMILY RESULT and
+        # KK CHAIN FAMILY RESULT. Display only. Each value is tagged with the
+        # letters of every source it came from: R = Recommended, K = KK,
+        # C = Chain (e.g. 06RKC = in all three).
+        _src_rec   = set(_rec_set)
+        _src_kk    = set(_kk_vals)
+        _src_chain = set(_kk_chain_vals)
+        _merged    = sorted(_src_rec | _src_kk | _src_chain)
         def _mtag(v):
-            return 'B' if v in _both else ('R' if v in _rec_only else 'K')
+            return (('R' if v in _src_rec else '') + ('K' if v in _src_kk else '')
+                    + ('C' if v in _src_chain else ''))
         _merge_hdr = (f"  MERGE: Special family & Recommended ({len(_merged)} unique values)")
         _merge_lines = []
         for _decade in range(10):
             _lo, _hi = _decade * 10, _decade * 10 + 9
             _in = [v for v in _merged if _lo <= v <= _hi]
-            _cells = "  ".join(f"{v:02d}{_mtag(v)}" for v in _in) if _in else "--"
+            _cells = "  ".join(f"{v:02d}{_mtag(v):<3}" for v in _in).rstrip() if _in else "--"
             _merge_lines.append(f"  {_lo:02d}-{_hi:02d} : {_cells}")
         # TOTAL MERGE also adds each value's reverse (xy → yx) if missing,
         # e.g. 29 present → 92 added.
@@ -2638,8 +2641,9 @@ def run(data_source, user_x_op=None, user_y_op=None):
         _merge_lines.append("")
         _merge_lines.extend(_wrapped_rows(f"REVERSE ADDED ({len(_rev_added)})", _rev_added, per_line=10))
         _merge_lines.append("")
-        _merge_lines.append(f"  B = both ({len(_both)})   R = Recommended only "
-                            f"({len(_rec_only - _kk_only)})   K = KK only ({len(_kk_only - _rec_only)})")
+        _all3 = _src_rec & _src_kk & _src_chain
+        _merge_lines.append(f"  R = Recommended ({len(_src_rec)})   K = KK ({len(_src_kk)})   "
+                            f"C = Chain ({len(_src_chain)})   in all 3 = {len(_all3)}  ")
         _print_box(_merge_hdr, _merge_lines)
     print()
     return root, ops_list, _last_top4, _last_scores

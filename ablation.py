@@ -31,8 +31,8 @@ from DataProcessing import load_data, find_op, get_next_number, build_strong_pre
 with open('temp_data.txt') as f:
     all_lines = [l for l in f if l.strip()]
 
-GRID_ROWS = 440
-D_START = 1766
+GRID_ROWS = 468
+D_START = 1769
 N_ROUNDS = len(all_lines) - GRID_ROWS  # D447..current
 
 FAMILIES = {

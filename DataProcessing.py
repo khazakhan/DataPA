@@ -1940,7 +1940,7 @@ def show_kk_special_family(rows):
         sequence.extend(row)
 
     if len(sequence) < 2 or sequence[-1] < 0:
-        return
+        return []
 
     ep      = sequence[-1]
     t       = ep // 10
@@ -1967,7 +1967,7 @@ def show_kk_special_family(rows):
         print("  No bracket cells found in the last 10 rows.")
         sep('═')
         print()
-        return
+        return []
 
     print(f"  {'Pos':<7} {'Source':<9} {'x op':<7} {'y op':<7} "
           f"{'xy':>4} {'yx':>4} {'sign+xy':>8} {'sign+yx':>8} {'cut xy':>7} {'cut sign':>9}")
@@ -2004,6 +2004,7 @@ def show_kk_special_family(rows):
     print("  ╚" + "═" * inner + "╝")
     sep('═')
     print()
+    return sorted(counts)
 
 
 def get_next_number(rows, r, c):
@@ -2160,7 +2161,7 @@ def run(data_source, user_x_op=None, user_y_op=None):
 
     # ── Step 5b: Last 3 rows of data grid ────────────────────────────────────
     show_last_rows_diagram(rows)
-    show_kk_special_family(rows)
+    _kk_vals = show_kk_special_family(rows)
 
     # ── Step 7: User Operation (if provided) ─────────────────────────────────
     if user_x_op and user_y_op:
@@ -2594,6 +2595,29 @@ def run(data_source, user_x_op=None, user_y_op=None):
             _mline("  rule-based ranking above -- shown for transparency, not")
             _mline("  used to determine the FINAL PREDICTIONS or RECOMMENDED pick.")
             print(f"  └{'─' * _mw}┘")
+
+        # ── MERGE: Special family & Recommended (printed very last) ──────
+        # Unique union of RECOMMENDED BY FAMILY and KK SPECIAL FAMILY RESULT.
+        # Display only. Tag: B = in both, R = Recommended only, K = KK only.
+        _rec_only = set(_rec_set)
+        _kk_only  = set(_kk_vals)
+        _merged   = sorted(_rec_only | _kk_only)
+        _both     = _rec_only & _kk_only
+        def _mtag(v):
+            return 'B' if v in _both else ('R' if v in _rec_only else 'K')
+        _merge_hdr = (f"  MERGE: Special family & Recommended ({len(_merged)} unique values)")
+        _merge_lines = []
+        for _decade in range(10):
+            _lo, _hi = _decade * 10, _decade * 10 + 9
+            _in = [v for v in _merged if _lo <= v <= _hi]
+            _cells = "  ".join(f"{v:02d}{_mtag(v)}" for v in _in) if _in else "--"
+            _merge_lines.append(f"  {_lo:02d}-{_hi:02d} : {_cells}")
+        _merge_lines.append("")
+        _merge_lines.extend(_wrapped_rows(f"TOTAL MERGE ({len(_merged)})", _merged, per_line=10))
+        _merge_lines.append("")
+        _merge_lines.append(f"  B = both ({len(_both)})   R = Recommended only "
+                            f"({len(_rec_only - _kk_only)})   K = KK only ({len(_kk_only - _rec_only)})")
+        _print_box(_merge_hdr, _merge_lines)
     print()
     return root, ops_list, _last_top4, _last_scores
 

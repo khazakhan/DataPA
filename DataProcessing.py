@@ -1941,8 +1941,24 @@ def show_kk_special_family(rows):
 
     if len(sequence) < 2 or sequence[-1] < 0:
         return []
+    ep = sequence[-1]
+    return _kk_table(sequence, ep, "KK SPECIAL FAMILY RESULT", "T",
+                     "No bracket cells found in the last 10 rows.")
 
-    ep      = sequence[-1]
+
+def show_kk_chain_family(group_index, endpoint):
+    """Same KK bracket rule, run over the TRANSITION CHAIN instead of the
+    last 10 rows: chain cells whose tens digit is in the EP bracket lend their
+    transition op (Op N), applied to the EndPoint. Display only."""
+    if endpoint is None or endpoint < 0 or len(group_index) < 2:
+        return []
+    return _kk_table(list(group_index), endpoint, "KK CHAIN FAMILY RESULT", "Op",
+                     "No bracket cells found in the transition chain.")
+
+
+def _kk_table(sequence, ep, label, pos_prefix, empty_msg):
+    """Shared KK bracket table: prints the per-cell table plus the boxed
+    # / Num / Count summary, returns the sorted unique values."""
     t       = ep // 10
     bracket = sorted({t, cut(t)})
 
@@ -1961,10 +1977,10 @@ def show_kk_special_family(rows):
                         compute_variants(ep, x_op, y_op) + (cxy, csxy)))
 
     sep('═')
-    print(f"\n  KK SPECIAL FAMILY RESULT   (EP={ep:02d}, bracket starts with "
+    print(f"\n  {label}   (EP={ep:02d}, bracket starts with "
           f"{' or '.join(str(d) for d in bracket)})\n")
     if not entries:
-        print("  No bracket cells found in the last 10 rows.")
+        print(f"  {empty_msg}")
         sep('═')
         print()
         return []
@@ -1976,7 +1992,7 @@ def show_kk_special_family(rows):
     for pos, a, b, x_op, y_op, (xy, yx, sxy, syx, cxy, csxy) in entries:
         xab = OP_ABBREV.get(x_op, x_op)
         yab = OP_ABBREV.get(y_op, y_op)
-        print(f"  {'[T' + str(pos) + ']':<7} {a:02d} → {b:02d}   {xab:<7} {yab:<7} "
+        print(f"  {'[' + pos_prefix + str(pos) + ']':<7} {a:02d} → {b:02d}   {xab:<7} {yab:<7} "
               + f"{xy:02d}".rjust(4) + f"{yx:02d}".rjust(5)
               + f"{sxy:02d}".rjust(9) + f"{syx:02d}".rjust(9)
               + f"{cxy:02d}".rjust(8) + f"{csxy:02d}".rjust(10))
@@ -1991,7 +2007,7 @@ def show_kk_special_family(rows):
     inner = COLS * CELLW
     print()
     print("  ╔" + "═" * inner + "╗")
-    title = f"KK SPECIAL FAMILY RESULT  ({len(ranked)} values)"
+    title = f"{label}  ({len(ranked)} values)"
     print("  ║" + title.center(inner) + "║")
     print("  ╠" + "═" * inner + "╣")
     print("  ║" + "".join(" #   Num   Count    ".ljust(CELLW) for _ in range(COLS)) + "║")
@@ -2162,6 +2178,7 @@ def run(data_source, user_x_op=None, user_y_op=None):
     # ── Step 5b: Last 3 rows of data grid ────────────────────────────────────
     show_last_rows_diagram(rows)
     _kk_vals = show_kk_special_family(rows)
+    show_kk_chain_family(group_index, endpoint)
 
     # ── Step 7: User Operation (if provided) ─────────────────────────────────
     if user_x_op and user_y_op:

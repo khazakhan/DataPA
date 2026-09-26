@@ -1909,6 +1909,16 @@ def load_data(source):
     return rows
 
 
+# KK Special family — add or remove the cut on an op (+1 ↔ cut+1, nc ↔ cut, …)
+KK_CUT_TOGGLE = {
+    'no_change': 'cut',   'cut':   'no_change',
+    '+1':        'cut+1', 'cut+1': '+1',
+    '-1':        'cut-1', 'cut-1': '-1',
+    '+2':        'cut+2', 'cut+2': '+2',
+    '-2':        'cut-2', 'cut-2': '-2',
+}
+
+
 def show_kk_special_family(rows):
     """KK Special family result — display only, does not affect scoring.
 
@@ -1917,6 +1927,10 @@ def show_kk_special_family(rows):
     (e.g. EP 08 → bracket 0/5). Every earlier cell whose tens digit is in that
     bracket contributes its own transition (cell → next cell) as an operation,
     which is applied to the EndPoint as xy / yx / sign+xy / sign+yx.
+
+    Two extra cut-toggle columns: each op has its cut added or removed
+    (+1 ↔ cut+1, nc ↔ cut, …) and is applied as xy ("cut xy"), then the
+    toggled op is also sign-flipped ("cut sign": +1 → cut-1, cut+1 → -1).
     """
     split = len(rows)
     while split > 0 and len(rows[split - 1]) == 1:
@@ -1940,7 +1954,11 @@ def show_kk_special_family(rows):
         x_op, y_op = find_op(a // 10, b // 10), find_op(a % 10, b % 10)
         if x_op == '?' or y_op == '?':
             continue
-        entries.append((i + 1, a, b, x_op, y_op, compute_variants(ep, x_op, y_op)))
+        tx, ty = KK_CUT_TOGGLE[x_op], KK_CUT_TOGGLE[y_op]
+        cxy  = apply_op(t, tx) * 10 + apply_op(ep % 10, ty)
+        csxy = apply_op(t, SIGN_FLIP[tx]) * 10 + apply_op(ep % 10, SIGN_FLIP[ty])
+        entries.append((i + 1, a, b, x_op, y_op,
+                        compute_variants(ep, x_op, y_op) + (cxy, csxy)))
 
     sep('═')
     print(f"\n  KK SPECIAL FAMILY RESULT   (EP={ep:02d}, bracket starts with "
@@ -1952,16 +1970,17 @@ def show_kk_special_family(rows):
         return
 
     print(f"  {'Pos':<7} {'Source':<9} {'x op':<7} {'y op':<7} "
-          f"{'xy':>4} {'yx':>4} {'sign+xy':>8} {'sign+yx':>8}")
+          f"{'xy':>4} {'yx':>4} {'sign+xy':>8} {'sign+yx':>8} {'cut xy':>7} {'cut sign':>9}")
     sep()
     counts = {}
-    for pos, a, b, x_op, y_op, (xy, yx, sxy, syx) in entries:
+    for pos, a, b, x_op, y_op, (xy, yx, sxy, syx, cxy, csxy) in entries:
         xab = OP_ABBREV.get(x_op, x_op)
         yab = OP_ABBREV.get(y_op, y_op)
         print(f"  {'[T' + str(pos) + ']':<7} {a:02d} → {b:02d}   {xab:<7} {yab:<7} "
               + f"{xy:02d}".rjust(4) + f"{yx:02d}".rjust(5)
-              + f"{sxy:02d}".rjust(9) + f"{syx:02d}".rjust(9))
-        for v in {xy, yx, sxy, syx}:
+              + f"{sxy:02d}".rjust(9) + f"{syx:02d}".rjust(9)
+              + f"{cxy:02d}".rjust(8) + f"{csxy:02d}".rjust(10))
+        for v in {xy, yx, sxy, syx, cxy, csxy}:
             counts[v] = counts.get(v, 0) + 1
     sep()
     ranked = sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))

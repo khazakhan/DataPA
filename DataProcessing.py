@@ -1919,7 +1919,7 @@ KK_CUT_TOGGLE = {
 }
 
 
-def show_kk_special_family(rows, merge_counts=None):
+def show_kk_special_family(rows, merge_counts=None, final40=None):
     """KK Special family result — display only, does not affect scoring.
 
     Over the same last-10-rows sequence shown in the diagram above, take the
@@ -1934,6 +1934,8 @@ def show_kk_special_family(rows, merge_counts=None):
 
     merge_counts: the KK CHAIN unique-value counts; when given, a KK MERGE
     box (special ∪ chain, no duplicates) prints beside the UNIQUE VALUES box.
+    final40: the FINAL PREDICTIONS (40) values; when given together with
+    merge_counts, a KK MERGE + FINAL 40 box prints beside the ranked box.
     """
     sequence = _kk_special_sequence(rows)
     if len(sequence) < 2 or sequence[-1] < 0:
@@ -1941,7 +1943,7 @@ def show_kk_special_family(rows, merge_counts=None):
     ep = sequence[-1]
     return _kk_table(sequence, ep, "KK SPECIAL FAMILY RESULT", "T",
                      "No bracket cells found in the last 10 rows.",
-                     merge_counts=merge_counts)
+                     merge_counts=merge_counts, final40=final40)
 
 
 def _kk_special_sequence(rows):
@@ -2017,7 +2019,16 @@ def _kk_box(title, items, cols=3, cellw=20):
     return lines
 
 
-def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None):
+def _print_side_by_side(left, right, gap=4):
+    width = max(len(l) for l in left)
+    left  = left + [""] * (len(right) - len(left))
+    right = right + [""] * (len(left) - len(right))
+    print()
+    for l, r in zip(left, right):
+        print((l.ljust(width) + " " * gap + r.lstrip()) if r else l)
+
+
+def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, final40=None):
     """Shared KK bracket table: prints the per-cell table, the UNIQUE VALUES
     box (optionally with a KK MERGE box beside it) and the ranked box;
     returns the sorted unique values."""
@@ -2061,20 +2072,26 @@ def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None):
             merged[v] = merged.get(v, 0) + c
         right = _kk_box(f"KK MERGE: SPECIAL + CHAIN  ({len(merged)} values)",
                         sorted(merged.items()))
-        width = len(left[0])
-        left += [""] * (len(right) - len(left))
-        right += [""] * (len(left) - len(right))
-        print()
-        for l, r in zip(left, right):
-            print(l.ljust(width) + "    " + r.lstrip() if r else l)
+        _print_side_by_side(left, right)
     else:
         print()
         print("\n".join(left))
 
     # Ranked by count (each value counted once per row)
     ranked = sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))
-    print()
-    print("\n".join(_kk_box(f"{label}  ({len(ranked)} values)", ranked)))
+    left = _kk_box(f"{label}  ({len(ranked)} values)", ranked)
+    if merge_counts is not None and final40:
+        # KK MERGE + FINAL 40 — no duplicates, each FINAL-40 value adds 1
+        # to its KK MERGE count; printed beside the ranked box
+        merged2 = dict(merged)
+        for v in final40:
+            merged2[v] = merged2.get(v, 0) + 1
+        right = _kk_box(f"KK MERGE + FINAL 40  ({len(merged2)} values)",
+                        sorted(merged2.items()))
+        _print_side_by_side(left, right)
+    else:
+        print()
+        print("\n".join(left))
     sep('═')
     print()
     return sorted(counts)
@@ -2234,7 +2251,8 @@ def run(data_source, user_x_op=None, user_y_op=None):
 
     # ── Step 5b: Last 3 rows of data grid ────────────────────────────────────
     show_last_rows_diagram(rows)
-    _kk_vals = show_kk_special_family(rows, merge_counts=kk_chain_unique_counts(group_index))
+    _kk_vals = show_kk_special_family(rows, merge_counts=kk_chain_unique_counts(group_index),
+                                      final40=[v for v, _, _ in _last_top4[:40]])
     _kk_chain_vals = show_kk_chain_family(group_index)
 
     # ── Step 7: User Operation (if provided) ─────────────────────────────────

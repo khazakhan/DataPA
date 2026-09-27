@@ -2019,6 +2019,27 @@ def _kk_table(sequence, ep, label, pos_prefix, empty_msg):
             line += f" {start + k + 1:>2}   {v:02d}    x{c}".ljust(CELLW)
         print("  ║" + line.ljust(inner) + "║")
     print("  ╚" + "═" * inner + "╝")
+
+    # Unique values table — every value once, sorted by number; count is
+    # occurrences across all 6 value columns (not once per row as above)
+    all_counts = {}
+    for *_, vals in entries:
+        for v in vals:
+            all_counts[v] = all_counts.get(v, 0) + 1
+    uniq = sorted(all_counts.items())
+    print()
+    print("  ╔" + "═" * inner + "╗")
+    title = f"{label}  (EP={ep:02d})  UNIQUE VALUES ({len(uniq)})"
+    print("  ║" + title.center(inner) + "║")
+    print("  ╠" + "═" * inner + "╣")
+    print("  ║" + "".join(" #   Num   Count    ".ljust(CELLW) for _ in range(COLS)) + "║")
+    print("  ╟" + "─" * inner + "╢")
+    for start in range(0, len(uniq), COLS):
+        line = ""
+        for k, (v, c) in enumerate(uniq[start:start + COLS]):
+            line += f" {start + k + 1:>2}   {v:02d}    x{c}".ljust(CELLW)
+        print("  ║" + line.ljust(inner) + "║")
+    print("  ╚" + "═" * inner + "╝")
     sep('═')
     print()
     return sorted(counts)

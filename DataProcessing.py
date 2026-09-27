@@ -1919,7 +1919,7 @@ KK_CUT_TOGGLE = {
 }
 
 
-def show_kk_special_family(rows):
+def show_kk_special_family(rows, merge_counts=None):
     """KK Special family result — display only, does not affect scoring.
 
     Over the same last-10-rows sequence shown in the diagram above, take the
@@ -1931,19 +1931,27 @@ def show_kk_special_family(rows):
     Two extra cut-toggle columns: each op has its cut added or removed
     (+1 ↔ cut+1, nc ↔ cut, …) and is applied as xy ("cut xy"), then the
     toggled op is also sign-flipped ("cut sign": +1 → cut-1, cut+1 → -1).
+
+    merge_counts: the KK CHAIN unique-value counts; when given, a KK MERGE
+    box (special ∪ chain, no duplicates) prints beside the UNIQUE VALUES box.
     """
+    sequence = _kk_special_sequence(rows)
+    if len(sequence) < 2 or sequence[-1] < 0:
+        return []
+    ep = sequence[-1]
+    return _kk_table(sequence, ep, "KK SPECIAL FAMILY RESULT", "T",
+                     "No bracket cells found in the last 10 rows.",
+                     merge_counts=merge_counts)
+
+
+def _kk_special_sequence(rows):
     split = len(rows)
     while split > 0 and len(rows[split - 1]) == 1:
         split -= 1
     sequence = []
     for row in rows[max(0, split - 10):split] + rows[split:]:
         sequence.extend(row)
-
-    if len(sequence) < 2 or sequence[-1] < 0:
-        return []
-    ep = sequence[-1]
-    return _kk_table(sequence, ep, "KK SPECIAL FAMILY RESULT", "T",
-                     "No bracket cells found in the last 10 rows.")
+    return sequence
 
 
 def show_kk_chain_family(group_index):
@@ -1957,12 +1965,16 @@ def show_kk_chain_family(group_index):
                      "No bracket cells found in the transition chain.")
 
 
-def _kk_table(sequence, ep, label, pos_prefix, empty_msg):
-    """Shared KK bracket table: prints the per-cell table plus the boxed
-    # / Num / Count summary, returns the sorted unique values."""
+def kk_chain_unique_counts(group_index):
+    """KK CHAIN unique values → count across all 6 value columns (silent)."""
+    if len(group_index) < 2 or group_index[-1] < 0:
+        return {}
+    return _kk_unique_counts(_kk_entries(list(group_index), group_index[-1]))
+
+
+def _kk_entries(sequence, ep):
     t       = ep // 10
     bracket = sorted({t, cut(t)})
-
     entries = []
     for i in range(len(sequence) - 1):
         a, b = sequence[i], sequence[i + 1]
@@ -1976,6 +1988,42 @@ def _kk_table(sequence, ep, label, pos_prefix, empty_msg):
         csxy = apply_op(t, SIGN_FLIP[tx]) * 10 + apply_op(ep % 10, SIGN_FLIP[ty])
         entries.append((i + 1, a, b, x_op, y_op,
                         compute_variants(ep, x_op, y_op) + (cxy, csxy)))
+    return entries
+
+
+def _kk_unique_counts(entries):
+    """Count of each value across all 6 value columns (not once per row)."""
+    counts = {}
+    for *_, vals in entries:
+        for v in vals:
+            counts[v] = counts.get(v, 0) + 1
+    return counts
+
+
+def _kk_box(title, items, cols=3, cellw=20):
+    """# / Num / Count box as a list of lines, 3 entries per line."""
+    inner = cols * cellw
+    lines = ["  ╔" + "═" * inner + "╗",
+             "  ║" + title.center(inner) + "║",
+             "  ╠" + "═" * inner + "╣",
+             "  ║" + "".join(" #   Num   Count    ".ljust(cellw) for _ in range(cols)) + "║",
+             "  ╟" + "─" * inner + "╢"]
+    for start in range(0, len(items), cols):
+        line = ""
+        for k, (v, c) in enumerate(items[start:start + cols]):
+            line += f" {start + k + 1:>2}   {v:02d}    x{c}".ljust(cellw)
+        lines.append("  ║" + line.ljust(inner) + "║")
+    lines.append("  ╚" + "═" * inner + "╝")
+    return lines
+
+
+def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None):
+    """Shared KK bracket table: prints the per-cell table, the UNIQUE VALUES
+    box (optionally with a KK MERGE box beside it) and the ranked box;
+    returns the sorted unique values."""
+    t       = ep // 10
+    bracket = sorted({t, cut(t)})
+    entries = _kk_entries(sequence, ep)
 
     sep('═')
     print(f"\n  {label}   (EP={ep:02d}, bracket starts with "
@@ -2000,49 +2048,33 @@ def _kk_table(sequence, ep, label, pos_prefix, empty_msg):
         for v in {xy, yx, sxy, syx, cxy, csxy}:
             counts[v] = counts.get(v, 0) + 1
     sep()
-    ranked = sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))
 
-    # Boxed tables, 3 entries per line
-    COLS  = 3
-    CELLW = 20
-    inner = COLS * CELLW
-
-    # Unique values table — every value once, sorted by number; count is
+    # Unique values box — every value once, sorted by number; count is
     # occurrences across all 6 value columns (not once per row like the ranked box)
-    all_counts = {}
-    for *_, vals in entries:
-        for v in vals:
-            all_counts[v] = all_counts.get(v, 0) + 1
-    uniq = sorted(all_counts.items())
-    print()
-    print("  ╔" + "═" * inner + "╗")
-    title = f"{label}  (EP={ep:02d})  UNIQUE VALUES ({len(uniq)})"
-    print("  ║" + title.center(inner) + "║")
-    print("  ╠" + "═" * inner + "╣")
-    print("  ║" + "".join(" #   Num   Count    ".ljust(CELLW) for _ in range(COLS)) + "║")
-    print("  ╟" + "─" * inner + "╢")
-    for start in range(0, len(uniq), COLS):
-        line = ""
-        for k, (v, c) in enumerate(uniq[start:start + COLS]):
-            line += f" {start + k + 1:>2}   {v:02d}    x{c}".ljust(CELLW)
-        print("  ║" + line.ljust(inner) + "║")
-    print("  ╚" + "═" * inner + "╝")
+    uniq = _kk_unique_counts(entries)
+    left = _kk_box(f"{label}  (EP={ep:02d})  UNIQUE VALUES ({len(uniq)})",
+                   sorted(uniq.items()))
+    if merge_counts is not None:
+        # KK MERGE — special ∪ chain, no duplicates, counts summed; printed beside
+        merged = dict(uniq)
+        for v, c in merge_counts.items():
+            merged[v] = merged.get(v, 0) + c
+        right = _kk_box(f"KK MERGE: SPECIAL + CHAIN  ({len(merged)} values)",
+                        sorted(merged.items()))
+        width = len(left[0])
+        left += [""] * (len(right) - len(left))
+        right += [""] * (len(left) - len(right))
+        print()
+        for l, r in zip(left, right):
+            print(l.ljust(width) + "    " + r.lstrip() if r else l)
+    else:
+        print()
+        print("\n".join(left))
 
     # Ranked by count (each value counted once per row)
+    ranked = sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))
     print()
-    print("  ╔" + "═" * inner + "╗")
-    title = f"{label}  ({len(ranked)} values)"
-    print("  ║" + title.center(inner) + "║")
-    print("  ╠" + "═" * inner + "╣")
-    print("  ║" + "".join(" #   Num   Count    ".ljust(CELLW) for _ in range(COLS)) + "║")
-    print("  ╟" + "─" * inner + "╢")
-    for start in range(0, len(ranked), COLS):
-        line = ""
-        for k, (v, c) in enumerate(ranked[start:start + COLS]):
-            line += f" {start + k + 1:>2}   {v:02d}    x{c}".ljust(CELLW)
-        print("  ║" + line.ljust(inner) + "║")
-    print("  ╚" + "═" * inner + "╝")
-
+    print("\n".join(_kk_box(f"{label}  ({len(ranked)} values)", ranked)))
     sep('═')
     print()
     return sorted(counts)
@@ -2202,7 +2234,7 @@ def run(data_source, user_x_op=None, user_y_op=None):
 
     # ── Step 5b: Last 3 rows of data grid ────────────────────────────────────
     show_last_rows_diagram(rows)
-    _kk_vals = show_kk_special_family(rows)
+    _kk_vals = show_kk_special_family(rows, merge_counts=kk_chain_unique_counts(group_index))
     _kk_chain_vals = show_kk_chain_family(group_index)
 
     # ── Step 7: User Operation (if provided) ─────────────────────────────────

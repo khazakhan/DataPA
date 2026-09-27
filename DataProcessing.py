@@ -2002,26 +2002,13 @@ def _kk_table(sequence, ep, label, pos_prefix, empty_msg):
     sep()
     ranked = sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))
 
-    # KK Special family result — boxed table, 3 entries per line
+    # Boxed tables, 3 entries per line
     COLS  = 3
     CELLW = 20
     inner = COLS * CELLW
-    print()
-    print("  ╔" + "═" * inner + "╗")
-    title = f"{label}  ({len(ranked)} values)"
-    print("  ║" + title.center(inner) + "║")
-    print("  ╠" + "═" * inner + "╣")
-    print("  ║" + "".join(" #   Num   Count    ".ljust(CELLW) for _ in range(COLS)) + "║")
-    print("  ╟" + "─" * inner + "╢")
-    for start in range(0, len(ranked), COLS):
-        line = ""
-        for k, (v, c) in enumerate(ranked[start:start + COLS]):
-            line += f" {start + k + 1:>2}   {v:02d}    x{c}".ljust(CELLW)
-        print("  ║" + line.ljust(inner) + "║")
-    print("  ╚" + "═" * inner + "╝")
 
     # Unique values table — every value once, sorted by number; count is
-    # occurrences across all 6 value columns (not once per row as above)
+    # occurrences across all 6 value columns (not once per row like the ranked box)
     all_counts = {}
     for *_, vals in entries:
         for v in vals:
@@ -2040,6 +2027,22 @@ def _kk_table(sequence, ep, label, pos_prefix, empty_msg):
             line += f" {start + k + 1:>2}   {v:02d}    x{c}".ljust(CELLW)
         print("  ║" + line.ljust(inner) + "║")
     print("  ╚" + "═" * inner + "╝")
+
+    # Ranked by count (each value counted once per row)
+    print()
+    print("  ╔" + "═" * inner + "╗")
+    title = f"{label}  ({len(ranked)} values)"
+    print("  ║" + title.center(inner) + "║")
+    print("  ╠" + "═" * inner + "╣")
+    print("  ║" + "".join(" #   Num   Count    ".ljust(CELLW) for _ in range(COLS)) + "║")
+    print("  ╟" + "─" * inner + "╢")
+    for start in range(0, len(ranked), COLS):
+        line = ""
+        for k, (v, c) in enumerate(ranked[start:start + COLS]):
+            line += f" {start + k + 1:>2}   {v:02d}    x{c}".ljust(CELLW)
+        print("  ║" + line.ljust(inner) + "║")
+    print("  ╚" + "═" * inner + "╝")
+
     sep('═')
     print()
     return sorted(counts)

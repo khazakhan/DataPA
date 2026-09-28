@@ -2022,13 +2022,38 @@ def _kk_box(title, items, cols=3, cellw=20):
     return lines
 
 
-def _print_side_by_side(left, right, gap=4):
-    width = max(len(l) for l in left)
-    left  = left + [""] * (len(right) - len(left))
-    right = right + [""] * (len(left) - len(right))
+def _kk_vertical_box(title, items, rows=10, cellw=10):
+    """Num / Count box with values running DOWN each column, `rows` per column."""
+    ncols = max(1, -(-len(items) // rows))
+    inner = max(ncols * cellw, len(title) + 4)
+    lines = ["  ╔" + "═" * inner + "╗",
+             "  ║" + title.center(inner) + "║",
+             "  ╠" + "═" * inner + "╣",
+             "  ║" + "".join(" Num Cnt".ljust(cellw) for _ in range(ncols)).ljust(inner) + "║",
+             "  ╟" + "─" * inner + "╢"]
+    for r in range(rows):
+        line = ""
+        for c in range(ncols):
+            i = c * rows + r
+            if i < len(items):
+                v, cnt = items[i]
+                line += f"  {v:02d}  x{cnt}".ljust(cellw)
+        lines.append("  ║" + line.ljust(inner) + "║")
+    lines.append("  ╚" + "═" * inner + "╝")
+    return lines
+
+
+def _print_side_by_side(left, *rights, gap=4):
+    boxes  = [left] + list(rights)
+    height = max(len(b) for b in boxes)
+    widths = [max(len(l) for l in b) for b in boxes]
     print()
-    for l, r in zip(left, right):
-        print((l.ljust(width) + " " * gap + r.lstrip()) if r else l)
+    for i in range(height):
+        parts = [(b[i] if i < len(b) else "") for b in boxes]
+        line  = parts[0].ljust(widths[0])
+        for j in range(1, len(boxes)):
+            line += " " * gap + parts[j].lstrip().ljust(widths[j] - 2)
+        print(line.rstrip())
 
 
 def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, final40=None):
@@ -2091,7 +2116,10 @@ def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, fin
             merged2[v] = merged2.get(v, 0) + 1
         right = _kk_box(f"KK MERGE + FINAL 40  ({len(merged2)} values)",
                         sorted(merged2.items()))
-        _print_side_by_side(left, right)
+        # Same values again, ascending, 10 per column running vertically
+        vert = _kk_vertical_box(f"ASCENDING  ({len(merged2)} values)",
+                                sorted(merged2.items()))
+        _print_side_by_side(left, right, vert)
     else:
         print()
         print("\n".join(left))

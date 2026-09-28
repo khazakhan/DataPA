@@ -2022,22 +2022,23 @@ def _kk_box(title, items, cols=3, cellw=20):
     return lines
 
 
-def _kk_vertical_box(title, items, rows=10, cellw=10):
-    """Num / Count box with values running DOWN each column, `rows` per column."""
-    ncols = max(1, -(-len(items) // rows))
+def _kk_vertical_box(title, values, rows=10, cellw=6):
+    """Numbers-only box with values running DOWN each column, `rows` per column."""
+    ncols = max(1, -(-len(values) // rows))
     inner = max(ncols * cellw, len(title) + 4)
+    blank = "  ║" + " " * inner + "║"
+    # 5 header lines, same as _kk_box, so rows line up with boxes beside it
     lines = ["  ╔" + "═" * inner + "╗",
+             blank,
              "  ║" + title.center(inner) + "║",
-             "  ╠" + "═" * inner + "╣",
-             "  ║" + "".join(" Num Cnt".ljust(cellw) for _ in range(ncols)).ljust(inner) + "║",
-             "  ╟" + "─" * inner + "╢"]
+             blank,
+             "  ╠" + "═" * inner + "╣"]
     for r in range(rows):
         line = ""
         for c in range(ncols):
             i = c * rows + r
-            if i < len(items):
-                v, cnt = items[i]
-                line += f"  {v:02d}  x{cnt}".ljust(cellw)
+            if i < len(values):
+                line += f"  {values[i]:02d}".ljust(cellw)
         lines.append("  ║" + line.ljust(inner) + "║")
     lines.append("  ╚" + "═" * inner + "╝")
     return lines
@@ -2118,7 +2119,7 @@ def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, fin
                         sorted(merged2.items()))
         # Same values again, ascending, 10 per column running vertically
         vert = _kk_vertical_box(f"ASCENDING  ({len(merged2)} values)",
-                                sorted(merged2.items()))
+                                sorted(merged2))
         _print_side_by_side(left, right, vert)
     else:
         print()

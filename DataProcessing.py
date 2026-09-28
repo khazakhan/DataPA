@@ -929,9 +929,22 @@ def show_next_op_after_last(rows):
     counts = defaultdict(int)
     for _, nop in matches:
         counts[nop] += 1
-    print(f"  Next-op pairs ({len(matches)} occurrences, {len(counts)} unique):")
-    for (nx, ny), c in sorted(counts.items(), key=lambda kv: (-kv[1], kv[0])):
-        print(f"    x:{ab(nx):<5} y:{ab(ny):<5}  ×{c}")
+    # Left: unique next-op pairs.  Right (beside it): each pair applied to EP.
+    ep = seq[-1]
+    ranked = sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))
+    left = [f"Next-op pairs ({len(matches)} occurrences, {len(counts)} unique):", "", ""]
+    left += [f"  x:{ab(nx):<5} y:{ab(ny):<5}  ×{c}" for (nx, ny), c in ranked]
+    right = [f"APPLY ALL {len(counts)} UNIQUE OPS TO EP={ep:02d}",
+             f"{'#':>2}  {'x op':<6}{'y op':<6}{'xy':>4}{'yx':>5}{'s+xy':>6}{'s+yx':>6}"]
+    for k, ((nx, ny), c) in enumerate(ranked, 1):
+        xy, yx, sxy, syx = compute_variants(ep, nx, ny)
+        right.append(f"{k:>2}  {ab(nx):<6}{ab(ny):<6}  {xy:02d}   {yx:02d}    {sxy:02d}    {syx:02d}")
+    right.insert(2, "─" * len(right[1]))
+    width = max(len(s) for s in left) + 6
+    for i in range(max(len(left), len(right))):
+        l = left[i] if i < len(left) else ""
+        r = right[i] if i < len(right) else ""
+        print(f"  {l:<{width}}{r}".rstrip())
     print("\n  Pos [T#] = position in the chain diagram above (\"-\" = earlier than the diagram).\n")
     sep('═')
     print()

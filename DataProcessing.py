@@ -940,6 +940,19 @@ def show_next_op_after_last(rows):
         xy, yx, sxy, syx = compute_variants(ep, nx, ny)
         right.append(f"{k:>2}  {ab(nx):<6}{ab(ny):<6}  {xy:02d}   {yx:02d}    {sxy:02d}    {syx:02d}")
     right.insert(2, "─" * len(right[1]))
+
+    # Triple border in Indian flag colours: saffron (outer), white, green (inner).
+    flag = [f"\033[38;2;{c}m" for c in ("255;153;51", "255;255;255", "19;136;8")]
+    rst  = "\033[0m"
+    iw   = max(len(s) for s in right) + 2                 # inner width incl. 1-space pad
+    body = [f" {s:<{iw - 2}} " for s in right]
+    for lvl in range(2, -1, -1):                          # wrap green, then white, then saffron
+        c, w = flag[lvl], iw + 2 * (2 - lvl)
+        body = ([f"{c}╔{'═' * w}╗{rst}"]
+                + [f"{c}║{rst}{s}{c}║{rst}" for s in body]
+                + [f"{c}╚{'═' * w}╝{rst}"])
+    right = body
+    left  = left[:1] + [""] * 3 + left[1:]                # keep op rows beside their values
     width = max(len(s) for s in left) + 6
     for i in range(max(len(left), len(right))):
         l = left[i] if i < len(left) else ""

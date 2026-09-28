@@ -773,13 +773,16 @@ def show_chain_diagram(group_index, ops_list, root, internal_positions):
     print()
 
 
+DIAGRAM_ROWS = 40
+
+
 def show_last_rows_diagram(rows):
-    """Print transition chain for the last 10 complete rows + trailing partial values."""
+    """Print transition chain for the last DIAGRAM_ROWS complete rows + trailing partial values."""
     # Separate trailing single-value rows (partial results) from complete rows
     split = len(rows)
     while split > 0 and len(rows[split - 1]) == 1:
         split -= 1
-    lastN_complete = rows[max(0, split - 10):split]
+    lastN_complete = rows[max(0, split - DIAGRAM_ROWS):split]
     trailing       = rows[split:]
     last_seq       = lastN_complete + trailing   # combined display sequence
 
@@ -808,7 +811,7 @@ def show_last_rows_diagram(rows):
 
     base_idx = split - len(lastN_complete)
     sep('═')
-    print("\n  Last 10 rows of data grid:\n")
+    print(f"\n  Last {len(lastN_complete)} rows of data grid:\n")
     for ri, row in enumerate(last_seq):
         rnum = base_idx + ri + 1
         print(f"  Row {rnum:>3}:  " + "   ".join(f"{v:02d}" for v in row))

@@ -867,6 +867,76 @@ def show_last_rows_diagram(rows):
     print()
 
 
+def show_next_op_after_last(rows):
+    """NEXT OPERATION AFTER LAST OP — display only, does not affect scoring.
+
+    Takes the last transition of the uploaded data (… → EP, e.g. 80 → 78 =
+    x:-1 y:-2), finds every earlier transition anywhere in the uploaded data
+    with that same x/y op pair, and lists the operation executed immediately
+    after it (the next transition b → c)."""
+    split = len(rows)
+    while split > 0 and len(rows[split - 1]) == 1:
+        split -= 1
+    diag_base = sum(len(r) for r in rows[:max(0, split - DIAGRAM_ROWS)])
+
+    seq, where = [], []          # flattened values + (row number, col) of each
+    for ri, row in enumerate(rows):
+        for ci, v in enumerate(row):
+            seq.append(v)
+            where.append((ri + 1, ci + 1))
+    if len(seq) < 2 or seq[-1] < 0 or seq[-2] < 0:
+        return
+
+    def op_at(i):   # transition seq[i] → seq[i+1]
+        a, b = seq[i], seq[i + 1]
+        if a < 0 or b < 0:
+            return None
+        x, y = find_op(a // 10, b // 10), find_op(a % 10, b % 10)
+        return None if '?' in (x, y) else (x, y)
+
+    last_i  = len(seq) - 2
+    last_op = op_at(last_i)
+    if last_op is None:
+        return
+    ab = lambda op: OP_ABBREV.get(op, op)
+
+    matches = []
+    for i in range(last_i - 1):          # need a following transition i+1
+        if op_at(i) == last_op:
+            nxt = op_at(i + 1)
+            if nxt is not None:
+                matches.append((i, nxt))
+
+    sep('═')
+    print(f"\n  NEXT OPERATION AFTER LAST OP   (last op {seq[-2]:02d} → {seq[-1]:02d} = "
+          f"x:{ab(last_op[0])}  y:{ab(last_op[1])}, searched in all uploaded data)\n")
+    if not matches:
+        print("  This op pair never occurred earlier in the uploaded data.\n")
+        sep('═')
+        print()
+        return
+
+    print(f"  {'Pos':<8}{'Row':<7}{'Matched (x/y)':<22}{'Next transition':<18}{'next x op':<11}next y op")
+    print("  " + "─" * 74)
+    for i, (nx, ny) in matches:
+        tpos = f"[T{i + 1 - diag_base}]" if i >= diag_base else "-"
+        rnum = where[i][0]
+        mtxt = f"{seq[i]:02d} → {seq[i+1]:02d}  {ab(last_op[0])}/{ab(last_op[1])}"
+        ntxt = f"{seq[i+1]:02d} → {seq[i+2]:02d}"
+        print(f"  {tpos:<8}{rnum:<7}{mtxt:<22}{ntxt:<18}{ab(nx):<11}{ab(ny)}")
+    print()
+
+    counts = defaultdict(int)
+    for _, nop in matches:
+        counts[nop] += 1
+    print(f"  Next-op pairs ({len(matches)} occurrences, {len(counts)} unique):")
+    for (nx, ny), c in sorted(counts.items(), key=lambda kv: (-kv[1], kv[0])):
+        print(f"    x:{ab(nx):<5} y:{ab(ny):<5}  ×{c}")
+    print("\n  Pos [T#] = position in the chain diagram above (\"-\" = earlier than the diagram).\n")
+    sep('═')
+    print()
+
+
 def build_strong_predictions(root, ops_list, group_index, endpoint=None, rows=None):
     """Score every candidate value across all known signals; return top 8 unique."""
     scores = defaultdict(list)   # value → [reason_label, ...]
@@ -2283,6 +2353,7 @@ def run(data_source, user_x_op=None, user_y_op=None):
 
     # ── Step 5b: Last 3 rows of data grid ────────────────────────────────────
     show_last_rows_diagram(rows)
+    show_next_op_after_last(rows)
     _kk_vals = show_kk_special_family(rows, merge_counts=kk_chain_unique_counts(group_index),
                                       final40=[v for v, _, _ in _last_top4[:40]])
     _kk_chain_vals = show_kk_chain_family(group_index)

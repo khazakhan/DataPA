@@ -926,6 +926,7 @@ def show_next_op_after_last(rows):
     right = ["╔" + rtitl.center(iw, "═") + "╗", "║" + rhdr + "║", "╟" + "─" * iw + "╢"]
     vals  = []                   # every value in the 4 columns, with repeats
     prio  = defaultdict(list)    # family → rows where 2+ distinct values share it
+    row_vals = []                # the 4 values of each row, in table order
     for i, (nx, ny) in matches:
         tpos = f"[T{i + 1 - diag_base}]" if i >= diag_base else "-"
         rnum = where[i][0]
@@ -934,6 +935,7 @@ def show_next_op_after_last(rows):
         left.append(f"{tpos:<8}{rnum:<7}{mtxt:<22}{ntxt:<18}{ab(nx):<11}{ab(ny)}")
         xy, yx, sxy, syx = compute_variants(ep, nx, ny)
         vals += [xy, yx, sxy, syx]
+        row_vals.append((xy, yx, sxy, syx))
         byfam = defaultdict(set)
         for v in (xy, yx, sxy, syx):
             byfam[FAMILY_MAP[v]].add(v)
@@ -983,6 +985,38 @@ def show_next_op_after_last(rows):
     right2 += ["╟" + "─" * iw2 + "╢"]
     right2 += ["║" + n.ljust(iw2) + "║" for n in notes]
     right2 += ["╚" + "═" * iw2 + "╝"]
+
+    # FIRST 4 ROWS → 40 NUMBERS: the 16 values of the first 4 POSSIBLE OPS
+    # rows, each expanded by cut tens / cut units / cut both / reverse
+    # (66=11, 53=03, 07=02, 31=13, 71=21=26). Per tens digit: values in
+    # those rows first (*), then the most-derived ones.
+    src    = [v for r in row_vals[:4] for v in r]
+    direct = defaultdict(int)
+    derived = defaultdict(int)
+    for v in src:
+        direct[v] += 1
+        a, b = v // 10, v % 10
+        for x in {a, cut(a)}:
+            for y in {b, cut(b)}:
+                for n in {x * 10 + y, y * 10 + x}:
+                    derived[n] += 1
+    ttl3  = f" FIRST {len(row_vals[:4])} ROWS → 40 NUMBERS "
+    rows3 = []
+    for d in range(10):
+        pick = sorted((d * 10 + u for u in range(10)),
+                      key=lambda n: (-direct[n], -derived[n], -units[n % 10], n))[:4]
+        rows3.append(f" {d} →  " + "  ".join(f"{n:02d}{'*' if direct[n] else ' '} " for n in pick))
+    notes3 = [" From: " + " ".join(f"{v:02d}" for v in src[:8]),
+              "       " + " ".join(f"{v:02d}" for v in src[8:]),
+              " * = in those rows, else cut/reverse"]
+    iw3 = max([len(ttl3)] + [len(r) for r in rows3] + [len(n) + 1 for n in notes3])
+    right2 += ["", "╔" + ttl3.center(iw3, "═") + "╗",
+               "║" + " Digit  Numbers".ljust(iw3) + "║",
+               "╟" + "─" * iw3 + "╢"]
+    right2 += ["║" + r.ljust(iw3) + "║" for r in rows3]
+    right2 += ["╟" + "─" * iw3 + "╢"]
+    right2 += ["║" + n.ljust(iw3) + "║" for n in notes3]
+    right2 += ["╚" + "═" * iw3 + "╝"]
 
     lw = max(len(l) for l in left) + 4
     rw = max(len(r) for r in right) + 4

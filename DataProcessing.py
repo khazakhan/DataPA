@@ -1018,13 +1018,40 @@ def show_next_op_after_last(rows):
     right2 += ["║" + n.ljust(iw3) + "║" for n in notes3]
     right2 += ["╚" + "═" * iw3 + "╝"]
 
+    # STARTING DIGITS OF FIRST 4 ROWS: tens digits seen in the first 4
+    # POSSIBLE OPS rows; every number in the whole POSSIBLE OPS table that
+    # starts with one of them, unique and sorted, one line per digit
+    # (wrapped 8 per line). Printed directly beside the POSSIBLE OPS box.
+    digs  = sorted({v // 10 for r in row_vals[:4] for v in r})
+    uniqv = sorted(set(vals))
+    lines4 = []
+    for d in digs:
+        nums = [v for v in uniqv if v // 10 == d]
+        for k in range(0, max(len(nums), 1), 8):
+            head = f" {d} →  " if k == 0 else "      "
+            lines4.append(head + "  ".join(f"{v:02d}" for v in nums[k:k + 8]))
+    total = sum(1 for v in uniqv if v // 10 in digs)
+    ttl4  = f" STARTS WITH {'/'.join(map(str, digs))} "
+    notes4 = [f" {total} numbers from the whole table",
+              " (digits = first 4 rows)"]
+    iw4 = max([len(ttl4) + 4] + [len(x) + 1 for x in lines4 + notes4])
+    right4 = ["╔" + ttl4.center(iw4, "═") + "╗",
+              "║" + " Digit  Numbers".ljust(iw4) + "║",
+              "╟" + "─" * iw4 + "╢"]
+    right4 += ["║" + x.ljust(iw4) + "║" for x in lines4]
+    right4 += ["╟" + "─" * iw4 + "╢"]
+    right4 += ["║" + x.ljust(iw4) + "║" for x in notes4]
+    right4 += ["╚" + "═" * iw4 + "╝"]
+
     lw = max(len(l) for l in left) + 4
     rw = max(len(r) for r in right) + 4
-    for k in range(max(len(left), len(right), len(right2))):
+    r4w = max(len(r) for r in right4) + 4
+    for k in range(max(len(left), len(right), len(right2), len(right4))):
         l  = left[k] if k < len(left) else ""
         r  = right[k] if k < len(right) else ""
+        r4 = right4[k] if k < len(right4) else ""
         r2 = right2[k] if k < len(right2) else ""
-        print(f"  {l:<{lw}}{r:<{rw}}{r2}".rstrip())
+        print(f"  {l:<{lw}}{r:<{rw}}{r4:<{r4w}}{r2}".rstrip())
     print()
 
     counts = defaultdict(int)

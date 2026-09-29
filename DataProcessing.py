@@ -925,6 +925,7 @@ def show_next_op_after_last(rows):
     iw    = len(rhdr)
     right = ["╔" + rtitl.center(iw, "═") + "╗", "║" + rhdr + "║", "╟" + "─" * iw + "╢"]
     vals  = []                   # every value in the 4 columns, with repeats
+    prio  = defaultdict(list)    # family → rows where 2+ distinct values share it
     for i, (nx, ny) in matches:
         tpos = f"[T{i + 1 - diag_base}]" if i >= diag_base else "-"
         rnum = where[i][0]
@@ -933,6 +934,12 @@ def show_next_op_after_last(rows):
         left.append(f"{tpos:<8}{rnum:<7}{mtxt:<22}{ntxt:<18}{ab(nx):<11}{ab(ny)}")
         xy, yx, sxy, syx = compute_variants(ep, nx, ny)
         vals += [xy, yx, sxy, syx]
+        byfam = defaultdict(set)
+        for v in (xy, yx, sxy, syx):
+            byfam[FAMILY_MAP[v]].add(v)
+        for fam, members in byfam.items():
+            if len(members) >= 2:
+                prio[fam].append(sorted(members))
         right.append("║" + f" {ab(nx):<6}{ab(ny):<6}" + f"{xy:02d}".rjust(6) + f"{yx:02d}".rjust(5)
                      + f"{sxy:02d}".rjust(6) + f"{syx:02d}".rjust(6) + " ║")
     right.append("╚" + "═" * iw + "╝")
@@ -946,20 +953,36 @@ def show_next_op_after_last(rows):
     for v in vals:
         exact[v] += 1
         units[v % 10] += 1
+    # PRIORITY FAMILY: a family with 2+ different values in the same row
+    # (e.g. 76 and 21 in one row → 12 FAMILY). Only the family paired in the
+    # most rows (ties kept) gets priority; its members go first for their
+    # tens digit.
+    top  = max((len(r) for r in prio.values()), default=0)
+    prio = {f: r for f, r in prio.items() if len(r) == top}
+    fam_rank = {f: 1 for f in prio}
+    mark = lambda n: ("F" if n in pset else "") + ("*" if exact[n] else "")
+    pset = {v for f in fam_rank for v in FAMILY_MEMBERS[f]}
     ttl  = " 40 NUMBERS (4 per digit) "
     rows40 = []
     for d in range(10):
         pick = sorted((d * 10 + u for u in range(10)),
-                      key=lambda n: (-exact[n], -units[n % 10], n))[:4]
-        rows40.append(f" {d} →  " + "  ".join(f"{n:02d}" + ("*" if exact[n] else " ") for n in pick) + " ")
-    iw2    = max(len(ttl), max(len(r) for r in rows40), len(" * = in table, else composed "))
+                      key=lambda n: (-fam_rank.get(FAMILY_MAP[n], 0), -exact[n],
+                                     -units[n % 10], n))[:4]
+        rows40.append(f" {d} →  " + "  ".join(f"{n:02d}{mark(n):<2}" for n in pick) + " ")
+    notes = [" * = in table, else composed",
+             " F = priority family member"]
+    for f, rs in sorted(prio.items()):
+        pairs = sorted({tuple(r) for r in rs})
+        notes.append(f" Priority: {f.replace(' FAMILY', '')} family ({len(rs)} row{'s' * (len(rs) > 1)}: "
+                     + ", ".join("/".join(f"{v:02d}" for v in r) for r in pairs) + ")")
+    iw2    = max([len(ttl)] + [len(r) for r in rows40] + [len(n) + 1 for n in notes])
     right2 = ["╔" + ttl.center(iw2, "═") + "╗",
               "║" + " Digit  Numbers".ljust(iw2) + "║",
               "╟" + "─" * iw2 + "╢"]
     right2 += ["║" + r.ljust(iw2) + "║" for r in rows40]
-    right2 += ["╟" + "─" * iw2 + "╢",
-               "║" + " * = in table, else composed".ljust(iw2) + "║",
-               "╚" + "═" * iw2 + "╝"]
+    right2 += ["╟" + "─" * iw2 + "╢"]
+    right2 += ["║" + n.ljust(iw2) + "║" for n in notes]
+    right2 += ["╚" + "═" * iw2 + "╝"]
 
     lw = max(len(l) for l in left) + 4
     rw = max(len(r) for r in right) + 4

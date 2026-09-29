@@ -706,6 +706,55 @@ OP_ABBREV = {
 }
 
 
+def _root_ops_table(root, ops_list, strong, rec):
+    """ROOT OPS box (display only): every transition step's ops applied to
+    the ROOT ELEMENT, same columns as POSSIBLE OPS (ops in brackets).
+    S = value is in the 30 STRONG PREDICTIONS, ★ = a ★ RECOMMENDED pick;
+    S# = how many of the row's 6 values are strong. Row k lines up with
+    TRANSITION OPERATIONS step k."""
+    ab  = lambda op: OP_ABBREV.get(op, op)
+    mk  = lambda v: ("★" if v in rec else "S" if v in strong else " ")
+    SW  = 15
+    hdr = (f" {'#':>2}  {'x op':<6}{'y op':<6}{'Number':<8}{'yx':<5}{'s+xy (op)':<{SW}}{'s+yx (op)':<{SW}}"
+           f"{'cut xy (op)':<{SW}}{'cut sign (op)':<{SW}}{'S#':>2} ")
+    iw  = len(hdr)
+    ttl = f" ROOT OPS → ROOT={root:02d}  (S=strong ★=recommended) "
+    out = ["╔" + ttl.center(iw, "═") + "╗", "║" + " " * iw + "║", "║" + hdr + "║", "╟" + "─" * iw + "╢"]
+    per_op = {}
+    for k, (nx, ny) in enumerate(ops_list, 1):
+        if '?' in (nx, ny):
+            out.append("║" + f" {k:>2}  ?".ljust(iw) + "║")
+            continue
+        xy, yx, sxy, syx = compute_variants(root, nx, ny)
+        fx, fy = ab(SIGN_FLIP[nx]), ab(SIGN_FLIP[ny])
+        tx, ty = KK_CUT_TOGGLE[nx], KK_CUT_TOGGLE[ny]
+        cxy  = apply_op(root // 10, tx) * 10 + apply_op(root % 10, ty)
+        csxy = apply_op(root // 10, SIGN_FLIP[tx]) * 10 + apply_op(root % 10, SIGN_FLIP[ty])
+        six  = [xy, yx, sxy, syx, cxy, csxy]
+        ns   = sum(1 for v in six if v in strong or v in rec)
+        per_op[(nx, ny)] = (ns, sorted({v for v in six if v in strong or v in rec}))
+        out.append("║" + f" {k:>2}  {ab(nx):<6}{ab(ny):<6}"
+                   + f"{xy:02d}{mk(xy)}".ljust(8) + f"{yx:02d}{mk(yx)}".ljust(5)
+                   + f"{sxy:02d}{mk(sxy)}({fx}/{fy})".ljust(SW)
+                   + f"{syx:02d}{mk(syx)}({fy}/{fx})".ljust(SW)
+                   + f"{cxy:02d}{mk(cxy)}({ab(tx)}/{ab(ty)})".ljust(SW)
+                   + f"{csxy:02d}{mk(csxy)}({ab(SIGN_FLIP[tx])}/{ab(SIGN_FLIP[ty])})".ljust(SW)
+                   + f"{ns:>2} ║")
+    out.append("╟" + "─" * iw + "╢")
+    best = max((n for n, _ in per_op.values()), default=0)
+    if best:
+        out.append("║" + f" STRONGEST OPS ({best} of 6 values strong):".ljust(iw) + "║")
+        for (nx, ny), (n, vs) in sorted(per_op.items()):
+            if n == best:
+                out.append("║" + (f"   x:{ab(nx):<5} y:{ab(ny):<5} → "
+                                  + " ".join(f"{v:02d}{mk(v).strip()}" for v in vs)).ljust(iw) + "║")
+    recd = sorted({op for op, (_, vs) in per_op.items() if any(v in rec for v in vs)})
+    out.append("║" + (" ★ RECOMMENDED via: " + (", ".join(f"{ab(x)}/{ab(y)}" for x, y in recd)
+                                               if recd else "none")).ljust(iw) + "║")
+    out.append("╚" + "═" * iw + "╝")
+    return out
+
+
 def show_chain_diagram(group_index, ops_list, root, internal_positions):
     """Print visual transition chain diagram with boxes and ==►► arrows."""
     PER_ROW = 5
@@ -2532,15 +2581,23 @@ def run(data_source, user_x_op=None, user_y_op=None):
     sep('═')
 
     # ── Step 4: Transition Operations ────────────────────────────────────────
-    print("\n  TRANSITION OPERATIONS:\n")
-    print(f"  {'Step':<10}  {'x operation':<14}  {'y operation'}")
-    sep()
-
+    # with the ROOT OPS table beside it (each step's ops applied to ROOT)
+    left = ["TRANSITION OPERATIONS:", "", f"{'Step':<10}  {'x operation':<14}  {'y operation'}",
+            "─" * 44]
     for i in range(len(group_index) - 1):
         a, b       = group_index[i], group_index[i + 1]
         x_op, y_op = ops_list[i]
-        print(f"  {a:02d} → {b:02d}     x:{x_op:<13}  y:{y_op}")
-
+        left.append(f"{a:02d} → {b:02d}     x:{x_op:<13}  y:{y_op}")
+    left.append("─" * 44)
+    right = _root_ops_table(root, ops_list, strong={v for v, *_ in _last_top4[:30]},
+                            rec=[v for v, *_ in _last_top4[:3]])
+    print()
+    lw = max(len(l) for l in left) + 4
+    for k in range(max(len(left), len(right))):
+        l = left[k] if k < len(left) else ""
+        r = right[k] if k < len(right) else ""
+        print(f"  {l:<{lw}}{r}".rstrip())
+    print()
     sep('═')
 
     # ── Step 5: Chain Diagram ────────────────────────────────────────────────

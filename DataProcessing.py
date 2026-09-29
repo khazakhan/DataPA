@@ -916,14 +916,29 @@ def show_next_op_after_last(rows):
         print()
         return
 
-    print(f"  {'Pos':<8}{'Row':<7}{'Matched (x/y)':<22}{'Next transition':<18}{'next x op':<11}next y op")
-    print("  " + "─" * 74)
+    ep    = seq[-1]
+    left  = ["", f"{'Pos':<8}{'Row':<7}{'Matched (x/y)':<22}{'Next transition':<18}{'next x op':<11}next y op",
+             "─" * 74]
+    # Beside it, row for row: that possible op applied to EP → its number
+    rhdr  = f" {'x op':<6}{'y op':<6}{'Number':>6}  {'yx':>3}  {'s+xy':>4}  {'s+yx':>4} "
+    rtitl = f" POSSIBLE OPS → EP={ep:02d} "
+    iw    = len(rhdr)
+    right = ["╔" + rtitl.center(iw, "═") + "╗", "║" + rhdr + "║", "╟" + "─" * iw + "╢"]
     for i, (nx, ny) in matches:
         tpos = f"[T{i + 1 - diag_base}]" if i >= diag_base else "-"
         rnum = where[i][0]
         mtxt = f"{seq[i]:02d} → {seq[i+1]:02d}  {ab(last_op[0])}/{ab(last_op[1])}"
         ntxt = f"{seq[i+1]:02d} → {seq[i+2]:02d}"
-        print(f"  {tpos:<8}{rnum:<7}{mtxt:<22}{ntxt:<18}{ab(nx):<11}{ab(ny)}")
+        left.append(f"{tpos:<8}{rnum:<7}{mtxt:<22}{ntxt:<18}{ab(nx):<11}{ab(ny)}")
+        xy, yx, sxy, syx = compute_variants(ep, nx, ny)
+        right.append("║" + f" {ab(nx):<6}{ab(ny):<6}" + f"{xy:02d}".rjust(6) + f"{yx:02d}".rjust(5)
+                     + f"{sxy:02d}".rjust(6) + f"{syx:02d}".rjust(6) + " ║")
+    right.append("╚" + "═" * iw + "╝")
+    lw = max(len(l) for l in left) + 4
+    for k in range(max(len(left), len(right))):
+        l = left[k] if k < len(left) else ""
+        r = right[k] if k < len(right) else ""
+        print(f"  {l:<{lw}}{r}".rstrip())
     print()
 
     counts = defaultdict(int)

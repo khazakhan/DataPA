@@ -924,6 +924,7 @@ def show_next_op_after_last(rows):
     rtitl = f" POSSIBLE OPS → EP={ep:02d} "
     iw    = len(rhdr)
     right = ["╔" + rtitl.center(iw, "═") + "╗", "║" + rhdr + "║", "╟" + "─" * iw + "╢"]
+    vals  = []                   # every value in the 4 columns, with repeats
     for i, (nx, ny) in matches:
         tpos = f"[T{i + 1 - diag_base}]" if i >= diag_base else "-"
         rnum = where[i][0]
@@ -931,14 +932,42 @@ def show_next_op_after_last(rows):
         ntxt = f"{seq[i+1]:02d} → {seq[i+2]:02d}"
         left.append(f"{tpos:<8}{rnum:<7}{mtxt:<22}{ntxt:<18}{ab(nx):<11}{ab(ny)}")
         xy, yx, sxy, syx = compute_variants(ep, nx, ny)
+        vals += [xy, yx, sxy, syx]
         right.append("║" + f" {ab(nx):<6}{ab(ny):<6}" + f"{xy:02d}".rjust(6) + f"{yx:02d}".rjust(5)
                      + f"{sxy:02d}".rjust(6) + f"{syx:02d}".rjust(6) + " ║")
     right.append("╚" + "═" * iw + "╝")
+
+    # 40 NUMBERS: 4 per tens digit 0-9 from the POSSIBLE OPS values. Values
+    # that occur directly rank first (by count); the rest are composed from
+    # the tens digit + the most frequent units digits in the table
+    # (e.g. 07 and 58 → 08).
+    exact = defaultdict(int)
+    units = defaultdict(int)
+    for v in vals:
+        exact[v] += 1
+        units[v % 10] += 1
+    ttl  = " 40 NUMBERS (4 per digit) "
+    rows40 = []
+    for d in range(10):
+        pick = sorted((d * 10 + u for u in range(10)),
+                      key=lambda n: (-exact[n], -units[n % 10], n))[:4]
+        rows40.append(f" {d} →  " + "  ".join(f"{n:02d}" + ("*" if exact[n] else " ") for n in pick) + " ")
+    iw2    = max(len(ttl), max(len(r) for r in rows40), len(" * = in table, else composed "))
+    right2 = ["╔" + ttl.center(iw2, "═") + "╗",
+              "║" + " Digit  Numbers".ljust(iw2) + "║",
+              "╟" + "─" * iw2 + "╢"]
+    right2 += ["║" + r.ljust(iw2) + "║" for r in rows40]
+    right2 += ["╟" + "─" * iw2 + "╢",
+               "║" + " * = in table, else composed".ljust(iw2) + "║",
+               "╚" + "═" * iw2 + "╝"]
+
     lw = max(len(l) for l in left) + 4
-    for k in range(max(len(left), len(right))):
-        l = left[k] if k < len(left) else ""
-        r = right[k] if k < len(right) else ""
-        print(f"  {l:<{lw}}{r}".rstrip())
+    rw = max(len(r) for r in right) + 4
+    for k in range(max(len(left), len(right), len(right2))):
+        l  = left[k] if k < len(left) else ""
+        r  = right[k] if k < len(right) else ""
+        r2 = right2[k] if k < len(right2) else ""
+        print(f"  {l:<{lw}}{r:<{rw}}{r2}".rstrip())
     print()
 
     counts = defaultdict(int)

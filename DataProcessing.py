@@ -2063,7 +2063,8 @@ def show_kk_chain_family(group_index):
     if len(group_index) < 2 or group_index[-1] < 0:
         return []
     return _kk_table(list(group_index), group_index[-1], "KK CHAIN FAMILY RESULT", "Op",
-                     "No bracket cells found in the transition chain.")
+                     "No bracket cells found in the transition chain.",
+                     show_missing=True)
 
 
 def kk_chain_unique_counts(group_index):
@@ -2153,7 +2154,25 @@ def _print_side_by_side(left, *rights, gap=4):
         print(line.rstrip())
 
 
-def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, final40=None):
+def _kk_missing_ops_box(miss_x, miss_y, cellw=10):
+    """# / x op / y op box listing the ops that never occur in each column."""
+    inner = max(3 * cellw, 32)
+    lines = ["  ╔" + "═" * inner + "╗",
+             "  ║" + "NON-EXISTING OPERATIONS".center(inner) + "║",
+             "  ╠" + "═" * inner + "╣",
+             "  ║" + (" #".ljust(cellw) + f"x op ({len(miss_x)})".ljust(cellw)
+                      + f"y op ({len(miss_y)})").ljust(inner) + "║",
+             "  ╟" + "─" * inner + "╢"]
+    for i in range(max(len(miss_x), len(miss_y), 1)):
+        x = miss_x[i] if i < len(miss_x) else ("-" if i == 0 else "")
+        y = miss_y[i] if i < len(miss_y) else ("-" if i == 0 else "")
+        lines.append("  ║" + (f" {i + 1:>2}".ljust(cellw) + x.ljust(cellw) + y).ljust(inner) + "║")
+    lines.append("  ╚" + "═" * inner + "╝")
+    return lines
+
+
+def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, final40=None,
+              show_missing=False):
     """Shared KK bracket table: prints the per-cell table, the UNIQUE VALUES
     box (optionally with a KK MERGE box beside it) and the ranked box;
     returns the sorted unique values."""
@@ -2162,28 +2181,39 @@ def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, fin
     entries = _kk_entries(sequence, ep)
 
     sep('═')
-    print(f"\n  {label}   (EP={ep:02d}, bracket starts with "
-          f"{' or '.join(str(d) for d in bracket)})\n")
+    title = (f"  {label}   (EP={ep:02d}, bracket starts with "
+             f"{' or '.join(str(d) for d in bracket)})")
+    if not (show_missing and entries):
+        print(f"\n{title}\n")
     if not entries:
         print(f"  {empty_msg}")
         sep('═')
         print()
         return []
 
-    print(f"  {'Pos':<7} {'Source':<9} {'x op':<7} {'y op':<7} "
-          f"{'xy':>4} {'yx':>4} {'sign+xy':>8} {'sign+yx':>8} {'cut xy':>7} {'cut sign':>9}")
-    sep()
+    table = [f"  {'Pos':<7} {'Source':<9} {'x op':<7} {'y op':<7} "
+             f"{'xy':>4} {'yx':>4} {'sign+xy':>8} {'sign+yx':>8} {'cut xy':>7} {'cut sign':>9}",
+             '─' * W]
     counts = {}
     for pos, a, b, x_op, y_op, (xy, yx, sxy, syx, cxy, csxy) in entries:
         xab = OP_ABBREV.get(x_op, x_op)
         yab = OP_ABBREV.get(y_op, y_op)
-        print(f"  {'[' + pos_prefix + str(pos) + ']':<7} {a:02d} → {b:02d}   {xab:<7} {yab:<7} "
-              + f"{xy:02d}".rjust(4) + f"{yx:02d}".rjust(5)
-              + f"{sxy:02d}".rjust(9) + f"{syx:02d}".rjust(9)
-              + f"{cxy:02d}".rjust(8) + f"{csxy:02d}".rjust(10))
+        table.append(f"  {'[' + pos_prefix + str(pos) + ']':<7} {a:02d} → {b:02d}   {xab:<7} {yab:<7} "
+                     + f"{xy:02d}".rjust(4) + f"{yx:02d}".rjust(5)
+                     + f"{sxy:02d}".rjust(9) + f"{syx:02d}".rjust(9)
+                     + f"{cxy:02d}".rjust(8) + f"{csxy:02d}".rjust(10))
         for v in {xy, yx, sxy, syx, cxy, csxy}:
             counts[v] = counts.get(v, 0) + 1
-    sep()
+    table.append('─' * W)
+    if show_missing:
+        # NON-EXISTING OPERATIONS — of the 10 ops, those never used in the
+        # x op / y op columns above; printed beside the table
+        miss_x = [OP_ABBREV[o] for o in ALL_OPS if o not in {e[3] for e in entries}]
+        miss_y = [OP_ABBREV[o] for o in ALL_OPS if o not in {e[4] for e in entries}]
+        # title + 2 blank lines on the left so both tables' rows line up
+        _print_side_by_side([title, "", ""] + table, _kk_missing_ops_box(miss_x, miss_y))
+    else:
+        print("\n".join(table))
 
     # Unique values box — every value once, sorted by number; count is
     # occurrences across all 6 value columns (not once per row like the ranked box)

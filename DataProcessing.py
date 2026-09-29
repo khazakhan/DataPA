@@ -2042,7 +2042,7 @@ def show_kk_special_family(rows, merge_counts=None, final40=None):
     ep = sequence[-1]
     return _kk_table(sequence, ep, "KK SPECIAL FAMILY RESULT", "T",
                      "No bracket cells found in the last 10 rows.",
-                     merge_counts=merge_counts, final40=final40)
+                     merge_counts=merge_counts, final40=final40, show_missing=True)
 
 
 def _kk_special_sequence(rows):

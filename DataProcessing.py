@@ -920,7 +920,10 @@ def show_next_op_after_last(rows):
     left  = ["", f"{'Pos':<8}{'Row':<7}{'Matched (x/y)':<22}{'Next transition':<18}{'next x op':<11}next y op",
              "─" * 74]
     # Beside it, row for row: that possible op applied to EP → its number
-    rhdr  = f" {'x op':<6}{'y op':<6}{'Number':>6}  {'yx':>3}  {'s+xy':>4}  {'s+yx':>4} "
+    # s+xy / s+yx show the sign-flipped ops they use in brackets
+    # (tens op/units op), e.g. -2/c+1 → s+xy 48 (+2/c-1), s+yx 66 (c-1/+2)
+    SW    = 14
+    rhdr  = f" {'x op':<6}{'y op':<6}{'Number':>6}  {'yx':>3}   {'s+xy (op)':<{SW}}{'s+yx (op)':<{SW}}"
     rtitl = f" POSSIBLE OPS → EP={ep:02d} "
     iw    = len(rhdr)
     right = ["╔" + rtitl.center(iw, "═") + "╗", "║" + rhdr + "║", "╟" + "─" * iw + "╢"]
@@ -942,8 +945,10 @@ def show_next_op_after_last(rows):
         for fam, members in byfam.items():
             if len(members) >= 2:
                 prio[fam].append(sorted(members))
+        fx, fy = ab(SIGN_FLIP[nx]), ab(SIGN_FLIP[ny])
         right.append("║" + f" {ab(nx):<6}{ab(ny):<6}" + f"{xy:02d}".rjust(6) + f"{yx:02d}".rjust(5)
-                     + f"{sxy:02d}".rjust(6) + f"{syx:02d}".rjust(6) + " ║")
+                     + "   " + f"{sxy:02d} ({fx}/{fy})".ljust(SW)
+                     + f"{syx:02d} ({fy}/{fx})".ljust(SW) + "║")
     right.append("╚" + "═" * iw + "╝")
 
     # 40 NUMBERS: 4 per tens digit 0-9 from the POSSIBLE OPS values. Values

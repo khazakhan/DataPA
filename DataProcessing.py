@@ -706,8 +706,65 @@ OP_ABBREV = {
 }
 
 
-def show_chain_diagram(group_index, ops_list, root, internal_positions):
-    """Print visual transition chain diagram with boxes and ==►► arrows."""
+def _chain_next_op_table(rows, last_op, ep):
+    """NEXT OPERATION POSSIBILITIES box (display only). Every earlier
+    transition in the uploaded grid with the chain's last op pair lends the
+    op that came right after it; each such op is applied to the chain's last
+    value. Falls back to x-op-only / y-op-only matches if the pair never
+    occurred. Returns a list of lines."""
+    seq = [v for row in (rows or []) for v in row]
+
+    def op_at(i):
+        a, b = seq[i], seq[i + 1]
+        if a < 0 or b < 0:
+            return None
+        x, y = find_op(a // 10, b // 10), find_op(a % 10, b % 10)
+        return None if '?' in (x, y) else (x, y)
+
+    ops  = [op_at(i) for i in range(len(seq) - 1)]
+    ab   = lambda op: OP_ABBREV.get(op, op)
+    how  = f"x:{ab(last_op[0])} y:{ab(last_op[1])}"
+    tests = [(how, lambda o: o == last_op),
+             (f"x:{ab(last_op[0])} only", lambda o: o[0] == last_op[0]),
+             (f"y:{ab(last_op[1])} only", lambda o: o[1] == last_op[1])]
+    counts, used, n_occ = {}, how, 0
+    for used, test in tests:
+        for i in range(len(ops) - 2):      # skip the chain's own last pair
+            if ops[i] is not None and ops[i + 1] is not None and test(ops[i]):
+                counts[ops[i + 1]] = counts.get(ops[i + 1], 0) + 1
+                n_occ += 1
+        if counts:
+            break
+
+    title = "NEXT OPERATION POSSIBILITIES"
+    sub   = f"after last op {used}  →  EP={ep:02d}"
+    hdr   = f" {'#':>2}  {'x op':<6}{'y op':<6}{'cnt':>4}   {'xy':>2}   {'yx':>2}  {'s+xy':>4}  {'s+yx':>4}"
+    inner = max(len(hdr) + 2, len(sub) + 4, len(title) + 4)
+    lines = ["╔" + "═" * inner + "╗",
+             "║" + title.center(inner) + "║",
+             "║" + sub.center(inner) + "║",
+             "╠" + "═" * inner + "╣"]
+    if not counts:
+        lines.append("║" + " No earlier match in uploaded data.".ljust(inner) + "║")
+    else:
+        lines += ["║" + hdr.ljust(inner) + "║", "╟" + "─" * inner + "╢"]
+        ranked = sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))
+        for k, ((nx, ny), c) in enumerate(ranked, 1):
+            xy, yx, sxy, syx = compute_variants(ep, nx, ny)
+            lines.append("║" + (f" {k:>2}  {ab(nx):<6}{ab(ny):<6}{'x' + str(c):>4}   {xy:02d}   {yx:02d}"
+                                f"    {sxy:02d}    {syx:02d}").ljust(inner) + "║")
+        vals = sorted({v for (nx, ny) in counts for v in compute_variants(ep, nx, ny)})
+        lines.append("╟" + "─" * inner + "╢")
+        lines.append("║" + f" {n_occ} matches, {len(counts)} unique ops, {len(vals)} numbers:".ljust(inner) + "║")
+        for k in range(0, len(vals), 10):
+            lines.append("║" + (" " + " ".join(f"{v:02d}" for v in vals[k:k + 10])).ljust(inner) + "║")
+    lines.append("╚" + "═" * inner + "╝")
+    return lines
+
+
+def show_chain_diagram(group_index, ops_list, root, internal_positions, rows=None):
+    """Print visual transition chain diagram with boxes and ==►► arrows,
+    with the NEXT OPERATION POSSIBILITIES box beside it."""
     PER_ROW = 5
     n       = len(ops_list)
     NODE    = 6   # ┌────┐ display width
@@ -729,7 +786,7 @@ def show_chain_diagram(group_index, ops_list, root, internal_positions):
         return OP_ABBREV.get(op, op)
 
     sep('═')
-    print("\n  TRANSITION CHAIN DIAGRAM\n")
+    out = ["", "  TRANSITION CHAIN DIAGRAM", ""]
 
     for row_start in range(0, n, PER_ROW):
         row_end  = min(row_start + PER_ROW, n)
@@ -763,11 +820,16 @@ def show_chain_diagram(group_index, ops_list, root, internal_positions):
         mid_line += f'│ {last_val:02d} │'
         bot_line += '└────┘'
 
-        print(top_line)
-        print(mid_line)
-        print(bot_line)
-        print(lbl_line)
-        print()
+        out += [top_line, mid_line, bot_line, lbl_line, ""]
+
+    right = []
+    if rows and n and '?' not in ops_list[-1] and group_index[-1] >= 0:
+        right = _chain_next_op_table(rows, ops_list[-1], group_index[-1])
+    width = max(len(l) for l in out) + 4
+    for i in range(max(len(out), len(right) + 1)):
+        l = out[i] if i < len(out) else ""
+        r = right[i - 1] if 0 < i <= len(right) else ""
+        print(f"{l:<{width}}{r}".rstrip())
 
     sep('═')
     print()
@@ -2405,7 +2467,7 @@ def run(data_source, user_x_op=None, user_y_op=None):
     # ── Step 5: Chain Diagram ────────────────────────────────────────────────
     internal_pos, _ = find_root_positions(group_index, root)
     if len(ops_list) >= 1:
-        show_chain_diagram(group_index, ops_list, root, internal_pos)
+        show_chain_diagram(group_index, ops_list, root, internal_pos, rows)
 
     # ── Step 5b: Last 3 rows of data grid ────────────────────────────────────
     show_last_rows_diagram(rows)

@@ -721,6 +721,7 @@ def _root_ops_table(root, ops_list, strong, rec):
     ttl = f" ROOT OPS → ROOT={root:02d}  (S=strong ★=recommended) "
     out = ["╔" + ttl.center(iw, "═") + "╗", "║" + " " * iw + "║", "║" + hdr + "║", "╟" + "─" * iw + "╢"]
     per_op = {}
+    hits   = {}                  # strong/recommended value → cells it appears in
     for k, (nx, ny) in enumerate(ops_list, 1):
         if '?' in (nx, ny):
             out.append("║" + f" {k:>2}  ?".ljust(iw) + "║")
@@ -732,6 +733,9 @@ def _root_ops_table(root, ops_list, strong, rec):
         csxy = apply_op(root // 10, SIGN_FLIP[tx]) * 10 + apply_op(root % 10, SIGN_FLIP[ty])
         six  = [xy, yx, sxy, syx, cxy, csxy]
         ns   = sum(1 for v in six if v in strong or v in rec)
+        for v in six:
+            if v in strong or v in rec:
+                hits[v] = hits.get(v, 0) + 1
         per_op[(nx, ny)] = (ns, sorted({v for v in six if v in strong or v in rec}))
         out.append("║" + f" {k:>2}  {ab(nx):<6}{ab(ny):<6}"
                    + f"{xy:02d}{mk(xy)}".ljust(8) + f"{yx:02d}{mk(yx)}".ljust(5)
@@ -752,7 +756,24 @@ def _root_ops_table(root, ops_list, strong, rec):
     out.append("║" + (" ★ RECOMMENDED via: " + (", ".join(f"{ab(x)}/{ab(y)}" for x, y in recd)
                                                if recd else "none")).ljust(iw) + "║")
     out.append("╚" + "═" * iw + "╝")
-    return out
+
+    # STRONG VALUES box beside it: every S/★ value from all 6 columns, once
+    # each, ascending, with how many cells it appeared in.
+    vals = sorted(hits)
+    iw2  = 36
+    side = ["╔" + f" STRONG VALUES ({len(vals)} unique) ".center(iw2, "═") + "╗",
+            "║" + " all columns, no duplicates".ljust(iw2) + "║",
+            "║" + ("  Num Cells".ljust(12) * 3).ljust(iw2) + "║",
+            "╟" + "─" * iw2 + "╢"]
+    for k in range(0, len(vals), 3):
+        side.append("║" + "".join(f"  {v:02d}{mk(v)} ×{hits[v]:<3}".ljust(12)
+                                    for v in vals[k:k + 3]).ljust(iw2) + "║")
+    side.append("╟" + "─" * iw2 + "╢")
+    side.append("║" + " ★ = recommended, S = strong".ljust(iw2) + "║")
+    side.append("╚" + "═" * iw2 + "╝")
+    width = len(out[0]) + 4
+    return [(o if k < len(out) else "").ljust(width) + (side[k] if k < len(side) else "")
+            for k, o in enumerate(out + [""] * max(0, len(side) - len(out)))]
 
 
 def show_chain_diagram(group_index, ops_list, root, internal_positions):

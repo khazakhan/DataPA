@@ -2598,24 +2598,38 @@ def _print_side_by_side(left, *rights, gap=4):
         print(line.rstrip())
 
 
-def _kk_missing_combos_box(combos, ep, n_x, n_y, cellw=8):
-    """# / x op / y op / xy / yx box: x/y op combinations built from the ops
-    used in the table that never occur together as a row (applied to EP)."""
+def _kk_missing_combos_box(first, rest, ep, n_exist, cellw=8):
+    """# / x op / y op / xy / yx box: every x/y op combination (10 × 10) that
+    never occurs as a row of the table, applied to EP. `first` = combos of
+    ops already used in the table, `rest` = combos with any other op."""
     inner = max(5 * cellw, 40)
     lines = ["  ╔" + "═" * inner + "╗",
              "  ║" + "NON-EXISTING x/y COMBINATIONS".center(inner) + "║",
-             "  ║" + f"{n_x} x ops × {n_y} y ops used − existing".center(inner) + "║",
+             "  ║" + f"10 x ops × 10 y ops − {n_exist} existing = {len(first) + len(rest)}".center(inner) + "║",
              "  ╠" + "═" * inner + "╣",
              "  ║" + (" #".ljust(cellw) + "x op".ljust(cellw) + "y op".ljust(cellw)
-                      + f"xy".ljust(cellw) + "yx").ljust(inner) + "║",
+                      + "xy".ljust(cellw) + "yx").ljust(inner) + "║",
              "  ╟" + "─" * inner + "╢"]
-    if not combos:
-        lines.append("  ║" + "  (none — every combination exists)".ljust(inner) + "║")
-    for i, (xo, yo) in enumerate(combos):
+
+    def row(i, xo, yo):
         xy, yx, *_ = compute_variants(ep, xo, yo)
-        lines.append("  ║" + (f" {i + 1:>2}".ljust(cellw) + OP_ABBREV[xo].ljust(cellw)
-                             + OP_ABBREV[yo].ljust(cellw) + f"{xy:02d}".ljust(cellw)
-                             + f"{yx:02d}").ljust(inner) + "║")
+        return "  ║" + (f" {i:>2}".ljust(cellw) + OP_ABBREV[xo].ljust(cellw)
+                        + OP_ABBREV[yo].ljust(cellw) + f"{xy:02d}".ljust(cellw)
+                        + f"{yx:02d}").ljust(inner) + "║"
+
+    n = 0
+    if first:
+        lines.append("  ║" + " ops used in table:".ljust(inner) + "║")
+        for xo, yo in first:
+            n += 1
+            lines.append(row(n, xo, yo))
+    if rest:
+        if first:
+            lines.append("  ╟" + "┄" * inner + "╢")
+        lines.append("  ║" + " with ops not used in table:".ljust(inner) + "║")
+        for xo, yo in rest:
+            n += 1
+            lines.append(row(n, xo, yo))
     lines.append("  ╚" + "═" * inner + "╝")
     return lines
 
@@ -2655,15 +2669,18 @@ def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, fin
             counts[v] = counts.get(v, 0) + 1
     table.append('─' * W)
     if show_missing:
-        # NON-EXISTING x/y COMBINATIONS — every x op used × every y op used
-        # (table order), minus the pairs that occur as rows; printed beside
+        # NON-EXISTING x/y COMBINATIONS — all 10 x ops × all 10 y ops minus
+        # the pairs that occur as rows; combos of ops already used in the
+        # table first (table order), then the rest (ALL_OPS order)
         used_x = list(dict.fromkeys(e[3] for e in entries))
         used_y = list(dict.fromkeys(e[4] for e in entries))
         pairs  = {(e[3], e[4]) for e in entries}
-        combos = [(xo, yo) for xo in used_x for yo in used_y if (xo, yo) not in pairs]
+        first  = [(xo, yo) for xo in used_x for yo in used_y if (xo, yo) not in pairs]
+        rest   = [(xo, yo) for xo in ALL_OPS for yo in ALL_OPS
+                  if (xo, yo) not in pairs and (xo, yo) not in set(first)]
         # title + 2 blank lines on the left so both tables' rows line up
         _print_side_by_side([title, "", ""] + table,
-                            _kk_missing_combos_box(combos, ep, len(used_x), len(used_y)))
+                            _kk_missing_combos_box(first, rest, ep, len(pairs)))
     else:
         print("\n".join(table))
 

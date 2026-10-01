@@ -779,6 +779,86 @@ def _root_ops_table(root, ops_list, strong, rec):
             for k, o in enumerate(out + [""] * max(0, len(side) - len(out)))]
 
 
+def _root_six(root, nx, ny):
+    """The 6 ROOT OPS values for one op pair, each with its (tens/units) ops:
+    Number, yx, s+xy, s+yx, cut xy, cut sign."""
+    ab = lambda op: OP_ABBREV.get(op, op)
+    xy, yx, sxy, syx = compute_variants(root, nx, ny)
+    fx, fy = SIGN_FLIP[nx], SIGN_FLIP[ny]
+    tx, ty = KK_CUT_TOGGLE[nx], KK_CUT_TOGGLE[ny]
+    cxy  = apply_op(root // 10, tx) * 10 + apply_op(root % 10, ty)
+    csxy = apply_op(root // 10, SIGN_FLIP[tx]) * 10 + apply_op(root % 10, SIGN_FLIP[ty])
+    return [(xy, ""), (yx, ""), (sxy, f"{ab(fx)}/{ab(fy)}"), (syx, f"{ab(fy)}/{ab(fx)}"),
+            (cxy, f"{ab(tx)}/{ab(ty)}"),
+            (csxy, f"{ab(SIGN_FLIP[tx])}/{ab(SIGN_FLIP[ty])}")]
+
+
+def show_root_missing_combos(root, ops_list, strong, rec):
+    """NON-EXISTING OP COMBINATIONS (display only), printed right below the
+    ROOT OPS table: every x op used in TRANSITION OPERATIONS paired with
+    every y op used there, keeping only pairs that never occur as a step;
+    each applied to ROOT (same 6 columns). Rows ordered by priority:
+    ★ recommended count, then S# (strong count), then op order.
+    Thick green border."""
+    ab    = lambda op: OP_ABBREV.get(op, op)
+    mk    = lambda v: ("★" if v in rec else "S" if v in strong else " ")
+    valid = [op for op in ops_list if '?' not in op]
+    if not valid:
+        return
+    xs    = [o for o in ALL_OPS if o in {x for x, _ in valid}]
+    ys    = [o for o in ALL_OPS if o in {y for _, y in valid}]
+    seen  = set(valid)
+    rows  = []
+    for nx in xs:
+        for ny in ys:
+            if (nx, ny) in seen:
+                continue
+            six = _root_six(root, nx, ny)
+            nr  = sum(1 for v, _ in six if v in rec)
+            ns  = sum(1 for v, _ in six if v in strong or v in rec)
+            rows.append((-nr, -ns, ALL_OPS.index(nx), ALL_OPS.index(ny), nx, ny, six, nr, ns))
+    rows.sort()
+
+    SW  = 15
+    hdr = (f" {'Rank':>4}  {'x op':<6}{'y op':<6}{'Number':<8}{'yx':<5}{'s+xy (op)':<{SW}}"
+           f"{'s+yx (op)':<{SW}}{'cut xy (op)':<{SW}}{'cut sign (op)':<{SW}}{'★#':>2} {'S#':>3} ")
+    body = [f" NON-EXISTING OP COMBINATIONS → ROOT={root:02d}",
+            f" {len(xs)} x ops × {len(ys)} y ops used in the transitions = {len(xs) * len(ys)} combos;"
+            f" {len(seen & {(x, y) for x in xs for y in ys})} exist, {len(rows)} never occur",
+            " Priority: ★ recommended first, then S# (strong values of 6)",
+            "", hdr, "─" * len(hdr)]
+    for k, (*_, nx, ny, six, nr, ns) in enumerate(rows, 1):
+        (xy, _), (yx, _) = six[0], six[1]
+        line = (f" {k:>4}  {ab(nx):<6}{ab(ny):<6}" + f"{xy:02d}{mk(xy)}".ljust(8)
+                + f"{yx:02d}{mk(yx)}".ljust(5)
+                + "".join(f"{v:02d}{mk(v)}({o})".ljust(SW) for v, o in six[2:])
+                + f"{nr:>2} {ns:>3} ")
+        body.append(line)
+        if k < len(rows) and (nr, ns) != (rows[k][7], rows[k][8]) and nr + ns > 0 \
+                and rows[k][7] + rows[k][8] == 0:
+            body.append("·" * len(hdr))          # divider before the zero-strength rows
+    body.append("─" * len(hdr))
+    top = [r for r in rows if r[7] == rows[0][7] and r[8] == rows[0][8]] if rows else []
+    if rows and (rows[0][7] or rows[0][8]):
+        vals = sorted({v for r in top for v, _ in r[6] if v in strong or v in rec})
+        body.append(f" TOP PRIORITY: " + ", ".join(f"{ab(r[4])}/{ab(r[5])}" for r in top)
+                    + "  → " + " ".join(f"{v:02d}{mk(v).strip()}" for v in vals))
+
+    # Thick green border: heavy outer frame + double inner frame
+    g1, g2, rst = "\033[1;38;2;0;200;83m", "\033[38;2;0;140;60m", "\033[0m"
+    iw = max(len(l) for l in body) + 2
+    inner = ([f"{g2}╔{'═' * iw}╗{rst}"]
+             + [f"{g2}║{rst} {l:<{iw - 2}} {g2}║{rst}" for l in body]
+             + [f"{g2}╚{'═' * iw}╝{rst}"])
+    outer = ([f"{g1}┏{'━' * (iw + 4)}┓{rst}"]
+             + [f"{g1}┃{rst} {l} {g1}┃{rst}" for l in inner]
+             + [f"{g1}┗{'━' * (iw + 4)}┛{rst}"])
+    print()
+    for l in outer:
+        print("  " + l)
+    print()
+
+
 def show_chain_diagram(group_index, ops_list, root, internal_positions):
     """Print visual transition chain diagram with boxes and ==►► arrows."""
     PER_ROW = 5
@@ -2621,7 +2701,8 @@ def run(data_source, user_x_op=None, user_y_op=None):
         l = left[k] if k < len(left) else ""
         r = right[k] if k < len(right) else ""
         print(f"  {l:<{lw}}{r}".rstrip())
-    print()
+    show_root_missing_combos(root, ops_list, strong={v for v, *_ in _last_top4[:30]},
+                             rec=[v for v, *_ in _last_top4[:3]])
     sep('═')
 
     # ── Step 5: Chain Diagram ────────────────────────────────────────────────

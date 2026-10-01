@@ -844,19 +844,51 @@ def show_root_missing_combos(root, ops_list, strong, rec):
         body.append(f" TOP PRIORITY: " + ", ".join(f"{ab(r[4])}/{ab(r[5])}" for r in top)
                     + "  → " + " ".join(f"{v:02d}{mk(v).strip()}" for v in vals))
 
-    # Thick green border: heavy outer frame + double inner frame
+    # UNIQUE VALUES box beside it: every value from the 6 columns once,
+    # grouped ★ recommended / S strong / other, ascending, ×cells count.
+    cnt = {}
+    for r in rows:
+        for v, _ in r[6]:
+            cnt[v] = cnt.get(v, 0) + 1
+    side = [f" UNIQUE VALUES ({len(cnt)})  from all 6 columns", ""]
+    for label, test in (("★ RECOMMENDED", lambda v: v in rec),
+                        ("S STRONG", lambda v: v in strong and v not in rec),
+                        ("OTHER", lambda v: v not in strong and v not in rec)):
+        vals = sorted(v for v in cnt if test(v))
+        side.append(f" {label} ({len(vals)})")
+        side.append(" " + "─" * 38)
+        for k in range(0, len(vals), 4):
+            side.append(" " + "".join(f"{v:02d}{mk(v).strip() or ' '} ×{cnt[v]:<3}".ljust(10)
+                                      for v in vals[k:k + 4]))
+        if not vals:
+            side.append("  none")
+        side.append("")
+    side.append(" ×N = cells it appears in")
+
+    left, right = _green_frame(body), _green_frame(side)
+    lw = len(_ANSI_RE.sub("", left[0]))
+    print()
+    for k in range(max(len(left), len(right))):
+        l = left[k] if k < len(left) else " " * lw
+        r = right[k] if k < len(right) else ""
+        print(("  " + l + "    " + r).rstrip())
+    print()
+
+
+_ANSI_RE = re.compile(r"\033\[[0-9;]*m")
+
+
+def _green_frame(body):
+    """Thick green border: bright-green heavy outer frame + darker-green
+    double inner frame around the given lines."""
     g1, g2, rst = "\033[1;38;2;0;200;83m", "\033[38;2;0;140;60m", "\033[0m"
     iw = max(len(l) for l in body) + 2
     inner = ([f"{g2}╔{'═' * iw}╗{rst}"]
              + [f"{g2}║{rst} {l:<{iw - 2}} {g2}║{rst}" for l in body]
              + [f"{g2}╚{'═' * iw}╝{rst}"])
-    outer = ([f"{g1}┏{'━' * (iw + 4)}┓{rst}"]
-             + [f"{g1}┃{rst} {l} {g1}┃{rst}" for l in inner]
-             + [f"{g1}┗{'━' * (iw + 4)}┛{rst}"])
-    print()
-    for l in outer:
-        print("  " + l)
-    print()
+    return ([f"{g1}┏{'━' * (iw + 4)}┓{rst}"]
+            + [f"{g1}┃{rst} {l} {g1}┃{rst}" for l in inner]
+            + [f"{g1}┗{'━' * (iw + 4)}┛{rst}"])
 
 
 def show_chain_diagram(group_index, ops_list, root, internal_positions):

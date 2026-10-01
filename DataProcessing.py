@@ -2654,20 +2654,26 @@ def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, fin
         print()
         return []
 
+    KW    = 15
     table = [f"  {'Pos':<7} {'Source':<9} {'x op':<7} {'y op':<7} "
-             f"{'xy':>4} {'yx':>4} {'sign+xy':>8} {'sign+yx':>8} {'cut xy':>7} {'cut sign':>9}",
-             '─' * W]
+             + "".join(f"{h:<{KW}}" for h in ('xy (op)', 'yx (op)', 'sign+xy (op)',
+                                               'sign+yx (op)', 'cut xy (op)', 'cut sign (op)')),
+             '─' * (36 + 6 * KW)]
     counts = {}
     for pos, a, b, x_op, y_op, (xy, yx, sxy, syx, cxy, csxy) in entries:
         xab = OP_ABBREV.get(x_op, x_op)
         yab = OP_ABBREV.get(y_op, y_op)
+        # every value shows the ops applied to EP in brackets (tens op/units op)
+        fx, fy = OP_ABBREV[SIGN_FLIP[x_op]], OP_ABBREV[SIGN_FLIP[y_op]]
+        tx, ty = KK_CUT_TOGGLE[x_op], KK_CUT_TOGGLE[y_op]
+        cells  = [(xy, xab, yab), (yx, yab, xab), (sxy, fx, fy), (syx, fy, fx),
+                  (cxy, OP_ABBREV[tx], OP_ABBREV[ty]),
+                  (csxy, OP_ABBREV[SIGN_FLIP[tx]], OP_ABBREV[SIGN_FLIP[ty]])]
         table.append(f"  {'[' + pos_prefix + str(pos) + ']':<7} {a:02d} → {b:02d}   {xab:<7} {yab:<7} "
-                     + f"{xy:02d}".rjust(4) + f"{yx:02d}".rjust(5)
-                     + f"{sxy:02d}".rjust(9) + f"{syx:02d}".rjust(9)
-                     + f"{cxy:02d}".rjust(8) + f"{csxy:02d}".rjust(10))
+                     + "".join(f"{v:02d} ({o1}/{o2})".ljust(KW) for v, o1, o2 in cells))
         for v in {xy, yx, sxy, syx, cxy, csxy}:
             counts[v] = counts.get(v, 0) + 1
-    table.append('─' * W)
+    table.append('─' * (36 + 6 * KW))
     if show_missing:
         # NON-EXISTING x/y COMBINATIONS — all 10 x ops × all 10 y ops minus
         # the pairs that occur as rows; combos of ops already used in the

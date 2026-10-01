@@ -1151,6 +1151,13 @@ def show_last_rows_diagram(rows):
         print(lbl_line)
         print()
 
+    # For EndPoint 10x10 Transitions — every op pair applied to EP (last value)
+    _print_10x10("For EndPoint 10x10 Transitions:", sequence[-1],
+                 set(trans_ops),
+                 f"the T-transitions above (last {len(lastN_complete)} rows)",
+                 last=trans_ops[-1])
+    print()
+
     sep('═')
     print()
 
@@ -2706,30 +2713,39 @@ def get_next_number(rows, r, c):
 
 W = 72
 
-def show_root_10x10(root, ops_list):
-    """Root Element 10x10 operations: every x op (rows) × every y op (cols)
-    applied to ROOT (xy). Covers 00-99 exactly once; * = op pair used in
-    a transition step."""
-    order = ['cut-1', 'cut+1', 'cut-2', 'cut+2', '-1', '+1', '-2', '+2',
-             'no_change', 'cut']
+_10X10_ORDER = ['cut-1', 'cut+1', 'cut-2', 'cut+2', '-1', '+1', '-2', '+2',
+                'no_change', 'cut']
+
+
+def _print_10x10(title, val, used, used_label, last=None):
+    """10x10 grid: every x op (rows) × every y op (cols) applied to `val`
+    (xy). Covers 00-99 exactly once; * = op pair in `used`; ◄ = `last`."""
     lbl = {'no_change': 'nc'}
-    used = set(ops_list)
-    rx, ry = root // 10, root % 10
-    print(f"\n  Root Element 10x10 operations  (ROOT = {root:02d},"
-          f" x = {rx}, y = {ry};  rows = x op, cols = y op)\n")
-    head = "   x \\ y │" + ''.join(f"{lbl.get(o, o):>7}" for o in order)
-    print(head)
-    print("  " + "─" * 7 + "┼" + "─" * (7 * len(order)))
-    for xo in order:
+    vx, vy = val // 10, val % 10
+    print(f"\n  {title}  ({val:02d}: x = {vx}, y = {vy};"
+          f"  rows = x op, cols = y op)\n")
+    print("   x \\ y │" + ''.join(f"{lbl.get(o, o):>7}" for o in _10X10_ORDER))
+    print("  " + "─" * 7 + "┼" + "─" * (7 * len(_10X10_ORDER)))
+    for xo in _10X10_ORDER:
         cells = ''
-        for yo in order:
-            v = apply_op(rx, xo) * 10 + apply_op(ry, yo)
-            mark = '*' if (xo, yo) in used else ' '
+        for yo in _10X10_ORDER:
+            v = apply_op(vx, xo) * 10 + apply_op(vy, yo)
+            mark = '◄' if (xo, yo) == last else ('*' if (xo, yo) in used else ' ')
             cells += f"   {v:02d}{mark} "
         print(f"  {lbl.get(xo, xo):>6} │{cells}")
-    print(f"\n  * = op pair used in TRANSITION OPERATIONS   nc/nc = {root:02d} (root)"
-          f"   cut/cut = {apply_op(rx, 'cut') * 10 + apply_op(ry, 'cut'):02d}")
+    foot = f"\n  * = op pair used in {used_label}"
+    if last:
+        foot += f"   ◄ = last op ({lbl.get(last[0], last[0])}/{lbl.get(last[1], last[1])})"
+    foot += (f"   nc/nc = {val:02d}"
+             f"   cut/cut = {apply_op(vx, 'cut') * 10 + apply_op(vy, 'cut'):02d}")
+    print(foot)
     print("  Note: the full grid holds every number 00-99 exactly once.")
+
+
+def show_root_10x10(root, ops_list):
+    """Root Element 10x10 operations — ops applied to ROOT."""
+    _print_10x10("Root Element 10x10 operations", root, set(ops_list),
+                 "TRANSITION OPERATIONS")
 
 
 def sep(ch='─'):

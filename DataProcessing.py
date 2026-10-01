@@ -2508,7 +2508,7 @@ def show_kk_chain_family(group_index):
         return []
     return _kk_table(list(group_index), group_index[-1], "KK CHAIN FAMILY RESULT", "Op",
                      "No bracket cells found in the transition chain.",
-                     show_missing=True)
+                     show_missing=True, frame_label="WIN - WIN")
 
 
 def kk_chain_unique_counts(group_index):
@@ -2588,13 +2588,15 @@ def _kk_vertical_box(title, values, rows=10, cellw=6):
 def _print_side_by_side(left, *rights, gap=4):
     boxes  = [left] + list(rights)
     height = max(len(b) for b in boxes)
-    widths = [max(len(l) for l in b) for b in boxes]
+    vis    = lambda l: len(_ANSI_RE.sub("", l))     # width ignoring colour codes
+    pad    = lambda l, w: l + " " * max(0, w - vis(l))
+    widths = [max((vis(l) for l in b), default=0) for b in boxes]
     print()
     for i in range(height):
         parts = [(b[i] if i < len(b) else "") for b in boxes]
-        line  = parts[0].ljust(widths[0])
+        line  = pad(parts[0], widths[0])
         for j in range(1, len(boxes)):
-            line += " " * gap + parts[j].lstrip().ljust(widths[j] - 2)
+            line += " " * gap + pad(parts[j].lstrip(), widths[j] - 2)
         print(line.rstrip())
 
 
@@ -2635,7 +2637,7 @@ def _kk_missing_combos_box(first, rest, ep, n_exist, cellw=8):
 
 
 def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, final40=None,
-              show_missing=False):
+              show_missing=False, frame_label=None):
     """Shared KK bracket table: prints the per-cell table, the UNIQUE VALUES
     box (optionally with a KK MERGE box beside it) and the ranked box;
     returns the sorted unique values."""
@@ -2685,8 +2687,18 @@ def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, fin
         rest   = [(xo, yo) for xo in ALL_OPS for yo in ALL_OPS
                   if (xo, yo) not in pairs and (xo, yo) not in set(first)]
         # title + 2 blank lines on the left so both tables' rows line up
-        _print_side_by_side([title, "", ""] + table,
-                            _kk_missing_combos_box(first, rest, ep, len(pairs)))
+        left  = [title, "", ""] + table
+        right = _kk_missing_combos_box(first, rest, ep, len(pairs))
+        if frame_label:
+            # green band + label (e.g. WIN - WIN) around the table; the box
+            # beside it drops 4 lines so its header still meets the table's
+            left  = _green_frame([f"★  {frame_label}  ★".center(max(len(l) for l in left)), ""] + left)
+            right = [""] * 4 + right
+        _print_side_by_side(left, right)
+    elif frame_label:
+        print()
+        print("\n".join(_green_frame([f"★  {frame_label}  ★".center(max(len(l) for l in table)), "",
+                                      title, ""] + table)))
     else:
         print("\n".join(table))
 

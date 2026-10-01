@@ -865,13 +865,32 @@ def show_root_missing_combos(root, ops_list, strong, rec):
         side.append("")
     side.append(" ×N = cells it appears in")
 
-    left, right = _green_frame(body), _green_frame(side)
-    lw = len(_ANSI_RE.sub("", left[0]))
+    # STARTS WITH ★ DIGITS box: the tens digits of the ★ RECOMMENDED values
+    # in the UNIQUE box (e.g. 44★ 80★ → 4 and 8); every unique value
+    # (★ / S / other) starting with one of them, per digit, ascending.
+    digs  = sorted({v // 10 for v in cnt if v in rec})
+    third = [f" STARTS WITH ★ DIGITS: {', '.join(map(str, digs)) or 'none'}",
+             f" (from ★ {' '.join(f'{v:02d}' for v in sorted(v for v in cnt if v in rec)) or '-'})", ""]
+    for d in digs:
+        vals = sorted(v for v in cnt if v // 10 == d)
+        third.append(f" {d} → {len(vals)} values")
+        third.append(" " + "─" * 38)
+        for k in range(0, len(vals), 4):
+            third.append(" " + "".join(f"{v:02d}{mk(v).strip() or ' '} ×{cnt[v]:<3}".ljust(10)
+                                       for v in vals[k:k + 4]))
+        third.append("")
+    if not digs:
+        third.append("  no ★ recommended value in this table")
+        third.append("")
+    third.append(" ★ = recommended, S = strong")
+
+    frames = [_green_frame(body), _green_frame(side), _green_frame(third)]
+    widths = [len(_ANSI_RE.sub("", f[0])) for f in frames]
     print()
-    for k in range(max(len(left), len(right))):
-        l = left[k] if k < len(left) else " " * lw
-        r = right[k] if k < len(right) else ""
-        print(("  " + l + "    " + r).rstrip())
+    for k in range(max(len(f) for f in frames)):
+        line = "  " + "    ".join(f[k] if k < len(f) else " " * w
+                                   for f, w in zip(frames, widths))
+        print(line.rstrip())
     print()
 
 

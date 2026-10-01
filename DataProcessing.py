@@ -721,7 +721,7 @@ def _root_ops_table(root, ops_list, strong, rec):
     ttl = f" ROOT OPS → ROOT={root:02d}  (S=strong ★=recommended) "
     out = ["╔" + ttl.center(iw, "═") + "╗", "║" + " " * iw + "║", "║" + hdr + "║", "╟" + "─" * iw + "╢"]
     per_op = {}
-    hits   = {}                  # strong/recommended value → cells it appears in
+    hits   = {}                  # every value → highest S# of a row it appears in
     for k, (nx, ny) in enumerate(ops_list, 1):
         if '?' in (nx, ny):
             out.append("║" + f" {k:>2}  ?".ljust(iw) + "║")
@@ -734,8 +734,7 @@ def _root_ops_table(root, ops_list, strong, rec):
         six  = [xy, yx, sxy, syx, cxy, csxy]
         ns   = sum(1 for v in six if v in strong or v in rec)
         for v in six:
-            if v in strong or v in rec:
-                hits[v] = hits.get(v, 0) + 1
+            hits[v] = max(hits.get(v, 0), ns)     # strongest row it appears in
         per_op[(nx, ny)] = (ns, sorted({v for v in six if v in strong or v in rec}))
         out.append("║" + f" {k:>2}  {ab(nx):<6}{ab(ny):<6}"
                    + f"{xy:02d}{mk(xy)}".ljust(8) + f"{yx:02d}{mk(yx)}".ljust(5)
@@ -757,18 +756,22 @@ def _root_ops_table(root, ops_list, strong, rec):
                                                if recd else "none")).ljust(iw) + "║")
     out.append("╚" + "═" * iw + "╝")
 
-    # STRONG VALUES box beside it: every S/★ value from all 6 columns, once
-    # each, ascending, with how many cells it appeared in.
-    vals = sorted(hits)
-    iw2  = 36
-    side = ["╔" + f" STRONG VALUES ({len(vals)} unique) ".center(iw2, "═") + "╗",
+    # VALUES BY OP STRENGTH box beside it: every value from all 6 columns,
+    # once each, grouped by the highest S# of any row it appears in (S#6 =
+    # the STRONGEST OPS first), ascending within a group, 8 per line.
+    iw2  = 44
+    side = ["╔" + f" ALL VALUES BY OP STRENGTH ({len(hits)}) ".center(iw2, "═") + "╗",
             "║" + " all columns, no duplicates".ljust(iw2) + "║",
-            "║" + ("  Num Cells".ljust(12) * 3).ljust(iw2) + "║",
+            "║" + " S#  Values".ljust(iw2) + "║",
             "╟" + "─" * iw2 + "╢"]
-    for k in range(0, len(vals), 3):
-        side.append("║" + "".join(f"  {v:02d}{mk(v)} ×{hits[v]:<3}".ljust(12)
-                                    for v in vals[k:k + 3]).ljust(iw2) + "║")
+    for n in range(6, -1, -1):
+        vals = sorted(v for v, h in hits.items() if h == n)
+        for k in range(0, len(vals), 8):
+            head = f" {n}  " if k == 0 else "    "
+            side.append("║" + (head + " ".join(f"{v:02d}{mk(v).strip() or ' '}"
+                                              for v in vals[k:k + 8])).ljust(iw2) + "║")
     side.append("╟" + "─" * iw2 + "╢")
+    side.append("║" + " S# = strong values in that op's row (of 6)".ljust(iw2) + "║")
     side.append("║" + " ★ = recommended, S = strong".ljust(iw2) + "║")
     side.append("╚" + "═" * iw2 + "╝")
     width = len(out[0]) + 4

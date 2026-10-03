@@ -2739,8 +2739,8 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 193, 'tens_cut': 43, 'either_decade': 62,
-    'table_rounds': 183, 'table_hits': 27, 'table_chance': 18, 'declared': 148, 'declared_hits': 4,
+    'results': 194, 'tens_cut': 43, 'either_decade': 62,
+    'table_rounds': 184, 'table_hits': 27, 'table_chance': 18, 'declared': 149, 'declared_hits': 4,
 }
 
 

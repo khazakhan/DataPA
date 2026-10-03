@@ -2762,7 +2762,7 @@ def _rrr_declared(grid_ep, last_x_op):
                          f"{L['either_decade'] / L['results']:.0%}  (chance 19%)")
     num = d1 * 10 + apply_op(u, 'cut-1')
     lines.append(f"    DECLARED NUMBER   {num:02d}        {f'cut / c-1 on {grid_ep:02d}':<28}"
-                 f"single number {L['declared_hits']} of {L['declared']} = chance; the units digit has no rule")
+                 f"single number {L['declared_hits']} of {L['declared']}  (chance about 1 in 100)")
     return lines
 
 

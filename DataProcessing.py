@@ -2740,7 +2740,7 @@ def _rrr_frame(body):
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
     'results': 111, 'tens_cut': 28, 'either_decade': 44,
-    'table_rounds': 101, 'table_hits': 12, 'declared': 67, 'declared_hits': 1,
+    'table_rounds': 101, 'table_hits': 12, 'table_chance': 10, 'declared': 67, 'declared_hits': 1,
 }
 
 
@@ -2800,7 +2800,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     body += ['─' * len(head),
              "  new x = old y, cut switched + sign flipped   |   new y = old x, cut switched, one step down",
              "  LAST = the chain's own last step.  Backtest (57,662 positions): table hit 6.42% vs 6.44% chance.",
-             f"  Live record: table hit {RRR_LIVE['table_hits']} of {RRR_LIVE['table_rounds']} rounds (about 9 expected by chance)."]
+             f"  Live record: table hit {RRR_LIVE['table_hits']} of {RRR_LIVE['table_rounds']} rounds (about {RRR_LIVE['table_chance']} expected by chance)."]
     if live:
         body += ['─' * len(head)] + _rrr_declared(grid_ep, last_x_op) + ["  ★ in the table = number inside the tens-cut decade"]
     return _rrr_frame(body)

@@ -2500,7 +2500,7 @@ def _kk_special_sequence(rows):
     return sequence
 
 
-def show_kk_chain_family(group_index):
+def show_kk_chain_family(group_index, grid_ep=None):
     """Same KK bracket rule, run over the TRANSITION CHAIN instead of the
     last 10 rows: the chain's own last value is the EP (e.g. chain ends 56 →
     bracket 5/0); chain cells whose tens digit is in that bracket lend their
@@ -2509,7 +2509,7 @@ def show_kk_chain_family(group_index):
         return []
     return _kk_table(list(group_index), group_index[-1], "KK CHAIN FAMILY RESULT", "Op",
                      "No bracket cells found in the transition chain.",
-                     show_missing=True, frame_label="WIN - WIN", rrr=True)
+                     show_missing=True, frame_label="WIN - WIN", rrr=True, grid_ep=grid_ep)
 
 
 def kk_chain_unique_counts(group_index):
@@ -2735,15 +2735,49 @@ def _rrr_frame(body):
             + [f"  {m}┗{'━' * iw}┛{rst}"])
 
 
-def _rrr_box(sequence, entries, ep, pos_prefix):
+# RRR live record (results the user gave one by one after each declaration,
+# 2026-10-03): the only change that beat chance is the running value's tens
+# digit getting cut. Update these counts when more results are recorded.
+RRR_LIVE = {
+    'results': 104, 'tens_cut': 28, 'either_decade': 41,
+    'table_rounds': 94, 'table_hits': 9, 'declared': 61, 'declared_hits': 1,
+}
+
+
+def _rrr_declared(grid_ep, last_x_op):
+    """RRR DECLARED lines — display only. From the running value (grid EP):
+    the tens-cut decade, a 2nd decade (tens moved by the chain's last x op,
+    sign flipped) and one number (cut / c-1)."""
+    t, u  = grid_ep // 10, grid_ep % 10
+    d1    = cut(t)
+    L     = RRR_LIVE
+    lines = [f"  RRR DECLARED  (running value = {grid_ep:02d})   — corrected from {L['results']} recorded results",
+             f"  ★ TENS-CUT DECADE   {d1}0 – {d1}9   {'tens digit cut':<28}"
+             f"recorded {L['tens_cut']} of {L['results']} = {L['tens_cut'] / L['results']:.0%}  (chance 10%)"]
+    if last_x_op is not None:
+        d2 = apply_op(t, SIGN_FLIP[last_x_op])
+        if d2 != d1:
+            lines.append(f"    2nd DECADE        {d2}0 – {d2}9   {'tens by LAST x op, flipped':<28}"
+                         f"either decade {L['either_decade']} of {L['results']} = "
+                         f"{L['either_decade'] / L['results']:.0%}  (chance 19%)")
+    num = d1 * 10 + apply_op(u, 'cut-1')
+    lines.append(f"    DECLARED NUMBER   {num:02d}        {f'cut / c-1 on {grid_ep:02d}':<28}"
+                 f"single number {L['declared_hits']} of {L['declared']} = chance; the units digit has no rule")
+    return lines
+
+
+def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     """RRR table — display only. Every WIN - WIN row (plus the chain's own
     last step, marked LAST) gives a next operation by the RRR rule, applied
-    to the EP as xy and yx."""
+    to the EP as xy and yx. With the running value (grid_ep) it also prints
+    the RRR DECLARED lines and stars (★) table numbers in the tens-cut decade."""
     src = [(pos, a, b, x_op, y_op, '') for pos, a, b, x_op, y_op, _ in entries]
     a, b = sequence[-2], sequence[-1]
+    last_x_op = None
     if a >= 0 and b >= 0:
         lx, ly = find_op(a // 10, b // 10), find_op(a % 10, b % 10)
         if '?' not in (lx, ly):
+            last_x_op = lx
             last = len(sequence) - 1
             if src and src[-1][0] == last:
                 src[-1] = src[-1][:5] + ('LAST',)
@@ -2753,22 +2787,27 @@ def _rrr_box(sequence, entries, ep, pos_prefix):
     head = (f"  {'Pos':<12} {'Source':<9} {'old x':<6} {'old y':<6}    "
             f"{'new x':<6} {'new y':<6}  {'xy (op)':<{KW}}{'yx (op)':<{KW}}")
     body = [f"RRR:  NEXT OPERATION → EP={ep:02d}".center(len(head)), "", head, '─' * len(head)]
+    live = grid_ep is not None and grid_ep >= 0
+    star = (lambda v: '★' if v // 10 == cut(grid_ep // 10) else ' ') if live else (lambda v: ' ')
     for pos, a, b, x_op, y_op, mark in src:
         nx, ny   = rrr_next_op(x_op, y_op)
         xy, yx   = compute_variants(ep, nx, ny)[:2]
         nxa, nya = OP_ABBREV[nx], OP_ABBREV[ny]
         tag      = f"[{pos_prefix}{pos}]{mark}"
         body.append(f"  {tag:<12} {a:02d} → {b:02d}   {OP_ABBREV[x_op]:<6} {OP_ABBREV[y_op]:<6} →  "
-                    f"{nxa:<6} {nya:<6}  " + f"{xy:02d} ({nxa}/{nya})".ljust(KW)
-                    + f"{yx:02d} ({nya}/{nxa})".ljust(KW))
+                    f"{nxa:<6} {nya:<6}  " + f"{xy:02d}{star(xy)}({nxa}/{nya})".ljust(KW)
+                    + f"{yx:02d}{star(yx)}({nya}/{nxa})".ljust(KW))
     body += ['─' * len(head),
              "  new x = old y, cut switched + sign flipped   |   new y = old x, cut switched, one step down",
-             "  LAST = the chain's own last step.  Backtest (57,662 positions): table hit 6.42% vs 6.44% chance."]
+             "  LAST = the chain's own last step.  Backtest (57,662 positions): table hit 6.42% vs 6.44% chance.",
+             f"  Live record: table hit {RRR_LIVE['table_hits']} of {RRR_LIVE['table_rounds']} rounds (about 9 expected by chance)."]
+    if live:
+        body += ['─' * len(head)] + _rrr_declared(grid_ep, last_x_op) + ["  ★ in the table = number inside the tens-cut decade"]
     return _rrr_frame(body)
 
 
 def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, final40=None,
-              show_missing=False, frame_label=None, round_trip=False, rrr=False):
+              show_missing=False, frame_label=None, round_trip=False, rrr=False, grid_ep=None):
     """Shared KK bracket table: prints the per-cell table, the UNIQUE VALUES
     box (optionally with a KK MERGE box beside it) and the ranked box;
     returns the sorted unique values."""
@@ -2785,7 +2824,7 @@ def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, fin
         print(f"  {empty_msg}")
         if rrr:
             print()
-            print("\n".join(_rrr_box(sequence, entries, ep, pos_prefix)))
+            print("\n".join(_rrr_box(sequence, entries, ep, pos_prefix, grid_ep)))
         sep('═')
         print()
         return []
@@ -2838,7 +2877,7 @@ def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, fin
 
     if rrr:
         print()
-        print("\n".join(_rrr_box(sequence, entries, ep, pos_prefix)))
+        print("\n".join(_rrr_box(sequence, entries, ep, pos_prefix, grid_ep)))
 
     if round_trip:
         print()
@@ -3088,7 +3127,7 @@ def run(data_source, user_x_op=None, user_y_op=None):
     show_next_op_after_last(rows)
     _kk_vals = show_kk_special_family(rows, merge_counts=kk_chain_unique_counts(group_index),
                                       final40=[v for v, _, _ in _last_top4[:40]])
-    _kk_chain_vals = show_kk_chain_family(group_index)
+    _kk_chain_vals = show_kk_chain_family(group_index, grid_ep=endpoint)
     _super_add("KK", _kk_vals or [])
     _super_add("KC", _kk_chain_vals or [])
 

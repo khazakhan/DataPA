@@ -2486,7 +2486,8 @@ def show_kk_special_family(rows, merge_counts=None, final40=None):
     ep = sequence[-1]
     return _kk_table(sequence, ep, "KK SPECIAL FAMILY RESULT", "T",
                      "No bracket cells found in the last 10 rows.",
-                     merge_counts=merge_counts, final40=final40, show_missing=True)
+                     merge_counts=merge_counts, final40=final40, show_missing=True,
+                     round_trip=True)
 
 
 def _kk_special_sequence(rows):
@@ -2636,8 +2637,81 @@ def _kk_missing_combos_box(first, rest, ep, n_exist, cellw=8):
     return lines
 
 
+# KK Round Trip — drop the cut from an op (cut-1 → -1, cut → nc); plain ops stay
+KK_CUT_REMOVE = {
+    'no_change': 'no_change', 'cut':   'no_change',
+    '+1':        '+1',        'cut+1': '+1',
+    '-1':        '-1',        'cut-1': '-1',
+    '+2':        '+2',        'cut+2': '+2',
+    '-2':        '-2',        'cut-2': '-2',
+}
+
+
+def _yellow_dotted_frame(body):
+    """Yellow dotted-line border around the given lines."""
+    y, rst = "\033[1;38;2;255;214;0m", "\033[0m"
+    iw = max(len(l) for l in body) + 2
+    return ([f"  {y}┌{'┄' * iw}┐{rst}"]
+            + [f"  {y}┆{rst} {l:<{iw - 2}} {y}┆{rst}" for l in body]
+            + [f"  {y}└{'┄' * iw}┘{rst}"])
+
+
+def _kk_round_trip_box(entries, ep, pos_prefix):
+    """KK ROUND TRIP OPCODE — display only.
+
+    Only the table rows whose source starts with cut(EP tens digit) take part.
+    They cancel like nested brackets, newest rows first: of the cancelled rows
+    the first pairs with the last, the rows between pair two by two. With an
+    odd number of rows the oldest one stays outside every bracket — that row
+    is the target. Its op with the cut removed (c-1 → -1, cut → nc) is the
+    round trip opcode, applied to EP in the same 6 value columns."""
+    t    = ep // 10
+    rows = [e for e in entries if e[1] // 10 == cut(t)]
+    tag  = lambda e: f"[{pos_prefix}{e[0]}]"
+    body = [f"KK ROUND TRIP OPCODE:   (EP={ep:02d}, rows whose source starts with {cut(t)})", ""]
+    if not rows:
+        return _yellow_dotted_frame(body + [f"No rows start with {cut(t)} — no round trip."])
+
+    target = rows[0] if len(rows) % 2 else None
+    rest   = rows[1:] if target else rows
+    pairs  = []
+    if rest:
+        pairs.append((rest[0], rest[-1]))
+        inner = rest[1:-1]
+        pairs += [(inner[i], inner[i + 1]) for i in range(0, len(inner), 2)]
+    body.append(f"Rows ({len(rows)}):  " + "  ".join(f"{tag(e)} {e[1]:02d}→{e[2]:02d}" for e in rows))
+    for k, (p, q) in enumerate(pairs):
+        kind = "outer" if k == 0 and len(pairs) > 1 else "inner" if k else "pair "
+        body.append(f"Cancelled ({kind}):  {tag(p)} {p[1]:02d}→{p[2]:02d} ({OP_ABBREV[p[3]]}/{OP_ABBREV[p[4]]})"
+                    f"   ↔   {tag(q)} {q[1]:02d}→{q[2]:02d} ({OP_ABBREV[q[3]]}/{OP_ABBREV[q[4]]})")
+    body.append("")
+    if target is None:
+        return _yellow_dotted_frame(body + ["All rows cancelled — no remaining target row."])
+
+    pos, a, b, x_op, y_op, _ = target
+    rx, ry = KK_CUT_REMOVE[x_op], KK_CUT_REMOVE[y_op]
+    body += [f"Remaining target:     {tag(target)} {a:02d} → {b:02d}    x: {OP_ABBREV[x_op]}   y: {OP_ABBREV[y_op]}",
+             f"Round trip opcode:    x: {OP_ABBREV[rx]}   y: {OP_ABBREV[ry]}    (cut removed)", ""]
+
+    KW = 15
+    xy, yx, sxy, syx = compute_variants(ep, rx, ry)[:4]
+    tx, ty = KK_CUT_TOGGLE[rx], KK_CUT_TOGGLE[ry]
+    cxy    = apply_op(t, tx) * 10 + apply_op(ep % 10, ty)
+    csxy   = apply_op(t, SIGN_FLIP[tx]) * 10 + apply_op(ep % 10, SIGN_FLIP[ty])
+    ab     = OP_ABBREV
+    cells  = [(xy, ab[rx], ab[ry]), (yx, ab[ry], ab[rx]),
+              (sxy, ab[SIGN_FLIP[rx]], ab[SIGN_FLIP[ry]]), (syx, ab[SIGN_FLIP[ry]], ab[SIGN_FLIP[rx]]),
+              (cxy, ab[tx], ab[ty]), (csxy, ab[SIGN_FLIP[tx]], ab[SIGN_FLIP[ty]])]
+    body += [f"{'x op':<7} {'y op':<7} "
+             + "".join(f"{h:<{KW}}" for h in ('xy (op)', 'yx (op)', 'sign+xy (op)',
+                                               'sign+yx (op)', 'cut xy (op)', 'cut sign (op)')),
+             '─' * (16 + 6 * KW),
+             f"{ab[rx]:<7} {ab[ry]:<7} " + "".join(f"{v:02d} ({o1}/{o2})".ljust(KW) for v, o1, o2 in cells)]
+    return _yellow_dotted_frame(body)
+
+
 def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, final40=None,
-              show_missing=False, frame_label=None):
+              show_missing=False, frame_label=None, round_trip=False):
     """Shared KK bracket table: prints the per-cell table, the UNIQUE VALUES
     box (optionally with a KK MERGE box beside it) and the ranked box;
     returns the sorted unique values."""
@@ -2701,6 +2775,10 @@ def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, fin
                                       title, ""] + table)))
     else:
         print("\n".join(table))
+
+    if round_trip:
+        print()
+        print("\n".join(_kk_round_trip_box(entries, ep, pos_prefix)))
 
     # Unique values box — every value once, sorted by number; count is
     # occurrences across all 6 value columns (not once per row like the ranked box)

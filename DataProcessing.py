@@ -2761,7 +2761,10 @@ def _rrr_box(sequence, entries, ep, pos_prefix):
         body.append(f"  {tag:<12} {a:02d} → {b:02d}   {OP_ABBREV[x_op]:<6} {OP_ABBREV[y_op]:<6} →  "
                     f"{nxa:<6} {nya:<6}  " + f"{xy:02d} ({nxa}/{nya})".ljust(KW)
                     + f"{yx:02d} ({nya}/{nxa})".ljust(KW))
+    rep = f"{ep:02d} (nc/nc)".ljust(KW)
+    body.append(f"  {'[REPEAT]':<12} {'chain EP':<9} {'':<6} {'':<6} →  {'nc':<6} {'nc':<6}  " + rep + rep)
     body += ['─' * len(head),
+             "  REPEAT = chain EP unchanged: the value that followed the grid EP's previous occurrence.",
              "  new x = old y, cut switched + sign flipped   |   new y = old x, cut switched, one step down",
              "  LAST = the chain's own last step.  Backtest (57,662 positions): table hit 6.42% vs 6.44% chance."]
     return _rrr_frame(body)

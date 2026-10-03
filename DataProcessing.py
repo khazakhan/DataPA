@@ -2509,7 +2509,7 @@ def show_kk_chain_family(group_index):
         return []
     return _kk_table(list(group_index), group_index[-1], "KK CHAIN FAMILY RESULT", "Op",
                      "No bracket cells found in the transition chain.",
-                     show_missing=True, frame_label="WIN - WIN")
+                     show_missing=True, frame_label="WIN - WIN", rrr=True)
 
 
 def kk_chain_unique_counts(group_index):
@@ -2710,8 +2710,65 @@ def _kk_round_trip_box(entries, ep, pos_prefix):
     return _yellow_dotted_frame(body)
 
 
+# RRR — next operation derived from an existing one (user's rule, 2026-10-03):
+#   new x = old y with its cut switched (added/removed) and its sign flipped
+#   new y = old x with its cut switched, then one step down (nc → cut-1)
+RRR_Y_NEXT = {
+    'no_change': 'cut-1', '+1':    'cut',       '+2':    'cut+1',
+    'cut-2':     'cut+2', 'cut-1': '-2',        'cut':   '-1',
+    'cut+1':     'no_change', 'cut+2': '+1',    '-2':    '+2',
+    '-1':        'cut-2',
+}
+
+
+def rrr_next_op(x_op, y_op):
+    """RRR rule: (old x, old y) → (new x, new y)."""
+    return SIGN_FLIP[KK_CUT_TOGGLE[y_op]], RRR_Y_NEXT[x_op]
+
+
+def _rrr_frame(body):
+    """Bold magenta heavy border with a centred RRR label."""
+    m, rst = "\033[1;38;2;233;30;140m", "\033[0m"
+    iw = max(len(l) for l in body) + 2
+    return ([f"  {m}┏{'━' * iw}┓{rst}"]
+            + [f"  {m}┃{rst} {l:<{iw - 2}} {m}┃{rst}" for l in body]
+            + [f"  {m}┗{'━' * iw}┛{rst}"])
+
+
+def _rrr_box(sequence, entries, ep, pos_prefix):
+    """RRR table — display only. Every WIN - WIN row (plus the chain's own
+    last step, marked LAST) gives a next operation by the RRR rule, applied
+    to the EP as xy and yx."""
+    src = [(pos, a, b, x_op, y_op, '') for pos, a, b, x_op, y_op, _ in entries]
+    a, b = sequence[-2], sequence[-1]
+    if a >= 0 and b >= 0:
+        lx, ly = find_op(a // 10, b // 10), find_op(a % 10, b % 10)
+        if '?' not in (lx, ly):
+            last = len(sequence) - 1
+            if src and src[-1][0] == last:
+                src[-1] = src[-1][:5] + ('LAST',)
+            else:
+                src.append((last, a, b, lx, ly, 'LAST'))
+    KW   = 15
+    head = (f"  {'Pos':<12} {'Source':<9} {'old x':<6} {'old y':<6}    "
+            f"{'new x':<6} {'new y':<6}  {'xy (op)':<{KW}}{'yx (op)':<{KW}}")
+    body = [f"RRR:  NEXT OPERATION → EP={ep:02d}".center(len(head)), "", head, '─' * len(head)]
+    for pos, a, b, x_op, y_op, mark in src:
+        nx, ny   = rrr_next_op(x_op, y_op)
+        xy, yx   = compute_variants(ep, nx, ny)[:2]
+        nxa, nya = OP_ABBREV[nx], OP_ABBREV[ny]
+        tag      = f"[{pos_prefix}{pos}]{mark}"
+        body.append(f"  {tag:<12} {a:02d} → {b:02d}   {OP_ABBREV[x_op]:<6} {OP_ABBREV[y_op]:<6} →  "
+                    f"{nxa:<6} {nya:<6}  " + f"{xy:02d} ({nxa}/{nya})".ljust(KW)
+                    + f"{yx:02d} ({nya}/{nxa})".ljust(KW))
+    body += ['─' * len(head),
+             "  new x = old y, cut switched + sign flipped   |   new y = old x, cut switched, one step down",
+             "  LAST = the chain's own last step.  Backtest (57,662 positions): table hit 6.42% vs 6.44% chance."]
+    return _rrr_frame(body)
+
+
 def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, final40=None,
-              show_missing=False, frame_label=None, round_trip=False):
+              show_missing=False, frame_label=None, round_trip=False, rrr=False):
     """Shared KK bracket table: prints the per-cell table, the UNIQUE VALUES
     box (optionally with a KK MERGE box beside it) and the ranked box;
     returns the sorted unique values."""
@@ -2726,6 +2783,9 @@ def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, fin
         print(f"\n{title}\n")
     if not entries:
         print(f"  {empty_msg}")
+        if rrr:
+            print()
+            print("\n".join(_rrr_box(sequence, entries, ep, pos_prefix)))
         sep('═')
         print()
         return []
@@ -2775,6 +2835,10 @@ def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, fin
                                       title, ""] + table)))
     else:
         print("\n".join(table))
+
+    if rrr:
+        print()
+        print("\n".join(_rrr_box(sequence, entries, ep, pos_prefix)))
 
     if round_trip:
         print()

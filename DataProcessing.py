@@ -2955,7 +2955,13 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              "  LAST = the chain's own last step.  Backtest (57,662 positions): table hit 6.42% vs 6.44% chance.",
              f"  Live record: table hit {RRR_LIVE['table_hits']} of {RRR_LIVE['table_rounds']} rounds (about {RRR_LIVE['table_chance']} expected by chance)."]
     la, picks = _rrr3_rows(entries, ep)
+    row, why  = _rrr3_last(entries, ep)
+    found     = [(f"{p[9]:02d}{star(p[9])}", f"A {OP_ABBREV[p[7]]}/{OP_ABBREV[p[8]]}") for p in picks]
+    if row is not None:
+        found.append((f"{row[7]:02d}{star(row[7])}", f"B {OP_ABBREV[row[5]]}/{OP_ABBREV[row[6]]}"))
+    result = '   '.join(f"{n} ({r})" for n, r in found) if found else "no number this round"
     body += ['─' * len(head), "3RRR".center(len(head)), "",
+             f"  ★ 3RRR RESULT  →  {result}", "",
              "  HOW THE OPERATIONS MOVED  (each row = an earlier row crossed: old y → new x, old x → new y)"]
     trail_rows = _rrr3_trail(entries)
     if not trail_rows:
@@ -2992,7 +2998,6 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                            for pos, _, _, x_op, y_op, _ in entries[-6:])
         body += [f"     pairs so far: {trail}",
                  "     C = cut±n, K = cut, I = ±n, N = nc"]
-    row, why = _rrr3_last(entries, ep)
     if row is None:
         body.append(f"     {why}")
     else:

@@ -2739,16 +2739,17 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 236, 'tens_cut': 52, 'either_decade': 76,
-    'table_rounds': 226, 'table_hits': 28, 'table_chance': 22, 'declared': 191, 'declared_hits': 5,
-    'band_hits': 27,
+    'results': 237, 'tens_cut': 52, 'either_decade': 77,
+    'table_rounds': 227, 'table_hits': 28, 'table_chance': 22, 'declared': 192, 'declared_hits': 5,
+    'band_hits': 27, 'units_hits': 36, 'second_hits': 10,
 }
 
 
 def _rrr_declared(grid_ep, last_x_op):
     """RRR DECLARED lines — display only. From the running value (grid EP):
     the tens-cut decade, a 2nd decade (tens moved by the chain's last x op,
-    sign flipped), one number (cut / c-1) and the 5-number band around it."""
+    sign flipped), one number (cut / c-1), the 5-number band around it, its
+    units digit alone and a 2nd number (c+1 / c-1)."""
     t, u  = grid_ep // 10, grid_ep % 10
     d1    = cut(t)
     L     = RRR_LIVE
@@ -2769,6 +2770,12 @@ def _rrr_declared(grid_ep, last_x_op):
     band = ' '.join(f"{d1 * 10 + (num % 10 + k) % 10:02d}" for k in range(-2, 3))
     lines.append(f"    NUMBER BAND       {band}  {'number ± 2':<22}"
                  f"recorded {L['band_hits']} of {L['results']} = {L['band_hits'] / L['results']:.0%}  (chance 5%)")
+    # the declared number's units digit alone, and the same number one decade up
+    lines.append(f"    UNITS DIGIT       ends in {num % 10}       {'units cut, one down':<22}"
+                 f"recorded {L['units_hits']} of {L['results']} = {L['units_hits'] / L['results']:.0%}  (chance 10%)")
+    num2 = apply_op(t, 'cut+1') * 10 + num % 10
+    lines.append(f"    2nd NUMBER        {num2:02d}              {f'c+1 / c-1 on {grid_ep:02d}':<22}"
+                 f"recorded {L['second_hits']} of {L['results']}  (chance about 1 in 100)")
     return lines
 
 

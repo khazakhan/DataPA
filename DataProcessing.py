@@ -2742,6 +2742,7 @@ RRR_LIVE = {
     'results': 247, 'tens_cut': 54, 'either_decade': 80,
     'table_rounds': 237, 'table_hits': 29, 'table_chance': 23, 'declared': 202, 'declared_hits': 5,
     'band_hits': 29, 'units_hits': 38, 'second_hits': 10,
+    'same_tens': 8, 'same_units': 13,
 }
 
 
@@ -2776,6 +2777,12 @@ def _rrr_declared(grid_ep, last_x_op):
     num2 = apply_op(t, 'cut+1') * 10 + num % 10
     lines.append(f"    2nd NUMBER        {num2:02d}              {f'c+1 / c-1 on {grid_ep:02d}':<22}"
                  f"recorded {L['second_hits']} of {L['results']}  (chance about 1 in 100)")
+    # what the recorded results rule out: the running value's own decade and
+    # its own units digit almost never come again in the next result
+    lines.append(f"  ✗ NOT EXPECTED      {t}0 – {t}9   {'same decade again':<28}"
+                 f"recorded {L['same_tens']} of {L['results']} = {L['same_tens'] / L['results']:.0%}  (chance 10%)")
+    lines.append(f"  ✗ NOT EXPECTED      ends in {u}       {'same units again':<22}"
+                 f"recorded {L['same_units']} of {L['results']} = {L['same_units'] / L['results']:.0%}  (chance 10%)")
     return lines
 
 

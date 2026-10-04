@@ -2743,6 +2743,7 @@ RRR_LIVE = {
     'table_rounds': 300, 'table_hits': 40, 'table_chance': 29, 'declared': 265, 'declared_hits': 6,
     'band_hits': 32, 'units_hits': 43, 'second_hits': 10,
     'same_tens': 12,
+    'rrr3_rounds': 0, 'rrr3_hits': 0,
 }
 
 
@@ -2784,6 +2785,57 @@ def _rrr_declared(grid_ep):
     return lines
 
 
+# 3RRR — second rule from the WIN - WIN rows (display only). The last WIN - WIN
+# row's source picks an earlier row of the same family (same number, or both
+# digits cut: 99 ~ 44). That row's two ops cross over: the 1st crossing keeps
+# old y as new x and moves old x one step further as new y (-1 → -2); when a
+# later row already shows that pair, the 2nd crossing is taken: new x = the
+# cut state of old y with old x's number (cut, -1 → c-1), new y = old x with
+# the sign flipped (-1 → +1).
+RRR3_STEP_OUT = {'+1': '+2', '-1': '-2'}
+
+
+def _op_parts(op):
+    """(has cut, number part) of an operation: 'cut-1' → (True, '-1')."""
+    has_cut = op.startswith('cut')
+    return has_cut, (op[3:] if has_cut else ('' if op == 'no_change' else op))
+
+
+def _op_join(has_cut, num):
+    return ('cut' + num) if has_cut else (num or 'no_change')
+
+
+def rrr3_first(x_op, y_op):
+    """1st crossing, or None when old x has no one-step-further form."""
+    has_cut, num = _op_parts(x_op)
+    if num not in RRR3_STEP_OUT:
+        return None
+    return y_op, _op_join(has_cut, RRR3_STEP_OUT[num])
+
+
+def rrr3_second(x_op, y_op):
+    """2nd crossing: (cut state of old y + number of old x, old x sign-flipped)."""
+    return _op_join(_op_parts(y_op)[0], _op_parts(x_op)[1]), SIGN_FLIP[x_op]
+
+
+def _rrr3_rows(entries, ep):
+    """3RRR picks: (pos, a, b, x_op, y_op, first, used_pos, nx, ny, number) for
+    every earlier WIN - WIN row in the family of the last row's source."""
+    if len(entries) < 2:
+        return None, []
+    la     = entries[-1][1]
+    family = {la, cut(la // 10) * 10 + cut(la % 10)}
+    rows   = []
+    for i, (pos, a, b, x_op, y_op, _) in enumerate(entries[:-1]):
+        if a not in family:
+            continue
+        first = rrr3_first(x_op, y_op)
+        used  = next((p for p, _, _, x2, y2, _ in entries[i + 1:] if (x2, y2) == first), None)
+        nx, ny = rrr3_second(x_op, y_op) if (first is None or used is not None) else first
+        rows.append((pos, a, b, x_op, y_op, first, used, nx, ny, compute_variants(ep, nx, ny)[0]))
+    return la, rows
+
+
 def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     """RRR table — display only. Every WIN - WIN row (plus the chain's own
     last step, marked LAST) gives a next operation by the RRR rule, applied
@@ -2817,6 +2869,31 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              "  new x = old y, cut switched + sign flipped   |   new y = old x, cut switched, one step down",
              "  LAST = the chain's own last step.  Backtest (57,662 positions): table hit 6.42% vs 6.44% chance.",
              f"  Live record: table hit {RRR_LIVE['table_hits']} of {RRR_LIVE['table_rounds']} rounds (about {RRR_LIVE['table_chance']} expected by chance)."]
+    la, picks = _rrr3_rows(entries, ep)
+    body += ['─' * len(head), "3RRR:  SAME-FAMILY ROW, CROSSED AGAIN".center(len(head)), ""]
+    if la is None:
+        body.append("  needs two WIN - WIN rows — no 3RRR number this round")
+    elif not picks:
+        body.append(f"  last WIN - WIN source {la:02d}: no earlier row in its family "
+                    f"({la:02d} / {cut(la // 10) * 10 + cut(la % 10):02d}) — no 3RRR number this round")
+    else:
+        body.append(f"  {'Pos':<12} {'Source':<9} {'old x':<6} {'old y':<6}    {'new x':<6} {'new y':<6}  "
+                    f"{'xy (op)':<{KW}}1st crossing")
+        for pos, a, b, x_op, y_op, first, used, nx, ny, num in picks:
+            nxa, nya = OP_ABBREV[nx], OP_ABBREV[ny]
+            if first is None:
+                note = "no 1st crossing → 2nd"
+            else:
+                pair = f"{OP_ABBREV[first[0]]}/{OP_ABBREV[first[1]]}"
+                note = f"{pair} used at [{pos_prefix}{used}] → 2nd" if used is not None else f"{pair} not used yet → 1st"
+            tag = f"[{pos_prefix}{pos}]"
+            body.append(f"  {tag:<12} {a:02d} → {b:02d}   {OP_ABBREV[x_op]:<6} {OP_ABBREV[y_op]:<6} →  "
+                        f"{nxa:<6} {nya:<6}  " + f"{num:02d}{star(num)}({nxa}/{nya})".ljust(KW) + note)
+        body += [f"  row = earlier WIN - WIN row in the family of the last row's source {la:02d}",
+                 "  1st crossing: new x = old y, new y = old x one step further",
+                 "  2nd crossing: new x = cut of old y + number of old x, new y = old x flipped"]
+    body.append(f"  3RRR live record: {RRR_LIVE['rrr3_hits']} of {RRR_LIVE['rrr3_rounds']} rounds with a 3RRR number."
+                "  Replay (309 rounds): 1 hit in 94 rounds with a number (1.2 by chance).")
     if live:
         body += ['─' * len(head)] + _rrr_declared(grid_ep) + ["  ★ in the table = number inside the tens-cut decade"]
     return _rrr_frame(body)

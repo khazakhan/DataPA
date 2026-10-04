@@ -2946,8 +2946,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     for pos, a, b, x_op, y_op, mark in src:
         nx, ny   = rrr_next_op(x_op, y_op)
         xy, yx   = compute_variants(ep, nx, ny)[:2]
-        both_cut += [(xy, (_op_type(nx), _op_type(ny))), (yx, (_op_type(ny), _op_type(nx)))]
         nxa, nya = OP_ABBREV[nx], OP_ABBREV[ny]
+        both_cut += [(xy, (_op_type(nx), _op_type(ny)), f"{nxa}/{nya}"),
+                     (yx, (_op_type(ny), _op_type(nx)), f"{nya}/{nxa}")]
         tag      = f"[{pos_prefix}{pos}]{mark}"
         body.append(f"  {tag:<12} {a:02d} → {b:02d}   {OP_ABBREV[x_op]:<6} {OP_ABBREV[y_op]:<6} →  "
                     f"{nxa:<6} {nya:<6}  " + f"{xy:02d}{star(xy)}({nxa}/{nya})".ljust(KW)
@@ -2965,19 +2966,26 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     # recommended: the 3RRR numbers, the other crossing of every same-family
     # row and every RRR number above whose pair of op types (C/K/I/N on x
     # and on y) no WIN - WIN row has used yet — the new combination is due
-    rec = [p[9] for p in picks] + ([row[7]] if row is not None else [])
+    rec = [(p[9], f"{OP_ABBREV[p[7]]}/{OP_ABBREV[p[8]]}") for p in picks]
+    if row is not None:
+        rec.append((row[7], f"{OP_ABBREV[row[5]]}/{OP_ABBREV[row[6]]}"))
     for p in picks:
         for ops in (p[5], rrr3_second(p[3], p[4])):
             if ops is not None:
-                rec.append(compute_variants(ep, ops[0], ops[1])[0])
+                rec.append((compute_variants(ep, ops[0], ops[1])[0], f"{OP_ABBREV[ops[0]]}/{OP_ABBREV[ops[1]]}"))
     used_types = {(_op_type(e[3]), _op_type(e[4])) for e in entries}
-    fresh = [v for v, types in both_cut if types not in used_types] if entries else []
-    rec = list(dict.fromkeys(rec + fresh))
-    rec_txt = ' '.join(f"{v:02d}{star(v)}".strip() for v in rec) if rec else "none this round"
+    rec += [(v, lab) for v, types, lab in both_cut if types not in used_types] if entries else []
+    first_seen = {}
+    for v, lab in rec:
+        first_seen.setdefault(v, (v, lab))
+    rec = list(first_seen.values())
+    rec_items = [f"{v:02d}{star(v).strip()} ({lab})" for v, lab in rec]
+    rec_lines = [f"  ★ 3RRR RECOMMENDED on EP={ep:02d}  →  " + ('   '.join(rec_items[:5]) if rec_items else "none this round")]
+    rec_lines += ["       " + '   '.join(rec_items[k:k + 7]) for k in range(5, len(rec_items), 7)]
     body += ['─' * len(head), "3RRR".center(len(head)), "",
              f"  ★ 3RRR RESULT  →  {result}",
-             f"  ★ 3RRR RECOMMENDED  →  {rec_txt}"
-             , "     = the 3RRR numbers + every RRR number above whose type pair no row has used yet", "",
+             *rec_lines,
+             "     = the 3RRR numbers + every RRR number above whose type pair no row has used yet", "",
              "  HOW THE OPERATIONS MOVED  (each row = an earlier row crossed: old y → new x, old x → new y)"]
     trail_rows = _rrr3_trail(entries)
     if not trail_rows:

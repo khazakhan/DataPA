@@ -2771,7 +2771,7 @@ def _rrr_declared(grid_ep):
     # the two leans together: the tens-cut decade plus the declared units
     # digit in every other decade except the running value's own (18 numbers)
     extra = ' '.join(f"{d * 10 + num % 10:02d}" for d in range(10) if d not in (t, d1))
-    lines.append(f"  ★ SHORT LIST (18)   {d1}0 – {d1}9  and  {extra}")
+    lines.append(f"    SHORT LIST (18)   {d1}0 – {d1}9  and  {extra}")
     lines.append(f"    {'':<18}{'decade + units digit elsewhere':<38}"
                  f"recorded {L['short_list']} of {L['results']} = {L['short_list'] / L['results']:.0%}  (chance 18%)")
     num2 = apply_op(t, 'cut+1') * 10 + num % 10

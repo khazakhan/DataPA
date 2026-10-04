@@ -2818,6 +2818,91 @@ def rrr3_second(x_op, y_op):
     return _op_join(_op_parts(y_op)[0], _op_parts(x_op)[1]), SIGN_FLIP[x_op]
 
 
+# 3RRR, second rule: the op pairs of the WIN - WIN rows go through type
+# combinations (C = cut±n, K = cut, I = ±n, N = nc). While no row has cut±n
+# on both sides, the last row is crossed with cut on both sides and each
+# number one step down (c+2 → c+1, cut → c-1).
+RRR3_STEP_DOWN = {'+2': '+1', '+1': '', '': '-1', '-1': '-2'}
+
+
+def _op_type(op):
+    has_cut, num = _op_parts(op)
+    return ('C' if num else 'K') if has_cut else ('I' if num else 'N')
+
+
+def rrr3_both_cut(x_op, y_op):
+    """Last row crossed, cut on both sides, numbers one step down; None when
+    a number has no step down (-2)."""
+    ny_num, nx_num = _op_parts(x_op)[1], _op_parts(y_op)[1]
+    if nx_num not in RRR3_STEP_DOWN or ny_num not in RRR3_STEP_DOWN:
+        return None
+    return 'cut' + RRR3_STEP_DOWN[nx_num], 'cut' + RRR3_STEP_DOWN[ny_num]
+
+
+def _rrr3_last(entries, ep):
+    """(row, new x, new y, number) for the both-cut rule, or (None, reason)."""
+    if not entries:
+        return None, "no WIN - WIN row"
+    used = next((p for p, _, _, x, y, _ in entries if _op_type(x) == 'C' and _op_type(y) == 'C'), None)
+    if used is not None:
+        return None, f"a row with cut±n on both sides already exists — no number from this rule"
+    pos, a, b, x_op, y_op, _ = entries[-1]
+    ops = rrr3_both_cut(x_op, y_op)
+    if ops is None:
+        return None, "last row has a -2: no step down — no number from this rule"
+    return (pos, a, b, x_op, y_op, ops[0], ops[1], compute_variants(ep, ops[0], ops[1])[0]), ''
+
+
+def _rrr3_change(old, new):
+    """(words, cost) for how one op turned into another when two rows cross."""
+    if old == new:
+        return 'same', 0
+    if new == 'no_change':
+        return 'dropped to nc', 1
+    (c0, n0), (c1, n1) = _op_parts(old), _op_parts(new)
+    v0, v1 = int(n0 or 0), int(n1 or 0)
+    if c0 == c1:
+        if v0 and v1 == -v0:
+            return 'sign flipped', 1
+        if abs(v1 - v0) == 1:
+            return ('one step up' if v1 > v0 else 'one step down'), 1
+        return 'changed', 3
+    word = 'cut added' if c1 else 'cut removed'
+    if v1 == v0:
+        return word, 1
+    if v0 and v1 == -v0:
+        return word + ' + sign flipped', 2
+    if abs(v1 - v0) == 1:
+        return word + ' + one step', 2
+    return 'changed', 3
+
+
+def _rrr3_trail(entries):
+    """How each WIN - WIN row came from an earlier one by crossing: for every
+    row the earlier row needing the fewest changes (latest wins a tie), as
+    (pos, from_pos, old y, new x, words, old x, new y, words)."""
+    out = []
+    for k in range(1, len(entries)):
+        pos, _, _, x_op, y_op, _ = entries[k]
+        best = None
+        for j in range(k):
+            fpos, _, _, fx, fy, _ = entries[j]
+            (wx, cx), (wy, cy) = _rrr3_change(fy, x_op), _rrr3_change(fx, y_op)
+            # the row just before wins whenever both its changes have a name
+            if j == k - 1 and 'changed' not in (wx, wy):
+                cx = cy = -1
+            if best is None or cx + cy <= best[0]:
+                best = (cx + cy, fpos, fy, wx, fx, wy, j)
+        _, fpos, fy, wx, fx, wy, j = best
+        xs = [e[3] for e in entries[:k]]
+        if wx == 'same' and x_op not in xs:
+            wx += f" ({OP_ABBREV[x_op]} new in x)"
+        if wy == 'dropped to nc' and xs.count(fx) >= 2:
+            wy += f" ({OP_ABBREV[fx]} x{xs.count(fx)} in x)"
+        out.append((pos, fpos, fy, x_op, wx, fx, y_op, wy))
+    return out
+
+
 def _rrr3_rows(entries, ep):
     """3RRR picks: (pos, a, b, x_op, y_op, first, used_pos, nx, ny, number) for
     every earlier WIN - WIN row in the family of the last row's source."""
@@ -2870,12 +2955,21 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              "  LAST = the chain's own last step.  Backtest (57,662 positions): table hit 6.42% vs 6.44% chance.",
              f"  Live record: table hit {RRR_LIVE['table_hits']} of {RRR_LIVE['table_rounds']} rounds (about {RRR_LIVE['table_chance']} expected by chance)."]
     la, picks = _rrr3_rows(entries, ep)
-    body += ['─' * len(head), "3RRR:  SAME-FAMILY ROW, CROSSED AGAIN".center(len(head)), ""]
+    body += ['─' * len(head), "3RRR".center(len(head)), "",
+             "  HOW THE OPERATIONS MOVED  (each row = an earlier row crossed: old y → new x, old x → new y)"]
+    trail_rows = _rrr3_trail(entries)
+    if not trail_rows:
+        body.append("     needs two WIN - WIN rows")
+    for pos, fpos, fy, nx_, wx, fx, ny_, wy in trail_rows:
+        tag = f"[{pos_prefix}{pos}] ← [{pos_prefix}{fpos}]"
+        body.append(f"  {tag:<17} x: {OP_ABBREV[fy]:<4} → {OP_ABBREV[nx_]:<4} {wx:<25} "
+                    f"y: {OP_ABBREV[fx]:<4} → {OP_ABBREV[ny_]:<4} {wy}")
+    body += ["", "  A) NEXT: SAME-FAMILY ROW, CROSSED AGAIN"]
     if la is None:
-        body.append("  needs two WIN - WIN rows — no 3RRR number this round")
+        body.append("     needs two WIN - WIN rows — no number from this rule")
     elif not picks:
-        body.append(f"  last WIN - WIN source {la:02d}: no earlier row in its family "
-                    f"({la:02d} / {cut(la // 10) * 10 + cut(la % 10):02d}) — no 3RRR number this round")
+        body.append(f"     last WIN - WIN source {la:02d}: no earlier row in its family "
+                    f"({la:02d} / {cut(la // 10) * 10 + cut(la % 10):02d}) — no number from this rule")
     else:
         body.append(f"  {'Pos':<12} {'Source':<9} {'old x':<6} {'old y':<6}    {'new x':<6} {'new y':<6}  "
                     f"{'xy (op)':<{KW}}1st crossing")
@@ -2889,11 +2983,27 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             tag = f"[{pos_prefix}{pos}]"
             body.append(f"  {tag:<12} {a:02d} → {b:02d}   {OP_ABBREV[x_op]:<6} {OP_ABBREV[y_op]:<6} →  "
                         f"{nxa:<6} {nya:<6}  " + f"{num:02d}{star(num)}({nxa}/{nya})".ljust(KW) + note)
-        body += [f"  row = earlier WIN - WIN row in the family of the last row's source {la:02d}",
-                 "  1st crossing: new x = old y, new y = old x one step further",
-                 "  2nd crossing: new x = cut of old y + number of old x, new y = old x flipped"]
-    body += [f"  3RRR live record: {RRR_LIVE['rrr3_hits']} of {RRR_LIVE['rrr3_rounds']} rounds with a 3RRR number.",
-             "  Replay on 309 recorded rounds: 1 hit in 94 rounds with a number (1.2 by chance)."]
+        body += [f"     row = earlier WIN - WIN row in the family of the last row's source {la:02d}",
+                 "     1st crossing: new x = old y, new y = old x one step further",
+                 "     2nd crossing: new x = cut of old y + number of old x, new y = old x flipped"]
+    body += ["", "  B) NEXT: LAST ROW CROSSED, CUT ON BOTH SIDES"]
+    if entries:
+        trail = ' · '.join(f"{pos_prefix}{pos} {_op_type(x_op)}/{_op_type(y_op)}"
+                           for pos, _, _, x_op, y_op, _ in entries[-6:])
+        body += [f"     pairs so far: {trail}",
+                 "     C = cut±n, K = cut, I = ±n, N = nc"]
+    row, why = _rrr3_last(entries, ep)
+    if row is None:
+        body.append(f"     {why}")
+    else:
+        pos, a, b, x_op, y_op, nx, ny, num = row
+        nxa, nya = OP_ABBREV[nx], OP_ABBREV[ny]
+        tag = f"[{pos_prefix}{pos}]"
+        body += [f"  {tag:<12} {a:02d} → {b:02d}   {OP_ABBREV[x_op]:<6} {OP_ABBREV[y_op]:<6} →  "
+                 f"{nxa:<6} {nya:<6}  " + f"{num:02d}{star(num)}({nxa}/{nya})".ljust(KW) + "C/C not used yet",
+                 "     new x = cut + old y's number one step down, new y = cut + old x's number one step down"]
+    body += ["", f"  3RRR live record: {RRR_LIVE['rrr3_hits']} of {RRR_LIVE['rrr3_rounds']} rounds with a 3RRR number.",
+             "  Replay on 309 recorded rounds: A 1 hit in 94 rounds with a number, B 2 hits in 101 (2.2 by chance for both)."]
     if live:
         body += ['─' * len(head)] + _rrr_declared(grid_ep) + ["  ★ in the table = number inside the tens-cut decade"]
     return _rrr_frame(body)

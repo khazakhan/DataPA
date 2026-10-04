@@ -2739,11 +2739,11 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 312, 'tens_cut': 61, 'short_list': 94,
-    'table_rounds': 302, 'table_hits': 40, 'table_chance': 29, 'declared': 267, 'declared_hits': 6,
+    'results': 313, 'tens_cut': 61, 'short_list': 94,
+    'table_rounds': 303, 'table_hits': 41, 'table_chance': 29, 'declared': 268, 'declared_hits': 6,
     'band_hits': 32, 'units_hits': 43, 'second_hits': 10,
-    'same_tens': 12,
-    'rrr3_rounds': 0, 'rrr3_hits': 0,
+    'same_tens': 13,
+    'rrr3_rounds': 1, 'rrr3_hits': 0, 'rrr3_rec_rounds': 0, 'rrr3_rec_hits': 0,
 }
 
 
@@ -2942,9 +2942,11 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     body = [f"RRR:  NEXT OPERATION → EP={ep:02d}".center(len(head)), "", head, '─' * len(head)]
     live = grid_ep is not None and grid_ep >= 0
     star = (lambda v: '★' if v // 10 == cut(grid_ep // 10) else ' ') if live else (lambda v: ' ')
+    both_cut = []          # every RRR number with the types of its new x / new y
     for pos, a, b, x_op, y_op, mark in src:
         nx, ny   = rrr_next_op(x_op, y_op)
         xy, yx   = compute_variants(ep, nx, ny)[:2]
+        both_cut += [(xy, (_op_type(nx), _op_type(ny))), (yx, (_op_type(ny), _op_type(nx)))]
         nxa, nya = OP_ABBREV[nx], OP_ABBREV[ny]
         tag      = f"[{pos_prefix}{pos}]{mark}"
         body.append(f"  {tag:<12} {a:02d} → {b:02d}   {OP_ABBREV[x_op]:<6} {OP_ABBREV[y_op]:<6} →  "
@@ -2960,8 +2962,22 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     if row is not None:
         found.append((f"{row[7]:02d}{star(row[7])}", f"B {OP_ABBREV[row[5]]}/{OP_ABBREV[row[6]]}"))
     result = '   '.join(f"{n} ({r})" for n, r in found) if found else "no number this round"
+    # recommended: the 3RRR numbers, the other crossing of every same-family
+    # row and every RRR number above whose pair of op types (C/K/I/N on x
+    # and on y) no WIN - WIN row has used yet — the new combination is due
+    rec = [p[9] for p in picks] + ([row[7]] if row is not None else [])
+    for p in picks:
+        for ops in (p[5], rrr3_second(p[3], p[4])):
+            if ops is not None:
+                rec.append(compute_variants(ep, ops[0], ops[1])[0])
+    used_types = {(_op_type(e[3]), _op_type(e[4])) for e in entries}
+    fresh = [v for v, types in both_cut if types not in used_types] if entries else []
+    rec = list(dict.fromkeys(rec + fresh))
+    rec_txt = ' '.join(f"{v:02d}{star(v)}".strip() for v in rec) if rec else "none this round"
     body += ['─' * len(head), "3RRR".center(len(head)), "",
-             f"  ★ 3RRR RESULT  →  {result}", "",
+             f"  ★ 3RRR RESULT  →  {result}",
+             f"  ★ 3RRR RECOMMENDED  →  {rec_txt}"
+             , "     = the 3RRR numbers + every RRR number above whose type pair no row has used yet", "",
              "  HOW THE OPERATIONS MOVED  (each row = an earlier row crossed: old y → new x, old x → new y)"]
     trail_rows = _rrr3_trail(entries)
     if not trail_rows:
@@ -3007,8 +3023,10 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         body += [f"  {tag:<12} {a:02d} → {b:02d}   {OP_ABBREV[x_op]:<6} {OP_ABBREV[y_op]:<6} →  "
                  f"{nxa:<6} {nya:<6}  " + f"{num:02d}{star(num)}({nxa}/{nya})".ljust(KW) + "C/C not used yet",
                  "     new x = cut + old y's number one step down, new y = cut + old x's number one step down"]
-    body += ["", f"  3RRR live record: {RRR_LIVE['rrr3_hits']} of {RRR_LIVE['rrr3_rounds']} rounds with a 3RRR number.",
-             "  Replay on 309 recorded rounds: A 1 hit in 94 rounds with a number, B 2 hits in 101 (2.2 by chance for both)."]
+    body += ["", f"  3RRR live record: result {RRR_LIVE['rrr3_hits']} of {RRR_LIVE['rrr3_rounds']} rounds with a number,"
+             f" recommended {RRR_LIVE['rrr3_rec_hits']} of {RRR_LIVE['rrr3_rec_rounds']}.",
+             "  Replay on 309 recorded rounds: A 1 hit in 94 rounds with a number, B 2 hits in 101 (2.2 by chance for both);",
+             "  recommended list (about 7 numbers a round): 23 hits (20.4 by chance)."]
     if live:
         body += ['─' * len(head)] + _rrr_declared(grid_ep) + ["  ★ in the table = number inside the tens-cut decade"]
     return _rrr_frame(body)

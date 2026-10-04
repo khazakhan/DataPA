@@ -2853,6 +2853,20 @@ def _rrr3_last(entries, ep):
     return (pos, a, b, x_op, y_op, ops[0], ops[1], compute_variants(ep, ops[0], ops[1])[0]), ''
 
 
+def _rrr3_keep(entries, ep):
+    """3RRR rule C — once a row with cut±n on both sides exists the last row is
+    crossed plainly: new x = old y kept (sign flipped when that op is already
+    in the x column), new y = old x with its cut removed. Returns
+    (pos, a, b, x_op, y_op, new x, new y, number, due) or None."""
+    if not entries:
+        return None
+    pos, a, b, x_op, y_op, _ = entries[-1]
+    nx = y_op if y_op not in [e[3] for e in entries] else SIGN_FLIP[y_op]
+    ny = _op_join(False, _op_parts(x_op)[1])
+    due = any(_op_type(e[3]) == 'C' and _op_type(e[4]) == 'C' for e in entries)
+    return pos, a, b, x_op, y_op, nx, ny, compute_variants(ep, nx, ny)[0], due
+
+
 def _rrr3_change(old, new):
     """(words, cost) for how one op turned into another when two rows cross."""
     if old == new:
@@ -2962,6 +2976,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     found     = [(f"{p[9]:02d}{star(p[9])}", f"A {OP_ABBREV[p[7]]}/{OP_ABBREV[p[8]]}") for p in picks]
     if row is not None:
         found.append((f"{row[7]:02d}{star(row[7])}", f"B {OP_ABBREV[row[5]]}/{OP_ABBREV[row[6]]}"))
+    keep = _rrr3_keep(entries, ep)
+    if keep is not None and keep[8]:
+        found.append((f"{keep[7]:02d}{star(keep[7])}", f"C {OP_ABBREV[keep[5]]}/{OP_ABBREV[keep[6]]}"))
     result = '   '.join(f"{n} ({r})" for n, r in found) if found else "no number this round"
     # recommended: the 3RRR numbers, the other crossing of every same-family
     # row and every RRR number above whose pair of op types (C/K/I/N on x
@@ -2969,6 +2986,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     rec = [(p[9], f"{OP_ABBREV[p[7]]}/{OP_ABBREV[p[8]]}") for p in picks]
     if row is not None:
         rec.append((row[7], f"{OP_ABBREV[row[5]]}/{OP_ABBREV[row[6]]}"))
+    if keep is not None:
+        rec.insert(len(rec) if not keep[8] else 0, (keep[7], f"{OP_ABBREV[keep[5]]}/{OP_ABBREV[keep[6]]}"))
     for p in picks:
         for ops in (p[5], rrr3_second(p[3], p[4])):
             if ops is not None:
@@ -3031,10 +3050,21 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         body += [f"  {tag:<12} {a:02d} → {b:02d}   {OP_ABBREV[x_op]:<6} {OP_ABBREV[y_op]:<6} →  "
                  f"{nxa:<6} {nya:<6}  " + f"{num:02d}{star(num)}({nxa}/{nya})".ljust(KW) + "C/C not used yet",
                  "     new x = cut + old y's number one step down, new y = cut + old x's number one step down"]
+    body += ["", "  C) NEXT: LAST ROW CROSSED, VALUE KEPT, CUT REMOVED"]
+    if keep is None:
+        body.append("     no WIN - WIN row")
+    else:
+        pos, a, b, x_op, y_op, nx, ny, num, due = keep
+        nxa, nya = OP_ABBREV[nx], OP_ABBREV[ny]
+        tag = f"[{pos_prefix}{pos}]"
+        body += [f"  {tag:<12} {a:02d} → {b:02d}   {OP_ABBREV[x_op]:<6} {OP_ABBREV[y_op]:<6} →  "
+                 f"{nxa:<6} {nya:<6}  " + f"{num:02d}{star(num)}({nxa}/{nya})".ljust(KW)
+                 + ("C/C already used → this rule" if due else "C/C not used yet → rule B first"),
+                 "     new x = old y kept (flipped when already in x), new y = old x without its cut"]
     body += ["", f"  3RRR live record: result {RRR_LIVE['rrr3_hits']} of {RRR_LIVE['rrr3_rounds']} rounds with a number,"
              f" recommended {RRR_LIVE['rrr3_rec_hits']} of {RRR_LIVE['rrr3_rec_rounds']}.",
-             "  Replay on 309 recorded rounds: A 1 hit in 94 rounds with a number, B 2 hits in 101 (2.2 by chance for both);",
-             "  recommended list (about 7 numbers a round): 23 hits (20.4 by chance)."]
+             "  Replay on 309 recorded rounds: result line 5 hits on 376 numbers (3.8 by chance) — A 1, B 2, C 2;",
+             "  recommended list (about 8 numbers a round): 26 hits (23.3 by chance)."]
     if live:
         body += ['─' * len(head)] + _rrr_declared(grid_ep) + ["  ★ in the table = number inside the tens-cut decade"]
     return _rrr_frame(body)

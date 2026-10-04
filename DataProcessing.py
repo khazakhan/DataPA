@@ -2739,10 +2739,10 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 306, 'tens_cut': 61, 'short_list': 93,
-    'table_rounds': 296, 'table_hits': 38, 'table_chance': 28, 'declared': 261, 'declared_hits': 6,
+    'results': 307, 'tens_cut': 61, 'short_list': 93,
+    'table_rounds': 297, 'table_hits': 39, 'table_chance': 29, 'declared': 262, 'declared_hits': 6,
     'band_hits': 32, 'units_hits': 42, 'second_hits': 10,
-    'same_tens': 12, 'same_units': 19,
+    'same_tens': 12,
 }
 
 
@@ -2750,7 +2750,7 @@ def _rrr_declared(grid_ep):
     """RRR DECLARED lines — display only. From the running value (grid EP):
     the tens-cut decade, one number (cut / c-1), the 5-number band around it,
     its units digit alone, the 18-number short list (decade + units digit
-    elsewhere), a 2nd number (c+1 / c-1) and what is not expected."""
+    elsewhere), a 2nd number (c+1 / c-1) and the decade that is not expected."""
     t, u  = grid_ep // 10, grid_ep % 10
     d1    = cut(t)
     L     = RRR_LIVE
@@ -2777,12 +2777,10 @@ def _rrr_declared(grid_ep):
     num2 = apply_op(t, 'cut+1') * 10 + num % 10
     lines.append(f"    2nd NUMBER        {num2:02d}              {f'c+1 / c-1 on {grid_ep:02d}':<22}"
                  f"recorded {L['second_hits']} of {L['results']}  (chance about 1 in 100)")
-    # what the recorded results rule out: the running value's own decade and
-    # its own units digit almost never come again in the next result
+    # what the recorded results rule out: the running value's own decade
+    # rarely comes again in the next result
     lines.append(f"  ✗ NOT EXPECTED      {t}0 – {t}9   {'same decade again':<28}"
                  f"recorded {L['same_tens']} of {L['results']} = {L['same_tens'] / L['results']:.0%}  (chance 10%)")
-    lines.append(f"  ✗ NOT EXPECTED      ends in {u}       {'same units again':<22}"
-                 f"recorded {L['same_units']} of {L['results']} = {L['same_units'] / L['results']:.0%}  (chance 10%)")
     return lines
 
 

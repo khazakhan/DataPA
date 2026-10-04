@@ -2739,31 +2739,24 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 272, 'tens_cut': 57, 'either_decade': 86,
-    'table_rounds': 262, 'table_hits': 32, 'table_chance': 25, 'declared': 227, 'declared_hits': 6,
+    'results': 273, 'tens_cut': 57, 'short_list': 87,
+    'table_rounds': 263, 'table_hits': 32, 'table_chance': 25, 'declared': 228, 'declared_hits': 6,
     'band_hits': 31, 'units_hits': 40, 'second_hits': 10,
     'same_tens': 9, 'same_units': 15,
 }
 
 
-def _rrr_declared(grid_ep, last_x_op):
+def _rrr_declared(grid_ep):
     """RRR DECLARED lines — display only. From the running value (grid EP):
-    the tens-cut decade, a 2nd decade (tens moved by the chain's last x op,
-    sign flipped), one number (cut / c-1), the 5-number band around it, its
-    units digit alone and a 2nd number (c+1 / c-1)."""
+    the tens-cut decade, one number (cut / c-1), the 5-number band around it,
+    its units digit alone, the 18-number short list (decade + units digit
+    elsewhere), a 2nd number (c+1 / c-1) and what is not expected."""
     t, u  = grid_ep // 10, grid_ep % 10
     d1    = cut(t)
     L     = RRR_LIVE
     lines = [f"  RRR DECLARED  (running value = {grid_ep:02d})   — corrected from {L['results']} recorded results",
              f"  ★ TENS-CUT DECADE   {d1}0 – {d1}9   {'tens digit cut':<28}"
              f"recorded {L['tens_cut']} of {L['results']} = {L['tens_cut'] / L['results']:.0%}  (chance 10%)"]
-    if last_x_op is not None:
-        d2 = apply_op(t, SIGN_FLIP[last_x_op])
-        # never the running value's own decade — that one is NOT EXPECTED
-        if d2 != d1 and d2 != t:
-            lines.append(f"    2nd DECADE        {d2}0 – {d2}9   {'tens by LAST x op, flipped':<28}"
-                         f"either decade {L['either_decade']} of {L['results']} = "
-                         f"{L['either_decade'] / L['results']:.0%}  (chance 19%)")
     num = d1 * 10 + apply_op(u, 'cut-1')
     lines.append(f"    DECLARED NUMBER   {num:02d}        {f'cut / c-1 on {grid_ep:02d}':<28}"
                  f"single number {L['declared_hits']} of {L['declared']}  (chance about 1 in 100)")
@@ -2775,6 +2768,12 @@ def _rrr_declared(grid_ep, last_x_op):
     # the declared number's units digit alone, and the same number one decade up
     lines.append(f"    UNITS DIGIT       ends in {num % 10}       {'units cut, one down':<22}"
                  f"recorded {L['units_hits']} of {L['results']} = {L['units_hits'] / L['results']:.0%}  (chance 10%)")
+    # the two leans together: the tens-cut decade plus the declared units
+    # digit in every other decade except the running value's own (18 numbers)
+    extra = ' '.join(f"{d * 10 + num % 10:02d}" for d in range(10) if d not in (t, d1))
+    lines.append(f"  ★ SHORT LIST (18)   {d1}0 – {d1}9  and  {extra}")
+    lines.append(f"    {'':<18}{'decade + units digit elsewhere':<38}"
+                 f"recorded {L['short_list']} of {L['results']} = {L['short_list'] / L['results']:.0%}  (chance 18%)")
     num2 = apply_op(t, 'cut+1') * 10 + num % 10
     lines.append(f"    2nd NUMBER        {num2:02d}              {f'c+1 / c-1 on {grid_ep:02d}':<22}"
                  f"recorded {L['second_hits']} of {L['results']}  (chance about 1 in 100)")
@@ -2794,11 +2793,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     the RRR DECLARED lines and stars (★) table numbers in the tens-cut decade."""
     src = [(pos, a, b, x_op, y_op, '') for pos, a, b, x_op, y_op, _ in entries]
     a, b = sequence[-2], sequence[-1]
-    last_x_op = None
     if a >= 0 and b >= 0:
         lx, ly = find_op(a // 10, b // 10), find_op(a % 10, b % 10)
         if '?' not in (lx, ly):
-            last_x_op = lx
             last = len(sequence) - 1
             if src and src[-1][0] == last:
                 src[-1] = src[-1][:5] + ('LAST',)
@@ -2823,7 +2820,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              "  LAST = the chain's own last step.  Backtest (57,662 positions): table hit 6.42% vs 6.44% chance.",
              f"  Live record: table hit {RRR_LIVE['table_hits']} of {RRR_LIVE['table_rounds']} rounds (about {RRR_LIVE['table_chance']} expected by chance)."]
     if live:
-        body += ['─' * len(head)] + _rrr_declared(grid_ep, last_x_op) + ["  ★ in the table = number inside the tens-cut decade"]
+        body += ['─' * len(head)] + _rrr_declared(grid_ep) + ["  ★ in the table = number inside the tens-cut decade"]
     return _rrr_frame(body)
 
 

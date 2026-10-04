@@ -2892,8 +2892,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         body += [f"  row = earlier WIN - WIN row in the family of the last row's source {la:02d}",
                  "  1st crossing: new x = old y, new y = old x one step further",
                  "  2nd crossing: new x = cut of old y + number of old x, new y = old x flipped"]
-    body.append(f"  3RRR live record: {RRR_LIVE['rrr3_hits']} of {RRR_LIVE['rrr3_rounds']} rounds with a 3RRR number."
-                "  Replay (309 rounds): 1 hit in 94 rounds with a number (1.2 by chance).")
+    body += [f"  3RRR live record: {RRR_LIVE['rrr3_hits']} of {RRR_LIVE['rrr3_rounds']} rounds with a 3RRR number.",
+             "  Replay on 309 recorded rounds: 1 hit in 94 rounds with a number (1.2 by chance)."]
     if live:
         body += ['─' * len(head)] + _rrr_declared(grid_ep) + ["  ★ in the table = number inside the tens-cut decade"]
     return _rrr_frame(body)

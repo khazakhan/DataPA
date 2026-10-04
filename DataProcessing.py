@@ -2759,7 +2759,8 @@ def _rrr_declared(grid_ep, last_x_op):
              f"recorded {L['tens_cut']} of {L['results']} = {L['tens_cut'] / L['results']:.0%}  (chance 10%)"]
     if last_x_op is not None:
         d2 = apply_op(t, SIGN_FLIP[last_x_op])
-        if d2 != d1:
+        # never the running value's own decade — that one is NOT EXPECTED
+        if d2 != d1 and d2 != t:
             lines.append(f"    2nd DECADE        {d2}0 – {d2}9   {'tens by LAST x op, flipped':<28}"
                          f"either decade {L['either_decade']} of {L['results']} = "
                          f"{L['either_decade'] / L['results']:.0%}  (chance 19%)")

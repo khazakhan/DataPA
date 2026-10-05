@@ -2739,11 +2739,11 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 329, 'tens_cut': 62, 'short_list': 95,
-    'table_rounds': 319, 'table_hits': 43, 'table_chance': 30, 'declared': 284, 'declared_hits': 6,
+    'results': 330, 'tens_cut': 62, 'short_list': 95,
+    'table_rounds': 320, 'table_hits': 43, 'table_chance': 30, 'declared': 285, 'declared_hits': 6,
     'band_hits': 33, 'units_hits': 43, 'second_hits': 10,
-    'same_tens': 15,
-    'rrr3_rounds': 15, 'rrr3_hits': 0, 'rrr3_rec_rounds': 16, 'rrr3_rec_hits': 3,
+    'same_tens': 16,
+    'rrr3_rounds': 16, 'rrr3_hits': 0, 'rrr3_rec_rounds': 17, 'rrr3_rec_hits': 3,
 }
 
 
@@ -2756,7 +2756,7 @@ def _rrr_declared(grid_ep):
     d1    = cut(t)
     L     = RRR_LIVE
     lines = [f"  RRR DECLARED  (running value = {grid_ep:02d})   — corrected from {L['results']} recorded results",
-             f"  ★ TENS-CUT DECADE   {d1}0 – {d1}9   {'tens digit cut':<28}"
+             f"    TENS-CUT DECADE   {d1}0 – {d1}9   {'tens digit cut':<28}"
              f"recorded {L['tens_cut']} of {L['results']} = {L['tens_cut'] / L['results']:.0%}  (chance 10%)"]
     num = d1 * 10 + apply_op(u, 'cut-1')
     lines.append(f"    DECLARED NUMBER   {num:02d}        {f'cut / c-1 on {grid_ep:02d}':<28}"
@@ -2780,8 +2780,11 @@ def _rrr_declared(grid_ep):
                  f"recorded {L['second_hits']} of {L['results']}  (chance about 1 in 100)")
     # what the recorded results rule out: the running value's own decade
     # rarely comes again in the next result
-    lines.append(f"  ✗ NOT EXPECTED      {t}0 – {t}9   {'same decade again':<28}"
+    lines.append(f"    SAME DECADE       {t}0 – {t}9   {'rare in the first 253':<28}"
                  f"recorded {L['same_tens']} of {L['results']} = {L['same_tens'] / L['results']:.0%}  (chance 10%)")
+    # these leans come from the first 253 results; on the three datasets
+    # since (76 results) every one of them is at its chance rate
+    lines.append("    since result 254 (76 results): tens-cut 8, same decade 8, units digit 4, short list 11 — all at chance")
     return lines
 
 
@@ -3064,6 +3067,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         lx, ly = entries[-1][3], entries[-1][4]
         tx2 = _op_join(_op_parts(ly)[0], RRR3_STEP_UP[_op_parts(ly)[1]])
         turned.append((compute_variants(ep, tx2, lx)[0], f"{OP_ABBREV[tx2]}/{OP_ABBREV[lx]}"))
+        # and the same with old x sign-flipped as it comes over
+        turned.append((compute_variants(ep, tx2, SIGN_FLIP[lx])[0], f"{OP_ABBREV[tx2]}/{OP_ABBREV[SIGN_FLIP[lx]]}"))
     rec += plain + kept + turned + dropped
     rec += [(v, lab) for v, types, lab in both_cut if types not in used_types] if entries else []
     first_seen = {}
@@ -3156,7 +3161,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              "     " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in plain) if plain else "none this round"),
              "     and rows whose x has a cut, crossed with old y kept and that cut removed:",
              "     " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in kept) if kept else "none this round"),
-             "     and the last row crossed with one side one step up (x up: old y flipped or kept / y up: old x kept):",
+             "     and the last row crossed with one side one step up (the other side kept or flipped):",
              "     " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in turned) if turned else "none this round")]
     body += ["", "  F) NEXT: LAST ROW NOT CROSSED, ONE SIDE DROPPED TO nc  (recommended list only)",
              "     " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in dropped) if dropped else "none this round")]

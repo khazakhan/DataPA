@@ -2739,11 +2739,11 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 320, 'tens_cut': 61, 'short_list': 94,
-    'table_rounds': 310, 'table_hits': 42, 'table_chance': 29, 'declared': 275, 'declared_hits': 6,
-    'band_hits': 32, 'units_hits': 43, 'second_hits': 10,
+    'results': 321, 'tens_cut': 62, 'short_list': 95,
+    'table_rounds': 311, 'table_hits': 42, 'table_chance': 30, 'declared': 276, 'declared_hits': 6,
+    'band_hits': 33, 'units_hits': 43, 'second_hits': 10,
     'same_tens': 13,
-    'rrr3_rounds': 6, 'rrr3_hits': 0, 'rrr3_rec_rounds': 7, 'rrr3_rec_hits': 0,
+    'rrr3_rounds': 7, 'rrr3_hits': 0, 'rrr3_rec_rounds': 8, 'rrr3_rec_hits': 0,
 }
 
 
@@ -3029,7 +3029,12 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     # crossed pair of types has not been used yet
     plain = [(compute_variants(ep, e[4], e[3])[0], f"{OP_ABBREV[e[4]]}/{OP_ABBREV[e[3]]}")
              for e in entries if (_op_type(e[4]), _op_type(e[3])) not in used_types]
-    rec += plain
+    # and every row whose x carries a cut, crossed with old y kept and only
+    # that cut removed (the cut stays on the x side, comes off the y side)
+    kept = [(compute_variants(ep, e[4], _op_join(False, _op_parts(e[3])[1]))[0],
+             f"{OP_ABBREV[e[4]]}/{OP_ABBREV[_op_join(False, _op_parts(e[3])[1])]}")
+            for e in entries if _op_parts(e[3])[0]]
+    rec += plain + kept
     rec += [(v, lab) for v, types, lab in both_cut if types not in used_types] if entries else []
     first_seen = {}
     for v, lab in rec:
@@ -3044,8 +3049,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     body += ['─' * len(head), "3RRR".center(len(head)), "",
              *res_lines,
              *rec_lines,
-             "     = the 3RRR numbers + every row crossed unchanged + every RRR number above,",
-             "       the last two only when their type pair has not been used by any row yet", "",
+             "     = the 3RRR numbers + rule E's crossings + every RRR number above of a type pair not used yet", "",
              "  HOW THE OPERATIONS MOVED  (each row = an earlier row crossed: old y → new x, old x → new y)"]
     trail_rows = _rrr3_trail(entries)
     if not trail_rows:
@@ -3119,11 +3123,13 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     if arrived:
         body.append("     new x = old y, cut switched + sign flipped; new y = old x, cut switched + sign flipped")
     body += ["", "  E) NEXT: ANY ROW CROSSED UNCHANGED, WHEN THAT TYPE PAIR IS NEW  (recommended list only)",
-             "     " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in plain) if plain else "none this round")]
+             "     " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in plain) if plain else "none this round"),
+             "     and rows whose x has a cut, crossed with old y kept and that cut removed:",
+             "     " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in kept) if kept else "none this round")]
     body += ["", f"  3RRR live record: result {RRR_LIVE['rrr3_hits']} of {RRR_LIVE['rrr3_rounds']} rounds with a number,"
              f" recommended {RRR_LIVE['rrr3_rec_hits']} of {RRR_LIVE['rrr3_rec_rounds']}.",
              "  Replay on 309 recorded rounds: result line 5 hits on 653 numbers (6.5 by chance);",
-             "  recommended list (about 10 numbers a round): 28 hits (30.0 by chance)."]
+             "  recommended list (about 12 numbers a round): 36 hits (35.8 by chance)."]
     if live:
         body += ['─' * len(head)] + _rrr_declared(grid_ep) + ["  ★ in the table = number inside the tens-cut decade"]
     return _rrr_frame(body)

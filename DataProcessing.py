@@ -2739,11 +2739,11 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 330, 'tens_cut': 62, 'short_list': 95,
-    'table_rounds': 320, 'table_hits': 43, 'table_chance': 30, 'declared': 285, 'declared_hits': 6,
+    'results': 331, 'tens_cut': 62, 'short_list': 95,
+    'table_rounds': 321, 'table_hits': 43, 'table_chance': 31, 'declared': 286, 'declared_hits': 6,
     'band_hits': 33, 'units_hits': 43, 'second_hits': 10,
     'same_tens': 16,
-    'rrr3_rounds': 16, 'rrr3_hits': 0, 'rrr3_rec_rounds': 17, 'rrr3_rec_hits': 3,
+    'rrr3_rounds': 17, 'rrr3_hits': 0, 'rrr3_rec_rounds': 18, 'rrr3_rec_hits': 3,
 }
 
 
@@ -3062,6 +3062,11 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         lx, ly = entries[-1][3], entries[-1][4]
         dropped = [(compute_variants(ep, lx, 'no_change')[0], f"{OP_ABBREV[lx]}/nc"),
                    (compute_variants(ep, 'no_change', ly)[0], f"nc/{OP_ABBREV[ly]}")]
+    # the same for the chain's own last step when it is not a WIN - WIN row
+    if src and src[-1][5] == 'LAST' and (not entries or src[-1][0] != entries[-1][0]):
+        cx, cy = src[-1][3], src[-1][4]
+        dropped += [(compute_variants(ep, cx, 'no_change')[0], f"{OP_ABBREV[cx]}/nc"),
+                    (compute_variants(ep, 'no_change', cy)[0], f"nc/{OP_ABBREV[cy]}")]
     # mirror of the last one: last row crossed, old y one step up, old x kept
     if entries and _op_parts(entries[-1][4])[1] in RRR3_STEP_UP:
         lx, ly = entries[-1][3], entries[-1][4]
@@ -3163,12 +3168,12 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              "     " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in kept) if kept else "none this round"),
              "     and the last row crossed with one side one step up (the other side kept or flipped):",
              "     " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in turned) if turned else "none this round")]
-    body += ["", "  F) NEXT: LAST ROW NOT CROSSED, ONE SIDE DROPPED TO nc  (recommended list only)",
+    body += ["", "  F) NEXT: LAST ROW / CHAIN'S LAST STEP NOT CROSSED, ONE SIDE DROPPED TO nc  (recommended list only)",
              "     " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in dropped) if dropped else "none this round")]
     body += ["", f"  3RRR live record: result {RRR_LIVE['rrr3_hits']} of {RRR_LIVE['rrr3_rounds']} rounds with a number,"
              f" recommended {RRR_LIVE['rrr3_rec_hits']} of {RRR_LIVE['rrr3_rec_rounds']}.",
-             "  Replay on 309 recorded rounds: result line 5 hits on 717 numbers (7.2 by chance);",
-             "  recommended list (about 15 numbers a round): 51 hits (46.6 by chance)."]
+             "  Replay on 309 recorded rounds: result line 13 hits on 1310 numbers (13.1 by chance);",
+             "  recommended list (about 17 numbers a round): 59 hits (52.2 by chance)."]
     if live:
         body += ['─' * len(head)] + _rrr_declared(grid_ep) + ["  ★ in the table = number inside the tens-cut decade"]
     return _rrr_frame(body)

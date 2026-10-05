@@ -2739,11 +2739,11 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 328, 'tens_cut': 62, 'short_list': 95,
-    'table_rounds': 318, 'table_hits': 43, 'table_chance': 30, 'declared': 283, 'declared_hits': 6,
+    'results': 329, 'tens_cut': 62, 'short_list': 95,
+    'table_rounds': 319, 'table_hits': 43, 'table_chance': 30, 'declared': 284, 'declared_hits': 6,
     'band_hits': 33, 'units_hits': 43, 'second_hits': 10,
-    'same_tens': 14,
-    'rrr3_rounds': 14, 'rrr3_hits': 0, 'rrr3_rec_rounds': 15, 'rrr3_rec_hits': 2,
+    'same_tens': 15,
+    'rrr3_rounds': 15, 'rrr3_hits': 0, 'rrr3_rec_rounds': 16, 'rrr3_rec_hits': 3,
 }
 
 
@@ -3007,13 +3007,6 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     keep = _rrr3_keep(entries, ep, [r[3] for r in src])
     keep_due = keep is not None
     arrived  = _rrr3_arrived(entries, ep, grid_ep) if live else []
-    # rows of the form cut±n / cut, crossed: the cut stays as new x, the number
-    # comes over without its cut (gave 39, and 49 declared in advance)
-    for e in entries:
-        if _op_type(e[3]) == 'C' and e[4] == 'cut':
-            ny_ = _op_join(False, _op_parts(e[3])[1])
-            num_ = compute_variants(ep, 'cut', ny_)[0]
-            found.append((f"{num_:02d}{star(num_)}", f"E cut/{OP_ABBREV[ny_]}"))
     found    = [(f"{d[7]:02d}{star(d[7])}", f"D {OP_ABBREV[d[5]]}/{OP_ABBREV[d[6]]}") for d in arrived] + found
     if keep_due:
         found.append((f"{keep[7]:02d}{star(keep[7])}", f"C {OP_ABBREV[keep[5]]}/{OP_ABBREV[keep[6]]}"))
@@ -3042,6 +3035,13 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     kept = [(compute_variants(ep, e[4], _op_join(False, _op_parts(e[3])[1]))[0],
              f"{OP_ABBREV[e[4]]}/{OP_ABBREV[_op_join(False, _op_parts(e[3])[1])]}")
             for e in entries if _op_parts(e[3])[0]]
+    # this move gave 99, 39, 49 and 11 in series H (49 and 11 declared in
+    # advance), so its numbers also go on the 3RRR RESULT line
+    seen_found = {n for n, _ in found}
+    for v, lab in kept:
+        if f"{v:02d}{star(v)}" not in seen_found:
+            found.append((f"{v:02d}{star(v)}", f"E {lab}"))
+            seen_found.add(f"{v:02d}{star(v)}")
     # and the last row crossed with the cuts removed, old y also sign-flipped
     # and old x one step up (recommended only)
     turned = []

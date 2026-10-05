@@ -2739,11 +2739,11 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 335, 'tens_cut': 63, 'short_list': 96,
-    'table_rounds': 325, 'table_hits': 45, 'table_chance': 31, 'declared': 290, 'declared_hits': 6,
+    'results': 336, 'tens_cut': 63, 'short_list': 96,
+    'table_rounds': 326, 'table_hits': 45, 'table_chance': 31, 'declared': 291, 'declared_hits': 6,
     'band_hits': 34, 'units_hits': 43, 'second_hits': 10,
     'same_tens': 16,
-    'rrr3_rounds': 21, 'rrr3_hits': 1, 'rrr3_rec_rounds': 22, 'rrr3_rec_hits': 5,
+    'rrr3_rounds': 22, 'rrr3_hits': 1, 'rrr3_rec_rounds': 23, 'rrr3_rec_hits': 5,
 }
 
 
@@ -3074,7 +3074,19 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         turned.append((compute_variants(ep, tx2, lx)[0], f"{OP_ABBREV[tx2]}/{OP_ABBREV[lx]}"))
         # and the same with old x sign-flipped as it comes over
         turned.append((compute_variants(ep, tx2, SIGN_FLIP[lx])[0], f"{OP_ABBREV[tx2]}/{OP_ABBREV[SIGN_FLIP[lx]]}"))
-    rec += plain + kept + turned + dropped
+    # rule F, second form: the same rows not crossed, one side losing its cut
+    uncut = []
+    f_rows = ([(entries[-1][3], entries[-1][4])] if entries else [])
+    if src and src[-1][5] == 'LAST' and (not entries or src[-1][0] != entries[-1][0]):
+        f_rows.append((src[-1][3], src[-1][4]))
+    for fx, fy in f_rows:
+        if _op_parts(fx)[0]:
+            ux = _op_join(False, _op_parts(fx)[1])
+            uncut.append((compute_variants(ep, ux, fy)[0], f"{OP_ABBREV[ux]}/{OP_ABBREV[fy]}"))
+        if _op_parts(fy)[0]:
+            uy = _op_join(False, _op_parts(fy)[1])
+            uncut.append((compute_variants(ep, fx, uy)[0], f"{OP_ABBREV[fx]}/{OP_ABBREV[uy]}"))
+    rec += plain + kept + turned + dropped + uncut
     rec += [(v, lab) for v, types, lab in both_cut if types not in used_types] if entries else []
     first_seen = {}
     for v, lab in rec:
@@ -3169,11 +3181,13 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              "     and the last row crossed with one side one step up (the other side kept or flipped):",
              "     " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in turned) if turned else "none this round")]
     body += ["", "  F) NEXT: LAST ROW / CHAIN'S LAST STEP NOT CROSSED, ONE SIDE DROPPED TO nc  (recommended list only)",
-             "     " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in dropped) if dropped else "none this round")]
+             "     " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in dropped) if dropped else "none this round"),
+             "     or one side losing its cut:  "
+             + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in uncut) if uncut else "none this round")]
     body += ["", f"  3RRR live record: result {RRR_LIVE['rrr3_hits']} of {RRR_LIVE['rrr3_rounds']} rounds with a number,"
              f" recommended {RRR_LIVE['rrr3_rec_hits']} of {RRR_LIVE['rrr3_rec_rounds']}.",
              "  Replay on 309 recorded rounds: result line 13 hits on 1310 numbers (13.1 by chance);",
-             "  recommended list (about 17 numbers a round): 59 hits (52.2 by chance)."]
+             "  recommended list (about 18 numbers a round): 62 hits (56.3 by chance)."]
     if live:
         body += ['─' * len(head)] + _rrr_declared(grid_ep) + ["  ★ in the table = number inside the tens-cut decade"]
     return _rrr_frame(body)

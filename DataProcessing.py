@@ -2739,11 +2739,11 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 316, 'tens_cut': 61, 'short_list': 94,
-    'table_rounds': 306, 'table_hits': 42, 'table_chance': 29, 'declared': 271, 'declared_hits': 6,
+    'results': 317, 'tens_cut': 61, 'short_list': 94,
+    'table_rounds': 307, 'table_hits': 42, 'table_chance': 29, 'declared': 272, 'declared_hits': 6,
     'band_hits': 32, 'units_hits': 43, 'second_hits': 10,
     'same_tens': 13,
-    'rrr3_rounds': 2, 'rrr3_hits': 0, 'rrr3_rec_rounds': 3, 'rrr3_rec_hits': 0,
+    'rrr3_rounds': 3, 'rrr3_hits': 0, 'rrr3_rec_rounds': 4, 'rrr3_rec_hits': 0,
 }
 
 
@@ -2868,6 +2868,20 @@ def _rrr3_keep(entries, ep):
     return pos, a, b, x_op, y_op, nx, ny, compute_variants(ep, nx, ny)[0], due
 
 
+def _rrr3_arrived(entries, ep, grid_ep):
+    """3RRR rule D — every WIN - WIN row that ends at the running value is
+    crossed with the cut switched and the sign flipped on both sides.
+    Returns [(pos, a, b, x_op, y_op, new x, new y, number)]."""
+    rows = []
+    for pos, a, b, x_op, y_op, _ in entries:
+        if b != grid_ep:
+            continue
+        nx = _rrr3_twice(SIGN_FLIP[KK_CUT_TOGGLE[y_op]], entries)
+        ny = SIGN_FLIP[KK_CUT_TOGGLE[x_op]]
+        rows.append((pos, a, b, x_op, y_op, nx, ny, compute_variants(ep, nx, ny)[0]))
+    return rows
+
+
 def _rrr3_change(old, new):
     """(words, cost) for how one op turned into another when two rows cross."""
     if old == new:
@@ -2986,6 +3000,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         found.append((f"{row[7]:02d}{star(row[7])}", f"B {OP_ABBREV[row[5]]}/{OP_ABBREV[row[6]]}"))
     keep = _rrr3_keep(entries, ep)
     keep_due = keep is not None and (keep[8] or row is None)
+    arrived  = _rrr3_arrived(entries, ep, grid_ep) if live else []
+    found    = [(f"{d[7]:02d}{star(d[7])}", f"D {OP_ABBREV[d[5]]}/{OP_ABBREV[d[6]]}") for d in arrived] + found
     if keep_due:
         found.append((f"{keep[7]:02d}{star(keep[7])}", f"C {OP_ABBREV[keep[5]]}/{OP_ABBREV[keep[6]]}"))
     result = '   '.join(f"{n} ({r})" for n, r in found) if found else "no number this round"
@@ -2997,6 +3013,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         rec.append((row[7], f"{OP_ABBREV[row[5]]}/{OP_ABBREV[row[6]]}"))
     if keep is not None:
         rec.insert(0 if keep[8] else len(rec), (keep[7], f"{OP_ABBREV[keep[5]]}/{OP_ABBREV[keep[6]]}"))
+    rec = [(d[7], f"{OP_ABBREV[d[5]]}/{OP_ABBREV[d[6]]}") for d in arrived] + rec
     for p in picks:
         for ops in (p[5], rrr3_second(p[3], p[4])):
             if ops is not None:
@@ -3073,10 +3090,21 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                  + ("C/C already used → this rule" if due else
                     "rule B has no number → this rule" if keep_due else "C/C not used yet → rule B first"),
                  "     new x = old y without its cut, new y = old x without its cut"]
+    body += ["", "  D) NEXT: ROW THAT ENDS AT THE RUNNING VALUE, CROSSED, CUT SWITCHED + SIGN FLIPPED"]
+    if not arrived:
+        body.append("     no WIN - WIN row ends at the running value" + (f" {grid_ep:02d}" if live else "")
+                    + " — no number from this rule")
+    for pos, a, b, x_op, y_op, nx, ny, num in arrived:
+        nxa, nya = OP_ABBREV[nx], OP_ABBREV[ny]
+        tag = f"[{pos_prefix}{pos}]"
+        body.append(f"  {tag:<12} {a:02d} → {b:02d}   {OP_ABBREV[x_op]:<6} {OP_ABBREV[y_op]:<6} →  "
+                    f"{nxa:<6} {nya:<6}  " + f"{num:02d}{star(num)}({nxa}/{nya})".ljust(KW))
+    if arrived:
+        body.append("     new x = old y, cut switched + sign flipped; new y = old x, cut switched + sign flipped")
     body += ["", f"  3RRR live record: result {RRR_LIVE['rrr3_hits']} of {RRR_LIVE['rrr3_rounds']} rounds with a number,"
              f" recommended {RRR_LIVE['rrr3_rec_hits']} of {RRR_LIVE['rrr3_rec_rounds']}.",
-             "  Replay on 309 recorded rounds: result line 5 hits on 418 numbers (4.2 by chance);",
-             "  recommended list (about 8 numbers a round): 26 hits (23.3 by chance)."]
+             "  Replay on 309 recorded rounds: result line 5 hits on 436 numbers (4.4 by chance);",
+             "  recommended list (about 8 numbers a round): 26 hits (23.5 by chance)."]
     if live:
         body += ['─' * len(head)] + _rrr_declared(grid_ep) + ["  ★ in the table = number inside the tens-cut decade"]
     return _rrr_frame(body)

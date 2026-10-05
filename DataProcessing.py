@@ -2739,11 +2739,11 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 323, 'tens_cut': 62, 'short_list': 95,
-    'table_rounds': 313, 'table_hits': 42, 'table_chance': 30, 'declared': 278, 'declared_hits': 6,
+    'results': 324, 'tens_cut': 62, 'short_list': 95,
+    'table_rounds': 314, 'table_hits': 42, 'table_chance': 30, 'declared': 279, 'declared_hits': 6,
     'band_hits': 33, 'units_hits': 43, 'second_hits': 10,
     'same_tens': 13,
-    'rrr3_rounds': 9, 'rrr3_hits': 0, 'rrr3_rec_rounds': 10, 'rrr3_rec_hits': 0,
+    'rrr3_rounds': 10, 'rrr3_hits': 0, 'rrr3_rec_rounds': 11, 'rrr3_rec_hits': 1,
 }
 
 
@@ -3007,6 +3007,13 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     keep = _rrr3_keep(entries, ep, [r[3] for r in src])
     keep_due = keep is not None
     arrived  = _rrr3_arrived(entries, ep, grid_ep) if live else []
+    # rows of the form cut±n / cut, crossed: the cut stays as new x, the number
+    # comes over without its cut (gave 39, and 49 declared in advance)
+    for e in entries:
+        if _op_type(e[3]) == 'C' and e[4] == 'cut':
+            ny_ = _op_join(False, _op_parts(e[3])[1])
+            num_ = compute_variants(ep, 'cut', ny_)[0]
+            found.append((f"{num_:02d}{star(num_)}", f"E cut/{OP_ABBREV[ny_]}"))
     found    = [(f"{d[7]:02d}{star(d[7])}", f"D {OP_ABBREV[d[5]]}/{OP_ABBREV[d[6]]}") for d in arrived] + found
     if keep_due:
         found.append((f"{keep[7]:02d}{star(keep[7])}", f"C {OP_ABBREV[keep[5]]}/{OP_ABBREV[keep[6]]}"))

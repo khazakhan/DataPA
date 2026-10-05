@@ -2739,11 +2739,11 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 318, 'tens_cut': 61, 'short_list': 94,
-    'table_rounds': 308, 'table_hits': 42, 'table_chance': 29, 'declared': 273, 'declared_hits': 6,
+    'results': 319, 'tens_cut': 61, 'short_list': 94,
+    'table_rounds': 309, 'table_hits': 42, 'table_chance': 29, 'declared': 274, 'declared_hits': 6,
     'band_hits': 32, 'units_hits': 43, 'second_hits': 10,
     'same_tens': 13,
-    'rrr3_rounds': 4, 'rrr3_hits': 0, 'rrr3_rec_rounds': 5, 'rrr3_rec_hits': 0,
+    'rrr3_rounds': 5, 'rrr3_hits': 0, 'rrr3_rec_rounds': 6, 'rrr3_rec_hits': 0,
 }
 
 
@@ -2954,7 +2954,10 @@ def _rrr3_rows(entries, ep):
         used  = next((p for p, _, _, x2, y2, _ in entries[i + 1:] if (x2, y2) == first), None)
         nx, ny = rrr3_second(x_op, y_op) if (first is None or used is not None) else first
         nx = _rrr3_twice(nx, entries)
-        rows.append((pos, a, b, x_op, y_op, first, used, nx, ny, compute_variants(ep, nx, ny)[0]))
+        # the same row crossed with the cut switched and the sign flipped on both sides
+        sx, sy = _rrr3_twice(SIGN_FLIP[KK_CUT_TOGGLE[y_op]], entries), SIGN_FLIP[KK_CUT_TOGGLE[x_op]]
+        rows.append((pos, a, b, x_op, y_op, first, used, nx, ny, compute_variants(ep, nx, ny)[0],
+                     sx, sy, compute_variants(ep, sx, sy)[0]))
     return la, rows
 
 
@@ -2997,6 +3000,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     la, picks = _rrr3_rows(entries, ep)
     row, why  = _rrr3_last(entries, ep)
     found     = [(f"{p[9]:02d}{star(p[9])}", f"A {OP_ABBREV[p[7]]}/{OP_ABBREV[p[8]]}") for p in picks]
+    found    += [(f"{p[12]:02d}{star(p[12])}", f"A {OP_ABBREV[p[10]]}/{OP_ABBREV[p[11]]}") for p in picks]
     if row is not None:
         found.append((f"{row[7]:02d}{star(row[7])}", f"B {OP_ABBREV[row[5]]}/{OP_ABBREV[row[6]]}"))
     keep = _rrr3_keep(entries, ep, [r[3] for r in src])
@@ -3005,11 +3009,11 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     found    = [(f"{d[7]:02d}{star(d[7])}", f"D {OP_ABBREV[d[5]]}/{OP_ABBREV[d[6]]}") for d in arrived] + found
     if keep_due:
         found.append((f"{keep[7]:02d}{star(keep[7])}", f"C {OP_ABBREV[keep[5]]}/{OP_ABBREV[keep[6]]}"))
-    result = '   '.join(f"{n} ({r})" for n, r in found) if found else "no number this round"
     # recommended: the 3RRR numbers, the other crossing of every same-family
     # row and every RRR number above whose pair of op types (C/K/I/N on x
     # and on y) no WIN - WIN row has used yet — the new combination is due
     rec = [(p[9], f"{OP_ABBREV[p[7]]}/{OP_ABBREV[p[8]]}") for p in picks]
+    rec += [(p[12], f"{OP_ABBREV[p[10]]}/{OP_ABBREV[p[11]]}") for p in picks]
     if row is not None:
         rec.append((row[7], f"{OP_ABBREV[row[5]]}/{OP_ABBREV[row[6]]}"))
     if keep is not None:
@@ -3029,8 +3033,11 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     rec_items = [f"{v:02d}{star(v).strip()} ({lab})" for v, lab in rec]
     rec_lines = [f"  ★ 3RRR RECOMMENDED on EP={ep:02d}  →  " + ('   '.join(rec_items[:5]) if rec_items else "none this round")]
     rec_lines += ["       " + '   '.join(rec_items[k:k + 7]) for k in range(5, len(rec_items), 7)]
+    res_items = [f"{n} ({r})" for n, r in found]
+    res_lines = [f"  ★ 3RRR RESULT  →  " + ('   '.join(res_items[:4]) if res_items else "no number this round")]
+    res_lines += ["       " + '   '.join(res_items[k:k + 5]) for k in range(4, len(res_items), 5)]
     body += ['─' * len(head), "3RRR".center(len(head)), "",
-             f"  ★ 3RRR RESULT  →  {result}",
+             *res_lines,
              *rec_lines,
              "     = the 3RRR numbers + every RRR number above whose type pair no row has used yet", "",
              "  HOW THE OPERATIONS MOVED  (each row = an earlier row crossed: old y → new x, old x → new y)"]
@@ -3050,7 +3057,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     else:
         body.append(f"  {'Pos':<12} {'Source':<9} {'old x':<6} {'old y':<6}    {'new x':<6} {'new y':<6}  "
                     f"{'xy (op)':<{KW}}1st crossing")
-        for pos, a, b, x_op, y_op, first, used, nx, ny, num in picks:
+        for pos, a, b, x_op, y_op, first, used, nx, ny, num, sx, sy, snum in picks:
             nxa, nya = OP_ABBREV[nx], OP_ABBREV[ny]
             if first is None:
                 note = "no 1st crossing → 2nd"
@@ -3060,9 +3067,13 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             tag = f"[{pos_prefix}{pos}]"
             body.append(f"  {tag:<12} {a:02d} → {b:02d}   {OP_ABBREV[x_op]:<6} {OP_ABBREV[y_op]:<6} →  "
                         f"{nxa:<6} {nya:<6}  " + f"{num:02d}{star(num)}({nxa}/{nya})".ljust(KW) + note)
+            sxa, sya = OP_ABBREV[sx], OP_ABBREV[sy]
+            body.append(f"  {'':<12} {'':<9} {'':<6} {'':<6} →  {sxa:<6} {sya:<6}  "
+                        + f"{snum:02d}{star(snum)}({sxa}/{sya})".ljust(KW) + "cut switched + sign flipped")
         body += [f"     row = earlier WIN - WIN row in the family of the last row's source {la:02d}",
                  "     1st crossing: new x = old y, new y = old x one step further",
                  "     2nd crossing: new x = cut of old y + number of old x, new y = old x flipped",
+                 "     also: both sides crossed with the cut switched and the sign flipped",
                  "     in every rule: a new x that already came twice in the x column drops to nc"]
     body += ["", "  B) NEXT: LAST ROW CROSSED, CUT ON BOTH SIDES"]
     if entries:
@@ -3103,8 +3114,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         body.append("     new x = old y, cut switched + sign flipped; new y = old x, cut switched + sign flipped")
     body += ["", f"  3RRR live record: result {RRR_LIVE['rrr3_hits']} of {RRR_LIVE['rrr3_rounds']} rounds with a number,"
              f" recommended {RRR_LIVE['rrr3_rec_hits']} of {RRR_LIVE['rrr3_rec_rounds']}.",
-             "  Replay on 309 recorded rounds: result line 4 hits on 536 numbers (5.4 by chance);",
-             "  recommended list (about 8 numbers a round): 24 hits (23.4 by chance)."]
+             "  Replay on 309 recorded rounds: result line 5 hits on 653 numbers (6.5 by chance);",
+             "  recommended list (about 8 numbers a round): 25 hits (24.5 by chance)."]
     if live:
         body += ['─' * len(head)] + _rrr_declared(grid_ep) + ["  ★ in the table = number inside the tens-cut decade"]
     return _rrr_frame(body)

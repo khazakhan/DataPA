@@ -2740,14 +2740,14 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 385, 'tens_cut': 67, 'short_list': 101,
-    'table_rounds': 375, 'table_hits': 50, 'table_chance': 33, 'declared': 340, 'declared_hits': 7,
+    'results': 386, 'tens_cut': 67, 'short_list': 101,
+    'table_rounds': 376, 'table_hits': 50, 'table_chance': 33, 'declared': 341, 'declared_hits': 7,
     'band_hits': 36, 'units_hits': 45, 'second_hits': 12,
     'same_tens': 21,
-    'rrr3_rounds': 71, 'rrr3_hits': 1, 'rrr3_rec_rounds': 72, 'rrr3_rec_hits': 12,
-    'rrr3_same_rounds': 44, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 31, 'rrr3_wide_hits': 4, 'rrr3_yx_rounds': 26, 'rrr3_yx_hits': 3,
-    'rrr3_strong_rounds': 22, 'rrr3_strong_hits': 0, 'rrr3_same2_rounds': 19, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 26, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 26, 'rrr3_sameyx_hits': 1,
+    'rrr3_rounds': 72, 'rrr3_hits': 1, 'rrr3_rec_rounds': 73, 'rrr3_rec_hits': 13,
+    'rrr3_same_rounds': 45, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 32, 'rrr3_wide_hits': 4, 'rrr3_yx_rounds': 27, 'rrr3_yx_hits': 3,
+    'rrr3_strong_rounds': 23, 'rrr3_strong_hits': 0, 'rrr3_same2_rounds': 20, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 27, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 27, 'rrr3_sameyx_hits': 1,
 }
 
 
@@ -3286,12 +3286,24 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     for again in (same, same2, same_turn if same else None, same_yx if same else None):
         if again and again[0] in strong_votes:
             strong_votes[again[0]] += 5
-    # then the RRR table numbers in table order: the table is the one list
-    # ahead of chance in advance (50 hits in 373 rounds, about 33 by size),
-    # while the rule-number seats went 0 for 20
+    # the remaining seats are shared evenly: one rule number (recommended
+    # list order), one RRR table number (table order), and so on.  Neither
+    # source has earned all of them — the rule seats went 0 for 20, and the
+    # round after they were handed to the table a rule number (71) came.
+    # FIXED 2026-10-07: judge it over at least 10 rounds before touching it.
+    taken = {v for v, n in strong_votes.items() if n >= 5}
+    rule_q = [v for v, _ in rec if v not in taken]
+    table_q = []
     for v, _, _ in both_cut:
-        if strong_votes.get(v, 0) < 3:
-            strong_votes[v] = strong_votes.get(v, 0) + 3
+        if v not in taken and v not in table_q:
+            table_q.append(v)
+    shared = []
+    for k in range(max(len(rule_q), len(table_q))):
+        for q in (rule_q, table_q):
+            if k < len(q) and q[k] not in shared:
+                shared.append(q[k])
+    for k, v in enumerate(shared):
+        strong_votes[v] = 4 - k * 0.01
     # the first 5 seats go to the NUMBER BAND of the running value (declared
     # number = tens cut, units +4, then ±1, ±2): on 376 recorded rounds the
     # declared number alone hit 10 times (2.7% against 1%) and the band 35
@@ -3335,8 +3347,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     res_lines += ["       " + '   '.join(res_items[k:k + 5]) for k in range(4, len(res_items), 5)]
     body += ['─' * len(head), "3RRR".center(len(head)), "",
              *strong_lines,
-             "     never more than 16: the number band (5), the last operations again (up to 4), the RRR table numbers,",
-             "     then the 3RRR RESULT line and the order of the lists below — most rounds still miss.", "",
+             "     never more than 16: the number band (5), the last operations again (up to 4), then rule numbers and",
+             "     RRR table numbers turn by turn — most rounds still miss.", "",
              *res_lines,
              *rec_lines,
              "     recommended = 3RRR numbers + rules E and F + same operation again + EP itself, EP cut + unused RRR pairs",

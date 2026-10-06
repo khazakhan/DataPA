@@ -2740,13 +2740,13 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 375, 'tens_cut': 66, 'short_list': 100,
-    'table_rounds': 365, 'table_hits': 49, 'table_chance': 33, 'declared': 330, 'declared_hits': 6,
+    'results': 376, 'tens_cut': 66, 'short_list': 100,
+    'table_rounds': 366, 'table_hits': 49, 'table_chance': 33, 'declared': 331, 'declared_hits': 6,
     'band_hits': 35, 'units_hits': 44, 'second_hits': 12,
     'same_tens': 20,
-    'rrr3_rounds': 61, 'rrr3_hits': 1, 'rrr3_rec_rounds': 62, 'rrr3_rec_hits': 9,
-    'rrr3_same_rounds': 34, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 21, 'rrr3_wide_hits': 3, 'rrr3_yx_rounds': 16, 'rrr3_yx_hits': 2,
-    'rrr3_strong_rounds': 12, 'rrr3_strong_hits': 0, 'rrr3_same2_rounds': 9, 'rrr3_same2_hits': 1,
+    'rrr3_rounds': 62, 'rrr3_hits': 1, 'rrr3_rec_rounds': 63, 'rrr3_rec_hits': 9,
+    'rrr3_same_rounds': 35, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 22, 'rrr3_wide_hits': 3, 'rrr3_yx_rounds': 17, 'rrr3_yx_hits': 2,
+    'rrr3_strong_rounds': 13, 'rrr3_strong_hits': 0, 'rrr3_same2_rounds': 10, 'rrr3_same2_hits': 1,
 }
 
 
@@ -3182,7 +3182,18 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         nx_, ny_ = _op_join(_op_parts(fx)[0], ''), _op_join(_op_parts(fy)[0], '')
         numberless += [(compute_variants(ep, ny_, nx_)[0], f"{OP_ABBREV[ny_]}/{OP_ABBREV[nx_]}"),
                        (compute_variants(ep, nx_, ny_)[0], f"{OP_ABBREV[nx_]}/{OP_ABBREV[ny_]}")]
-    rec += plain + kept + turned + dropped + uncut + gained + stepped + bare + rrr_side + numberless
+    # rule B's other steps: the last row crossed with a cut on both sides,
+    # the two numbers stepped down/up, up/down and up/up (rule B itself is
+    # down/down)
+    b_steps = []
+    if entries:
+        lx, ly = entries[-1][3], entries[-1][4]
+        for ty_tab, tx_tab in ((RRR3_STEP_DOWN, RRR3_STEP_UP), (RRR3_STEP_UP, RRR3_STEP_DOWN),
+                               (RRR3_STEP_UP, RRR3_STEP_UP)):
+            if _op_parts(ly)[1] in ty_tab and _op_parts(lx)[1] in tx_tab:
+                bx_, by_ = _op_join(True, ty_tab[_op_parts(ly)[1]]), _op_join(True, tx_tab[_op_parts(lx)[1]])
+                b_steps.append((compute_variants(ep, bx_, by_)[0], f"{OP_ABBREV[bx_]}/{OP_ABBREV[by_]}"))
+    rec += plain + kept + turned + dropped + uncut + gained + stepped + bare + rrr_side + numberless + b_steps
     rec += [(v, lab) for v, types, lab in both_cut if types not in used_types] if entries else []
     rec_votes = {}
     for v, _ in rec:
@@ -3406,8 +3417,10 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in bare) if bare else "none this round"),
              "     or not crossed, one side cut switched + sign flipped, other side kept:",
              "       " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in rrr_side) if rrr_side else "none this round"),
-             "     or the ± numbers removed on both sides (crossed / not crossed):  "
-             + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in numberless) if numberless else "none this round")]
+             "     or the ± numbers removed on both sides (crossed / not crossed):",
+             "       " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in numberless) if numberless else "none this round"),
+             "     or rule B with the numbers stepped down/up, up/down, up/up:",
+             "       " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in b_steps) if b_steps else "none this round")]
     body += ["", "  SAME OPERATION AGAIN  (the previous round's operation on this EP):  "
              + (f"{same[0]:02d}{star(same[0]).strip()} ({same[1]})" if same else "not available")]
     if same:

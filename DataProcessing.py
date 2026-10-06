@@ -2739,11 +2739,11 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 352, 'tens_cut': 63, 'short_list': 97,
-    'table_rounds': 342, 'table_hits': 45, 'table_chance': 33, 'declared': 307, 'declared_hits': 6,
+    'results': 353, 'tens_cut': 63, 'short_list': 97,
+    'table_rounds': 343, 'table_hits': 45, 'table_chance': 33, 'declared': 308, 'declared_hits': 6,
     'band_hits': 34, 'units_hits': 44, 'second_hits': 11,
     'same_tens': 17,
-    'rrr3_rounds': 38, 'rrr3_hits': 1, 'rrr3_rec_rounds': 39, 'rrr3_rec_hits': 5,
+    'rrr3_rounds': 39, 'rrr3_hits': 1, 'rrr3_rec_rounds': 40, 'rrr3_rec_hits': 5,
 }
 
 
@@ -3089,6 +3089,15 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         if _op_parts(fy)[0]:
             uy = _op_join(False, _op_parts(fy)[1])
             uncut.append((compute_variants(ep, fx, uy)[0], f"{OP_ABBREV[fx]}/{OP_ABBREV[uy]}"))
+    # rule F, third form: the same rows not crossed, both sides one step down
+    # (or both one step up), cuts left where they are
+    stepped = []
+    for fx, fy in f_rows:
+        for table in (RRR3_STEP_DOWN, RRR3_STEP_UP):
+            if _op_parts(fx)[1] in table and _op_parts(fy)[1] in table:
+                sx_ = _op_join(_op_parts(fx)[0], table[_op_parts(fx)[1]])
+                sy_ = _op_join(_op_parts(fy)[0], table[_op_parts(fy)[1]])
+                stepped.append((compute_variants(ep, sx_, sy_)[0], f"{OP_ABBREV[sx_]}/{OP_ABBREV[sy_]}"))
     # the same two rows crossed, old y kept, old x gaining a cut (the mirror
     # of the kept-y move, which takes a cut away)
     gained = [(compute_variants(ep, fy, _op_join(True, _op_parts(fx)[1]))[0],
@@ -3099,7 +3108,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         lx, ly = entries[-1][3], entries[-1][4]
         tx3 = _op_join(_op_parts(ly)[0], RRR3_STEP_DOWN[_op_parts(ly)[1]])
         turned.append((compute_variants(ep, tx3, lx)[0], f"{OP_ABBREV[tx3]}/{OP_ABBREV[lx]}"))
-    rec += plain + kept + turned + dropped + uncut + gained
+    rec += plain + kept + turned + dropped + uncut + gained + stepped
     rec += [(v, lab) for v, types, lab in both_cut if types not in used_types] if entries else []
     first_seen = {}
     for v, lab in rec:
@@ -3198,11 +3207,13 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              "     or one side losing its cut:  "
              + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in uncut) if uncut else "none this round"),
              "     or crossed, old y kept, old x gaining a cut:  "
-             + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in gained) if gained else "none this round")]
+             + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in gained) if gained else "none this round"),
+             "     or not crossed, both sides one step down / up:  "
+             + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in stepped) if stepped else "none this round")]
     body += ["", f"  3RRR live record: result {RRR_LIVE['rrr3_hits']} of {RRR_LIVE['rrr3_rounds']} rounds with a number,"
              f" recommended {RRR_LIVE['rrr3_rec_hits']} of {RRR_LIVE['rrr3_rec_rounds']}.",
              "  Replay on 309 recorded rounds: result line 13 hits on 1310 numbers (13.1 by chance);",
-             "  recommended list (about 20 numbers a round): 70 hits (62.2 by chance)."]
+             "  recommended list (about 22 numbers a round): 75 hits (68.0 by chance)."]
     if live:
         body += ['─' * len(head)] + _rrr_declared(grid_ep) + ["  ★ in the table = number inside the tens-cut decade"]
     return _rrr_frame(body)

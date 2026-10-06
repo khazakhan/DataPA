@@ -2740,13 +2740,13 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 376, 'tens_cut': 66, 'short_list': 100,
-    'table_rounds': 366, 'table_hits': 49, 'table_chance': 33, 'declared': 331, 'declared_hits': 6,
+    'results': 377, 'tens_cut': 66, 'short_list': 100,
+    'table_rounds': 367, 'table_hits': 49, 'table_chance': 33, 'declared': 332, 'declared_hits': 6,
     'band_hits': 35, 'units_hits': 44, 'second_hits': 12,
     'same_tens': 20,
-    'rrr3_rounds': 62, 'rrr3_hits': 1, 'rrr3_rec_rounds': 63, 'rrr3_rec_hits': 9,
-    'rrr3_same_rounds': 35, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 22, 'rrr3_wide_hits': 3, 'rrr3_yx_rounds': 17, 'rrr3_yx_hits': 2,
-    'rrr3_strong_rounds': 13, 'rrr3_strong_hits': 0, 'rrr3_same2_rounds': 10, 'rrr3_same2_hits': 1,
+    'rrr3_rounds': 63, 'rrr3_hits': 1, 'rrr3_rec_rounds': 64, 'rrr3_rec_hits': 9,
+    'rrr3_same_rounds': 36, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 23, 'rrr3_wide_hits': 3, 'rrr3_yx_rounds': 18, 'rrr3_yx_hits': 2,
+    'rrr3_strong_rounds': 14, 'rrr3_strong_hits': 0, 'rrr3_same2_rounds': 11, 'rrr3_same2_hits': 1,
 }
 
 
@@ -3229,6 +3229,10 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     # the EP itself, nothing changed (5 of 354 recorded results were the chain EP)
     if ep not in [v for v, _ in rec]:
         rec.append((ep, "nc/nc"))
+    # and the EP with both digits cut (the 48 -> 28 miss)
+    ep_cut = compute_variants(ep, 'cut', 'cut')[0]
+    if ep_cut not in [v for v, _ in rec]:
+        rec.append((ep_cut, "cut/cut"))
     in_rec = {v for v, _ in rec}
     # yx of every recommended value: the same two operations, crossed
     abbrev_op = {v: k for k, v in OP_ABBREV.items()}
@@ -3324,7 +3328,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              "     On 364 recorded rounds this choice holds the result 88 times = 24% (16% by chance) — most rounds miss.", "",
              *res_lines,
              *rec_lines,
-             "     recommended = 3RRR numbers + rules E and F + same operation again + EP itself + RRR numbers of an unused pair",
+             "     recommended = 3RRR numbers + rules E and F + same operation again + EP itself, EP cut + unused RRR pairs",
              "     recommended yx = each recommended value's two operations crossed (numbers not already recommended)",
              "     wide = rule G: the single moves seen on middle rows, tried on every row (numbers not already above)", "",
              "  HOW THE OPERATIONS MOVED  (each row = an earlier row crossed: old y → new x, old x → new y)"]

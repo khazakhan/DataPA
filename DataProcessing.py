@@ -2739,11 +2739,11 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 347, 'tens_cut': 63, 'short_list': 97,
-    'table_rounds': 337, 'table_hits': 45, 'table_chance': 32, 'declared': 302, 'declared_hits': 6,
+    'results': 348, 'tens_cut': 63, 'short_list': 97,
+    'table_rounds': 338, 'table_hits': 45, 'table_chance': 32, 'declared': 303, 'declared_hits': 6,
     'band_hits': 34, 'units_hits': 44, 'second_hits': 11,
     'same_tens': 17,
-    'rrr3_rounds': 33, 'rrr3_hits': 1, 'rrr3_rec_rounds': 34, 'rrr3_rec_hits': 5,
+    'rrr3_rounds': 34, 'rrr3_hits': 1, 'rrr3_rec_rounds': 35, 'rrr3_rec_hits': 5,
 }
 
 
@@ -3053,6 +3053,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         tx = SIGN_FLIP[_op_join(False, _op_parts(ly)[1])]
         ty = _op_join(False, RRR3_STEP_UP[_op_parts(lx)[1]])
         turned = [(compute_variants(ep, tx, ty)[0], f"{OP_ABBREV[tx]}/{OP_ABBREV[ty]}")]
+        # the same crossing with the cuts left where they are
+        ty_c = _op_join(_op_parts(lx)[0], RRR3_STEP_UP[_op_parts(lx)[1]])
+        turned.append((compute_variants(ep, SIGN_FLIP[ly], ty_c)[0], f"{OP_ABBREV[SIGN_FLIP[ly]]}/{OP_ABBREV[ty_c]}"))
         # the same crossing with old y simply kept
         ty2 = _op_join(_op_parts(lx)[0], RRR3_STEP_UP[_op_parts(lx)[1]])
         turned.append((compute_variants(ep, ly, ty2)[0], f"{OP_ABBREV[ly]}/{OP_ABBREV[ty2]}"))
@@ -3199,7 +3202,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     body += ["", f"  3RRR live record: result {RRR_LIVE['rrr3_hits']} of {RRR_LIVE['rrr3_rounds']} rounds with a number,"
              f" recommended {RRR_LIVE['rrr3_rec_hits']} of {RRR_LIVE['rrr3_rec_rounds']}.",
              "  Replay on 309 recorded rounds: result line 13 hits on 1310 numbers (13.1 by chance);",
-             "  recommended list (about 19 numbers a round): 64 hits (58.7 by chance)."]
+             "  recommended list (about 20 numbers a round): 70 hits (62.2 by chance)."]
     if live:
         body += ['─' * len(head)] + _rrr_declared(grid_ep) + ["  ★ in the table = number inside the tens-cut decade"]
     return _rrr_frame(body)

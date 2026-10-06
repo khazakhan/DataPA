@@ -2740,13 +2740,13 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 373, 'tens_cut': 66, 'short_list': 100,
-    'table_rounds': 363, 'table_hits': 49, 'table_chance': 33, 'declared': 328, 'declared_hits': 6,
+    'results': 374, 'tens_cut': 66, 'short_list': 100,
+    'table_rounds': 364, 'table_hits': 49, 'table_chance': 33, 'declared': 329, 'declared_hits': 6,
     'band_hits': 35, 'units_hits': 44, 'second_hits': 12,
     'same_tens': 20,
-    'rrr3_rounds': 59, 'rrr3_hits': 1, 'rrr3_rec_rounds': 60, 'rrr3_rec_hits': 8,
-    'rrr3_same_rounds': 32, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 19, 'rrr3_wide_hits': 3, 'rrr3_yx_rounds': 14, 'rrr3_yx_hits': 2,
-    'rrr3_strong_rounds': 10, 'rrr3_strong_hits': 0,
+    'rrr3_rounds': 60, 'rrr3_hits': 1, 'rrr3_rec_rounds': 61, 'rrr3_rec_hits': 9,
+    'rrr3_same_rounds': 33, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 20, 'rrr3_wide_hits': 3, 'rrr3_yx_rounds': 15, 'rrr3_yx_hits': 2,
+    'rrr3_strong_rounds': 11, 'rrr3_strong_hits': 0, 'rrr3_same2_rounds': 8, 'rrr3_same2_hits': 1,
 }
 
 
@@ -3255,6 +3255,12 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     for n, _ in found:
         if int(n[:2]) in strong_votes:
             strong_votes[int(n[:2])] += 1
+    # the operation of the last round and of the round before last, again,
+    # each get a seat: a repeat came 7 times in 357 rounds (lag 1) and 4 in
+    # 350 (lag 2, three of them in series I) against about 3.5 by chance
+    for again in (same, same2):
+        if again and again[0] in strong_votes:
+            strong_votes[again[0]] += 1.5
     # at most 4 seats go to the tens-cut decade: that lean carried the older
     # series but has been at chance since result 254, so it must not crowd
     # the rule numbers out of the 16
@@ -3295,7 +3301,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     res_lines += ["       " + '   '.join(res_items[k:k + 5]) for k in range(4, len(res_items), 5)]
     body += ['─' * len(head), "3RRR".center(len(head)), "",
              *strong_lines,
-             "     never more than 16: up to 4 from the tens-cut decade, then the 3RRR RESULT line, then the order of the lists",
+             "     never more than 16: up to 4 from the tens-cut decade, the last two operations again, the 3RRR RESULT line,",
+             "     then the order of the lists below",
              "     On 364 recorded rounds this choice holds the result 88 times = 24% (16% by chance) — most rounds miss.", "",
              *res_lines,
              *rec_lines,
@@ -3400,7 +3407,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                  f"{same_turn[0]:02d}{star(same_turn[0]).strip()} ({same_turn[1]})"]
     if same2:
         body += [f"     operation of the round before last, again:  {same2[0]:02d}{star(same2[0]).strip()} ({same2[1]})"
-                 f"     (3 hits on 349 recorded rounds, 3.5 by chance)"]
+                 f"     (in advance {RRR_LIVE['rrr3_same2_hits']} of {RRR_LIVE['rrr3_same2_rounds']};"
+                 f" all rounds 4 of 350, 3.5 by chance)"]
     body += ["", f"  3RRR live record: result {RRR_LIVE['rrr3_hits']} of {RRR_LIVE['rrr3_rounds']} rounds with a number,"
              f" recommended {RRR_LIVE['rrr3_rec_hits']} of {RRR_LIVE['rrr3_rec_rounds']},",
              f"  same operation again {RRR_LIVE['rrr3_same_hits']} of {RRR_LIVE['rrr3_same_rounds']},"

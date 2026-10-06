@@ -2739,11 +2739,11 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 345, 'tens_cut': 63, 'short_list': 96,
-    'table_rounds': 335, 'table_hits': 45, 'table_chance': 32, 'declared': 300, 'declared_hits': 6,
-    'band_hits': 34, 'units_hits': 43, 'second_hits': 10,
+    'results': 346, 'tens_cut': 63, 'short_list': 97,
+    'table_rounds': 336, 'table_hits': 45, 'table_chance': 32, 'declared': 301, 'declared_hits': 6,
+    'band_hits': 34, 'units_hits': 44, 'second_hits': 11,
     'same_tens': 17,
-    'rrr3_rounds': 31, 'rrr3_hits': 1, 'rrr3_rec_rounds': 32, 'rrr3_rec_hits': 5,
+    'rrr3_rounds': 32, 'rrr3_hits': 1, 'rrr3_rec_rounds': 33, 'rrr3_rec_hits': 5,
 }
 
 
@@ -3091,6 +3091,11 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     gained = [(compute_variants(ep, fy, _op_join(True, _op_parts(fx)[1]))[0],
                f"{OP_ABBREV[fy]}/{OP_ABBREV[_op_join(True, _op_parts(fx)[1])]}")
               for fx, fy in f_rows if not _op_parts(fx)[0]]
+    # and one step DOWN on old y with old x kept
+    if entries and _op_parts(entries[-1][4])[1] in RRR3_STEP_DOWN:
+        lx, ly = entries[-1][3], entries[-1][4]
+        tx3 = _op_join(_op_parts(ly)[0], RRR3_STEP_DOWN[_op_parts(ly)[1]])
+        turned.append((compute_variants(ep, tx3, lx)[0], f"{OP_ABBREV[tx3]}/{OP_ABBREV[lx]}"))
     rec += plain + kept + turned + dropped + uncut + gained
     rec += [(v, lab) for v, types, lab in both_cut if types not in used_types] if entries else []
     first_seen = {}
@@ -3183,7 +3188,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              "     " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in plain) if plain else "none this round"),
              "     and rows whose x has a cut, crossed with old y kept and that cut removed:",
              "     " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in kept) if kept else "none this round"),
-             "     and the last row crossed with one side one step up (the other side kept or flipped):",
+             "     and the last row crossed with one side one step up or down (the other side kept or flipped):",
              "     " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in turned) if turned else "none this round")]
     body += ["", "  F) NEXT: LAST ROW / CHAIN'S LAST STEP NOT CROSSED, ONE SIDE DROPPED TO nc  (recommended list only)",
              "     " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in dropped) if dropped else "none this round"),

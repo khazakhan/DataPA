@@ -2740,13 +2740,13 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 377, 'tens_cut': 66, 'short_list': 100,
-    'table_rounds': 367, 'table_hits': 49, 'table_chance': 33, 'declared': 332, 'declared_hits': 6,
-    'band_hits': 35, 'units_hits': 44, 'second_hits': 12,
+    'results': 378, 'tens_cut': 67, 'short_list': 101,
+    'table_rounds': 368, 'table_hits': 49, 'table_chance': 33, 'declared': 333, 'declared_hits': 7,
+    'band_hits': 36, 'units_hits': 45, 'second_hits': 12,
     'same_tens': 20,
-    'rrr3_rounds': 63, 'rrr3_hits': 1, 'rrr3_rec_rounds': 64, 'rrr3_rec_hits': 9,
-    'rrr3_same_rounds': 36, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 23, 'rrr3_wide_hits': 3, 'rrr3_yx_rounds': 18, 'rrr3_yx_hits': 2,
-    'rrr3_strong_rounds': 14, 'rrr3_strong_hits': 0, 'rrr3_same2_rounds': 11, 'rrr3_same2_hits': 1,
+    'rrr3_rounds': 64, 'rrr3_hits': 1, 'rrr3_rec_rounds': 65, 'rrr3_rec_hits': 9,
+    'rrr3_same_rounds': 37, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 24, 'rrr3_wide_hits': 3, 'rrr3_yx_rounds': 19, 'rrr3_yx_hits': 2,
+    'rrr3_strong_rounds': 15, 'rrr3_strong_hits': 0, 'rrr3_same2_rounds': 12, 'rrr3_same2_hits': 1,
 }
 
 
@@ -3283,14 +3283,17 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     for again in (same, same2):
         if again and again[0] in strong_votes:
             strong_votes[again[0]] += 1.5
-    # at most 4 seats go to the tens-cut decade: that lean carried the older
-    # series but has been at chance since result 254, so it must not crowd
-    # the rule numbers out of the 16
-    decade_seats = 0
-    for v in strong_votes:
-        if star(v).strip() and decade_seats < 4:
-            strong_votes[v] += 2
-            decade_seats += 1
+    # the first 5 seats go to the NUMBER BAND of the running value (declared
+    # number = tens cut, units +4, then ±1, ±2): on 376 recorded rounds the
+    # declared number alone hit 10 times (2.7% against 1%) and the band 35
+    # times (9.3% against 5%) — the best record per number of any source.
+    # No other preference for the tens-cut decade.
+    if live and grid_ep is not None:
+        b_t, b_u = cut(grid_ep // 10), (grid_ep % 10 + 4) % 10
+        for rank, step in enumerate((0, -1, 1, -2, 2)):
+            v = b_t * 10 + (b_u + step) % 10
+            strong_lab.setdefault(v, f"{OP_ABBREV[find_op(ep // 10, v // 10)]}/{OP_ABBREV[find_op(ep % 10, v % 10)]}")
+            strong_votes[v] = 10 - rank * 0.1
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json
@@ -3323,9 +3326,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     res_lines += ["       " + '   '.join(res_items[k:k + 5]) for k in range(4, len(res_items), 5)]
     body += ['─' * len(head), "3RRR".center(len(head)), "",
              *strong_lines,
-             "     never more than 16: up to 4 from the tens-cut decade, the last two operations again, the 3RRR RESULT line,",
+             "     never more than 16: the number band (5), the last two operations again, the 3RRR RESULT line,",
              "     then the order of the lists below",
-             "     On 364 recorded rounds this choice holds the result 88 times = 24% (16% by chance) — most rounds miss.", "",
+             "     On 376 recorded rounds this choice holds the result 93 times = 25% (16% by chance) — most rounds miss.", "",
              *res_lines,
              *rec_lines,
              "     recommended = 3RRR numbers + rules E and F + same operation again + EP itself, EP cut + unused RRR pairs",

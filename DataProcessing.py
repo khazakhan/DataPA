@@ -3407,8 +3407,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                  f"{same_turn[0]:02d}{star(same_turn[0]).strip()} ({same_turn[1]})"]
     if same2:
         body += [f"     operation of the round before last, again:  {same2[0]:02d}{star(same2[0]).strip()} ({same2[1]})"
-                 f"     (in advance {RRR_LIVE['rrr3_same2_hits']} of {RRR_LIVE['rrr3_same2_rounds']};"
-                 f" all rounds 4 of 350, 3.5 by chance)"]
+                 f"   (in advance {RRR_LIVE['rrr3_same2_hits']} of {RRR_LIVE['rrr3_same2_rounds']}; all 4 of 350)"]
     body += ["", f"  3RRR live record: result {RRR_LIVE['rrr3_hits']} of {RRR_LIVE['rrr3_rounds']} rounds with a number,"
              f" recommended {RRR_LIVE['rrr3_rec_hits']} of {RRR_LIVE['rrr3_rec_rounds']},",
              f"  same operation again {RRR_LIVE['rrr3_same_hits']} of {RRR_LIVE['rrr3_same_rounds']},"

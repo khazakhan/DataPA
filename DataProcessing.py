@@ -3369,8 +3369,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              "     " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in dropped) if dropped else "none this round"),
              "     or one side losing its cut:  "
              + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in uncut) if uncut else "none this round"),
-             "     or crossed, old y kept, old x gaining a cut (also sign flipped):  "
-             + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in gained) if gained else "none this round"),
+             "     or crossed, old y kept, old x gaining a cut (also sign flipped):",
+             "       " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in gained) if gained else "none this round"),
              "     or not crossed, both sides one step down / up:  "
              + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in stepped) if stepped else "none this round"),
              "     or crossed, cuts removed, other side dropped to nc:  "

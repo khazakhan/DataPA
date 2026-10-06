@@ -2739,12 +2739,12 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 356, 'tens_cut': 63, 'short_list': 97,
-    'table_rounds': 346, 'table_hits': 45, 'table_chance': 33, 'declared': 311, 'declared_hits': 6,
+    'results': 357, 'tens_cut': 64, 'short_list': 98,
+    'table_rounds': 347, 'table_hits': 45, 'table_chance': 33, 'declared': 312, 'declared_hits': 6,
     'band_hits': 34, 'units_hits': 44, 'second_hits': 11,
     'same_tens': 18,
-    'rrr3_rounds': 42, 'rrr3_hits': 1, 'rrr3_rec_rounds': 43, 'rrr3_rec_hits': 5,
-    'rrr3_same_rounds': 15, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 2, 'rrr3_wide_hits': 1,
+    'rrr3_rounds': 43, 'rrr3_hits': 1, 'rrr3_rec_rounds': 44, 'rrr3_rec_hits': 5,
+    'rrr3_same_rounds': 16, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 3, 'rrr3_wide_hits': 1,
 }
 
 
@@ -3152,7 +3152,14 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         lx, ly = entries[-1][3], entries[-1][4]
         tx3 = _op_join(_op_parts(ly)[0], RRR3_STEP_DOWN[_op_parts(ly)[1]])
         turned.append((compute_variants(ep, tx3, lx)[0], f"{OP_ABBREV[tx3]}/{OP_ABBREV[lx]}"))
-    rec += plain + kept + turned + dropped + uncut + gained + stepped
+    # rule F, fourth form: the same rows crossed, cuts removed, and the other
+    # side dropped to nc
+    bare = []
+    for fx, fy in f_rows:
+        by, bx = _op_join(False, _op_parts(fy)[1]), _op_join(False, _op_parts(fx)[1])
+        bare += [(compute_variants(ep, by, 'no_change')[0], f"{OP_ABBREV[by]}/nc"),
+                 (compute_variants(ep, 'no_change', bx)[0], f"nc/{OP_ABBREV[bx]}")]
+    rec += plain + kept + turned + dropped + uncut + gained + stepped + bare
     rec += [(v, lab) for v, types, lab in both_cut if types not in used_types] if entries else []
     first_seen = {}
     for v, lab in rec:
@@ -3275,7 +3282,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              "     or crossed, old y kept, old x gaining a cut:  "
              + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in gained) if gained else "none this round"),
              "     or not crossed, both sides one step down / up:  "
-             + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in stepped) if stepped else "none this round")]
+             + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in stepped) if stepped else "none this round"),
+             "     or crossed, cuts removed, other side dropped to nc:  "
+             + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in bare) if bare else "none this round")]
     body += ["", "  SAME OPERATION AGAIN  (the previous round's operation on this EP):  "
              + (f"{same[0]:02d}{star(same[0]).strip()} ({same[1]})" if same else "not available")]
     body += ["", f"  3RRR live record: result {RRR_LIVE['rrr3_hits']} of {RRR_LIVE['rrr3_rounds']} rounds with a number,"

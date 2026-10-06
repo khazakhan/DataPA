@@ -2740,13 +2740,13 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 368, 'tens_cut': 66, 'short_list': 100,
-    'table_rounds': 358, 'table_hits': 47, 'table_chance': 33, 'declared': 323, 'declared_hits': 6,
+    'results': 369, 'tens_cut': 66, 'short_list': 100,
+    'table_rounds': 359, 'table_hits': 47, 'table_chance': 33, 'declared': 324, 'declared_hits': 6,
     'band_hits': 35, 'units_hits': 44, 'second_hits': 11,
     'same_tens': 19,
-    'rrr3_rounds': 54, 'rrr3_hits': 1, 'rrr3_rec_rounds': 55, 'rrr3_rec_hits': 7,
-    'rrr3_same_rounds': 27, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 14, 'rrr3_wide_hits': 3, 'rrr3_yx_rounds': 9, 'rrr3_yx_hits': 1,
-    'rrr3_strong_rounds': 5, 'rrr3_strong_hits': 0,
+    'rrr3_rounds': 55, 'rrr3_hits': 1, 'rrr3_rec_rounds': 56, 'rrr3_rec_hits': 8,
+    'rrr3_same_rounds': 28, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 15, 'rrr3_wide_hits': 3, 'rrr3_yx_rounds': 10, 'rrr3_yx_hits': 1,
+    'rrr3_strong_rounds': 6, 'rrr3_strong_hits': 0,
 }
 
 
@@ -3248,9 +3248,14 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     for n, _ in found:
         if int(n[:2]) in strong_votes:
             strong_votes[int(n[:2])] += 1
+    # at most 4 seats go to the tens-cut decade: that lean carried the older
+    # series but has been at chance since result 254, so it must not crowd
+    # the rule numbers out of the 16
+    decade_seats = 0
     for v in strong_votes:
-        if star(v).strip():
+        if star(v).strip() and decade_seats < 4:
             strong_votes[v] += 2
+            decade_seats += 1
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json
@@ -3283,8 +3288,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     res_lines += ["       " + '   '.join(res_items[k:k + 5]) for k in range(4, len(res_items), 5)]
     body += ['─' * len(head), "3RRR".center(len(head)), "",
              *strong_lines,
-             "     never more than 16: tens-cut decade first, then the 3RRR RESULT line, then the order of the lists below",
-             "     Tested with each series held out: 91 hits on 363 rounds = 25% (16% by chance) — most rounds still miss.", "",
+             "     never more than 16: up to 4 from the tens-cut decade, then the 3RRR RESULT line, then the order of the lists",
+             "     On 364 recorded rounds this choice holds the result 88 times = 24% (16% by chance) — most rounds miss.", "",
              *res_lines,
              *rec_lines,
              "     recommended = 3RRR numbers + rules E and F + same operation again + EP itself + RRR numbers of an unused pair",

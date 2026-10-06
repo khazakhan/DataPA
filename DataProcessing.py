@@ -2739,12 +2739,12 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 354, 'tens_cut': 63, 'short_list': 97,
-    'table_rounds': 344, 'table_hits': 45, 'table_chance': 33, 'declared': 309, 'declared_hits': 6,
+    'results': 355, 'tens_cut': 63, 'short_list': 97,
+    'table_rounds': 345, 'table_hits': 45, 'table_chance': 33, 'declared': 310, 'declared_hits': 6,
     'band_hits': 34, 'units_hits': 44, 'second_hits': 11,
     'same_tens': 17,
-    'rrr3_rounds': 40, 'rrr3_hits': 1, 'rrr3_rec_rounds': 41, 'rrr3_rec_hits': 5,
-    'rrr3_same_rounds': 13, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 0, 'rrr3_wide_hits': 0,
+    'rrr3_rounds': 41, 'rrr3_hits': 1, 'rrr3_rec_rounds': 42, 'rrr3_rec_hits': 5,
+    'rrr3_same_rounds': 14, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 1, 'rrr3_wide_hits': 0,
 }
 
 
@@ -3167,6 +3167,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         same = (compute_variants(ep, px, py)[0], f"{OP_ABBREV[px]}/{OP_ABBREV[py]}")
         if same[0] not in [v for v, _ in rec]:
             rec.append(same)
+    # the EP itself, nothing changed (5 of 354 recorded results were the chain EP)
+    if ep not in [v for v, _ in rec]:
+        rec.append((ep, "nc/nc"))
     in_rec = {v for v, _ in rec}
     wide = {}
     for v, lab in _rrr3_wide(entries, ep):
@@ -3185,7 +3188,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     body += ['─' * len(head), "3RRR".center(len(head)), "",
              *res_lines,
              *rec_lines,
-             "     recommended = the 3RRR numbers + rules E and F + same operation again + RRR numbers of an unused type pair",
+             "     recommended = 3RRR numbers + rules E and F + same operation again + EP itself + RRR numbers of an unused pair",
              "     wide = rule G: the single moves seen on middle rows, tried on every row (numbers not already above)", "",
              "  HOW THE OPERATIONS MOVED  (each row = an earlier row crossed: old y → new x, old x → new y)"]
     trail_rows = _rrr3_trail(entries)
@@ -3280,7 +3283,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              f"  same operation again {RRR_LIVE['rrr3_same_hits']} of {RRR_LIVE['rrr3_same_rounds']},"
              f" wide {RRR_LIVE['rrr3_wide_hits']} of {RRR_LIVE['rrr3_wide_rounds']}.",
              "  Replay on 309 recorded rounds: result line 13 hits on 1310 numbers (13.1 by chance);",
-             "  recommended list (about 23 numbers a round): 80 hits (70.5 by chance);",
+             "  recommended list (about 23 numbers a round): 82 hits (72.0 by chance);",
              "  wide list (about 16 numbers a round): 39 hits (49.7 by chance); same operation again: 6 (3.1)."]
     if live:
         body += ['─' * len(head)] + _rrr_declared(grid_ep) + ["  ★ in the table = number inside the tens-cut decade"]

@@ -2740,14 +2740,14 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 381, 'tens_cut': 67, 'short_list': 101,
-    'table_rounds': 371, 'table_hits': 50, 'table_chance': 33, 'declared': 336, 'declared_hits': 7,
+    'results': 382, 'tens_cut': 67, 'short_list': 101,
+    'table_rounds': 372, 'table_hits': 50, 'table_chance': 33, 'declared': 337, 'declared_hits': 7,
     'band_hits': 36, 'units_hits': 45, 'second_hits': 12,
-    'same_tens': 20,
-    'rrr3_rounds': 67, 'rrr3_hits': 1, 'rrr3_rec_rounds': 68, 'rrr3_rec_hits': 11,
-    'rrr3_same_rounds': 40, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 27, 'rrr3_wide_hits': 3, 'rrr3_yx_rounds': 22, 'rrr3_yx_hits': 2,
-    'rrr3_strong_rounds': 18, 'rrr3_strong_hits': 0, 'rrr3_same2_rounds': 15, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 22, 'rrr3_turn_hits': 1,
+    'same_tens': 21,
+    'rrr3_rounds': 68, 'rrr3_hits': 1, 'rrr3_rec_rounds': 69, 'rrr3_rec_hits': 12,
+    'rrr3_same_rounds': 41, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 28, 'rrr3_wide_hits': 3, 'rrr3_yx_rounds': 23, 'rrr3_yx_hits': 2,
+    'rrr3_strong_rounds': 19, 'rrr3_strong_hits': 0, 'rrr3_same2_rounds': 16, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 23, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 23, 'rrr3_sameyx_hits': 1,
 }
 
 
@@ -3283,7 +3283,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     # 350 (lag 2, three of them in series I) against about 3.5 by chance
     # the same operation crossed the user's way (yx, cut removed from old y,
     # old x sign flipped) gets a seat too: it gave 30 and 18 in series I
-    for again in (same, same2, same_turn if same else None):
+    for again in (same, same2, same_turn if same else None, same_yx if same else None):
         if again and again[0] in strong_votes:
             strong_votes[again[0]] += 1.5
     # the first 5 seats go to the NUMBER BAND of the running value (declared
@@ -3437,7 +3437,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         body += [f"     yx (crossed):  {same_yx[0]:02d}{star(same_yx[0]).strip()} ({same_yx[1]})"
                  f"     yx, cut removed from old y, old x sign flipped:  "
                  f"{same_turn[0]:02d}{star(same_turn[0]).strip()} ({same_turn[1]})",
-                 f"       (that last move in advance: {RRR_LIVE['rrr3_turn_hits']} of {RRR_LIVE['rrr3_turn_rounds']})"]
+                 f"       (in advance: yx {RRR_LIVE['rrr3_sameyx_hits']} of {RRR_LIVE['rrr3_sameyx_rounds']},"
+                 f" yx with cut removed + sign flipped {RRR_LIVE['rrr3_turn_hits']} of {RRR_LIVE['rrr3_turn_rounds']})"]
     if same2:
         body += [f"     operation of the round before last, again:  {same2[0]:02d}{star(same2[0]).strip()} ({same2[1]})"
                  f"   (in advance {RRR_LIVE['rrr3_same2_hits']} of {RRR_LIVE['rrr3_same2_rounds']}; all 4 of 350)"]

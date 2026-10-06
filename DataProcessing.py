@@ -2729,9 +2729,10 @@ def rrr_next_op(x_op, y_op):
 def _rrr_frame(body):
     """Bold magenta heavy border with a centred RRR label."""
     m, rst = "\033[1;38;2;233;30;140m", "\033[0m"
-    iw = max(len(l) for l in body) + 2
+    vis = lambda l: len(re.sub(r"\033\[[0-9;]*m", "", l))    # width ignoring colour codes
+    iw = max(vis(l) for l in body) + 2
     return ([f"  {m}┏{'━' * iw}┓{rst}"]
-            + [f"  {m}┃{rst} {l:<{iw - 2}} {m}┃{rst}" for l in body]
+            + [f"  {m}┃{rst} {l}{' ' * (iw - 2 - vis(l))} {m}┃{rst}" for l in body]
             + [f"  {m}┗{'━' * iw}┛{rst}"])
 
 
@@ -2739,12 +2740,13 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 362, 'tens_cut': 65, 'short_list': 99,
-    'table_rounds': 352, 'table_hits': 47, 'table_chance': 33, 'declared': 317, 'declared_hits': 6,
+    'results': 363, 'tens_cut': 65, 'short_list': 99,
+    'table_rounds': 353, 'table_hits': 47, 'table_chance': 33, 'declared': 318, 'declared_hits': 6,
     'band_hits': 35, 'units_hits': 44, 'second_hits': 11,
-    'same_tens': 18,
-    'rrr3_rounds': 48, 'rrr3_hits': 1, 'rrr3_rec_rounds': 49, 'rrr3_rec_hits': 7,
-    'rrr3_same_rounds': 21, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 8, 'rrr3_wide_hits': 2, 'rrr3_yx_rounds': 3, 'rrr3_yx_hits': 1,
+    'same_tens': 19,
+    'rrr3_rounds': 49, 'rrr3_hits': 1, 'rrr3_rec_rounds': 50, 'rrr3_rec_hits': 7,
+    'rrr3_same_rounds': 22, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 9, 'rrr3_wide_hits': 2, 'rrr3_yx_rounds': 4, 'rrr3_yx_hits': 1,
+    'rrr3_strong_rounds': 0, 'rrr3_strong_hits': 0,
 }
 
 
@@ -3161,6 +3163,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                  (compute_variants(ep, 'no_change', bx)[0], f"nc/{OP_ABBREV[bx]}")]
     rec += plain + kept + turned + dropped + uncut + gained + stepped + bare
     rec += [(v, lab) for v, types, lab in both_cut if types not in used_types] if entries else []
+    rec_votes = {}
+    for v, _ in rec:
+        rec_votes[v] = rec_votes.get(v, 0) + 1
     first_seen = {}
     for v, lab in rec:
         first_seen.setdefault(v, (v, lab))
@@ -3211,10 +3216,52 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     wide_items = [f"{v:02d}{star(v).strip()} ({lab})" for v, lab in wide]
     rec_lines += [f"    3RRR WIDE on EP={ep:02d}  →  " + ('   '.join(wide_items[:6]) if wide_items else "none this round")]
     rec_lines += ["       " + '   '.join(wide_items[k:k + 7]) for k in range(6, len(wide_items), 7)]
+    # STRONG 16: at most 16 numbers, the ones the most rules agree on —
+    # one vote per rule naming the number, two more for the 3RRR RESULT line,
+    # two more for the RRR table, one more inside the tens-cut decade; the
+    # yx and wide lines count half.  Ties keep the order of the lists.
+    strong_votes, strong_lab = {}, {}
+    for weight, group in ((1, rec), (0.5, rec_yx), (0.5, wide)):
+        for v, lab in group:
+            strong_lab.setdefault(v, lab)
+            strong_votes[v] = strong_votes.get(v, 0) + weight * max(1, rec_votes.get(v, 1) if weight == 1 else 1)
+    for n, _ in found:
+        v = int(n[:2])
+        if v in strong_votes:
+            strong_votes[v] += 2
+    for v, _, lab in both_cut:
+        strong_lab.setdefault(v, lab)
+        strong_votes[v] = strong_votes.get(v, 0) + 2
+    for v in strong_votes:
+        if star(v).strip():
+            strong_votes[v] += 1
+    order = list(strong_lab)
+    strong = sorted(order, key=lambda v: (-strong_votes[v], order.index(v)))[:16]
+    # drawn as a green table: ribbon label, then 4 numbers a row, each with
+    # its rank and the operation applied to the EP
+    s_g, s_rib, s_rst = "\033[1;32m", "\033[1;97;42m", "\033[0m"
+    s_cells = [f"#{k + 1:<2} {v:02d} ({strong_lab[v]})" for k, v in enumerate(strong)]
+    s_cw = max([len(c) for c in s_cells] + [16]) + 2
+    s_per = 4
+    s_tw = s_per * s_cw + s_per - 1
+    s_title = f"★  3RRR STRONG 16   —   operations applied on EP={ep:02d}  ★"
+    strong_lines = [f"  {s_g}┌{'─' * s_tw}┐{s_rst}",
+                    f"  {s_g}│{s_rst}{s_rib}{s_title:^{s_tw}}{s_rst}{s_g}│{s_rst}",
+                    f"  {s_g}├{'┬'.join('─' * s_cw for _ in range(s_per))}┤{s_rst}"]
+    for s_k in range(0, max(len(s_cells), 1), s_per):
+        s_row = s_cells[s_k:s_k + s_per] + [''] * (s_per - len(s_cells[s_k:s_k + s_per]))
+        if s_k:
+            strong_lines.append(f"  {s_g}├{'┼'.join('─' * s_cw for _ in range(s_per))}┤{s_rst}")
+        strong_lines.append(f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{s_cw - 1}}" for c in s_row)
+                            + f"{s_g}│{s_rst}")
+    strong_lines.append(f"  {s_g}└{'┴'.join('─' * s_cw for _ in range(s_per))}┘{s_rst}")
     res_items = [f"{n} ({r})" for n, r in found]
     res_lines = [f"  ★ 3RRR RESULT  →  " + ('   '.join(res_items[:4]) if res_items else "no number this round")]
     res_lines += ["       " + '   '.join(res_items[k:k + 5]) for k in range(4, len(res_items), 5)]
     body += ['─' * len(head), "3RRR".center(len(head)), "",
+             *strong_lines,
+             "     the 16 numbers the most rules agree on (never more than 16) — the lists below are the working",
+             "     Replay: 57 hits on 309 earlier rounds = 18% (16% by chance) — a result outside the 16 is normal.", "",
              *res_lines,
              *rec_lines,
              "     recommended = 3RRR numbers + rules E and F + same operation again + EP itself + RRR numbers of an unused pair",
@@ -3318,7 +3365,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              f" recommended {RRR_LIVE['rrr3_rec_hits']} of {RRR_LIVE['rrr3_rec_rounds']},",
              f"  same operation again {RRR_LIVE['rrr3_same_hits']} of {RRR_LIVE['rrr3_same_rounds']},"
              f" wide {RRR_LIVE['rrr3_wide_hits']} of {RRR_LIVE['rrr3_wide_rounds']},"
-             f" recommended yx {RRR_LIVE['rrr3_yx_hits']} of {RRR_LIVE['rrr3_yx_rounds']}.",
+             f" recommended yx {RRR_LIVE['rrr3_yx_hits']} of {RRR_LIVE['rrr3_yx_rounds']},",
+             f"  STRONG 16: {RRR_LIVE['rrr3_strong_hits']} of {RRR_LIVE['rrr3_strong_rounds']}.",
              "  Replay on 309 recorded rounds: result line 13 hits on 1310 numbers (13.1 by chance);",
              "  recommended list (about 23 numbers a round): 82 hits (72.0 by chance);",
              "  wide list (about 16 numbers a round): 39 hits (49.7 by chance); same operation again: 6 (3.1).",

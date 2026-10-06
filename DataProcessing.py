@@ -2740,13 +2740,13 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 365, 'tens_cut': 66, 'short_list': 100,
-    'table_rounds': 355, 'table_hits': 47, 'table_chance': 33, 'declared': 320, 'declared_hits': 6,
+    'results': 366, 'tens_cut': 66, 'short_list': 100,
+    'table_rounds': 356, 'table_hits': 47, 'table_chance': 33, 'declared': 321, 'declared_hits': 6,
     'band_hits': 35, 'units_hits': 44, 'second_hits': 11,
     'same_tens': 19,
-    'rrr3_rounds': 51, 'rrr3_hits': 1, 'rrr3_rec_rounds': 52, 'rrr3_rec_hits': 7,
-    'rrr3_same_rounds': 24, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 11, 'rrr3_wide_hits': 3, 'rrr3_yx_rounds': 6, 'rrr3_yx_hits': 1,
-    'rrr3_strong_rounds': 2, 'rrr3_strong_hits': 0,
+    'rrr3_rounds': 52, 'rrr3_hits': 1, 'rrr3_rec_rounds': 53, 'rrr3_rec_hits': 7,
+    'rrr3_same_rounds': 25, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 12, 'rrr3_wide_hits': 3, 'rrr3_yx_rounds': 7, 'rrr3_yx_hits': 1,
+    'rrr3_strong_rounds': 3, 'rrr3_strong_hits': 0,
 }
 
 
@@ -2866,17 +2866,17 @@ def _rrr3_last(entries, ep):
 _RRR3_PREV = {}
 
 
-def _rrr3_previous_op(rows):
-    """(x op, y op) of the previous round: from the EP that round had — what
-    followed the latest earlier occurrence of the value before last — to the
-    value that came. None when the data does not show it."""
+def _rrr3_previous_op(rows, back=1):
+    """(x op, y op) of the round `back` rounds ago: from the EP that round
+    had — what followed the latest earlier occurrence of the value before it
+    — to the value that came. None when the data does not show it."""
     flat = [v for row in rows for v in row]
-    if len(flat) < 3 or flat[-1] < 0 or flat[-2] < 0:
+    if len(flat) < back + 2 or flat[-back] < 0 or flat[-back - 1] < 0:
         return None
-    prev = flat[-2]
-    for i in range(len(flat) - 3, -1, -1):
+    prev, came = flat[-back - 1], flat[-back]
+    for i in range(len(flat) - back - 2, -1, -1):
         if flat[i] == prev and flat[i + 1] >= 0:
-            x_op, y_op = find_op(flat[i + 1] // 10, flat[-1] // 10), find_op(flat[i + 1] % 10, flat[-1] % 10)
+            x_op, y_op = find_op(flat[i + 1] // 10, came // 10), find_op(flat[i + 1] % 10, came % 10)
             return None if '?' in (x_op, y_op) else (x_op, y_op)
     return None
 
@@ -3187,6 +3187,13 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         for extra in (same_yx, same_turn):
             if extra[0] not in [v for v, _ in rec]:
                 rec.append(extra)
+    # the operation of the round before last, again (seen on 47 and 03 in series I)
+    same2 = None
+    if _RRR3_PREV.get('op2'):
+        qx, qy = _RRR3_PREV['op2']
+        same2 = (compute_variants(ep, qx, qy)[0], f"{OP_ABBREV[qx]}/{OP_ABBREV[qy]}")
+        if same2[0] not in [v for v, _ in rec]:
+            rec.append(same2)
     # the EP itself, nothing changed (5 of 354 recorded results were the chain EP)
     if ep not in [v for v, _ in rec]:
         rec.append((ep, "nc/nc"))
@@ -3370,6 +3377,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         body += [f"     yx (crossed):  {same_yx[0]:02d}{star(same_yx[0]).strip()} ({same_yx[1]})"
                  f"     yx, cut removed from old y, old x sign flipped:  "
                  f"{same_turn[0]:02d}{star(same_turn[0]).strip()} ({same_turn[1]})"]
+    if same2:
+        body += [f"     operation of the round before last, again:  {same2[0]:02d}{star(same2[0]).strip()} ({same2[1]})"
+                 f"     (3 hits on 349 recorded rounds, 3.5 by chance)"]
     body += ["", f"  3RRR live record: result {RRR_LIVE['rrr3_hits']} of {RRR_LIVE['rrr3_rounds']} rounds with a number,"
              f" recommended {RRR_LIVE['rrr3_rec_hits']} of {RRR_LIVE['rrr3_rec_rounds']},",
              f"  same operation again {RRR_LIVE['rrr3_same_hits']} of {RRR_LIVE['rrr3_same_rounds']},"
@@ -3708,6 +3718,7 @@ def run(data_source, user_x_op=None, user_y_op=None):
     _kk_vals = show_kk_special_family(rows, merge_counts=kk_chain_unique_counts(group_index),
                                       final40=[v for v, _, _ in _last_top4[:40]])
     _RRR3_PREV['op'] = _rrr3_previous_op(rows)
+    _RRR3_PREV['op2'] = _rrr3_previous_op(rows, back=2)
     _kk_chain_vals = show_kk_chain_family(group_index, grid_ep=endpoint)
     _super_add("KK", _kk_vals or [])
     _super_add("KC", _kk_chain_vals or [])

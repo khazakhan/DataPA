@@ -2739,12 +2739,12 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 358, 'tens_cut': 64, 'short_list': 98,
-    'table_rounds': 348, 'table_hits': 46, 'table_chance': 33, 'declared': 313, 'declared_hits': 6,
+    'results': 359, 'tens_cut': 64, 'short_list': 98,
+    'table_rounds': 349, 'table_hits': 46, 'table_chance': 33, 'declared': 314, 'declared_hits': 6,
     'band_hits': 34, 'units_hits': 44, 'second_hits': 11,
     'same_tens': 18,
-    'rrr3_rounds': 44, 'rrr3_hits': 1, 'rrr3_rec_rounds': 45, 'rrr3_rec_hits': 6,
-    'rrr3_same_rounds': 17, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 4, 'rrr3_wide_hits': 1,
+    'rrr3_rounds': 45, 'rrr3_hits': 1, 'rrr3_rec_rounds': 46, 'rrr3_rec_hits': 6,
+    'rrr3_same_rounds': 18, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 5, 'rrr3_wide_hits': 1, 'rrr3_yx_rounds': 0, 'rrr3_yx_hits': 0,
 }
 
 
@@ -3174,10 +3174,29 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         same = (compute_variants(ep, px, py)[0], f"{OP_ABBREV[px]}/{OP_ABBREV[py]}")
         if same[0] not in [v for v, _ in rec]:
             rec.append(same)
+        # the same operation crossed (yx), and crossed the user's way: old y
+        # without its cut becomes x, old x sign-flipped becomes y
+        tx, ty = _op_join(False, _op_parts(py)[1]), SIGN_FLIP[px]
+        same_yx = (compute_variants(ep, py, px)[0], f"{OP_ABBREV[py]}/{OP_ABBREV[px]}")
+        same_turn = (compute_variants(ep, tx, ty)[0], f"{OP_ABBREV[tx]}/{OP_ABBREV[ty]}")
+        for extra in (same_yx, same_turn):
+            if extra[0] not in [v for v, _ in rec]:
+                rec.append(extra)
     # the EP itself, nothing changed (5 of 354 recorded results were the chain EP)
     if ep not in [v for v, _ in rec]:
         rec.append((ep, "nc/nc"))
     in_rec = {v for v, _ in rec}
+    # yx of every recommended value: the same two operations, crossed
+    abbrev_op = {v: k for k, v in OP_ABBREV.items()}
+    rec_yx = {}
+    for _, lab in rec:
+        lx_, _, ly_ = lab.partition('/')
+        if lx_ in abbrev_op and ly_ in abbrev_op and lx_ != ly_:
+            v = compute_variants(ep, abbrev_op[ly_], abbrev_op[lx_])[0]
+            if v not in in_rec:
+                rec_yx.setdefault(v, (v, f"{ly_}/{lx_}"))
+    rec_yx = list(rec_yx.values())
+    in_rec |= {v for v, _ in rec_yx}
     wide = {}
     for v, lab in _rrr3_wide(entries, ep):
         if v not in in_rec:
@@ -3186,6 +3205,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     rec_items = [f"{v:02d}{star(v).strip()} ({lab})" for v, lab in rec]
     rec_lines = [f"  ★ 3RRR RECOMMENDED on EP={ep:02d}  →  " + ('   '.join(rec_items[:5]) if rec_items else "none this round")]
     rec_lines += ["       " + '   '.join(rec_items[k:k + 7]) for k in range(5, len(rec_items), 7)]
+    yx_items = [f"{v:02d}{star(v).strip()} ({lab})" for v, lab in rec_yx]
+    rec_lines += [f"    3RRR RECOMMENDED yx on EP={ep:02d}  →  " + ('   '.join(yx_items[:5]) if yx_items else "none this round")]
+    rec_lines += ["       " + '   '.join(yx_items[k:k + 7]) for k in range(5, len(yx_items), 7)]
     wide_items = [f"{v:02d}{star(v).strip()} ({lab})" for v, lab in wide]
     rec_lines += [f"    3RRR WIDE on EP={ep:02d}  →  " + ('   '.join(wide_items[:6]) if wide_items else "none this round")]
     rec_lines += ["       " + '   '.join(wide_items[k:k + 7]) for k in range(6, len(wide_items), 7)]
@@ -3196,6 +3218,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              *res_lines,
              *rec_lines,
              "     recommended = 3RRR numbers + rules E and F + same operation again + EP itself + RRR numbers of an unused pair",
+             "     recommended yx = each recommended value's two operations crossed (numbers not already recommended)",
              "     wide = rule G: the single moves seen on middle rows, tried on every row (numbers not already above)", "",
              "  HOW THE OPERATIONS MOVED  (each row = an earlier row crossed: old y → new x, old x → new y)"]
     trail_rows = _rrr3_trail(entries)
@@ -3287,13 +3310,20 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in bare) if bare else "none this round")]
     body += ["", "  SAME OPERATION AGAIN  (the previous round's operation on this EP):  "
              + (f"{same[0]:02d}{star(same[0]).strip()} ({same[1]})" if same else "not available")]
+    if same:
+        body += [f"     yx (crossed):  {same_yx[0]:02d}{star(same_yx[0]).strip()} ({same_yx[1]})"
+                 f"     yx, cut removed from old y, old x sign flipped:  "
+                 f"{same_turn[0]:02d}{star(same_turn[0]).strip()} ({same_turn[1]})"]
     body += ["", f"  3RRR live record: result {RRR_LIVE['rrr3_hits']} of {RRR_LIVE['rrr3_rounds']} rounds with a number,"
              f" recommended {RRR_LIVE['rrr3_rec_hits']} of {RRR_LIVE['rrr3_rec_rounds']},",
              f"  same operation again {RRR_LIVE['rrr3_same_hits']} of {RRR_LIVE['rrr3_same_rounds']},"
-             f" wide {RRR_LIVE['rrr3_wide_hits']} of {RRR_LIVE['rrr3_wide_rounds']}.",
+             f" wide {RRR_LIVE['rrr3_wide_hits']} of {RRR_LIVE['rrr3_wide_rounds']},"
+             f" recommended yx {RRR_LIVE['rrr3_yx_hits']} of {RRR_LIVE['rrr3_yx_rounds']}.",
              "  Replay on 309 recorded rounds: result line 13 hits on 1310 numbers (13.1 by chance);",
              "  recommended list (about 23 numbers a round): 82 hits (72.0 by chance);",
-             "  wide list (about 16 numbers a round): 39 hits (49.7 by chance); same operation again: 6 (3.1)."]
+             "  wide list (about 16 numbers a round): 39 hits (49.7 by chance); same operation again: 6 (3.1).",
+             "  On 357 rounds: recommended yx (about 11 numbers a round) 28 hits (40.3 by chance);",
+             "  same operation yx 3 hits, yx with cut removed + sign flipped 5 hits (3.6 by chance each)."]
     if live:
         body += ['─' * len(head)] + _rrr_declared(grid_ep) + ["  ★ in the table = number inside the tens-cut decade"]
     return _rrr_frame(body)

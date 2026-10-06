@@ -2740,13 +2740,13 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 367, 'tens_cut': 66, 'short_list': 100,
-    'table_rounds': 357, 'table_hits': 47, 'table_chance': 33, 'declared': 322, 'declared_hits': 6,
+    'results': 368, 'tens_cut': 66, 'short_list': 100,
+    'table_rounds': 358, 'table_hits': 47, 'table_chance': 33, 'declared': 323, 'declared_hits': 6,
     'band_hits': 35, 'units_hits': 44, 'second_hits': 11,
     'same_tens': 19,
-    'rrr3_rounds': 53, 'rrr3_hits': 1, 'rrr3_rec_rounds': 54, 'rrr3_rec_hits': 7,
-    'rrr3_same_rounds': 26, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 13, 'rrr3_wide_hits': 3, 'rrr3_yx_rounds': 8, 'rrr3_yx_hits': 1,
-    'rrr3_strong_rounds': 4, 'rrr3_strong_hits': 0,
+    'rrr3_rounds': 54, 'rrr3_hits': 1, 'rrr3_rec_rounds': 55, 'rrr3_rec_hits': 7,
+    'rrr3_same_rounds': 27, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 14, 'rrr3_wide_hits': 3, 'rrr3_yx_rounds': 9, 'rrr3_yx_hits': 1,
+    'rrr3_strong_rounds': 5, 'rrr3_strong_hits': 0,
 }
 
 
@@ -2901,6 +2901,9 @@ def _rrr3_wide(entries, ep):
         if ny_ in RRR3_STEP_UP:
             add(_op_join(cy, RRR3_STEP_UP[ny_]), x_op)
         add(SIGN_FLIP[y_op], SIGN_FLIP[x_op])
+        # crossed, old y gaining a cut, old x kept
+        if not cy:
+            add(_op_join(True, ny_), x_op)
     return out
 
 

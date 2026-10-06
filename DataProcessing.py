@@ -2740,13 +2740,13 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 366, 'tens_cut': 66, 'short_list': 100,
-    'table_rounds': 356, 'table_hits': 47, 'table_chance': 33, 'declared': 321, 'declared_hits': 6,
+    'results': 367, 'tens_cut': 66, 'short_list': 100,
+    'table_rounds': 357, 'table_hits': 47, 'table_chance': 33, 'declared': 322, 'declared_hits': 6,
     'band_hits': 35, 'units_hits': 44, 'second_hits': 11,
     'same_tens': 19,
-    'rrr3_rounds': 52, 'rrr3_hits': 1, 'rrr3_rec_rounds': 53, 'rrr3_rec_hits': 7,
-    'rrr3_same_rounds': 25, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 12, 'rrr3_wide_hits': 3, 'rrr3_yx_rounds': 7, 'rrr3_yx_hits': 1,
-    'rrr3_strong_rounds': 3, 'rrr3_strong_hits': 0,
+    'rrr3_rounds': 53, 'rrr3_hits': 1, 'rrr3_rec_rounds': 54, 'rrr3_rec_hits': 7,
+    'rrr3_same_rounds': 26, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 13, 'rrr3_wide_hits': 3, 'rrr3_yx_rounds': 8, 'rrr3_yx_hits': 1,
+    'rrr3_strong_rounds': 4, 'rrr3_strong_hits': 0,
 }
 
 
@@ -3149,6 +3149,10 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     gained = [(compute_variants(ep, fy, _op_join(True, _op_parts(fx)[1]))[0],
                f"{OP_ABBREV[fy]}/{OP_ABBREV[_op_join(True, _op_parts(fx)[1])]}")
               for fx, fy in f_rows if not _op_parts(fx)[0]]
+    # and the same with old x also sign-flipped as it gains the cut
+    gained += [(compute_variants(ep, fy, SIGN_FLIP[_op_join(True, _op_parts(fx)[1])])[0],
+                f"{OP_ABBREV[fy]}/{OP_ABBREV[SIGN_FLIP[_op_join(True, _op_parts(fx)[1])]]}")
+               for fx, fy in f_rows if not _op_parts(fx)[0] and _op_parts(fx)[1]]
     # and one step DOWN on old y with old x kept
     if entries and _op_parts(entries[-1][4])[1] in RRR3_STEP_DOWN:
         lx, ly = entries[-1][3], entries[-1][4]
@@ -3365,7 +3369,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              "     " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in dropped) if dropped else "none this round"),
              "     or one side losing its cut:  "
              + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in uncut) if uncut else "none this round"),
-             "     or crossed, old y kept, old x gaining a cut:  "
+             "     or crossed, old y kept, old x gaining a cut (also sign flipped):  "
              + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in gained) if gained else "none this round"),
              "     or not crossed, both sides one step down / up:  "
              + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in stepped) if stepped else "none this round"),

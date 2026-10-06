@@ -2740,13 +2740,13 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 374, 'tens_cut': 66, 'short_list': 100,
-    'table_rounds': 364, 'table_hits': 49, 'table_chance': 33, 'declared': 329, 'declared_hits': 6,
+    'results': 375, 'tens_cut': 66, 'short_list': 100,
+    'table_rounds': 365, 'table_hits': 49, 'table_chance': 33, 'declared': 330, 'declared_hits': 6,
     'band_hits': 35, 'units_hits': 44, 'second_hits': 12,
     'same_tens': 20,
-    'rrr3_rounds': 60, 'rrr3_hits': 1, 'rrr3_rec_rounds': 61, 'rrr3_rec_hits': 9,
-    'rrr3_same_rounds': 33, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 20, 'rrr3_wide_hits': 3, 'rrr3_yx_rounds': 15, 'rrr3_yx_hits': 2,
-    'rrr3_strong_rounds': 11, 'rrr3_strong_hits': 0, 'rrr3_same2_rounds': 8, 'rrr3_same2_hits': 1,
+    'rrr3_rounds': 61, 'rrr3_hits': 1, 'rrr3_rec_rounds': 62, 'rrr3_rec_hits': 9,
+    'rrr3_same_rounds': 34, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 21, 'rrr3_wide_hits': 3, 'rrr3_yx_rounds': 16, 'rrr3_yx_hits': 2,
+    'rrr3_strong_rounds': 12, 'rrr3_strong_hits': 0, 'rrr3_same2_rounds': 9, 'rrr3_same2_hits': 1,
 }
 
 
@@ -3175,7 +3175,14 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         ty_, tx_ = SIGN_FLIP[KK_CUT_TOGGLE[fy]], SIGN_FLIP[KK_CUT_TOGGLE[fx]]
         rrr_side += [(compute_variants(ep, fx, ty_)[0], f"{OP_ABBREV[fx]}/{OP_ABBREV[ty_]}"),
                      (compute_variants(ep, tx_, fy)[0], f"{OP_ABBREV[tx_]}/{OP_ABBREV[fy]}")]
-    rec += plain + kept + turned + dropped + uncut + gained + stepped + bare + rrr_side
+    # rule F, sixth form: the same rows with the ± numbers removed on both
+    # sides (a cut stays a cut, anything else becomes nc) — crossed and not
+    numberless = []
+    for fx, fy in f_rows:
+        nx_, ny_ = _op_join(_op_parts(fx)[0], ''), _op_join(_op_parts(fy)[0], '')
+        numberless += [(compute_variants(ep, ny_, nx_)[0], f"{OP_ABBREV[ny_]}/{OP_ABBREV[nx_]}"),
+                       (compute_variants(ep, nx_, ny_)[0], f"{OP_ABBREV[nx_]}/{OP_ABBREV[ny_]}")]
+    rec += plain + kept + turned + dropped + uncut + gained + stepped + bare + rrr_side + numberless
     rec += [(v, lab) for v, types, lab in both_cut if types not in used_types] if entries else []
     rec_votes = {}
     for v, _ in rec:
@@ -3398,7 +3405,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              "     or crossed, cuts removed, other side dropped to nc:  "
              + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in bare) if bare else "none this round"),
              "     or not crossed, one side cut switched + sign flipped, other side kept:",
-             "       " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in rrr_side) if rrr_side else "none this round")]
+             "       " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in rrr_side) if rrr_side else "none this round"),
+             "     or the ± numbers removed on both sides (crossed / not crossed):  "
+             + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in numberless) if numberless else "none this round")]
     body += ["", "  SAME OPERATION AGAIN  (the previous round's operation on this EP):  "
              + (f"{same[0]:02d}{star(same[0]).strip()} ({same[1]})" if same else "not available")]
     if same:

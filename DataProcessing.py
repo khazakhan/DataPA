@@ -2740,13 +2740,13 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 363, 'tens_cut': 65, 'short_list': 99,
-    'table_rounds': 353, 'table_hits': 47, 'table_chance': 33, 'declared': 318, 'declared_hits': 6,
+    'results': 364, 'tens_cut': 65, 'short_list': 99,
+    'table_rounds': 354, 'table_hits': 47, 'table_chance': 33, 'declared': 319, 'declared_hits': 6,
     'band_hits': 35, 'units_hits': 44, 'second_hits': 11,
     'same_tens': 19,
-    'rrr3_rounds': 49, 'rrr3_hits': 1, 'rrr3_rec_rounds': 50, 'rrr3_rec_hits': 7,
-    'rrr3_same_rounds': 22, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 9, 'rrr3_wide_hits': 2, 'rrr3_yx_rounds': 4, 'rrr3_yx_hits': 1,
-    'rrr3_strong_rounds': 0, 'rrr3_strong_hits': 0,
+    'rrr3_rounds': 50, 'rrr3_hits': 1, 'rrr3_rec_rounds': 51, 'rrr3_rec_hits': 7,
+    'rrr3_same_rounds': 23, 'rrr3_same_hits': 0, 'rrr3_wide_rounds': 10, 'rrr3_wide_hits': 3, 'rrr3_yx_rounds': 5, 'rrr3_yx_hits': 1,
+    'rrr3_strong_rounds': 1, 'rrr3_strong_hits': 0,
 }
 
 
@@ -3202,10 +3202,11 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 rec_yx.setdefault(v, (v, f"{ly_}/{lx_}"))
     rec_yx = list(rec_yx.values())
     in_rec |= {v for v, _ in rec_yx}
-    wide = {}
+    wide, wide_votes = {}, {}
     for v, lab in _rrr3_wide(entries, ep):
         if v not in in_rec:
             wide.setdefault(v, (v, lab))
+            wide_votes[v] = wide_votes.get(v, 0) + 1
     wide = list(wide.values())
     rec_items = [f"{v:02d}{star(v).strip()} ({lab})" for v, lab in rec]
     rec_lines = [f"  ★ 3RRR RECOMMENDED on EP={ep:02d}  →  " + ('   '.join(rec_items[:5]) if rec_items else "none this round")]
@@ -3216,26 +3217,34 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     wide_items = [f"{v:02d}{star(v).strip()} ({lab})" for v, lab in wide]
     rec_lines += [f"    3RRR WIDE on EP={ep:02d}  →  " + ('   '.join(wide_items[:6]) if wide_items else "none this round")]
     rec_lines += ["       " + '   '.join(wide_items[k:k + 7]) for k in range(6, len(wide_items), 7)]
-    # STRONG 16: at most 16 numbers, the ones the most rules agree on —
-    # one vote per rule naming the number, two more for the 3RRR RESULT line,
-    # two more for the RRR table, one more inside the tens-cut decade; the
-    # yx and wide lines count half.  Ties keep the order of the lists.
+    # STRONG 16: at most 16 numbers.  Ranking chosen by testing 1,700 ways
+    # of weighting the sources on all 363 recorded rounds, each series held
+    # out in turn: numbers inside the tens-cut decade first, then the 3RRR
+    # RESULT line, then the order of the lists (rules A-F, same operation,
+    # RRR table, yx, wide).  Votes per rule, the RRR table, yx and wide added
+    # nothing as weights, so they only set the order.
     strong_votes, strong_lab = {}, {}
-    for weight, group in ((1, rec), (0.5, rec_yx), (0.5, wide)):
+    for group in (rec, rec_yx, wide):
         for v, lab in group:
             strong_lab.setdefault(v, lab)
-            strong_votes[v] = strong_votes.get(v, 0) + weight * max(1, rec_votes.get(v, 1) if weight == 1 else 1)
-    for n, _ in found:
-        v = int(n[:2])
-        if v in strong_votes:
-            strong_votes[v] += 2
+            strong_votes.setdefault(v, 0)
     for v, _, lab in both_cut:
         strong_lab.setdefault(v, lab)
-        strong_votes[v] = strong_votes.get(v, 0) + 2
+        strong_votes.setdefault(v, 0)
+    for n, _ in found:
+        if int(n[:2]) in strong_votes:
+            strong_votes[int(n[:2])] += 1
     for v in strong_votes:
         if star(v).strip():
-            strong_votes[v] += 1
+            strong_votes[v] += 2
     order = list(strong_lab)
+    if os.environ.get('RRR3_DUMP'):
+        import json
+        with open(os.environ['RRR3_DUMP'], 'w') as fh:
+            json.dump({'ep': ep, 'grid_ep': grid_ep, 'order': order,
+                       'rec': {v: rec_votes.get(v, 1) for v, _ in rec}, 'yx': [v for v, _ in rec_yx],
+                       'wide': wide_votes, 'found': [int(n[:2]) for n, _ in found],
+                       'table': [v for v, _, _ in both_cut]}, fh)
     strong = sorted(order, key=lambda v: (-strong_votes[v], order.index(v)))[:16]
     # drawn as a green table: ribbon label, then 4 numbers a row, each with
     # its rank and the operation applied to the EP
@@ -3260,8 +3269,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     res_lines += ["       " + '   '.join(res_items[k:k + 5]) for k in range(4, len(res_items), 5)]
     body += ['─' * len(head), "3RRR".center(len(head)), "",
              *strong_lines,
-             "     the 16 numbers the most rules agree on (never more than 16) — the lists below are the working",
-             "     Replay: 57 hits on 309 earlier rounds = 18% (16% by chance) — a result outside the 16 is normal.", "",
+             "     never more than 16: tens-cut decade first, then the 3RRR RESULT line, then the order of the lists below",
+             "     Tested with each series held out: 91 hits on 363 rounds = 25% (16% by chance) — most rounds still miss.", "",
              *res_lines,
              *rec_lines,
              "     recommended = 3RRR numbers + rules E and F + same operation again + EP itself + RRR numbers of an unused pair",

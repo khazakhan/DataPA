@@ -2748,6 +2748,7 @@ RRR_LIVE = {
     'rrr3_same_rounds': 83, 'rrr3_same_hits': 1, 'rrr3_wide_rounds': 70, 'rrr3_wide_hits': 6, 'rrr3_yx_rounds': 65, 'rrr3_yx_hits': 6,
     'rrr3_strong_rounds': 61, 'rrr3_strong_hits': 1, 'rrr3_same2_rounds': 58, 'rrr3_same2_hits': 1,
     'rrr3_turn_rounds': 65, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 65, 'rrr3_sameyx_hits': 1,
+    'power_rounds': 0, 'power_hits': 0,
 }
 
 
@@ -3371,10 +3372,36 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         final_lines.append(f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{f_cw - 1}}" for c in f_row)
                            + f"{s_g}│{s_rst}")
     final_lines.append(f"  {s_g}└{'┴'.join('─' * f_cw for _ in range(f_per))}┘{s_rst}")
+    # POWER BASE: only four numbers.  Chosen by comparing seven ways of
+    # picking four on all 423 recorded rounds: the declared number of the
+    # running value (tens cut, units +4), the same number one decade up, and
+    # the declared number one below and one above.  36 hits in 423 rounds =
+    # 8.5% against 4% by chance; in the latest series 7 in 170 = chance.
+    power_lines = []
+    if live and grid_ep is not None:
+        p_t, p_u = cut(grid_ep // 10), (grid_ep % 10 + 4) % 10
+        p_decl = p_t * 10 + p_u
+        p_four = [(p_decl, "declared number"), ((p_decl + 10) % 100, "one decade up"),
+                  (p_t * 10 + (p_u - 1) % 10, "one below"), (p_t * 10 + (p_u + 1) % 10, "one above")]
+        p_cells = [f"{v:02d} ({OP_ABBREV[find_op(ep // 10, v // 10)]}/{OP_ABBREV[find_op(ep % 10, v % 10)]})"
+                   for v, _ in p_four]
+        p_cw = max([len(c) for c in p_cells] + [len(t) for _, t in p_four] + [16]) + 2
+        p_tw = 4 * p_cw + 3
+        p_rib = "\033[1;30;43m"
+        p_title = f"★  POWER BASE  —  4 numbers, operations applied on EP={ep:02d}  ★"
+        power_lines = [f"  {s_g}┌{'─' * p_tw}┐{s_rst}",
+                       f"  {s_g}│{s_rst}{p_rib}{p_title:^{p_tw}}{s_rst}{s_g}│{s_rst}",
+                       f"  {s_g}├{'┬'.join('─' * p_cw for _ in range(4))}┤{s_rst}",
+                       f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{p_cw - 1}}" for c in p_cells) + f"{s_g}│{s_rst}",
+                       f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {t:<{p_cw - 1}}" for _, t in p_four) + f"{s_g}│{s_rst}",
+                       f"  {s_g}└{'┴'.join('─' * p_cw for _ in range(4))}┘{s_rst}",
+                       f"     in advance {RRR_LIVE['power_hits']} of {RRR_LIVE['power_rounds']};"
+                       " all 423 recorded rounds: 36 = 8.5% (4% by chance), latest series 7 of 170", ""]
     res_items = [f"{n} ({r})" for n, r in found]
     res_lines = [f"  ★ 3RRR RESULT  →  " + ('   '.join(res_items[:4]) if res_items else "no number this round")]
     res_lines += ["       " + '   '.join(res_items[k:k + 5]) for k in range(4, len(res_items), 5)]
     body += ['─' * len(head), "3RRR".center(len(head)), "",
+             *power_lines,
              *strong_lines,
              "     never more than 16: the whole RRR table (up to 11), the number band (5), then the last operations again",
              "     and rule numbers as fill — about one round in six by size; most rounds still miss.", "",

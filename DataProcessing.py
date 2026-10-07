@@ -3354,6 +3354,23 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         strong_lines.append(f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{s_cw - 1}}" for c in s_row)
                             + f"{s_g}│{s_rst}")
     strong_lines.append(f"  {s_g}└{'┴'.join('─' * s_cw for _ in range(s_per))}┘{s_rst}")
+    # 40RRR FINAL-RESULT-TABLE: every recommended number in four columns —
+    # the STRONG 16 first, then the rest of the recommended, yx and wide
+    # lists in their own order, each with the operation applied to the EP
+    f_all = strong + [v for v in order if v not in strong]
+    f_cells = [f"{k + 1:>2}. {v:02d} ({strong_lab[v]})" for k, v in enumerate(f_all)]
+    f_cw = max([len(c) for c in f_cells] + [16]) + 2
+    f_per = 4
+    f_tw = f_per * f_cw + f_per - 1
+    f_title = f"★  40RRR FINAL-RESULT-TABLE  —  all {len(f_all)} recommended numbers on EP={ep:02d}  ★"
+    final_lines = [f"  {s_g}┌{'─' * f_tw}┐{s_rst}",
+                   f"  {s_g}│{s_rst}{s_rib}{f_title:^{f_tw}}{s_rst}{s_g}│{s_rst}",
+                   f"  {s_g}├{'┬'.join('─' * f_cw for _ in range(f_per))}┤{s_rst}"]
+    for f_k in range(0, max(len(f_cells), 1), f_per):
+        f_row = f_cells[f_k:f_k + f_per] + [''] * (f_per - len(f_cells[f_k:f_k + f_per]))
+        final_lines.append(f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{f_cw - 1}}" for c in f_row)
+                           + f"{s_g}│{s_rst}")
+    final_lines.append(f"  {s_g}└{'┴'.join('─' * f_cw for _ in range(f_per))}┘{s_rst}")
     res_items = [f"{n} ({r})" for n, r in found]
     res_lines = [f"  ★ 3RRR RESULT  →  " + ('   '.join(res_items[:4]) if res_items else "no number this round")]
     res_lines += ["       " + '   '.join(res_items[k:k + 5]) for k in range(4, len(res_items), 5)]
@@ -3361,6 +3378,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              *strong_lines,
              "     never more than 16: the whole RRR table (up to 11), the number band (5), then the last operations again",
              "     and rule numbers as fill — about one round in six by size; most rounds still miss.", "",
+             *final_lines,
+             "     numbers 1-16 are the STRONG 16; the rest follow in the order of the lists below", "",
              *res_lines,
              *rec_lines,
              "     recommended = 3RRR numbers + rules E and F + same operation again + EP itself, EP cut + unused RRR pairs",

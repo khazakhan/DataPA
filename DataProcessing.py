@@ -3567,6 +3567,13 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                         cols_[0] = p_join(cols_[0], [
                             f"{compute_variants(ep, cx_, abbrev_op[ly_])[0]:02d} ({cxa_}/{ly_}), "
                             f"{compute_variants(ep, abbrev_op[ly_], cx_)[0]:02d} ({ly_}/{cxa_})"])
+                        # where that operation is a bare cut (cut/-1 and -1/cut),
+                        # also nc in its place (nc/-1 and -1/nc: 38 and 29 on
+                        # EP 39), user's screenshot 2026-10-09
+                        if cx_ == 'cut':
+                            cols_[0] = p_join(cols_[0], [
+                                f"{compute_variants(ep, 'no_change', abbrev_op[ly_])[0]:02d} (nc/{ly_}), "
+                                f"{compute_variants(ep, abbrev_op[ly_], 'no_change')[0]:02d} ({ly_}/nc)"])
                         # that yx number with a cut step on x (c+2/c-2), user's
                         # screenshot 2026-10-09: x loses the cut, changes sign
                         # and takes the other number (c+2 -> -1), and the same
@@ -3677,6 +3684,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared number only, x cut step + y nc: the first rule's two numbers with both cut",
                        "     declared cell, last line: RRR last row xy and yx with the cut added to its new x operation",
                        "     and that xy number with the sign of its y changed, and with only the cut on y (cut/c+2, cut/cut)",
+                       "     where that operation is a bare cut: also nc in its place (cut/-1, -1/cut -> nc/-1, -1/nc)",
                        "     that yx number with a cut step on x: x without cut, other sign, both numbers (c+2/c-2 -> -1/c-2, -2/c-2)",
                        "     RRR last row +1/+1 or +2/+2: also nc on x and the other step on y (+1/+1 -> nc/+2)",
                        "     ★ = also in the STRONG 16     * = also in the RECOMMENDED list     ☆ = number from the declared-cell rules",

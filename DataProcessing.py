@@ -3424,10 +3424,29 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             pv = compute_variants(ep, abbrev_op[px_], abbrev_op[p_swap[py_]])[0]
             return f"{cell}, {pv:02d} ({px_}/{p_swap[py_]})"
 
-        p_cells = [p_pair(c) for c in p_cells]
-        p_rev = [p_pair(c) for c in p_rev]
-        p_third = [(p_pair(c), t) for c, t in p_third]
-        p_cw = max([len(c) for c in p_cells + p_rev] + [len(c) for c, _ in p_third]
+        # cut numbers (user's screenshot, 2026-10-08): only in those same cells
+        # (plain y step), each of the two numbers is followed by the same number
+        # with the cut put on its y step: 75 (c+1/+2), 70 (c+1/c+2), 74 (c+1/+1),
+        # 79 (c+1/c+1).  The second pair goes on the cell's second line.
+        def p_cut(cell):
+            parts = cell.split(', ')
+            if len(parts) != 2:
+                return cell, ''
+            out = []
+            for part in parts:
+                px_, _, py_ = part[4:-1].partition('/')
+                cy = KK_CUT_TOGGLE[abbrev_op[py_]]
+                out.append(f"{part}, {compute_variants(ep, abbrev_op[px_], cy)[0]:02d} ({px_}/{OP_ABBREV[cy]})")
+            return out[0] + ',', out[1]
+
+        p_cells2, p_rev2, p_third2 = [], [], []
+        for src_, dst_ in ((p_cells, p_cells2), (p_rev, p_rev2), ([c for c, _ in p_third], p_third2)):
+            for k, c in enumerate(src_):
+                l1, l2 = p_cut(p_pair(c))
+                src_[k] = l1
+                dst_.append(l2)
+        p_third = [(c, t) for c, (_, t) in zip([p_cut(p_pair(c))[0] for c, _ in p_third], p_third)]
+        p_cw = max([len(c) for c in p_cells + p_rev + p_cells2 + p_rev2 + p_third2] + [len(c) for c, _ in p_third]
                    + [len(t) for _, t in p_four] + [len(t) for _, t in p_third] + [21]) + 2
         p_tw = 4 * p_cw + 3
         p_rib = "\033[1;30;43m"
@@ -3436,17 +3455,21 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        f"  {s_g}│{s_rst}{p_rib}{p_title:^{p_tw}}{s_rst}{s_g}│{s_rst}",
                        f"  {s_g}├{'┬'.join('─' * p_cw for _ in range(4))}┤{s_rst}",
                        f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{p_cw - 1}}" for c in p_cells) + f"{s_g}│{s_rst}",
+                       *([f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{p_cw - 1}}" for c in p_cells2) + f"{s_g}│{s_rst}"] if any(p_cells2) else []),
                        f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {t:<{p_cw - 1}}" for _, t in p_four) + f"{s_g}│{s_rst}",
                        f"  {s_g}├{'┼'.join('─' * p_cw for _ in range(4))}┤{s_rst}",
                        f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{p_cw - 1}}" for c in p_rev) + f"{s_g}│{s_rst}",
+                       *([f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{p_cw - 1}}" for c in p_rev2) + f"{s_g}│{s_rst}"] if any(p_rev2) else []),
                        f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {'operations reversed':<{p_cw - 1}}" for _ in p_rev)
                        + f"{s_g}│{s_rst}",
                        f"  {s_g}├{'┼'.join('─' * p_cw for _ in range(4))}┤{s_rst}",
                        f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{p_cw - 1}}" for c, _ in p_third) + f"{s_g}│{s_rst}",
+                       *([f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{p_cw - 1}}" for c in p_third2) + f"{s_g}│{s_rst}"] if any(p_third2) else []),
                        f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {t:<{p_cw - 1}}" for _, t in p_third) + f"{s_g}│{s_rst}",
                        f"  {s_g}└{'┴'.join('─' * p_cw for _ in range(4))}┘{s_rst}",
                        "     reversed = the two operations crossed and both signs flipped (c+1/+1 becomes -1/c-1)",
                        "     after a comma = same x, y step switched (-1 <-> -2, +1 <-> +2), only for a plain y step",
+                       "     each of those two is followed by the same number with the cut on its y step (+2 -> c+2)",
                        f"     in advance {RRR_LIVE['power_hits']} of {RRR_LIVE['power_rounds']};"
                        " all 423 recorded rounds: 36 = 8.5% (4% by chance), latest series 7 of 170", ""]
     res_items = [f"{n} ({r})" for n, r in found]

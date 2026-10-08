@@ -3535,11 +3535,13 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             return out_
 
         p_rows = []
+        p_user = set()
         for cells_, labs_ in ((p_cells, [t for _, t in p_four]), (p_rev, ['operations reversed'] * 4),
                               ([c for c, _ in p_third], [t for _, t in p_third]),
                               ([c for c, _ in p_fourth], [t for _, t in p_fourth])):
             cols_ = [p_join(p_cut(p_pair(c)), p_xfam(c)) for c in cells_]
             if cells_ is p_cells:
+                p_base_n = len(cols_[0])
                 cols_[0] = p_join(cols_[0], p_decl_extra(cells_[0]))
                 # RRR last row (user's screenshot, 2026-10-09): its new x
                 # operation with the cut added, in the xy and in the yx
@@ -3565,6 +3567,10 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                     if lx_ == ly_ and lx_ in ('+1', '+2'):
                         cols_[0] = p_join(cols_[0], [
                             f"{compute_variants(ep, 'no_change', abbrev_op[p_swap[ly_]])[0]:02d} (nc/{p_swap[ly_]})"])
+            if cells_ is p_cells:
+                # numbers made by the declared-cell rules: marked ☆ wherever
+                # they stand in the table (user, 2026-10-09); ★ and * stay
+                p_user = {int(e) for l in cols_[0][p_base_n:] for e in re.findall(r'(\d\d) \(', l)}
             h_ = max(len(c) for c in cols_)
             p_rows.append([[c[k] if k < len(c) else '' for c in cols_] for k in range(h_)] + [labs_])
         # stars (user, 2026-10-08): ★ = the number is also in the STRONG 16,
@@ -3573,7 +3579,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
 
         def p_star(m):
             v = int(m.group(1))
-            return m.group(0) + ('★' if v in strong else '*' if v in p_recv else '')
+            return m.group(0) + ('★' if v in strong else '*' if v in p_recv else '') + ('☆' if v in p_user else '')
 
         p_rows = [[[re.sub(r'(\d\d) \([^)]*\)', p_star, c) for c in line] for line in grp] for grp in p_rows]
         p_cw = max([len(c) for grp in p_rows for line in grp for c in line] + [21]) + 2
@@ -3635,7 +3641,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell, last line: RRR last row xy and yx with the cut added to its new x operation",
                        "     and that xy number with the sign of its y changed, and with only the cut on y (cut/c+2, cut/cut)",
                        "     RRR last row +1/+1 or +2/+2: also nc on x and the other step on y (+1/+1 -> nc/+2)",
-                       "     ★ = also in the STRONG 16     * = also in the RECOMMENDED list",
+                       "     ★ = also in the STRONG 16     * = also in the RECOMMENDED list     ☆ = number from the declared-cell rules",
                        f"     in advance {RRR_LIVE['power_hits']} of {RRR_LIVE['power_rounds']};"
                        " all 423 recorded rounds: 36 = 8.5% (4% by chance), latest series 7 of 170", ""]
     res_items = [f"{n} ({r})" for n, r in found]

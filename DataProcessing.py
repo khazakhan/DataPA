@@ -3552,6 +3552,11 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                         cols_[0] = p_join(cols_[0], [
                             f"{compute_variants(ep, cx_, abbrev_op[ly_])[0]:02d} ({cxa_}/{ly_}), "
                             f"{compute_variants(ep, abbrev_op[ly_], cx_)[0]:02d} ({ly_}/{cxa_})"])
+                    # RRR last row +1/+1 or +2/+2 (user's screenshot, 2026-10-09):
+                    # x becomes nc and y takes the other step (+1 -> +2, +2 -> +1)
+                    if lx_ == ly_ and lx_ in ('+1', '+2'):
+                        cols_[0] = p_join(cols_[0], [
+                            f"{compute_variants(ep, 'no_change', abbrev_op[p_swap[ly_]])[0]:02d} (nc/{p_swap[ly_]})"])
             h_ = max(len(c) for c in cols_)
             p_rows.append([[c[k] if k < len(c) else '' for c in cols_] for k in range(h_)] + [labs_])
         # stars (user, 2026-10-08): ★ = the number is also in the STRONG 16,
@@ -3620,6 +3625,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared number only, x plain step + y cut step: +1/c+1 -> cut/c-2",
                        "     declared number only, x cut step + y nc: the first rule's two numbers with both cut",
                        "     declared cell, last line: RRR last row xy and yx with the cut added to its new x operation",
+                       "     RRR last row +1/+1 or +2/+2: also nc on x and the other step on y (+1/+1 -> nc/+2)",
                        "     ★ = also in the STRONG 16     * = also in the RECOMMENDED list",
                        f"     in advance {RRR_LIVE['power_hits']} of {RRR_LIVE['power_rounds']};"
                        " all 423 recorded rounds: 36 = 8.5% (4% by chance), latest series 7 of 170", ""]

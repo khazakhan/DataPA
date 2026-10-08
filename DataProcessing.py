@@ -3625,6 +3625,19 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             u_row = ''.join(f"  {c}" for c in p_uniq[k:k + u_per])
             u_box.append(f"{s_g}│{s_rst}{u_row:<{u_tw}}{s_g}│{s_rst}")
         u_box.append(f"{s_g}└{'─' * u_tw}┘{s_rst}")
+        # under it (user's screenshot, 2026-10-09): only the star-marked numbers
+        # (★ STRONG 16, * RECOMMENDED, ☆ declared-cell rules) as one table
+        p_marked = [f"{v:02d}{(p_seen[v] if p_seen[v] in ('★', '*') else '') + ('☆' if v in p_user else '')}"
+                    for v in sorted(p_seen) if p_seen[v] in ('★', '*') or v in p_user]
+        m_title = f"★ {len(p_marked)} STAR-MARKED NUMBERS ★"
+        u_box += [' ' * (u_tw + 2),
+                  f"{s_g}┌{'─' * u_tw}┐{s_rst}",
+                  f"{s_g}│{s_rst}{p_rib}{m_title:^{u_tw}}{s_rst}{s_g}│{s_rst}",
+                  f"{s_g}├{'─' * u_tw}┤{s_rst}"]
+        for k in range(0, len(p_marked), 5):
+            m_row = ''.join(f"  {c:<4}" for c in p_marked[k:k + 5])
+            u_box.append(f"{s_g}│{s_rst}{m_row:<{u_tw}}{s_g}│{s_rst}")
+        u_box.append(f"{s_g}└{'─' * u_tw}┘{s_rst}")
         while len(power_lines) < len(u_box):
             power_lines.append(' ' * (p_tw + 4))
         power_lines = [l + ('  ' + u_box[k] if k < len(u_box) else '') for k, l in enumerate(power_lines)]

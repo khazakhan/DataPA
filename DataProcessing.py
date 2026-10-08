@@ -3445,10 +3445,29 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             lines_ = out + ([', '.join(extra)] if extra else [])
             return [l + ',' for l in lines_[:-1]] + lines_[-1:]
 
+        # x side (user's screenshot, 2026-10-08 evening): the same family on the
+        # x operation of the cell's first number, its y kept — x cut, x step
+        # switched, that cut, and for a minus step the opposite cut steps
+        def p_xfam(cell):
+            px_, _, py_ = cell[4:-1].partition('/') if cell else ('', '', '')
+            if px_ not in p_swap or py_ not in abbrev_op:
+                return []
+            xo, xs = abbrev_op[px_], abbrev_op[p_swap[px_]]
+            fam = [KK_CUT_TOGGLE[xo], xs, KK_CUT_TOGGLE[xs]]
+            if px_ in ('-1', '-2'):
+                fam += [KK_CUT_TOGGLE[SIGN_FLIP[xo]], KK_CUT_TOGGLE[SIGN_FLIP[xs]]]
+            ent = [f"{compute_variants(ep, fx, abbrev_op[py_])[0]:02d} ({OP_ABBREV[fx]}/{py_})" for fx in fam]
+            return [', '.join(ent[k:k + 2]) for k in range(0, len(ent), 2)]
+
+        def p_join(ylines, xlines):
+            if not xlines:
+                return ylines
+            return ylines[:-1] + [ylines[-1] + ','] + [l + ',' for l in xlines[:-1]] + xlines[-1:]
+
         p_rows = []
         for cells_, labs_ in ((p_cells, [t for _, t in p_four]), (p_rev, ['operations reversed'] * 4),
                               ([c for c, _ in p_third], [t for _, t in p_third])):
-            cols_ = [p_cut(p_pair(c)) for c in cells_]
+            cols_ = [p_join(p_cut(p_pair(c)), p_xfam(c)) for c in cells_]
             h_ = max(len(c) for c in cols_)
             p_rows.append([[c[k] if k < len(c) else '' for c in cols_] for k in range(h_)] + [labs_])
         p_cw = max([len(c) for grp in p_rows for line in grp for c in line] + [21]) + 2
@@ -3468,6 +3487,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     after a comma = same x, y step switched (-1 <-> -2, +1 <-> +2), only for a plain y step",
                        "     each of those two is followed by the same number with the cut on its y step (+2 -> c+2)",
                        "     where the y step is -1 or -2 the opposite cut step is added too (-2, c-2 -> c+2)",
+                       "     then the same on the x operation of the cell's first number, its y kept",
                        f"     in advance {RRR_LIVE['power_hits']} of {RRR_LIVE['power_rounds']};"
                        " all 423 recorded rounds: 36 = 8.5% (4% by chance), latest series 7 of 170", ""]
     res_items = [f"{n} ({r})" for n, r in found]

@@ -3499,11 +3499,26 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 return ylines
             return ylines[:-1] + [ylines[-1] + ','] + [l + ',' for l in xlines[:-1]] + xlines[-1:]
 
+        # declared-number cell only (user's screenshot, 2026-10-08 evening):
+        # from its x/y, y gets the cut and the opposite sign, x loses its cut
+        # (c-1/-2 -> -1/c+2), and the same with the x step switched (-2/c+2)
+        def p_decl_extra(cell):
+            px_, _, py_ = cell[4:-1].partition('/')
+            if px_ not in abbrev_op or py_ not in abbrev_op:
+                return []
+            ny_ = _op_join(True, _op_parts(SIGN_FLIP[abbrev_op[py_]])[1])
+            nx_ = _op_join(False, _op_parts(abbrev_op[px_])[1])
+            xs_ = [nx_] + ([abbrev_op[p_swap[OP_ABBREV[nx_]]]] if OP_ABBREV[nx_] in p_swap else [])
+            return [', '.join(f"{compute_variants(ep, x_, ny_)[0]:02d} ({OP_ABBREV[x_]}/{OP_ABBREV[ny_]})"
+                              for x_ in xs_)]
+
         p_rows = []
         for cells_, labs_ in ((p_cells, [t for _, t in p_four]), (p_rev, ['operations reversed'] * 4),
                               ([c for c, _ in p_third], [t for _, t in p_third]),
                               ([c for c, _ in p_fourth], [t for _, t in p_fourth])):
             cols_ = [p_join(p_cut(p_pair(c)), p_xfam(c)) for c in cells_]
+            if cells_ is p_cells:
+                cols_[0] = p_join(cols_[0], p_decl_extra(cells_[0]))
             h_ = max(len(c) for c in cols_)
             p_rows.append([[c[k] if k < len(c) else '' for c in cols_] for k in range(h_)] + [labs_])
         # stars (user, 2026-10-08): ★ = the number is also in the STRONG 16,
@@ -3567,6 +3582,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     each of those two is followed by the same number with the cut on its y step (+2 -> c+2)",
                        "     where the y step is -1 or -2 the opposite cut step is added too (-2, c-2 -> c+2)",
                        "     then the same on the x operation of the cell's first number, its y kept",
+                       "     declared number only: y cut + sign changed, x without its cut, and that x step switched",
                        "     ★ = also in the STRONG 16     * = also in the RECOMMENDED list",
                        f"     in advance {RRR_LIVE['power_hits']} of {RRR_LIVE['power_rounds']};"
                        " all 423 recorded rounds: 36 = 8.5% (4% by chance), latest series 7 of 170", ""]

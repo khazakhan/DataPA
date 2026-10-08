@@ -3575,6 +3575,14 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                             cols_[0] = p_join(cols_[0], [
                                 f"{compute_variants(ep, 'no_change', abbrev_op[ly_])[0]:02d} (nc/{ly_}), "
                                 f"{compute_variants(ep, abbrev_op[ly_], 'no_change')[0]:02d} ({ly_}/nc)"])
+                        # case c-1/nc (user's screenshot, 2026-10-09): x a cut
+                        # step and y nc — x without the cut, and y the cut step
+                        # of the other sign in place of nc (c-1/nc -> -1/c+1)
+                        if ly_ == 'nc' and cxa_ in ('c+1', 'c-1', 'c+2', 'c-2'):
+                            ux_ = _op_join(False, _op_parts(cx_)[1])
+                            uy_ = KK_CUT_TOGGLE[SIGN_FLIP[ux_]]
+                            cols_[0] = p_join(cols_[0], [
+                                f"{compute_variants(ep, ux_, uy_)[0]:02d} ({OP_ABBREV[ux_]}/{OP_ABBREV[uy_]})"])
                         # that yx number with a cut step on x (c+2/c-2), user's
                         # screenshot 2026-10-09: x loses the cut, changes sign
                         # and takes the other number (c+2 -> -1), and the same
@@ -3726,6 +3734,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell, last line: RRR last row xy and yx with the cut added to its new x operation",
                        "     and that xy number with the sign of its y changed, and with only the cut on y (cut/c+2, cut/cut)",
                        "     where that operation is a bare cut: also nc in its place (cut/-1, -1/cut -> nc/-1, -1/nc)",
+                       "     that xy number as cut step / nc: x without the cut, y the cut step of the other sign (c-1/nc -> -1/c+1)",
                        "     that yx number with a cut step on x: x without cut, other sign, both numbers (c+2/c-2 -> -1/c-2, -2/c-2)",
                        "     RRR last row +1/+1 or +2/+2: also nc on x and the other step on y (+1/+1 -> nc/+2)",
                        "     declared cell, end: a number of it whose digits reversed stand in another cell brings that number in",

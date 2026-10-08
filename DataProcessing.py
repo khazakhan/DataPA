@@ -3514,9 +3514,17 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             # second rule (user's screenshot, same evening): x loses its cut and
             # changes sign, y stays as it is (c+1/+2 -> -1/+2)
             fx_ = SIGN_FLIP[nx_]
-            return [', '.join(f"{compute_variants(ep, ny_, x_)[0]:02d} ({OP_ABBREV[ny_]}/{OP_ABBREV[x_]})"
+            out_ = [', '.join(f"{compute_variants(ep, ny_, x_)[0]:02d} ({OP_ABBREV[ny_]}/{OP_ABBREV[x_]})"
                               for x_ in xs_),
                     f"{compute_variants(ep, fx_, abbrev_op[py_])[0]:02d} ({OP_ABBREV[fx_]}/{py_})"]
+            # third rule (user's screenshot, same evening): x a plain step and y
+            # a cut step (+1/c+1).  Crossed, the cut step keeps only its cut and
+            # the plain step gets the cut, the other sign and the other number:
+            # +1/c+1 -> cut/c-2  (95 on EP 89 gives 32)
+            if px_ in p_swap and py_ in ('c+1', 'c-1', 'c+2', 'c-2'):
+                ty_ = KK_CUT_TOGGLE[SIGN_FLIP[abbrev_op[p_swap[px_]]]]
+                out_.append(f"{compute_variants(ep, 'cut', ty_)[0]:02d} (cut/{OP_ABBREV[ty_]})")
+            return out_
 
         p_rows = []
         for cells_, labs_ in ((p_cells, [t for _, t in p_four]), (p_rev, ['operations reversed'] * 4),
@@ -3590,6 +3598,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     then the same on the x operation of the cell's first number, its y kept",
                        "     declared number only: y cut + sign changed, x without its cut, the two swapped; and that step switched",
                        "     declared number only, last: x without its cut and sign changed, y kept (c+1/+2 -> -1/+2)",
+                       "     declared number only, x plain step + y cut step: +1/c+1 -> cut/c-2",
                        "     ★ = also in the STRONG 16     * = also in the RECOMMENDED list",
                        f"     in advance {RRR_LIVE['power_hits']} of {RRR_LIVE['power_rounds']};"
                        " all 423 recorded rounds: 36 = 8.5% (4% by chance), latest series 7 of 170", ""]

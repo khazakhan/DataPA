@@ -862,6 +862,34 @@ def show_super_special(top4, scores):
         print("  " + l)
 
 
+def show_power_box():
+    """ALL NUMBERS, NO REPEATS of the 3RRR POWER BASE table again at the very
+    end of the page, below SUPER SPECIAL RECOMMENDED, in the same triple
+    Indian-flag border (user's screenshots, 2026-10-08)."""
+    got = _RRR3_PREV.pop('power_box', None)
+    if not got:
+        return
+    ep, uniq = got
+    body = [f"★  POWER BASE — ALL {len(uniq)} NUMBERS, NO REPEATS  (EP={ep:02d})  ★", ""]
+    body += [''.join(f"  {c}" for c in uniq[k:k + 10]) for k in range(0, len(uniq), 10)]
+    body += ["", "★ = also in the STRONG 16    * = also in the RECOMMENDED list",
+             "+ = digits reversed of a table number whose series is there",
+             "A wide list: it holds the result often by size alone, NOT a proven edge."]
+    B    = "\033[1m"
+    flag = [f"\033[1;38;2;{c}m" for c in ("255;153;51", "255;255;255", "19;136;8")]
+    rst  = "\033[0m"
+    iw   = max(len(s) for s in body) + 2
+    box  = [f" {B}{s:<{iw - 2}}{rst} " for s in body]
+    for lvl in range(2, -1, -1):           # green inner, white, saffron outer
+        c, w = flag[lvl], iw + 2 * (2 - lvl)
+        box = ([f"{c}┏{'━' * w}┓{rst}"]
+               + [f"{c}┃{rst}{s}{c}┃{rst}" for s in box]
+               + [f"{c}┗{'━' * w}┛{rst}"])
+    print()
+    for l in box:
+        print("  " + l)
+
+
 def _root_six(root, nx, ny):
     """The 6 ROOT OPS values for one op pair, each with its (tens/units) ops:
     Number, yx, s+xy, s+yx, cut xy, cut sign."""
@@ -3519,6 +3547,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 p_seen[rv_] = '★' if rv_ in strong else '*' if rv_ in p_recv else '+'
                 p_added.append(rv_)
         p_uniq = [f"{v:02d}{p_seen[v] or ' '}" for v in sorted(p_seen)]
+        _RRR3_PREV['power_box'] = (ep, list(p_uniq))
         u_per = 6
         u_tw = u_per * 5 + 1
         u_title = f"★ ALL {len(p_uniq)} NUMBERS, NO REPEATS ★"
@@ -4470,6 +4499,7 @@ def run(data_source, user_x_op=None, user_y_op=None):
                             f"C = Chain ({len(_src_chain)})   in all 3 = {len(_all3)}  ")
         _print_box(_merge_hdr, _merge_lines)
     show_super_special(_last_top4, _last_scores)
+    show_power_box()
     print()
     return root, ops_list, _last_top4, _last_scores
 

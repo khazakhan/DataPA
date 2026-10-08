@@ -3517,6 +3517,14 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             out_ = [', '.join(f"{compute_variants(ep, ny_, x_)[0]:02d} ({OP_ABBREV[ny_]}/{OP_ABBREV[x_]})"
                               for x_ in xs_),
                     f"{compute_variants(ep, fx_, abbrev_op[py_])[0]:02d} ({OP_ABBREV[fx_]}/{py_})"]
+            # along with those two, the same with the sign of the second
+            # operation changed (c-2/-1, c-2/-2 -> c-2/+1, c-2/+2), user's
+            # screenshot 2026-10-09
+            fl_ = [x_ for x_ in xs_ if SIGN_FLIP[x_] != x_]
+            if fl_:
+                out_.insert(1, ', '.join(
+                    f"{compute_variants(ep, ny_, SIGN_FLIP[x_])[0]:02d} ({OP_ABBREV[ny_]}/{OP_ABBREV[SIGN_FLIP[x_]]})"
+                    for x_ in fl_))
             # format c+2/nc (user's screenshot, 2026-10-09): x a cut step and y
             # nc — the two numbers of the first rule again with both cut
             # (cut/+2 -> nc/c+2: 00 -> 55, 09 -> 54 on EP 58)
@@ -3648,6 +3656,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     where the y step is -1 or -2 the opposite cut step is added too (-2, c-2 -> c+2)",
                        "     then the same on the x operation of the cell's first number, its y kept",
                        "     declared number only: y cut + sign changed, x without its cut, the two swapped; and that step switched",
+                       "     and those two with the sign of the second operation changed (c-2/-1 -> c-2/+1)",
                        "     declared number only, last: x without its cut and sign changed, y kept (c+1/+2 -> -1/+2)",
                        "     declared number only, x plain step + y cut step: +1/c+1 -> cut/c-2",
                        "     declared number only, x cut step + y nc: the first rule's two numbers with both cut",

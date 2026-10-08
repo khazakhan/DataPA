@@ -3584,14 +3584,6 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                                 d_more.append(e)
             p_groups[0][0][0] = p_join(p_groups[0][0][0],
                                        [', '.join(d_more[k:k + 2]) for k in range(0, len(d_more), 2)])
-            # the declared cell is divided in two (user's screenshot, 2026-10-09):
-            # its lower half continues in the next cell, under that cell's own
-            # numbers and a blank line, so the two columns end level
-            d_col, n_col = p_groups[0][0][0], p_groups[0][0][1]
-            d_keep = (len(d_col) + len(n_col) + 2) // 2
-            if 0 < d_keep < len(d_col):
-                p_groups[0][0][1] = n_col + [''] + d_col[d_keep:]
-                p_groups[0][0][0] = d_col[:d_keep - 1] + [d_col[d_keep - 1].rstrip(',')]
         for cols_, labs_ in p_groups:
             h_ = max(len(c) for c in cols_)
             p_rows.append([[c[k] if k < len(c) else '' for c in cols_] for k in range(h_)] + [labs_])
@@ -3663,7 +3655,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell, last line: RRR last row xy and yx with the cut added to its new x operation",
                        "     and that xy number with the sign of its y changed, and with only the cut on y (cut/c+2, cut/cut)",
                        "     RRR last row +1/+1 or +2/+2: also nc on x and the other step on y (+1/+1 -> nc/+2)",
-                       "     declared cell, end: every number of the other cells, each once; its lower half continues in the next cell",
+                       "     declared cell, end: every number of the other cells, each once",
                        "     ★ = also in the STRONG 16     * = also in the RECOMMENDED list",
                        f"     in advance {RRR_LIVE['power_hits']} of {RRR_LIVE['power_rounds']};"
                        " all 423 recorded rounds: 36 = 8.5% (4% by chance), latest series 7 of 170", ""]

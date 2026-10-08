@@ -3509,7 +3509,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             ny_ = _op_join(True, _op_parts(SIGN_FLIP[abbrev_op[py_]])[1])
             nx_ = _op_join(False, _op_parts(abbrev_op[px_])[1])
             xs_ = [nx_] + ([abbrev_op[p_swap[OP_ABBREV[nx_]]]] if OP_ABBREV[nx_] in p_swap else [])
-            return [', '.join(f"{compute_variants(ep, x_, ny_)[0]:02d} ({OP_ABBREV[x_]}/{OP_ABBREV[ny_]})"
+            # updated the same evening: the two operations are then swapped —
+            # the new y goes to x and the new x goes to y (-1/c+2 -> c+2/-1)
+            return [', '.join(f"{compute_variants(ep, ny_, x_)[0]:02d} ({OP_ABBREV[ny_]}/{OP_ABBREV[x_]})"
                               for x_ in xs_)]
 
         p_rows = []
@@ -3582,7 +3584,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     each of those two is followed by the same number with the cut on its y step (+2 -> c+2)",
                        "     where the y step is -1 or -2 the opposite cut step is added too (-2, c-2 -> c+2)",
                        "     then the same on the x operation of the cell's first number, its y kept",
-                       "     declared number only: y cut + sign changed, x without its cut, and that x step switched",
+                       "     declared number only: y cut + sign changed, x without its cut, the two swapped; and that step switched",
                        "     ★ = also in the STRONG 16     * = also in the RECOMMENDED list",
                        f"     in advance {RRR_LIVE['power_hits']} of {RRR_LIVE['power_rounds']};"
                        " all 423 recorded rounds: 36 = 8.5% (4% by chance), latest series 7 of 170", ""]

@@ -3567,6 +3567,15 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                         cols_[0] = p_join(cols_[0], [
                             f"{compute_variants(ep, cx_, abbrev_op[ly_])[0]:02d} ({cxa_}/{ly_}), "
                             f"{compute_variants(ep, abbrev_op[ly_], cx_)[0]:02d} ({ly_}/{cxa_})"])
+                        # that yx number with a cut step on x (c+2/c-2), user's
+                        # screenshot 2026-10-09: x loses the cut, changes sign
+                        # and takes the other number (c+2 -> -1), and the same
+                        # for its neighbour step (c+1 -> -2)
+                        if ly_ in ('c+1', 'c-1', 'c+2', 'c-2'):
+                            sg_ = '-' if ly_[1] == '+' else '+'
+                            cols_[0] = p_join(cols_[0], [', '.join(
+                                f"{compute_variants(ep, sg_ + n_, cx_)[0]:02d} ({sg_ + n_}/{cxa_})"
+                                for n_ in (p_swap[ly_[1:]][1], ly_[2]))])
                         # along with that xy number, the same with the sign of
                         # its y changed (cut/c-2 -> cut/c+2), user's screenshot
                         fy_ = SIGN_FLIP[abbrev_op[ly_]]
@@ -3668,6 +3677,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared number only, x cut step + y nc: the first rule's two numbers with both cut",
                        "     declared cell, last line: RRR last row xy and yx with the cut added to its new x operation",
                        "     and that xy number with the sign of its y changed, and with only the cut on y (cut/c+2, cut/cut)",
+                       "     that yx number with a cut step on x: x without cut, other sign, both numbers (c+2/c-2 -> -1/c-2, -2/c-2)",
                        "     RRR last row +1/+1 or +2/+2: also nc on x and the other step on y (+1/+1 -> nc/+2)",
                        "     ★ = also in the STRONG 16     * = also in the RECOMMENDED list     ☆ = number from the declared-cell rules",
                        f"     in advance {RRR_LIVE['power_hits']} of {RRR_LIVE['power_rounds']};"

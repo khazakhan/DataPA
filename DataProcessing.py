@@ -3724,7 +3724,8 @@ def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, fin
         print(f"  {empty_msg}")
         if rrr:
             print()
-            print("\n".join(_rrr_box(sequence, entries, ep, pos_prefix, grid_ep)))
+            _RRR3_PREV['frame'] = _rrr_box(sequence, entries, ep, pos_prefix, grid_ep)
+            print("\n".join(_RRR3_PREV['frame']))
         sep('═')
         print()
         return []
@@ -3777,7 +3778,8 @@ def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, fin
 
     if rrr:
         print()
-        print("\n".join(_rrr_box(sequence, entries, ep, pos_prefix, grid_ep)))
+        _RRR3_PREV['frame'] = _rrr_box(sequence, entries, ep, pos_prefix, grid_ep)
+        print("\n".join(_RRR3_PREV['frame']))
 
     if round_trip:
         print()
@@ -4500,6 +4502,12 @@ def run(data_source, user_x_op=None, user_y_op=None):
         _print_box(_merge_hdr, _merge_lines)
     show_super_special(_last_top4, _last_scores)
     show_power_box()
+    # the whole RRR / 3RRR frame once more at the very end of the page
+    # (user's screenshot, 2026-10-08 evening)
+    _rrr_end = _RRR3_PREV.pop('frame', None)
+    if _rrr_end:
+        print()
+        print("\n".join(_rrr_end))
     print()
     return root, ops_list, _last_top4, _last_scores
 

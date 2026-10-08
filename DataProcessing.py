@@ -3499,8 +3499,30 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 power_lines.append(f"  {s_g}├{'┼'.join('─' * p_cw for _ in range(4))}┤{s_rst}")
             power_lines += [f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{p_cw - 1}}" for c in line) + f"{s_g}│{s_rst}"
                             for line in grp]
-        power_lines += [f"  {s_g}└{'┴'.join('─' * p_cw for _ in range(4))}┘{s_rst}",
-                       "     reversed = the two operations crossed and both signs flipped (c+1/+1 becomes -1/c-1)",
+        power_lines.append(f"  {s_g}└{'┴'.join('─' * p_cw for _ in range(4))}┘{s_rst}")
+        # beside the table (user's screenshot, 2026-10-08 evening): every POWER
+        # BASE number once, no repeats, ascending, with its ★ / * mark
+        p_seen = {}
+        for grp in p_rows:
+            for line in grp:
+                for c in line:
+                    for m in re.finditer(r'(\d\d) \([^)]*\)([★*]?)', c):
+                        p_seen.setdefault(int(m.group(1)), m.group(2))
+        p_uniq = [f"{v:02d}{p_seen[v] or ' '}" for v in sorted(p_seen)]
+        u_per = 6
+        u_tw = u_per * 5 + 1
+        u_title = f"★ ALL {len(p_uniq)} NUMBERS, NO REPEATS ★"
+        u_box = [f"{s_g}┌{'─' * u_tw}┐{s_rst}",
+                 f"{s_g}│{s_rst}{p_rib}{u_title:^{u_tw}}{s_rst}{s_g}│{s_rst}",
+                 f"{s_g}├{'─' * u_tw}┤{s_rst}"]
+        for k in range(0, len(p_uniq), u_per):
+            u_row = ''.join(f"  {c}" for c in p_uniq[k:k + u_per])
+            u_box.append(f"{s_g}│{s_rst}{u_row:<{u_tw}}{s_g}│{s_rst}")
+        u_box.append(f"{s_g}└{'─' * u_tw}┘{s_rst}")
+        while len(power_lines) < len(u_box):
+            power_lines.append(' ' * (p_tw + 4))
+        power_lines = [l + ('  ' + u_box[k] if k < len(u_box) else '') for k, l in enumerate(power_lines)]
+        power_lines += ["     reversed = the two operations crossed and both signs flipped (c+1/+1 becomes -1/c-1)",
                        "     after a comma = same x, y step switched (-1 <-> -2, +1 <-> +2), only for a plain y step",
                        "     each of those two is followed by the same number with the cut on its y step (+2 -> c+2)",
                        "     where the y step is -1 or -2 the opposite cut step is added too (-2, c-2 -> c+2)",

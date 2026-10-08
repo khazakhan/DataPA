@@ -3470,6 +3470,15 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             cols_ = [p_join(p_cut(p_pair(c)), p_xfam(c)) for c in cells_]
             h_ = max(len(c) for c in cols_)
             p_rows.append([[c[k] if k < len(c) else '' for c in cols_] for k in range(h_)] + [labs_])
+        # stars (user, 2026-10-08): ★ = the number is also in the STRONG 16,
+        # * = it is also in the RECOMMENDED list
+        p_recv = {r_[0] for r_ in rec}
+
+        def p_star(m):
+            v = int(m.group(1))
+            return m.group(0) + ('★' if v in strong else '*' if v in p_recv else '')
+
+        p_rows = [[[re.sub(r'(\d\d) \([^)]*\)', p_star, c) for c in line] for line in grp] for grp in p_rows]
         p_cw = max([len(c) for grp in p_rows for line in grp for c in line] + [21]) + 2
         p_tw = 4 * p_cw + 3
         p_rib = "\033[1;30;43m"
@@ -3488,6 +3497,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     each of those two is followed by the same number with the cut on its y step (+2 -> c+2)",
                        "     where the y step is -1 or -2 the opposite cut step is added too (-2, c-2 -> c+2)",
                        "     then the same on the x operation of the cell's first number, its y kept",
+                       "     ★ = also in the STRONG 16     * = also in the RECOMMENDED list",
                        f"     in advance {RRR_LIVE['power_hits']} of {RRR_LIVE['power_rounds']};"
                        " all 423 recorded rounds: 36 = 8.5% (4% by chance), latest series 7 of 170", ""]
     res_items = [f"{n} ({r})" for n, r in found]

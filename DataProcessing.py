@@ -3392,7 +3392,28 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             rx = SIGN_FLIP[find_op(ep % 10, v % 10)]
             ry = SIGN_FLIP[find_op(ep // 10, v // 10)]
             p_rev.append(f"{compute_variants(ep, rx, ry)[0]:02d} ({OP_ABBREV[rx]}/{OP_ABBREV[ry]})")
-        p_cw = max([len(c) for c in p_cells + p_rev] + [len(t) for _, t in p_four] + [21]) + 2
+        # third row (user's screenshot, 2026-10-08): the yx number of the RRR
+        # table's last row and that operation reversed; the first STRONG 16
+        # number and the same with the cut taken off its y operation
+        p_third = []
+        if both_cut:
+            lv, _, llab = both_cut[-1]
+            lx_, _, ly_ = llab.partition('/')
+            p_third.append((f"{lv:02d} ({llab})", "RRR last row yx"))
+            if lx_ in abbrev_op and ly_ in abbrev_op:
+                rx, ry = SIGN_FLIP[abbrev_op[ly_]], SIGN_FLIP[abbrev_op[lx_]]
+                p_third.append((f"{compute_variants(ep, rx, ry)[0]:02d} ({OP_ABBREV[rx]}/{OP_ABBREV[ry]})",
+                                "that, reversed"))
+        if strong:
+            sx_, _, sy_ = strong_lab[strong[0]].partition('/')
+            p_third.append((f"{strong[0]:02d} ({strong_lab[strong[0]]})", "STRONG 16 first"))
+            if sx_ in abbrev_op and sy_ in abbrev_op:
+                uy = _op_join(False, _op_parts(abbrev_op[sy_])[1])
+                p_third.append((f"{compute_variants(ep, abbrev_op[sx_], uy)[0]:02d} ({sx_}/{OP_ABBREV[uy]})",
+                                "its y without the cut"))
+        p_third += [('', '')] * (4 - len(p_third))
+        p_cw = max([len(c) for c in p_cells + p_rev] + [len(c) for c, _ in p_third]
+                   + [len(t) for _, t in p_four] + [len(t) for _, t in p_third] + [21]) + 2
         p_tw = 4 * p_cw + 3
         p_rib = "\033[1;30;43m"
         p_title = f"★  POWER BASE  —  4 numbers, operations applied on EP={ep:02d}  ★"
@@ -3405,6 +3426,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{p_cw - 1}}" for c in p_rev) + f"{s_g}│{s_rst}",
                        f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {'operations reversed':<{p_cw - 1}}" for _ in p_rev)
                        + f"{s_g}│{s_rst}",
+                       f"  {s_g}├{'┼'.join('─' * p_cw for _ in range(4))}┤{s_rst}",
+                       f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{p_cw - 1}}" for c, _ in p_third) + f"{s_g}│{s_rst}",
+                       f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {t:<{p_cw - 1}}" for _, t in p_third) + f"{s_g}│{s_rst}",
                        f"  {s_g}└{'┴'.join('─' * p_cw for _ in range(4))}┘{s_rst}",
                        "     reversed = the two operations crossed and both signs flipped (c+1/+1 becomes -1/c-1)",
                        f"     in advance {RRR_LIVE['power_hits']} of {RRR_LIVE['power_rounds']};"

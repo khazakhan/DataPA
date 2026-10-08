@@ -3412,6 +3412,21 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 p_third.append((f"{compute_variants(ep, abbrev_op[sx_], uy)[0]:02d} ({sx_}/{OP_ABBREV[uy]})",
                                 "its y without the cut"))
         p_third += [('', '')] * (4 - len(p_third))
+        # partner numbers (user's screenshot, 2026-10-08): wherever a cell's y
+        # operation is a plain -1, -2, +1 or +2, the same x with the y step
+        # switched (-1 <-> -2, +1 <-> +2) is added after a comma
+        p_swap = {'-1': '-2', '-2': '-1', '+1': '+2', '+2': '+1'}
+
+        def p_pair(cell):
+            px_, _, py_ = cell[4:-1].partition('/') if cell else ('', '', '')
+            if py_ not in p_swap or px_ not in abbrev_op:
+                return cell
+            pv = compute_variants(ep, abbrev_op[px_], abbrev_op[p_swap[py_]])[0]
+            return f"{cell}, {pv:02d} ({px_}/{p_swap[py_]})"
+
+        p_cells = [p_pair(c) for c in p_cells]
+        p_rev = [p_pair(c) for c in p_rev]
+        p_third = [(p_pair(c), t) for c, t in p_third]
         p_cw = max([len(c) for c in p_cells + p_rev] + [len(c) for c, _ in p_third]
                    + [len(t) for _, t in p_four] + [len(t) for _, t in p_third] + [21]) + 2
         p_tw = 4 * p_cw + 3
@@ -3431,6 +3446,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {t:<{p_cw - 1}}" for _, t in p_third) + f"{s_g}│{s_rst}",
                        f"  {s_g}└{'┴'.join('─' * p_cw for _ in range(4))}┘{s_rst}",
                        "     reversed = the two operations crossed and both signs flipped (c+1/+1 becomes -1/c-1)",
+                       "     after a comma = same x, y step switched (-1 <-> -2, +1 <-> +2), only for a plain y step",
                        f"     in advance {RRR_LIVE['power_hits']} of {RRR_LIVE['power_rounds']};"
                        " all 423 recorded rounds: 36 = 8.5% (4% by chance), latest series 7 of 170", ""]
     res_items = [f"{n} ({r})" for n, r in found]

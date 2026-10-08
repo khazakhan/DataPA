@@ -3431,45 +3431,43 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         def p_cut(cell):
             parts = cell.split(', ')
             if len(parts) != 2:
-                return cell, ''
-            out = []
+                return [cell]
+            out, extra = [], []
             for part in parts:
                 px_, _, py_ = part[4:-1].partition('/')
                 cy = KK_CUT_TOGGLE[abbrev_op[py_]]
                 out.append(f"{part}, {compute_variants(ep, abbrev_op[px_], cy)[0]:02d} ({px_}/{OP_ABBREV[cy]})")
-            return out[0] + ',', out[1]
+                # user's screenshot 2 (2026-10-08): where the y step is -2 (so the
+                # cell holds -2 and c-2) c+2 is added too; the same for -1 -> c+1
+                if py_ in ('-1', '-2'):
+                    ey = KK_CUT_TOGGLE[SIGN_FLIP[abbrev_op[py_]]]
+                    extra.append(f"{compute_variants(ep, abbrev_op[px_], ey)[0]:02d} ({px_}/{OP_ABBREV[ey]})")
+            lines_ = out + ([', '.join(extra)] if extra else [])
+            return [l + ',' for l in lines_[:-1]] + lines_[-1:]
 
-        p_cells2, p_rev2, p_third2 = [], [], []
-        for src_, dst_ in ((p_cells, p_cells2), (p_rev, p_rev2), ([c for c, _ in p_third], p_third2)):
-            for k, c in enumerate(src_):
-                l1, l2 = p_cut(p_pair(c))
-                src_[k] = l1
-                dst_.append(l2)
-        p_third = [(c, t) for c, (_, t) in zip([p_cut(p_pair(c))[0] for c, _ in p_third], p_third)]
-        p_cw = max([len(c) for c in p_cells + p_rev + p_cells2 + p_rev2 + p_third2] + [len(c) for c, _ in p_third]
-                   + [len(t) for _, t in p_four] + [len(t) for _, t in p_third] + [21]) + 2
+        p_rows = []
+        for cells_, labs_ in ((p_cells, [t for _, t in p_four]), (p_rev, ['operations reversed'] * 4),
+                              ([c for c, _ in p_third], [t for _, t in p_third])):
+            cols_ = [p_cut(p_pair(c)) for c in cells_]
+            h_ = max(len(c) for c in cols_)
+            p_rows.append([[c[k] if k < len(c) else '' for c in cols_] for k in range(h_)] + [labs_])
+        p_cw = max([len(c) for grp in p_rows for line in grp for c in line] + [21]) + 2
         p_tw = 4 * p_cw + 3
         p_rib = "\033[1;30;43m"
         p_title = f"★  POWER BASE  —  4 numbers, operations applied on EP={ep:02d}  ★"
         power_lines = [f"  {s_g}┌{'─' * p_tw}┐{s_rst}",
                        f"  {s_g}│{s_rst}{p_rib}{p_title:^{p_tw}}{s_rst}{s_g}│{s_rst}",
-                       f"  {s_g}├{'┬'.join('─' * p_cw for _ in range(4))}┤{s_rst}",
-                       f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{p_cw - 1}}" for c in p_cells) + f"{s_g}│{s_rst}",
-                       *([f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{p_cw - 1}}" for c in p_cells2) + f"{s_g}│{s_rst}"] if any(p_cells2) else []),
-                       f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {t:<{p_cw - 1}}" for _, t in p_four) + f"{s_g}│{s_rst}",
-                       f"  {s_g}├{'┼'.join('─' * p_cw for _ in range(4))}┤{s_rst}",
-                       f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{p_cw - 1}}" for c in p_rev) + f"{s_g}│{s_rst}",
-                       *([f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{p_cw - 1}}" for c in p_rev2) + f"{s_g}│{s_rst}"] if any(p_rev2) else []),
-                       f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {'operations reversed':<{p_cw - 1}}" for _ in p_rev)
-                       + f"{s_g}│{s_rst}",
-                       f"  {s_g}├{'┼'.join('─' * p_cw for _ in range(4))}┤{s_rst}",
-                       f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{p_cw - 1}}" for c, _ in p_third) + f"{s_g}│{s_rst}",
-                       *([f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{p_cw - 1}}" for c in p_third2) + f"{s_g}│{s_rst}"] if any(p_third2) else []),
-                       f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {t:<{p_cw - 1}}" for _, t in p_third) + f"{s_g}│{s_rst}",
-                       f"  {s_g}└{'┴'.join('─' * p_cw for _ in range(4))}┘{s_rst}",
+                       f"  {s_g}├{'┬'.join('─' * p_cw for _ in range(4))}┤{s_rst}"]
+        for k, grp in enumerate(p_rows):
+            if k:
+                power_lines.append(f"  {s_g}├{'┼'.join('─' * p_cw for _ in range(4))}┤{s_rst}")
+            power_lines += [f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{p_cw - 1}}" for c in line) + f"{s_g}│{s_rst}"
+                            for line in grp]
+        power_lines += [f"  {s_g}└{'┴'.join('─' * p_cw for _ in range(4))}┘{s_rst}",
                        "     reversed = the two operations crossed and both signs flipped (c+1/+1 becomes -1/c-1)",
                        "     after a comma = same x, y step switched (-1 <-> -2, +1 <-> +2), only for a plain y step",
                        "     each of those two is followed by the same number with the cut on its y step (+2 -> c+2)",
+                       "     where the y step is -1 or -2 the opposite cut step is added too (-2, c-2 -> c+2)",
                        f"     in advance {RRR_LIVE['power_hits']} of {RRR_LIVE['power_rounds']};"
                        " all 423 recorded rounds: 36 = 8.5% (4% by chance), latest series 7 of 170", ""]
     res_items = [f"{n} ({r})" for n, r in found]

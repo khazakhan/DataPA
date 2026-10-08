@@ -3503,11 +3503,21 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         # beside the table (user's screenshot, 2026-10-08 evening): every POWER
         # BASE number once, no repeats, ascending, with its ★ / * mark
         p_seen = {}
+        p_added = []
         for grp in p_rows:
             for line in grp:
                 for c in line:
                     for m in re.finditer(r'(\d\d) \([^)]*\)([★*]?)', c):
                         p_seen.setdefault(int(m.group(1)), m.group(2))
+        # reversed numbers (user's screenshot, 2026-10-08 evening): 16 is in the
+        # box and the 6 series is there too (60, 68), so its reverse 61 is added.
+        # One pass over the table's own numbers; the added ones carry a +
+        p_tens = {v // 10 for v in p_seen}
+        for v in sorted(p_seen):
+            rv_ = (v % 10) * 10 + v // 10
+            if rv_ not in p_seen and rv_ // 10 in p_tens:
+                p_seen[rv_] = '★' if rv_ in strong else '*' if rv_ in p_recv else '+'
+                p_added.append(rv_)
         p_uniq = [f"{v:02d}{p_seen[v] or ' '}" for v in sorted(p_seen)]
         u_per = 6
         u_tw = u_per * 5 + 1
@@ -3522,7 +3532,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         while len(power_lines) < len(u_box):
             power_lines.append(' ' * (p_tw + 4))
         power_lines = [l + ('  ' + u_box[k] if k < len(u_box) else '') for k, l in enumerate(power_lines)]
-        power_lines += ["     reversed = the two operations crossed and both signs flipped (c+1/+1 becomes -1/c-1)",
+        power_lines += [f"     box: + = digits reversed of a table number whose series is already there ({len(p_added)} added)",
+                        "     reversed = the two operations crossed and both signs flipped (c+1/+1 becomes -1/c-1)",
                        "     after a comma = same x, y step switched (-1 <-> -2, +1 <-> +2), only for a plain y step",
                        "     each of those two is followed by the same number with the cut on its y step (+2 -> c+2)",
                        "     where the y step is -1 or -2 the opposite cut step is added too (-2, c-2 -> c+2)",

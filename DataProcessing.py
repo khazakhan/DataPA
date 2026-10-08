@@ -3412,6 +3412,13 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 p_third.append((f"{compute_variants(ep, abbrev_op[sx_], uy)[0]:02d} ({sx_}/{OP_ABBREV[uy]})",
                                 "its y without the cut"))
         p_third += [('', '')] * (4 - len(p_third))
+        # fourth row (user's screenshot, 2026-10-08 evening): the xy number of
+        # the RRR table's last row (only its yx was in the third row)
+        p_fourth = []
+        if len(both_cut) >= 2:
+            xv_, _, xlab_ = both_cut[-2]
+            p_fourth.append((f"{xv_:02d} ({xlab_})", "RRR last row xy"))
+        p_fourth += [('', '')] * (4 - len(p_fourth))
         # partner numbers (user's screenshot, 2026-10-08): wherever a cell's y
         # operation is a plain -1, -2, +1 or +2, the same x with the y step
         # switched (-1 <-> -2, +1 <-> +2) is added after a comma
@@ -3466,7 +3473,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
 
         p_rows = []
         for cells_, labs_ in ((p_cells, [t for _, t in p_four]), (p_rev, ['operations reversed'] * 4),
-                              ([c for c, _ in p_third], [t for _, t in p_third])):
+                              ([c for c, _ in p_third], [t for _, t in p_third]),
+                              ([c for c, _ in p_fourth], [t for _, t in p_fourth])):
             cols_ = [p_join(p_cut(p_pair(c)), p_xfam(c)) for c in cells_]
             h_ = max(len(c) for c in cols_)
             p_rows.append([[c[k] if k < len(c) else '' for c in cols_] for k in range(h_)] + [labs_])

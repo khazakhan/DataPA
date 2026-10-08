@@ -3692,6 +3692,22 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             m_row = ''.join(f"  {c:<4}" for c in p_marked[k:k + 5])
             u_box.append(f"{s_g}│{s_rst}{m_row:<{u_tw}}{s_g}│{s_rst}")
         u_box.append(f"{s_g}└{'─' * u_tw}┘{s_rst}")
+        # under that (user's screenshot, 2026-10-09): the declared cell and the
+        # star-marked numbers merged into one table, each number once
+        p_declv = {int(e) for l in p_groups[0][0][0] for e in re.findall(r'(\d\d) \(', l)} if p_groups else set()
+        p_mark_of = lambda v: (('★' if v in strong else '*' if v in p_recv else '')
+                               + ('☆' if v in p_user else ''))
+        p_merged = [f"{v:02d}{p_mark_of(v)}" for v in sorted(
+            p_declv | {v for v in p_seen if p_seen[v] in ('★', '*') or v in p_user})]
+        g_title = f"★ DECLARED + STAR-MARKED: {len(p_merged)} ★"
+        u_box += [' ' * (u_tw + 2),
+                  f"{s_g}┌{'─' * u_tw}┐{s_rst}",
+                  f"{s_g}│{s_rst}{p_rib}{g_title:^{u_tw}}{s_rst}{s_g}│{s_rst}",
+                  f"{s_g}├{'─' * u_tw}┤{s_rst}"]
+        for k in range(0, len(p_merged), 5):
+            m_row = ''.join(f"  {c:<4}" for c in p_merged[k:k + 5])
+            u_box.append(f"{s_g}│{s_rst}{m_row:<{u_tw}}{s_g}│{s_rst}")
+        u_box.append(f"{s_g}└{'─' * u_tw}┘{s_rst}")
         while len(power_lines) < len(u_box):
             power_lines.append(' ' * (p_tw + 4))
         power_lines = [l + ('  ' + u_box[k] if k < len(u_box) else '') for k, l in enumerate(power_lines)]

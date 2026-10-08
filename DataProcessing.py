@@ -3385,7 +3385,14 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                   (p_t * 10 + (p_u - 1) % 10, "one below"), (p_t * 10 + (p_u + 1) % 10, "one above")]
         p_cells = [f"{v:02d} ({OP_ABBREV[find_op(ep // 10, v // 10)]}/{OP_ABBREV[find_op(ep % 10, v % 10)]})"
                    for v, _ in p_four]
-        p_cw = max([len(c) for c in p_cells] + [len(t) for _, t in p_four] + [16]) + 2
+        # second row (user's screenshot, 2026-10-08): each number's operations
+        # reversed — x and y crossed and both signs flipped — applied to the EP
+        p_rev = []
+        for v, _ in p_four:
+            rx = SIGN_FLIP[find_op(ep % 10, v % 10)]
+            ry = SIGN_FLIP[find_op(ep // 10, v // 10)]
+            p_rev.append(f"{compute_variants(ep, rx, ry)[0]:02d} ({OP_ABBREV[rx]}/{OP_ABBREV[ry]})")
+        p_cw = max([len(c) for c in p_cells + p_rev] + [len(t) for _, t in p_four] + [21]) + 2
         p_tw = 4 * p_cw + 3
         p_rib = "\033[1;30;43m"
         p_title = f"★  POWER BASE  —  4 numbers, operations applied on EP={ep:02d}  ★"
@@ -3394,7 +3401,12 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        f"  {s_g}├{'┬'.join('─' * p_cw for _ in range(4))}┤{s_rst}",
                        f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{p_cw - 1}}" for c in p_cells) + f"{s_g}│{s_rst}",
                        f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {t:<{p_cw - 1}}" for _, t in p_four) + f"{s_g}│{s_rst}",
+                       f"  {s_g}├{'┼'.join('─' * p_cw for _ in range(4))}┤{s_rst}",
+                       f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{p_cw - 1}}" for c in p_rev) + f"{s_g}│{s_rst}",
+                       f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {'operations reversed':<{p_cw - 1}}" for _ in p_rev)
+                       + f"{s_g}│{s_rst}",
                        f"  {s_g}└{'┴'.join('─' * p_cw for _ in range(4))}┘{s_rst}",
+                       "     reversed = the two operations crossed and both signs flipped (c+1/+1 becomes -1/c-1)",
                        f"     in advance {RRR_LIVE['power_hits']} of {RRR_LIVE['power_rounds']};"
                        " all 423 recorded rounds: 36 = 8.5% (4% by chance), latest series 7 of 170", ""]
     res_items = [f"{n} ({r})" for n, r in found]

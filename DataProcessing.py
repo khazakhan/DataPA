@@ -3548,6 +3548,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             return out_
 
         p_rows = []
+        p_groups = []
         p_user = set()
         for cells_, labs_ in ((p_cells, [t for _, t in p_four]), (p_rev, ['operations reversed'] * 4),
                               ([c for c, _ in p_third], [t for _, t in p_third]),
@@ -3600,6 +3601,30 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 # numbers made by the declared-cell rules: marked ☆ wherever
                 # they stand in the table (user, 2026-10-09); ★ and * stay
                 p_user = {int(e) for l in cols_[0][p_base_n:] for e in re.findall(r'(\d\d) \(', l)}
+            p_groups.append((cols_, labs_))
+        # reverse numbers in the declared cell (user's screenshot, 2026-10-09):
+        # a declared-cell number whose digits reversed stand in another cell
+        # of the table (40 and 04) brings that number into the declared cell
+        if p_groups:
+            p_ent = re.compile(r'\d\d \([^)]*\)')
+            d_have = [e[:2] for l in p_groups[0][0][0] for e in p_ent.findall(l)]
+            o_ent = {}
+            for gi_, (cols_, _) in enumerate(p_groups):
+                for ci_, col_ in enumerate(cols_):
+                    if gi_ or ci_:
+                        for l in col_:
+                            for e in p_ent.findall(l):
+                                o_ent.setdefault(e[:2], e)
+            d_rev = []
+            for n_ in d_have:
+                r_ = n_[::-1]
+                if r_ in o_ent and r_ not in d_have and o_ent[r_] not in d_rev:
+                    d_rev.append(o_ent[r_])
+            if d_rev:
+                p_groups[0][0][0] = p_join(p_groups[0][0][0],
+                                           [', '.join(d_rev[k:k + 2]) for k in range(0, len(d_rev), 2)])
+                p_user |= {int(e[:2]) for e in d_rev}
+        for cols_, labs_ in p_groups:
             h_ = max(len(c) for c in cols_)
             p_rows.append([[c[k] if k < len(c) else '' for c in cols_] for k in range(h_)] + [labs_])
         # stars (user, 2026-10-08): ★ = the number is also in the STRONG 16,
@@ -3687,6 +3712,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     where that operation is a bare cut: also nc in its place (cut/-1, -1/cut -> nc/-1, -1/nc)",
                        "     that yx number with a cut step on x: x without cut, other sign, both numbers (c+2/c-2 -> -1/c-2, -2/c-2)",
                        "     RRR last row +1/+1 or +2/+2: also nc on x and the other step on y (+1/+1 -> nc/+2)",
+                       "     declared cell, end: a number of it whose digits reversed stand in another cell brings that number in",
                        "     ★ = also in the STRONG 16     * = also in the RECOMMENDED list     ☆ = number from the declared-cell rules",
                        f"     in advance {RRR_LIVE['power_hits']} of {RRR_LIVE['power_rounds']};"
                        " all 423 recorded rounds: 36 = 8.5% (4% by chance), latest series 7 of 170", ""]

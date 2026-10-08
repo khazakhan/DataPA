@@ -3535,7 +3535,6 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             return out_
 
         p_rows = []
-        p_groups = []
         for cells_, labs_ in ((p_cells, [t for _, t in p_four]), (p_rev, ['operations reversed'] * 4),
                               ([c for c, _ in p_third], [t for _, t in p_third]),
                               ([c for c, _ in p_fourth], [t for _, t in p_fourth])):
@@ -3566,25 +3565,6 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                     if lx_ == ly_ and lx_ in ('+1', '+2'):
                         cols_[0] = p_join(cols_[0], [
                             f"{compute_variants(ep, 'no_change', abbrev_op[p_swap[ly_]])[0]:02d} (nc/{p_swap[ly_]})"])
-            p_groups.append((cols_, labs_))
-        # every number of every other cell is also included in the declared
-        # cell (user's screenshot, 2026-10-09), each number once, two per line
-        if p_groups:
-            p_ent = re.compile(r'\d\d \([^)]*\)')
-            d_have = {e[:2] for l in p_groups[0][0][0] for e in p_ent.findall(l)}
-            d_more = []
-            for gi_, (cols_, _) in enumerate(p_groups):
-                for ci_, col_ in enumerate(cols_):
-                    if gi_ == 0 and ci_ == 0:
-                        continue
-                    for l in col_:
-                        for e in p_ent.findall(l):
-                            if e[:2] not in d_have:
-                                d_have.add(e[:2])
-                                d_more.append(e)
-            p_groups[0][0][0] = p_join(p_groups[0][0][0],
-                                       [', '.join(d_more[k:k + 2]) for k in range(0, len(d_more), 2)])
-        for cols_, labs_ in p_groups:
             h_ = max(len(c) for c in cols_)
             p_rows.append([[c[k] if k < len(c) else '' for c in cols_] for k in range(h_)] + [labs_])
         # stars (user, 2026-10-08): ★ = the number is also in the STRONG 16,
@@ -3655,7 +3635,6 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell, last line: RRR last row xy and yx with the cut added to its new x operation",
                        "     and that xy number with the sign of its y changed, and with only the cut on y (cut/c+2, cut/cut)",
                        "     RRR last row +1/+1 or +2/+2: also nc on x and the other step on y (+1/+1 -> nc/+2)",
-                       "     declared cell, end: every number of the other cells, each once",
                        "     ★ = also in the STRONG 16     * = also in the RECOMMENDED list",
                        f"     in advance {RRR_LIVE['power_hits']} of {RRR_LIVE['power_rounds']};"
                        " all 423 recorded rounds: 36 = 8.5% (4% by chance), latest series 7 of 170", ""]

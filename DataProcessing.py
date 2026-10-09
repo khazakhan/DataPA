@@ -3619,6 +3619,15 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         # reverse numbers in the declared cell (user's screenshot, 2026-10-09):
         # a declared-cell number whose digits reversed stand in another cell
         # of the table (40 and 04) brings that number into the declared cell
+        # cut/cut in the declared cell (user's screenshot, 2026-10-09): the
+        # number of cut/nc with its digits reversed (EP 56: cut/nc = 06 -> 60)
+        if p_groups and any('(cut/cut)' in l for l in p_groups[0][0][0]):
+            cn_ = compute_variants(ep, 'cut', 'no_change')[0]
+            rn_ = (cn_ % 10) * 10 + cn_ // 10
+            if not any(l.startswith(f"{rn_:02d} (") or f", {rn_:02d} (" in l for l in p_groups[0][0][0]):
+                p_groups[0][0][0] = p_join(p_groups[0][0][0], [
+                    f"{rn_:02d} ({OP_ABBREV[find_op(ep // 10, rn_ // 10)]}/{OP_ABBREV[find_op(ep % 10, rn_ % 10)]})"])
+                p_user.add(rn_)
         if p_groups:
             p_ent = re.compile(r'\d\d \([^)]*\)')
             d_have = [e[:2] for l in p_groups[0][0][0] for e in p_ent.findall(l)]
@@ -3756,6 +3765,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     that yx number with a cut step on x: x without cut, other sign, both numbers (c+2/c-2 -> -1/c-2, -2/c-2)",
                        "     and the first of those with only the cut on y (-2/c-1 -> -2/cut)",
                        "     RRR last row +1/+1 or +2/+2: also nc on x and the other step on y (+1/+1 -> nc/+2)",
+                       "     declared cell with a cut/cut number: the cut/nc number with its digits reversed",
                        "     declared cell, end: a number of it whose digits reversed stand in another cell brings that number in",
                        "     ★ = also in the STRONG 16     * = also in the RECOMMENDED list     ☆ = number from the declared-cell rules",
                        f"     in advance {RRR_LIVE['power_hits']} of {RRR_LIVE['power_rounds']};"

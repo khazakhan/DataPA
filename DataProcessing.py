@@ -3632,6 +3632,24 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         # reverse numbers in the declared cell (user's screenshot, 2026-10-09):
         # a declared-cell number whose digits reversed stand in another cell
         # of the table (40 and 04) brings that number into the declared cell
+        # declared number nc/cut (user's screenshot, 2026-10-09; 52 on EP 57):
+        # its tens digit cut (02), both digits cut (07), and the digits
+        # reversed of the declared number and of those two (25, 20, 70)
+        if p_groups and p_cells and p_cells[0][3:] == '(nc/cut)':
+            dv_ = int(p_cells[0][:2])
+            n1_ = cut(dv_ // 10) * 10 + dv_ % 10
+            n2_ = cut(dv_ // 10) * 10 + cut(dv_ % 10)
+            rv2_ = lambda v: (v % 10) * 10 + v // 10
+            n_have = {e for l in p_groups[0][0][0] for e in re.findall(r'(\d\d) \(', l)}
+            n_new = []
+            for v in (n1_, n2_, rv2_(n1_), rv2_(dv_), rv2_(n2_)):
+                if f"{v:02d}" not in n_have:
+                    n_have.add(f"{v:02d}")
+                    n_new.append(f"{v:02d} ({OP_ABBREV[find_op(ep // 10, v // 10)]}/{OP_ABBREV[find_op(ep % 10, v % 10)]})")
+            if n_new:
+                p_groups[0][0][0] = p_join(p_groups[0][0][0],
+                                           [', '.join(n_new[k:k + 2]) for k in range(0, len(n_new), 2)])
+                p_user |= {int(e[:2]) for e in n_new}
         # cut/cut in the declared cell (user's screenshot, 2026-10-09): the
         # number of cut/nc with its digits reversed (EP 56: cut/nc = 06 -> 60)
         if p_groups and any('(cut/cut)' in l for l in p_groups[0][0][0]):
@@ -3803,6 +3821,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     and the first of those with only the cut on y (-2/c-1 -> -2/cut)",
                        "     RRR last row +1/+1 or +2/+2: also nc on x and the other step on y (+1/+1 -> nc/+2)",
                        "     declared cell numbers with the cut step of the other sign and number on x (c+1 -> c-2): also without that cut",
+                       "     declared number nc/cut: its tens cut, both digits cut, and the digits reversed of those and of itself",
                        "     declared cell with a cut/cut number: the cut/nc number with its digits reversed",
                        "     declared cell, end: a number of it whose digits reversed stand in another cell brings that number in",
                        "     ★ = also in the STRONG 16     * = also in the RECOMMENDED list     ☆ = number from the declared-cell rules",

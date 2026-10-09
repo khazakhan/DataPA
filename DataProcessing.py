@@ -3579,8 +3579,13 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                         # 2026-10-09; shown with its own operations on the EP
                         yv_ = compute_variants(ep, abbrev_op[ly_], cx_)[0]
                         yr_ = (yv_ % 10) * 10 + cut(yv_ // 10)
-                        cols_[0] = p_join(cols_[0], [
-                            f"{yr_:02d} ({OP_ABBREV[find_op(ep // 10, yr_ // 10)]}/{OP_ABBREV[find_op(ep % 10, yr_ % 10)]})"])
+                        yl_ = f"{yr_:02d} ({OP_ABBREV[find_op(ep // 10, yr_ // 10)]}/{OP_ABBREV[find_op(ep % 10, yr_ % 10)]})"
+                        # ... and the same with nc on y (cut/-1 -> cut/nc: 36 ->
+                        # 37 on EP 87), user's screenshot 2026-10-09
+                        if yr_ % 10 != ep % 10:
+                            yn_ = (yr_ // 10) * 10 + ep % 10
+                            yl_ += f", {yn_:02d} ({OP_ABBREV[find_op(ep // 10, yn_ // 10)]}/nc)"
+                        cols_[0] = p_join(cols_[0], [yl_])
                         # where that operation is a bare cut (cut/-1 and -1/cut),
                         # also nc in its place (nc/-1 and -1/nc: 38 and 29 on
                         # EP 39), user's screenshot 2026-10-09
@@ -3814,7 +3819,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared number only, x cut step + y nc: the first rule's two numbers with both cut",
                        "     declared cell, last line: RRR last row xy and yx with the cut added to its new x operation",
                        "     and that xy number with the sign of its y changed, and with only the cut on y (cut/c+2, cut/cut)",
-                       "     that yx number with its tens digit cut and the digits reversed (30 -> 08)",
+                       "     that yx number with its tens digit cut and the digits reversed (30 -> 08), and that with nc on y",
                        "     where that operation is a bare cut: also nc in its place (cut/-1, -1/cut -> nc/-1, -1/nc)",
                        "     that xy number as cut step / nc: x without the cut, y the cut step of the other sign (c-1/nc -> -1/c+1)",
                        "     that yx number with a cut step on x: x without cut, other sign, both numbers (c+2/c-2 -> -1/c-2, -2/c-2)",

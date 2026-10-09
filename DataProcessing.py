@@ -3701,6 +3701,14 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                             if tv_ not in t_have:
                                 t_have.add(tv_)
                                 t_new.append(f"{tv_} ({OP_ABBREV[tp_]}/{ey_})")
+                # ... and each of those with its digits reversed (14 -> 41 on
+                # EP 90), user's screenshot 2026-10-09
+                for e in list(t_new):
+                    rr_ = e[1] + e[0]
+                    if rr_ not in t_have:
+                        t_have.add(rr_)
+                        rv_ = int(rr_)
+                        t_new.append(f"{rr_} ({OP_ABBREV[find_op(ep // 10, rv_ // 10)]}/{OP_ABBREV[find_op(ep % 10, rv_ % 10)]})")
                 if t_new:
                     p_groups[0][0][0] = p_join(p_groups[0][0][0],
                                                [', '.join(t_new[k:k + 2]) for k in range(0, len(t_new), 2)])
@@ -3826,6 +3834,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     and the first of those with only the cut on y (-2/c-1 -> -2/cut)",
                        "     RRR last row +1/+1 or +2/+2: also nc on x and the other step on y (+1/+1 -> nc/+2)",
                        "     declared cell numbers with the cut step of the other sign and number on x (c+1 -> c-2): also without that cut",
+                       "     and each of those with its digits reversed (14 -> 41)",
                        "     declared number nc/cut: its tens cut, both digits cut, and the digits reversed of those and of itself",
                        "     declared cell with a cut/cut number: the cut/nc number with its digits reversed",
                        "     declared cell, end: a number of it whose digits reversed stand in another cell brings that number in",

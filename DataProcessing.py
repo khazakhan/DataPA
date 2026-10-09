@@ -3660,6 +3660,28 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 p_groups[0][0][0] = p_join(p_groups[0][0][0],
                                            [', '.join(d_rev[k:k + 2]) for k in range(0, len(d_rev), 2)])
                 p_user |= {int(e[:2]) for e in d_rev}
+        # declared number like c+1/+1 (user's screenshot, 2026-10-09): the
+        # declared-cell numbers whose x is the cut step of the other sign and
+        # other number (c+1 -> c-2: 74, 76, 73 on EP 40) also without that
+        # cut on x, y kept (24, 26, 23)
+        if p_groups and p_cells and p_cells[0]:
+            dx_ = p_cells[0][4:-1].partition('/')[0]
+            dstep_ = _op_parts(abbrev_op[dx_])[1] if dx_ in abbrev_op else ''
+            if dstep_ in p_swap:
+                tp_ = SIGN_FLIP[abbrev_op[p_swap[dstep_]]]          # plain: +1 -> -2
+                ta_ = OP_ABBREV[KK_CUT_TOGGLE[tp_]]                  # with cut: c-2
+                t_new, t_have = [], {e for l in p_groups[0][0][0] for e in re.findall(r'(\d\d) \(', l)}
+                for l in p_groups[0][0][0]:
+                    for ex_, ey_ in re.findall(r'\d\d \(([^/)]*)/([^)]*)\)', l):
+                        if ex_ == ta_ and ey_ in abbrev_op:
+                            tv_ = f"{compute_variants(ep, tp_, abbrev_op[ey_])[0]:02d}"
+                            if tv_ not in t_have:
+                                t_have.add(tv_)
+                                t_new.append(f"{tv_} ({OP_ABBREV[tp_]}/{ey_})")
+                if t_new:
+                    p_groups[0][0][0] = p_join(p_groups[0][0][0],
+                                               [', '.join(t_new[k:k + 2]) for k in range(0, len(t_new), 2)])
+                    p_user |= {int(e[:2]) for e in t_new}
         for cols_, labs_ in p_groups:
             h_ = max(len(c) for c in cols_)
             p_rows.append([[c[k] if k < len(c) else '' for c in cols_] for k in range(h_)] + [labs_])
@@ -3780,6 +3802,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     that yx number with a cut step on x: x without cut, other sign, both numbers (c+2/c-2 -> -1/c-2, -2/c-2)",
                        "     and the first of those with only the cut on y (-2/c-1 -> -2/cut)",
                        "     RRR last row +1/+1 or +2/+2: also nc on x and the other step on y (+1/+1 -> nc/+2)",
+                       "     declared cell numbers with the cut step of the other sign and number on x (c+1 -> c-2): also without that cut",
                        "     declared cell with a cut/cut number: the cut/nc number with its digits reversed",
                        "     declared cell, end: a number of it whose digits reversed stand in another cell brings that number in",
                        "     ★ = also in the STRONG 16     * = also in the RECOMMENDED list     ☆ = number from the declared-cell rules",

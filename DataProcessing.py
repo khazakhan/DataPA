@@ -3530,6 +3530,12 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 out_.insert(2, ', '.join(
                     f"{compute_variants(ep, cf_, ny_)[0]:02d} ({OP_ABBREV[cf_]}/{OP_ABBREV[ny_]})"
                     for cf_ in (_op_join(True, _op_parts(SIGN_FLIP[x_])[1]) for x_ in fl_)))
+                # ... and the last of the sign-changed pair with the cut put on
+                # its y only (cut/+2 -> cut/c+2: 26 -> 21 on EP 74), user's
+                # screenshot 2026-10-09
+                if len(fl_) == 2:
+                    gy_ = _op_join(True, _op_parts(SIGN_FLIP[fl_[-1]])[1])
+                    out_.insert(3, f"{compute_variants(ep, ny_, gy_)[0]:02d} ({OP_ABBREV[ny_]}/{OP_ABBREV[gy_]})")
             # format c+2/nc (user's screenshot, 2026-10-09): x a cut step and y
             # nc — the two numbers of the first rule again with both cut
             # (cut/+2 -> nc/c+2: 00 -> 55, 09 -> 54 on EP 58)
@@ -3755,6 +3761,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared number only: y cut + sign changed, x without its cut, the two swapped; and that step switched",
                        "     and those two with the sign of the second operation changed (c-2/-1 -> c-2/+1)",
                        "     and those crossed with the cut put on the new x only (c+1/-1 -> c-1/c+1)",
+                       "     and the last of that pair with the cut put on its y only (cut/+2 -> cut/c+2)",
                        "     declared number only, last: x without its cut and sign changed, y kept (c+1/+2 -> -1/+2)",
                        "     declared number only, x plain step + y cut step: +1/c+1 -> cut/c-2",
                        "     declared number only, x cut step + y nc: the first rule's two numbers with both cut",

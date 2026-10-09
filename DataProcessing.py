@@ -3592,6 +3592,12 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                             cols_[0] = p_join(cols_[0], [', '.join(
                                 f"{compute_variants(ep, sg_ + n_, cx_)[0]:02d} ({sg_ + n_}/{cxa_})"
                                 for n_ in (p_swap[ly_[1:]][1], ly_[2]))])
+                            # ... and the first of them with only the cut on y
+                            # (-2/c-1 -> -2/cut), user's screenshot 2026-10-09
+                            if cxa_ in ('c+1', 'c-1', 'c+2', 'c-2'):
+                                fx_ = sg_ + p_swap[ly_[1:]][1]
+                                cols_[0] = p_join(cols_[0], [
+                                    f"{compute_variants(ep, fx_, 'cut')[0]:02d} ({fx_}/cut)"])
                         # along with that xy number, the same with the sign of
                         # its y changed (cut/c-2 -> cut/c+2), user's screenshot
                         fy_ = SIGN_FLIP[abbrev_op[ly_]]
@@ -3736,6 +3742,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     where that operation is a bare cut: also nc in its place (cut/-1, -1/cut -> nc/-1, -1/nc)",
                        "     that xy number as cut step / nc: x without the cut, y the cut step of the other sign (c-1/nc -> -1/c+1)",
                        "     that yx number with a cut step on x: x without cut, other sign, both numbers (c+2/c-2 -> -1/c-2, -2/c-2)",
+                       "     and the first of those with only the cut on y (-2/c-1 -> -2/cut)",
                        "     RRR last row +1/+1 or +2/+2: also nc on x and the other step on y (+1/+1 -> nc/+2)",
                        "     declared cell, end: a number of it whose digits reversed stand in another cell brings that number in",
                        "     ★ = also in the STRONG 16     * = also in the RECOMMENDED list     ☆ = number from the declared-cell rules",

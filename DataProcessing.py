@@ -3744,6 +3744,31 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 p_groups[0][0][0] = p_join(p_groups[0][0][0],
                                            [', '.join(c_new[k:k + 2]) for k in range(0, len(c_new), 2)])
                 p_user |= {int(e[:2]) for e in c_new}
+        # declared cell: the ★ rows of the RRR table (number inside the
+        # tens-cut decade) modified — x without its cut and sign flipped, y
+        # without its cut and with that same sign (12★ (+2/c-2), 16★ (+2/c+2)
+        # on EP 99 -> 77 (-2/-2)), user's screenshot 2026-10-11
+        if p_groups and grid_ep is not None:
+            s_dec = cut(grid_ep // 10)
+            s_have = {e for l in p_groups[0][0][0] for e in re.findall(r'(\d\d) \(', l)}
+            s_new = []
+            for sv_, _, slab_ in both_cut:
+                sx_, _, sy_ = slab_.partition('/')
+                if sv_ // 10 != s_dec or sx_ not in abbrev_op or sy_ not in abbrev_op:
+                    continue
+                xn_, yn_ = _op_parts(abbrev_op[sx_])[1], _op_parts(abbrev_op[sy_])[1]
+                if not xn_ or not yn_:
+                    continue
+                nx_ = SIGN_FLIP[xn_]
+                ny_ = nx_[0] + yn_[1:]
+                nv_ = f"{compute_variants(ep, nx_, ny_)[0]:02d}"
+                if nv_ not in s_have:
+                    s_have.add(nv_)
+                    s_new.append(f"{nv_} ({OP_ABBREV[nx_]}/{OP_ABBREV[ny_]})")
+            if s_new:
+                p_groups[0][0][0] = p_join(p_groups[0][0][0],
+                                           [', '.join(s_new[k:k + 2]) for k in range(0, len(s_new), 2)])
+                p_user |= {int(e[:2]) for e in s_new}
         for cols_, labs_ in p_groups:
             h_ = max(len(c) for c in cols_)
             p_rows.append([[c[k] if k < len(c) else '' for c in cols_] for k in range(h_)] + [labs_])
@@ -3881,6 +3906,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     and each of those with its digits reversed (14 -> 41)",
                        "     nearest x of the declared x already in the cell: that x with the declared y (96 c+2/+2 -> 86 c+1/+2)",
                        "     declared cell: every number with a bare cut on y also with nc on y (65 +1/cut -> 60 +1/nc)",
+                       "     declared cell: ★ rows of the RRR table, x without cut + sign flipped, y without cut, same sign (+2/c-2 -> -2/-2)",
                        "     declared number nc/cut: its tens cut, both digits cut, and the digits reversed of those and of itself",
                        "     declared cell with a cut/cut number: the cut/nc number with its digits reversed",
                        "     declared cell, end: a number of it whose digits reversed stand in another cell brings that number in",

@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 431, 'tens_cut': 72, 'short_list': 113,
-    'table_rounds': 421, 'table_hits': 50, 'table_chance': 33, 'declared': 386, 'declared_hits': 8,
+    'results': 432, 'tens_cut': 72, 'short_list': 113,
+    'table_rounds': 422, 'table_hits': 51, 'table_chance': 33, 'declared': 387, 'declared_hits': 8,
     'band_hits': 39, 'units_hits': 54, 'second_hits': 12,
     'same_tens': 23,
-    'rrr3_rounds': 117, 'rrr3_hits': 2, 'rrr3_rec_rounds': 118, 'rrr3_rec_hits': 26,
-    'rrr3_same_rounds': 90, 'rrr3_same_hits': 1, 'rrr3_wide_rounds': 77, 'rrr3_wide_hits': 9, 'rrr3_yx_rounds': 72, 'rrr3_yx_hits': 7,
-    'rrr3_strong_rounds': 68, 'rrr3_strong_hits': 2, 'rrr3_same2_rounds': 65, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 72, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 72, 'rrr3_sameyx_hits': 1,
-    'power_rounds': 7, 'power_hits': 6,
+    'rrr3_rounds': 118, 'rrr3_hits': 2, 'rrr3_rec_rounds': 119, 'rrr3_rec_hits': 27,
+    'rrr3_same_rounds': 91, 'rrr3_same_hits': 1, 'rrr3_wide_rounds': 78, 'rrr3_wide_hits': 9, 'rrr3_yx_rounds': 73, 'rrr3_yx_hits': 7,
+    'rrr3_strong_rounds': 69, 'rrr3_strong_hits': 2, 'rrr3_same2_rounds': 66, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 73, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 73, 'rrr3_sameyx_hits': 1,
+    'power_rounds': 8, 'power_hits': 6,
 }
 
 
@@ -3359,23 +3359,40 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             # seats (10 votes) pushed the band's fifth number out and it
             # was the result (23 after 77); the band keeps all 5 seats
             strong_votes[v] = 15 - rank * 0.1
-    # one fixed seat (2026-10-11, result 30 after 77): the first RRR table
-    # number with a plain step on y, that y as the cut step of the other
-    # sign (31 (+1/-2) -> 30 (+1/c+2)) — the user's -2 -> c+2 rule.  It
-    # ranks just ahead of the 11th table number, so it is always inside the
-    # 16 and the band keeps its 5 seats
+    # fixed rule seats (2026-10-11), each written after a miss and each
+    # taking the seat of the last RRR table number, so the list stays at 16
+    # and the band keeps its 5 seats:
+    #  1. result 30 after 77 — the first RRR table number with a plain step
+    #     on y, that y as the cut step of the other sign (31 (+1/-2) -> 30
+    #     (+1/c+2)), the user's -2 -> c+2 rule
+    #  2. result 50 after 30 — the declared number's ops (x/y on the EP):
+    #     y sign flipped with the cut, its step switched, put on x; x without
+    #     its cut put on y (84 (-1/c-2) -> 50 (c+1/-1))
+    rule_seats = []
     for v, _, lab in both_cut:
         sx_, _, sy_ = lab.partition('/')
         if sy_ in ('-1', '-2', '+1', '+2') and sx_ in abbrev_op:
             ny_ = KK_CUT_TOGGLE[SIGN_FLIP[abbrev_op[sy_]]]
-            nv_ = compute_variants(ep, abbrev_op[sx_], ny_)[0]
-            strong_lab.setdefault(nv_, f"{sx_}/{OP_ABBREV[ny_]}")
-            if strong_votes.get(nv_, 0) < 15:
-                # it takes the 11th table number's seat, never a band seat
-                if len(table_first) >= 11 and strong_votes.get(table_first[10], 0) > 19:
-                    strong_votes[table_first[10]] = 4.5
-                strong_votes[nv_] = 19.905
+            rule_seats.append((compute_variants(ep, abbrev_op[sx_], ny_)[0], f"{sx_}/{OP_ABBREV[ny_]}"))
             break
+    if grid_ep is not None:
+        d_v = cut(grid_ep // 10) * 10 + (grid_ep % 10 + 4) % 10
+        d_x, d_y = find_op(ep // 10, d_v // 10), find_op(ep % 10, d_v % 10)
+        d_n = _op_parts(SIGN_FLIP.get(d_y, d_y))[1]
+        d_sw = {'+1': '+2', '+2': '+1', '-1': '-2', '-2': '-1'}
+        if d_n in d_sw:
+            ny_, nx_ = 'cut' + d_sw[d_n], _op_join(False, _op_parts(d_x)[1])
+            rule_seats.append((compute_variants(ep, ny_, nx_)[0], f"{OP_ABBREV[ny_]}/{OP_ABBREV[nx_]}"))
+    r_k = 0
+    for nv_, nlab_ in rule_seats:
+        strong_lab.setdefault(nv_, nlab_)
+        if strong_votes.get(nv_, 0) >= 15:
+            continue
+        t_i = 10 - r_k
+        if 0 <= t_i < len(table_first) and strong_votes.get(table_first[t_i], 0) > 19:
+            strong_votes[table_first[t_i]] = 4.5
+        strong_votes[nv_] = 19.905 - r_k * 0.001
+        r_k += 1
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json
@@ -3806,6 +3823,28 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 if m_new:
                     p_groups[0][0][0] = p_join(p_groups[0][0][0], [', '.join(m_new)])
                     p_user |= {int(e[:2]) for e in m_new}
+        # declared cell: the first rule's two numbers (y cut + sign changed
+        # put on x, x without its cut put on y, and that step switched) also
+        # with the cut step on x switched (60 (c+2/-1), 69 (c+2/-2) on EP 91
+        # -> 50 (c+1/-1), 59 (c+1/-2)).  Result 50 after 30, user 2026-10-11
+        if p_groups and p_cells and p_cells[0]:
+            dx_, _, dy_ = p_cells[0][4:-1].partition('/')
+            if dx_ in abbrev_op and dy_ in abbrev_op:
+                yn_ = _op_parts(SIGN_FLIP[abbrev_op[dy_]])[1]
+                if yn_ in p_swap:
+                    ny_ = 'cut' + p_swap[yn_]
+                    nx_ = _op_join(False, _op_parts(abbrev_op[dx_])[1])
+                    w_xs = [nx_] + ([abbrev_op[p_swap[OP_ABBREV[nx_]]]] if OP_ABBREV[nx_] in p_swap else [])
+                    w_have = {e for l in p_groups[0][0][0] for e in re.findall(r'(\d\d) \(', l)}
+                    w_new = []
+                    for x_ in w_xs:
+                        wv_ = f"{compute_variants(ep, ny_, x_)[0]:02d}"
+                        if wv_ not in w_have:
+                            w_have.add(wv_)
+                            w_new.append(f"{wv_} ({OP_ABBREV[ny_]}/{OP_ABBREV[x_]})")
+                    if w_new:
+                        p_groups[0][0][0] = p_join(p_groups[0][0][0], [', '.join(w_new)])
+                        p_user |= {int(e[:2]) for e in w_new}
         for cols_, labs_ in p_groups:
             h_ = max(len(c) for c in cols_)
             p_rows.append([[c[k] if k < len(c) else '' for c in cols_] for k in range(h_)] + [labs_])
@@ -3945,6 +3984,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: every number with a bare cut on y also with nc on y (65 +1/cut -> 60 +1/nc)",
                        "     declared cell: ★ rows of the RRR table, x without cut + sign flipped, y without cut, same sign (+2/c-2 -> -2/-2)",
                        "     declared cell: declared y a +1/+2 step — the cut steps of the other sign too (-1/+1 -> -1/c-1, -1/c-2)",
+                       "     declared cell: the first rule's two numbers also with the cut step on x switched (c+2/-1 -> c+1/-1)",
                        "     declared number nc/cut: its tens cut, both digits cut, and the digits reversed of those and of itself",
                        "     declared cell with a cut/cut number: the cut/nc number with its digits reversed",
                        "     declared cell, end: a number of it whose digits reversed stand in another cell brings that number in",
@@ -3957,7 +3997,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     body += ['─' * len(head), "3RRR".center(len(head)), "",
              *power_lines,
              *strong_lines,
-             "     never more than 16: the RRR table (up to 11), one table number with its y as the opposite cut step, the number band (5)",
+             "     never more than 16: the RRR table, the rule seats written after misses (in place of the last table numbers), the number band (5)",
              "     and rule numbers as fill — about one round in six by size; most rounds still miss.", "",
              *final_lines,
              "     numbers 1-16 are the STRONG 16; the rest follow in the order of the lists below", "",

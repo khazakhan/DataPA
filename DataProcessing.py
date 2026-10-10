@@ -3713,6 +3713,21 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                     p_groups[0][0][0] = p_join(p_groups[0][0][0],
                                                [', '.join(t_new[k:k + 2]) for k in range(0, len(t_new), 2)])
                     p_user |= {int(e[:2]) for e in t_new}
+        # nearest x of the declared x (c+2 -> c+1) already standing in the
+        # declared cell (81 (c+1/c+2) on EP 24): that x also with the declared
+        # y (96 (c+2/+2) -> 86 (c+1/+2)), user's screenshot 2026-10-11
+        if p_groups and p_cells and p_cells[0]:
+            dx_, _, dy_ = p_cells[0][4:-1].partition('/')
+            if dx_ in abbrev_op and dy_ in abbrev_op:
+                nc_, ns_ = _op_parts(abbrev_op[dx_])
+                if ns_ in p_swap:
+                    nx_ = _op_join(nc_, p_swap[ns_])
+                    na_ = OP_ABBREV[nx_]
+                    n_ents = [e for l in p_groups[0][0][0] for e in re.findall(r'(\d\d) \(([^/)]*)/', l)]
+                    nv_ = compute_variants(ep, nx_, abbrev_op[dy_])[0]
+                    if any(x == na_ for _, x in n_ents) and f"{nv_:02d}" not in {v for v, _ in n_ents}:
+                        p_groups[0][0][0] = p_join(p_groups[0][0][0], [f"{nv_:02d} ({na_}/{dy_})"])
+                        p_user.add(nv_)
         for cols_, labs_ in p_groups:
             h_ = max(len(c) for c in cols_)
             p_rows.append([[c[k] if k < len(c) else '' for c in cols_] for k in range(h_)] + [labs_])
@@ -3835,6 +3850,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     RRR last row +1/+1 or +2/+2: also nc on x and the other step on y (+1/+1 -> nc/+2)",
                        "     declared cell numbers with the cut step of the other sign and number on x (c+1 -> c-2): also without that cut",
                        "     and each of those with its digits reversed (14 -> 41)",
+                       "     nearest x of the declared x already in the cell: that x with the declared y (96 c+2/+2 -> 86 c+1/+2)",
                        "     declared number nc/cut: its tens cut, both digits cut, and the digits reversed of those and of itself",
                        "     declared cell with a cut/cut number: the cut/nc number with its digits reversed",
                        "     declared cell, end: a number of it whose digits reversed stand in another cell brings that number in",

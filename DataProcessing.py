@@ -3370,7 +3370,11 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             ny_ = KK_CUT_TOGGLE[SIGN_FLIP[abbrev_op[sy_]]]
             nv_ = compute_variants(ep, abbrev_op[sx_], ny_)[0]
             strong_lab.setdefault(nv_, f"{sx_}/{OP_ABBREV[ny_]}")
-            strong_votes[nv_] = max(strong_votes.get(nv_, 0), 19.905)
+            if strong_votes.get(nv_, 0) < 15:
+                # it takes the 11th table number's seat, never a band seat
+                if len(table_first) >= 11 and strong_votes.get(table_first[10], 0) > 19:
+                    strong_votes[table_first[10]] = 4.5
+                strong_votes[nv_] = 19.905
             break
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):

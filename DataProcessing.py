@@ -3369,6 +3369,16 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     #     y sign flipped with the cut, its step switched, put on x; x without
     #     its cut put on y (84 (-1/c-2) -> 50 (c+1/-1))
     rule_seats = []
+    # record seats (2026-10-11, replay of all 423 older rounds, one seat =
+    # 1% by chance): the 2nd NUMBER (c+1 / c-1 on the running value) held
+    # the result 12 times (2.8%) and never had a seat; the last round's
+    # operation again 8 times (1.9%).  The RRR table numbers they displace
+    # held it about 1% each (positions 2 and 3: 3 times each).
+    if grid_ep is not None:
+        v2_ = ((grid_ep // 10 + 6) % 10) * 10 + (grid_ep % 10 + 4) % 10
+        rule_seats.append((v2_, f"{OP_ABBREV[find_op(ep // 10, v2_ // 10)]}/{OP_ABBREV[find_op(ep % 10, v2_ % 10)]}"))
+    if same:
+        rule_seats.append((same[0], strong_lab.get(same[0], same[1])))
     for v, _, lab in both_cut:
         sx_, _, sy_ = lab.partition('/')
         if sy_ in ('-1', '-2', '+1', '+2') and sx_ in abbrev_op:
@@ -3438,6 +3448,16 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        'wide': wide_votes, 'found': [int(n[:2]) for n, _ in found],
                        'table': [v for v, _, _ in both_cut]}, fh)
     strong = sorted(order, key=lambda v: (-strong_votes[v], order.index(v)))[:16]
+    if os.environ.get('RRR3_DUMP2'):
+        import json
+        with open(os.environ['RRR3_DUMP2'], 'w') as fh:
+            json.dump({'ep': ep, 'grid_ep': grid_ep, 'strong': strong,
+                       'table': [[v, lab] for v, _, lab in both_cut],
+                       'rule_seats': [v for v, _ in rule_seats],
+                       'rec': [v for v, _ in rec], 'yx': [v for v, _ in rec_yx], 'wide': [v for v, _ in wide],
+                       'found': [int(n[:2]) for n, _ in found],
+                       'again': [a[0] if a else None for a in (same, same2, same_turn if same else None,
+                                                               same_yx if same else None)]}, fh)
     # drawn as a green table: ribbon label, then 4 numbers a row, each with
     # its rank and the operation applied to the EP
     s_g, s_rib, s_rst = "\033[1;32m", "\033[1;97;42m", "\033[0m"

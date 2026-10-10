@@ -3390,6 +3390,35 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         if d_xn in d_sw:
             tx_ = SIGN_FLIP[d_sw[d_xn]]
             rule_seats.append((compute_variants(ep, tx_, 'cut')[0], f"{OP_ABBREV[tx_]}/cut"))
+        # seats for the earlier series J misses that had only been repaired
+        # in the declared cell (user, 2026-10-11):
+        #  4. result 86 after 42 — the nearest x of the declared x (step
+        #     switched, c+2 -> c+1) with the declared y (96 (c+2/+2) -> 86)
+        if d_xn in d_sw:
+            qx_ = _op_join(_op_parts(d_x)[0], d_sw[d_xn])
+            rule_seats.append((compute_variants(ep, qx_, d_y)[0], f"{OP_ABBREV[qx_]}/{OP_ABBREV[d_y]}"))
+        #  5. result 10 after 86 — declared x without its cut and sign
+        #     flipped, y kept (30 (+1/-2) -> 10 (-1/-2))
+        if d_xn:
+            qx_ = SIGN_FLIP[d_xn]
+            rule_seats.append((compute_variants(ep, qx_, d_y)[0], f"{OP_ABBREV[qx_]}/{OP_ABBREV[d_y]}"))
+        #  6. result 60 after 10 — the declared x with nc on y (64 (+1/c-1),
+        #     65 (+1/cut) -> 60 (+1/nc))
+        if d_y != 'no_change':
+            rule_seats.append((compute_variants(ep, d_x, 'no_change')[0], f"{OP_ABBREV[d_x]}/nc"))
+        #  7. result 77 after 60 — the first ★ row of the RRR table (number
+        #     in the tens-cut decade): x without cut + sign flipped, y without
+        #     cut with that sign (12 (+2/c-2) -> 77 (-2/-2))
+        for v, _, lab in both_cut:
+            sx_, _, sy_ = lab.partition('/')
+            if v // 10 != cut(grid_ep // 10) or sx_ not in abbrev_op or sy_ not in abbrev_op:
+                continue
+            xn_, yn_ = _op_parts(abbrev_op[sx_])[1], _op_parts(abbrev_op[sy_])[1]
+            if xn_ and yn_:
+                qx_ = SIGN_FLIP[xn_]
+                qy_ = qx_[0] + yn_[1:]
+                rule_seats.append((compute_variants(ep, qx_, qy_)[0], f"{OP_ABBREV[qx_]}/{OP_ABBREV[qy_]}"))
+                break
     r_k = 0
     for nv_, nlab_ in rule_seats:
         strong_lab.setdefault(nv_, nlab_)

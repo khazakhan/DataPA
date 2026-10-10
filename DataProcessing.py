@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 430, 'tens_cut': 72, 'short_list': 113,
-    'table_rounds': 420, 'table_hits': 50, 'table_chance': 33, 'declared': 385, 'declared_hits': 8,
+    'results': 431, 'tens_cut': 72, 'short_list': 113,
+    'table_rounds': 421, 'table_hits': 50, 'table_chance': 33, 'declared': 386, 'declared_hits': 8,
     'band_hits': 39, 'units_hits': 54, 'second_hits': 12,
     'same_tens': 23,
-    'rrr3_rounds': 116, 'rrr3_hits': 2, 'rrr3_rec_rounds': 117, 'rrr3_rec_hits': 26,
-    'rrr3_same_rounds': 89, 'rrr3_same_hits': 1, 'rrr3_wide_rounds': 76, 'rrr3_wide_hits': 8, 'rrr3_yx_rounds': 71, 'rrr3_yx_hits': 7,
-    'rrr3_strong_rounds': 67, 'rrr3_strong_hits': 2, 'rrr3_same2_rounds': 64, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 71, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 71, 'rrr3_sameyx_hits': 1,
-    'power_rounds': 6, 'power_hits': 5,
+    'rrr3_rounds': 117, 'rrr3_hits': 2, 'rrr3_rec_rounds': 118, 'rrr3_rec_hits': 26,
+    'rrr3_same_rounds': 90, 'rrr3_same_hits': 1, 'rrr3_wide_rounds': 77, 'rrr3_wide_hits': 9, 'rrr3_yx_rounds': 72, 'rrr3_yx_hits': 7,
+    'rrr3_strong_rounds': 68, 'rrr3_strong_hits': 2, 'rrr3_same2_rounds': 65, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 72, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 72, 'rrr3_sameyx_hits': 1,
+    'power_rounds': 7, 'power_hits': 6,
 }
 
 
@@ -3359,6 +3359,19 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             # seats (10 votes) pushed the band's fifth number out and it
             # was the result (23 after 77); the band keeps all 5 seats
             strong_votes[v] = 15 - rank * 0.1
+    # one fixed seat (2026-10-11, result 30 after 77): the first RRR table
+    # number with a plain step on y, that y as the cut step of the other
+    # sign (31 (+1/-2) -> 30 (+1/c+2)) — the user's -2 -> c+2 rule.  It
+    # ranks just ahead of the 11th table number, so it is always inside the
+    # 16 and the band keeps its 5 seats
+    for v, _, lab in both_cut:
+        sx_, _, sy_ = lab.partition('/')
+        if sy_ in ('-1', '-2', '+1', '+2') and sx_ in abbrev_op:
+            ny_ = KK_CUT_TOGGLE[SIGN_FLIP[abbrev_op[sy_]]]
+            nv_ = compute_variants(ep, abbrev_op[sx_], ny_)[0]
+            strong_lab.setdefault(nv_, f"{sx_}/{OP_ABBREV[ny_]}")
+            strong_votes[nv_] = max(strong_votes.get(nv_, 0), 19.905)
+            break
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json
@@ -3940,7 +3953,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     body += ['─' * len(head), "3RRR".center(len(head)), "",
              *power_lines,
              *strong_lines,
-             "     never more than 16: the whole RRR table (up to 11), the number band (5), then the last operations again",
+             "     never more than 16: the RRR table (up to 11), one table number with its y as the opposite cut step, the number band (5)",
              "     and rule numbers as fill — about one round in six by size; most rounds still miss.", "",
              *final_lines,
              "     numbers 1-16 are the STRONG 16; the rest follow in the order of the lists below", "",

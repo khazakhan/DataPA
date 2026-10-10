@@ -3728,6 +3728,22 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                     if any(x == na_ for _, x in n_ents) and f"{nv_:02d}" not in {v for v, _ in n_ents}:
                         p_groups[0][0][0] = p_join(p_groups[0][0][0], [f"{nv_:02d} ({na_}/{dy_})"])
                         p_user.add(nv_)
+        # declared cell: every number whose y is the bare cut also with nc on
+        # y, x kept (65 (+1/cut) -> 60 (+1/nc) on EP 50), user's screenshot
+        # 2026-10-11
+        if p_groups:
+            c_ents = [e for l in p_groups[0][0][0] for e in re.findall(r'(\d\d) \(([^/)]*)/([^)]*)\)', l)]
+            c_have, c_new = {v for v, _, _ in c_ents}, []
+            for _, cx_, cy_ in c_ents:
+                if cy_ == 'cut' and cx_ in abbrev_op:
+                    cv_ = f"{compute_variants(ep, abbrev_op[cx_], 'no_change')[0]:02d}"
+                    if cv_ not in c_have:
+                        c_have.add(cv_)
+                        c_new.append(f"{cv_} ({cx_}/nc)")
+            if c_new:
+                p_groups[0][0][0] = p_join(p_groups[0][0][0],
+                                           [', '.join(c_new[k:k + 2]) for k in range(0, len(c_new), 2)])
+                p_user |= {int(e[:2]) for e in c_new}
         for cols_, labs_ in p_groups:
             h_ = max(len(c) for c in cols_)
             p_rows.append([[c[k] if k < len(c) else '' for c in cols_] for k in range(h_)] + [labs_])
@@ -3851,6 +3867,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell numbers with the cut step of the other sign and number on x (c+1 -> c-2): also without that cut",
                        "     and each of those with its digits reversed (14 -> 41)",
                        "     nearest x of the declared x already in the cell: that x with the declared y (96 c+2/+2 -> 86 c+1/+2)",
+                       "     declared cell: every number with a bare cut on y also with nc on y (65 +1/cut -> 60 +1/nc)",
                        "     declared number nc/cut: its tens cut, both digits cut, and the digits reversed of those and of itself",
                        "     declared cell with a cut/cut number: the cut/nc number with its digits reversed",
                        "     declared cell, end: a number of it whose digits reversed stand in another cell brings that number in",

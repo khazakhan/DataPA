@@ -3840,6 +3840,19 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             m_row = ''.join(f"  {c:<4}" for c in p_donly[k:k + 5])
             u_box.append(f"{s_g}│{s_rst}{m_row:<{u_tw}}{s_g}│{s_rst}")
         u_box.append(f"{s_g}└{'─' * u_tw}┘{s_rst}")
+        # under that (user's screenshot, 2026-10-11): the numbers 00-99 that
+        # do NOT stand in the declared cell, each once, ascending
+        p_dnon = [f"{v:02d}{p_mark_of(v)}" for v in range(100) if v not in p_declv]
+        n_t1, n_t2 = "★ NON-EXISTING FROM ★", f"DECLARED CELL: {len(p_dnon)}"
+        u_box += [' ' * (u_tw + 2),
+                  f"{s_g}┌{'─' * u_tw}┐{s_rst}",
+                  f"{s_g}│{s_rst}{p_rib}{n_t1:^{u_tw}}{s_rst}{s_g}│{s_rst}",
+                  f"{s_g}│{s_rst}{p_rib}{n_t2:^{u_tw}}{s_rst}{s_g}│{s_rst}",
+                  f"{s_g}├{'─' * u_tw}┤{s_rst}"]
+        for k in range(0, len(p_dnon), 5):
+            m_row = ''.join(f"  {c:<4}" for c in p_dnon[k:k + 5])
+            u_box.append(f"{s_g}│{s_rst}{m_row:<{u_tw}}{s_g}│{s_rst}")
+        u_box.append(f"{s_g}└{'─' * u_tw}┘{s_rst}")
         while len(power_lines) < len(u_box):
             power_lines.append(' ' * (p_tw + 4))
         power_lines = [l + ('  ' + u_box[k] if k < len(u_box) else '') for k, l in enumerate(power_lines)]

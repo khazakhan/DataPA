@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 428, 'tens_cut': 70, 'short_list': 111,
-    'table_rounds': 418, 'table_hits': 50, 'table_chance': 33, 'declared': 383, 'declared_hits': 7,
-    'band_hits': 37, 'units_hits': 53, 'second_hits': 12,
+    'results': 429, 'tens_cut': 71, 'short_list': 112,
+    'table_rounds': 419, 'table_hits': 50, 'table_chance': 33, 'declared': 384, 'declared_hits': 7,
+    'band_hits': 38, 'units_hits': 53, 'second_hits': 12,
     'same_tens': 23,
-    'rrr3_rounds': 114, 'rrr3_hits': 2, 'rrr3_rec_rounds': 115, 'rrr3_rec_hits': 26,
-    'rrr3_same_rounds': 87, 'rrr3_same_hits': 1, 'rrr3_wide_rounds': 74, 'rrr3_wide_hits': 8, 'rrr3_yx_rounds': 69, 'rrr3_yx_hits': 6,
-    'rrr3_strong_rounds': 65, 'rrr3_strong_hits': 1, 'rrr3_same2_rounds': 62, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 69, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 69, 'rrr3_sameyx_hits': 1,
-    'power_rounds': 4, 'power_hits': 3,
+    'rrr3_rounds': 115, 'rrr3_hits': 2, 'rrr3_rec_rounds': 116, 'rrr3_rec_hits': 26,
+    'rrr3_same_rounds': 88, 'rrr3_same_hits': 1, 'rrr3_wide_rounds': 75, 'rrr3_wide_hits': 8, 'rrr3_yx_rounds': 70, 'rrr3_yx_hits': 7,
+    'rrr3_strong_rounds': 66, 'rrr3_strong_hits': 1, 'rrr3_same2_rounds': 63, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 70, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 70, 'rrr3_sameyx_hits': 1,
+    'power_rounds': 5, 'power_hits': 4,
 }
 
 
@@ -3355,7 +3355,10 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         for rank, step in enumerate((0, -1, 1, -2, 2)):
             v = b_t * 10 + (b_u + step) % 10
             strong_lab.setdefault(v, f"{OP_ABBREV[find_op(ep // 10, v // 10)]}/{OP_ABBREV[find_op(ep % 10, v % 10)]}")
-            strong_votes[v] = 10 - rank * 0.1
+            # 2026-10-11: 15, not 10 — a same-operation number with two
+            # seats (10 votes) pushed the band's fifth number out and it
+            # was the result (23 after 77); the band keeps all 5 seats
+            strong_votes[v] = 15 - rank * 0.1
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json
@@ -3769,6 +3772,23 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 p_groups[0][0][0] = p_join(p_groups[0][0][0],
                                            [', '.join(s_new[k:k + 2]) for k in range(0, len(s_new), 2)])
                 p_user |= {int(e[:2]) for e in s_new}
+        # declared cell: declared y a +1 / +2 step (plain or cut) — the cut
+        # steps of the other sign too, x kept (21 (-1/+1) on EP 30 -> 24
+        # (-1/c-1), 23 (-1/c-2)); the mirror of the -1/-2 -> c+1/c+2 rule.
+        # Result 23 after 77, user 2026-10-11
+        if p_groups and p_cells and p_cells[0]:
+            dx_, _, dy_ = p_cells[0][4:-1].partition('/')
+            if dx_ in abbrev_op and dy_ in abbrev_op and _op_parts(abbrev_op[dy_])[1] in ('+1', '+2'):
+                m_have = {e for l in p_groups[0][0][0] for e in re.findall(r'(\d\d) \(', l)}
+                m_new = []
+                for my_ in ('cut-1', 'cut-2'):
+                    mv_ = f"{compute_variants(ep, abbrev_op[dx_], my_)[0]:02d}"
+                    if mv_ not in m_have:
+                        m_have.add(mv_)
+                        m_new.append(f"{mv_} ({dx_}/{OP_ABBREV[my_]})")
+                if m_new:
+                    p_groups[0][0][0] = p_join(p_groups[0][0][0], [', '.join(m_new)])
+                    p_user |= {int(e[:2]) for e in m_new}
         for cols_, labs_ in p_groups:
             h_ = max(len(c) for c in cols_)
             p_rows.append([[c[k] if k < len(c) else '' for c in cols_] for k in range(h_)] + [labs_])
@@ -3907,6 +3927,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     nearest x of the declared x already in the cell: that x with the declared y (96 c+2/+2 -> 86 c+1/+2)",
                        "     declared cell: every number with a bare cut on y also with nc on y (65 +1/cut -> 60 +1/nc)",
                        "     declared cell: ★ rows of the RRR table, x without cut + sign flipped, y without cut, same sign (+2/c-2 -> -2/-2)",
+                       "     declared cell: declared y a +1/+2 step — the cut steps of the other sign too (-1/+1 -> -1/c-1, -1/c-2)",
                        "     declared number nc/cut: its tens cut, both digits cut, and the digits reversed of those and of itself",
                        "     declared cell with a cut/cut number: the cut/nc number with its digits reversed",
                        "     declared cell, end: a number of it whose digits reversed stand in another cell brings that number in",

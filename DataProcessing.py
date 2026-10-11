@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 442, 'tens_cut': 73, 'short_list': 115,
-    'table_rounds': 432, 'table_hits': 51, 'table_chance': 33, 'declared': 397, 'declared_hits': 8,
+    'results': 443, 'tens_cut': 73, 'short_list': 115,
+    'table_rounds': 433, 'table_hits': 51, 'table_chance': 33, 'declared': 398, 'declared_hits': 8,
     'band_hits': 40, 'units_hits': 55, 'second_hits': 13,
     'same_tens': 23,
-    'rrr3_rounds': 128, 'rrr3_hits': 4, 'rrr3_rec_rounds': 129, 'rrr3_rec_hits': 32,
-    'rrr3_same_rounds': 101, 'rrr3_same_hits': 1, 'rrr3_wide_rounds': 88, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 83, 'rrr3_yx_hits': 7,
-    'rrr3_strong_rounds': 79, 'rrr3_strong_hits': 4, 'rrr3_same2_rounds': 76, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 83, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 83, 'rrr3_sameyx_hits': 1,
-    'power_rounds': 18, 'power_hits': 12,
+    'rrr3_rounds': 129, 'rrr3_hits': 4, 'rrr3_rec_rounds': 130, 'rrr3_rec_hits': 32,
+    'rrr3_same_rounds': 102, 'rrr3_same_hits': 1, 'rrr3_wide_rounds': 89, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 84, 'rrr3_yx_hits': 7,
+    'rrr3_strong_rounds': 80, 'rrr3_strong_hits': 4, 'rrr3_same2_rounds': 77, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 84, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 84, 'rrr3_sameyx_hits': 1,
+    'power_rounds': 19, 'power_hits': 13,
 }
 
 
@@ -3468,6 +3468,14 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     if grid_ep is not None and grid_ep >= 0 and _op_parts(d_y)[1] in d_sw:
         gv_ = compute_variants(grid_ep, d_sw[_op_parts(d_y)[1]], _op_join(False, _op_parts(d_x)[1]))[0]
         rule_seats.append((gv_, f"{OP_ABBREV[find_op(ep // 10, gv_ // 10)]}/{OP_ABBREV[find_op(ep % 10, gv_ % 10)]}"))
+    # 14. result 62 after 30 — the declared operations crossed, both without
+    #     their cut and both with the sign flipped (84 (c-2/c-1) -> 62
+    #     (+1/+2)); seat 9 with the sign change on both sides.  Seated after
+    #     the family seats below, so those and the declared cell do not move
+    seat14_ = None
+    if grid_ep is not None and d_xn and _op_parts(d_y)[1]:
+        qx_, qy_ = SIGN_FLIP[_op_parts(d_y)[1]], SIGN_FLIP[d_xn]
+        seat14_ = (compute_variants(ep, qx_, qy_)[0], f"{OP_ABBREV[qx_]}/{OP_ABBREV[qy_]}")
     base16_ = sorted(strong_lab, key=lambda v: (-strong_votes[v], list(strong_lab).index(v)))[:16]
     r_k = 0
     seat_set_ = {v for v, _ in rule_seats[:2]}    # the two record seats
@@ -3548,6 +3556,20 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         strong_votes[nv_] = (19.905 - r_k * 0.001 if r_k < 11 and sum(x > 19 for x in strong_votes.values()) < 11
                              else 14.4 - r_k * 0.001)
         r_k += 1
+    # seat 14: the 16 are full by now, so it takes the seat of the lowest
+    # ranked number above the band (never a band number, and never the
+    # crossed family pair number seated just above — 30 after 51 was one)
+    if seat14_:
+        strong_lab.setdefault(seat14_[0], seat14_[1])
+        if strong_votes.get(seat14_[0], 0) < 14.5:
+            f_keep = {v for v, _ in fam_x if v in fam_res}
+            f_all = [v for v in strong_votes if strong_votes[v] > 19]
+            f_top = sorted((v for v in f_all if v not in f_keep), key=lambda v: strong_votes[v])
+            if len(f_all) >= 11 and f_top:
+                strong_votes[seat14_[0]] = strong_votes[f_top[0]]
+                strong_votes[f_top[0]] = 14.3
+            else:
+                strong_votes[seat14_[0]] = 19.7
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json

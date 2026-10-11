@@ -3468,6 +3468,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     if grid_ep is not None and grid_ep >= 0 and _op_parts(d_y)[1] in d_sw:
         gv_ = compute_variants(grid_ep, d_sw[_op_parts(d_y)[1]], _op_join(False, _op_parts(d_x)[1]))[0]
         rule_seats.append((gv_, f"{OP_ABBREV[find_op(ep // 10, gv_ // 10)]}/{OP_ABBREV[find_op(ep % 10, gv_ % 10)]}"))
+    base16_ = sorted(strong_lab, key=lambda v: (-strong_votes[v], list(strong_lab).index(v)))[:16]
     r_k = 0
     seat_set_ = {v for v, _ in rule_seats[:2]}    # the two record seats
     for nv_, nlab_ in rule_seats:
@@ -3487,6 +3488,32 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         # round does not push a band number out, it only fills a free seat
         strong_votes[nv_] = 19.905 - r_k * 0.001 if r_k < 11 else 14.4 - r_k * 0.001
         r_k += 1
+    # family seats (user, 2026-10-11, after 08 came on 28): a STRONG 16
+    # number and a 3RRR RESULT number of the same family — the same two
+    # digits up to cut and order, like 53 and 85 (5/0 with 3/8) — bring the
+    # STRONG 16 number with both digits cut (53 -> 08).  The 16 looked at
+    # is the one before the rule seats (RRR table + band), so a later rule
+    # seat cannot take the pair away; ranked after the rule seats above
+    fam_key = lambda v: tuple(sorted((min(v // 10, cut(v // 10)), min(v % 10, cut(v % 10)))))
+    fam_res = [int(n[:2]) for n, _ in found]
+    fam_seats = []
+    for sv_ in base16_:
+        if any(fv_ != sv_ and fam_key(fv_) == fam_key(sv_) for fv_ in fam_res):
+            nv_ = cut(sv_ // 10) * 10 + cut(sv_ % 10)
+            if nv_ not in [v for v, _ in fam_seats]:
+                fam_seats.append((nv_, f"{OP_ABBREV[find_op(ep // 10, nv_ // 10)]}/{OP_ABBREV[find_op(ep % 10, nv_ % 10)]}"))
+    for nv_, nlab_ in fam_seats:
+        strong_lab.setdefault(nv_, nlab_)
+        if strong_votes.get(nv_, 0) >= 14:
+            continue
+        t_i = 10 - r_k
+        while 0 <= t_i < len(table_first) and (table_first[t_i] in seat_set_
+                                               or strong_votes.get(table_first[t_i], 0) <= 19):
+            t_i -= 1
+        if 0 <= t_i < len(table_first) and strong_votes.get(table_first[t_i], 0) > 19:
+            strong_votes[table_first[t_i]] = 4.5
+        strong_votes[nv_] = 19.905 - r_k * 0.001 if r_k < 11 else 14.4 - r_k * 0.001
+        r_k += 1
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json
@@ -3501,7 +3528,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         with open(os.environ['RRR3_DUMP2'], 'w') as fh:
             json.dump({'ep': ep, 'grid_ep': grid_ep, 'strong': strong,
                        'table': [[v, lab] for v, _, lab in both_cut],
-                       'rule_seats': [v for v, _ in rule_seats],
+                       'rule_seats': [v for v, _ in rule_seats], 'fam_seats': [v for v, _ in fam_seats],
                        'rec': [v for v, _ in rec], 'yx': [v for v, _ in rec_yx], 'wide': [v for v, _ in wide],
                        'found': [int(n[:2]) for n, _ in found],
                        'again': [a[0] if a else None for a in (same, same2, same_turn if same else None,
@@ -4041,6 +4068,16 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                     p_groups[0][0][0] = p_join(p_groups[0][0][0], [
                         f"{gv_:02d} ({OP_ABBREV[find_op(ep // 10, gv_ // 10)]}/{OP_ABBREV[find_op(ep % 10, gv_ % 10)]})"])
                     p_user.add(gv_)
+        # declared cell: the family numbers (user, 2026-10-11) — a STRONG 16
+        # number and a 3RRR RESULT number of the same family (53 and 85)
+        # bring the STRONG 16 number with both digits cut (53 -> 08)
+        if p_groups and fam_seats:
+            g_have = {e for l in p_groups[0][0][0] for e in re.findall(r'(\d\d) \(', l)}
+            g_new = [f"{v:02d} ({lab})" for v, lab in fam_seats if f"{v:02d}" not in g_have]
+            if g_new:
+                p_groups[0][0][0] = p_join(p_groups[0][0][0],
+                                           [', '.join(g_new[k:k + 2]) for k in range(0, len(g_new), 2)])
+                p_user |= {int(e[:2]) for e in g_new}
         for cols_, labs_ in p_groups:
             h_ = max(len(c) for c in cols_)
             p_rows.append([[c[k] if k < len(c) else '' for c in cols_] for k in range(h_)] + [labs_])
@@ -4188,6 +4225,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the last round's operation again on the EP with nc on y (c+1/+2 -> c+1/nc)",
                        "     declared cell: declared x without its cut + sign flipped, with the cut steps of the other sign on a +1/+2 declared y (c-2/+2 -> +2/c-1, +2/c-2)",
                        "     declared cell: the crossed declared operations (nc/-1 -> -2/nc) applied on the running value instead of the EP (-2/nc on 28 = 08)",
+                       "     declared cell: a STRONG 16 number and a 3RRR RESULT number of the same family (53 and 85) bring that STRONG 16 number with both digits cut (53 -> 08)",
                        "     declared number nc/cut: its tens cut, both digits cut, and the digits reversed of those and of itself",
                        "     declared cell with a cut/cut number: the cut/nc number with its digits reversed",
                        "     declared cell, end: a number of it whose digits reversed stand in another cell brings that number in",

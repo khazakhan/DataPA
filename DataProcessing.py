@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 460, 'tens_cut': 78, 'short_list': 122,
-    'table_rounds': 450, 'table_hits': 53, 'table_chance': 33, 'declared': 415, 'declared_hits': 8,
-    'band_hits': 43, 'units_hits': 57, 'second_hits': 14,
+    'results': 461, 'tens_cut': 78, 'short_list': 123,
+    'table_rounds': 451, 'table_hits': 53, 'table_chance': 33, 'declared': 416, 'declared_hits': 8,
+    'band_hits': 43, 'units_hits': 58, 'second_hits': 14,
     'same_tens': 23,
-    'rrr3_rounds': 146, 'rrr3_hits': 4, 'rrr3_rec_rounds': 147, 'rrr3_rec_hits': 38,
-    'rrr3_same_rounds': 119, 'rrr3_same_hits': 4, 'rrr3_wide_rounds': 106, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 101, 'rrr3_yx_hits': 8,
-    'rrr3_strong_rounds': 97, 'rrr3_strong_hits': 9, 'rrr3_same2_rounds': 94, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 101, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 101, 'rrr3_sameyx_hits': 2,
-    'power_rounds': 36, 'power_hits': 23,
+    'rrr3_rounds': 147, 'rrr3_hits': 5, 'rrr3_rec_rounds': 148, 'rrr3_rec_hits': 39,
+    'rrr3_same_rounds': 120, 'rrr3_same_hits': 4, 'rrr3_wide_rounds': 107, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 102, 'rrr3_yx_hits': 8,
+    'rrr3_strong_rounds': 98, 'rrr3_strong_hits': 9, 'rrr3_same2_rounds': 95, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 102, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 102, 'rrr3_sameyx_hits': 2,
+    'power_rounds': 37, 'power_hits': 24,
 }
 
 
@@ -3919,6 +3919,20 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             strong_votes[f_all[k_]] = band_v_.get(f_all[k_], 14.3)
         elif len(f_all) < 11:
             strong_votes[same[0]] = 18.6
+    # seat 5's number keeps a seat (result 16 after 82, 2026-10-11): the
+    # declared x without its cut and sign flipped, y kept (36 (+1/-2) -> 16
+    # (-1/-2)) was already a rule seat but the later seats had pushed it out
+    if grid_ep is not None and d_xn:
+        nv_ = compute_variants(ep, SIGN_FLIP[d_xn], d_y)[0]
+        if strong_votes.get(nv_, 0) < 14.5:
+            strong_lab.setdefault(nv_, f"{OP_ABBREV[SIGN_FLIP[d_xn]]}/{OP_ABBREV[d_y]}")
+            f_all = sorted((v for v in strong_votes if strong_votes[v] > 19), key=lambda v: strong_votes[v])
+            k_ = 3    # places 2 and 3 keep every earlier round; 3 leaves the same-operation seat alone
+            if len(f_all) >= 11 and k_ < len(f_all):
+                strong_votes[nv_] = strong_votes[f_all[k_]]
+                strong_votes[f_all[k_]] = band_v_.get(f_all[k_], 14.3)
+            elif len(f_all) < 11:
+                strong_votes[nv_] = 18.5
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json

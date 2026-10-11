@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 433, 'tens_cut': 72, 'short_list': 113,
-    'table_rounds': 423, 'table_hits': 51, 'table_chance': 33, 'declared': 388, 'declared_hits': 8,
+    'results': 434, 'tens_cut': 72, 'short_list': 113,
+    'table_rounds': 424, 'table_hits': 51, 'table_chance': 33, 'declared': 389, 'declared_hits': 8,
     'band_hits': 39, 'units_hits': 54, 'second_hits': 12,
     'same_tens': 23,
-    'rrr3_rounds': 119, 'rrr3_hits': 2, 'rrr3_rec_rounds': 120, 'rrr3_rec_hits': 27,
-    'rrr3_same_rounds': 92, 'rrr3_same_hits': 1, 'rrr3_wide_rounds': 79, 'rrr3_wide_hits': 10, 'rrr3_yx_rounds': 74, 'rrr3_yx_hits': 7,
-    'rrr3_strong_rounds': 70, 'rrr3_strong_hits': 2, 'rrr3_same2_rounds': 67, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 74, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 74, 'rrr3_sameyx_hits': 1,
-    'power_rounds': 9, 'power_hits': 6,
+    'rrr3_rounds': 120, 'rrr3_hits': 2, 'rrr3_rec_rounds': 121, 'rrr3_rec_hits': 28,
+    'rrr3_same_rounds': 93, 'rrr3_same_hits': 1, 'rrr3_wide_rounds': 80, 'rrr3_wide_hits': 10, 'rrr3_yx_rounds': 75, 'rrr3_yx_hits': 7,
+    'rrr3_strong_rounds': 71, 'rrr3_strong_hits': 2, 'rrr3_same2_rounds': 68, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 75, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 75, 'rrr3_sameyx_hits': 1,
+    'power_rounds': 10, 'power_hits': 6,
 }
 
 
@@ -3429,6 +3429,12 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 qy_ = qx_[0] + yn_[1:]
                 rule_seats.append((compute_variants(ep, qx_, qy_)[0], f"{OP_ABBREV[qx_]}/{OP_ABBREV[qy_]}"))
                 break
+        #  8. result 12 after 27 — the last round's operation again, on the
+        #     running value instead of the EP (-1/cut on 27 -> 12, shown as
+        #     +1/+1 on EP 01); 7 of 432 older rounds on a replay
+        if _RRR3_PREV.get('op') and grid_ep >= 0:
+            gv_ = compute_variants(grid_ep, *_RRR3_PREV['op'])[0]
+            rule_seats.append((gv_, f"{OP_ABBREV[find_op(ep // 10, gv_ // 10)]}/{OP_ABBREV[find_op(ep % 10, gv_ % 10)]}"))
     r_k = 0
     for nv_, nlab_ in rule_seats:
         strong_lab.setdefault(nv_, nlab_)
@@ -3916,6 +3922,15 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                         x == OP_ABBREV[tp_] and y in ('c+1', 'c-1', 'c+2', 'c-2') for _, x, y in o_ents):
                     p_groups[0][0][0] = p_join(p_groups[0][0][0], [f"{ov_} ({OP_ABBREV[tp_]}/cut)"])
                     p_user.add(int(ov_))
+        # declared cell: the last round's operation again, on the running
+        # value instead of the EP (-1/cut on 27 -> 12, shown with its
+        # operation on the EP: +1/+1 on 01).  Result 12 after 27, 2026-10-11
+        if p_groups and grid_ep is not None and grid_ep >= 0 and _RRR3_PREV.get('op'):
+            gv_ = compute_variants(grid_ep, *_RRR3_PREV['op'])[0]
+            if f"{gv_:02d}" not in {e for l in p_groups[0][0][0] for e in re.findall(r'(\d\d) \(', l)}:
+                p_groups[0][0][0] = p_join(p_groups[0][0][0], [
+                    f"{gv_:02d} ({OP_ABBREV[find_op(ep // 10, gv_ // 10)]}/{OP_ABBREV[find_op(ep % 10, gv_ % 10)]})"])
+                p_user.add(gv_)
         for cols_, labs_ in p_groups:
             h_ = max(len(c) for c in cols_)
             p_rows.append([[c[k] if k < len(c) else '' for c in cols_] for k in range(h_)] + [labs_])
@@ -4057,6 +4072,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: declared y a +1/+2 step — the cut steps of the other sign too (-1/+1 -> -1/c-1, -1/c-2)",
                        "     declared cell: the first rule's two numbers also with the cut step on x switched (c+2/-1 -> c+1/-1)",
                        "     declared cell: x = declared x step without cut, other sign and number, y a cut step — also only the cut on y (-1/c-2 -> -1/cut)",
+                       "     declared cell: the last round's operation again, on the running value instead of the EP (-1/cut on 27 -> 12)",
                        "     declared number nc/cut: its tens cut, both digits cut, and the digits reversed of those and of itself",
                        "     declared cell with a cut/cut number: the cut/nc number with its digits reversed",
                        "     declared cell, end: a number of it whose digits reversed stand in another cell brings that number in",

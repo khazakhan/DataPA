@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 461, 'tens_cut': 78, 'short_list': 123,
-    'table_rounds': 451, 'table_hits': 53, 'table_chance': 33, 'declared': 416, 'declared_hits': 8,
+    'results': 462, 'tens_cut': 78, 'short_list': 123,
+    'table_rounds': 452, 'table_hits': 53, 'table_chance': 33, 'declared': 417, 'declared_hits': 8,
     'band_hits': 43, 'units_hits': 58, 'second_hits': 14,
     'same_tens': 23,
-    'rrr3_rounds': 147, 'rrr3_hits': 5, 'rrr3_rec_rounds': 148, 'rrr3_rec_hits': 39,
-    'rrr3_same_rounds': 120, 'rrr3_same_hits': 4, 'rrr3_wide_rounds': 107, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 102, 'rrr3_yx_hits': 8,
-    'rrr3_strong_rounds': 98, 'rrr3_strong_hits': 9, 'rrr3_same2_rounds': 95, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 102, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 102, 'rrr3_sameyx_hits': 2,
-    'power_rounds': 37, 'power_hits': 24,
+    'rrr3_rounds': 148, 'rrr3_hits': 5, 'rrr3_rec_rounds': 149, 'rrr3_rec_hits': 40,
+    'rrr3_same_rounds': 121, 'rrr3_same_hits': 4, 'rrr3_wide_rounds': 108, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 103, 'rrr3_yx_hits': 8,
+    'rrr3_strong_rounds': 99, 'rrr3_strong_hits': 9, 'rrr3_same2_rounds': 96, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 103, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 103, 'rrr3_sameyx_hits': 2,
+    'power_rounds': 38, 'power_hits': 24,
 }
 
 
@@ -3918,7 +3918,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         strong_votes.setdefault(nv_, 0)
         if strong_votes[nv_] < 14.5:
             f_all = sorted((v for v in strong_votes if strong_votes[v] > 19), key=lambda v: strong_votes[v])
-            k_ = int(os.environ.get('RULE25_POS', 0))
+            k_ = -1    # no place: each of the 11 was tried and pushed out a number an earlier round needed
             if len(f_all) >= 11 and 0 <= k_ < len(f_all):
                 strong_votes[nv_] = strong_votes[f_all[k_]]
                 strong_votes[f_all[k_]] = band_v_.get(f_all[k_], 14.3)

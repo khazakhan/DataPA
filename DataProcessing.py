@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 434, 'tens_cut': 72, 'short_list': 113,
-    'table_rounds': 424, 'table_hits': 51, 'table_chance': 33, 'declared': 389, 'declared_hits': 8,
+    'results': 435, 'tens_cut': 72, 'short_list': 113,
+    'table_rounds': 425, 'table_hits': 51, 'table_chance': 33, 'declared': 390, 'declared_hits': 8,
     'band_hits': 39, 'units_hits': 54, 'second_hits': 12,
     'same_tens': 23,
-    'rrr3_rounds': 120, 'rrr3_hits': 2, 'rrr3_rec_rounds': 121, 'rrr3_rec_hits': 28,
-    'rrr3_same_rounds': 93, 'rrr3_same_hits': 1, 'rrr3_wide_rounds': 80, 'rrr3_wide_hits': 10, 'rrr3_yx_rounds': 75, 'rrr3_yx_hits': 7,
-    'rrr3_strong_rounds': 71, 'rrr3_strong_hits': 2, 'rrr3_same2_rounds': 68, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 75, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 75, 'rrr3_sameyx_hits': 1,
-    'power_rounds': 10, 'power_hits': 6,
+    'rrr3_rounds': 121, 'rrr3_hits': 3, 'rrr3_rec_rounds': 122, 'rrr3_rec_hits': 29,
+    'rrr3_same_rounds': 94, 'rrr3_same_hits': 1, 'rrr3_wide_rounds': 81, 'rrr3_wide_hits': 10, 'rrr3_yx_rounds': 76, 'rrr3_yx_hits': 7,
+    'rrr3_strong_rounds': 72, 'rrr3_strong_hits': 2, 'rrr3_same2_rounds': 69, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 76, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 76, 'rrr3_sameyx_hits': 1,
+    'power_rounds': 11, 'power_hits': 6,
 }
 
 
@@ -3435,6 +3435,14 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         if _RRR3_PREV.get('op') and grid_ep >= 0:
             gv_ = compute_variants(grid_ep, *_RRR3_PREV['op'])[0]
             rule_seats.append((gv_, f"{OP_ABBREV[find_op(ep // 10, gv_ // 10)]}/{OP_ABBREV[find_op(ep % 10, gv_ % 10)]}"))
+        #  9. result 42 after 12 — the declared number's operations crossed:
+        #     y without its cut and its step switched put on x, x without its
+        #     cut put on y (66 (nc/c-1) -> 42 (-2/nc)); seat 2 without the
+        #     cut and the sign change
+        d_yn = _op_parts(d_y)[1]
+        if d_yn in d_sw:
+            qy_ = _op_join(False, _op_parts(d_x)[1])
+            rule_seats.append((compute_variants(ep, d_sw[d_yn], qy_)[0], f"{d_sw[d_yn]}/{OP_ABBREV[qy_]}"))
     r_k = 0
     for nv_, nlab_ in rule_seats:
         strong_lab.setdefault(nv_, nlab_)
@@ -3931,6 +3939,19 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 p_groups[0][0][0] = p_join(p_groups[0][0][0], [
                     f"{gv_:02d} ({OP_ABBREV[find_op(ep // 10, gv_ // 10)]}/{OP_ABBREV[find_op(ep % 10, gv_ % 10)]})"])
                 p_user.add(gv_)
+        # declared cell: the declared number's operations crossed — y without
+        # its cut and its step switched put on x, x without its cut put on y
+        # (66 (nc/c-1) on EP 62 -> 42 (-2/nc)).  Result 42 after 12, 2026-10-11
+        if p_groups and grid_ep is not None and grid_ep >= 0:
+            cv_ = cut(grid_ep // 10) * 10 + (grid_ep % 10 + 4) % 10
+            cx_, cy_ = find_op(ep // 10, cv_ // 10), find_op(ep % 10, cv_ % 10)
+            cn_ = _op_parts(cy_)[1]
+            if cn_ in p_swap:
+                nx_, ny_ = abbrev_op[p_swap[cn_]], _op_join(False, _op_parts(cx_)[1])
+                nv_ = compute_variants(ep, nx_, ny_)[0]
+                if f"{nv_:02d}" not in {e for l in p_groups[0][0][0] for e in re.findall(r'(\d\d) \(', l)}:
+                    p_groups[0][0][0] = p_join(p_groups[0][0][0], [f"{nv_:02d} ({OP_ABBREV[nx_]}/{OP_ABBREV[ny_]})"])
+                    p_user.add(nv_)
         for cols_, labs_ in p_groups:
             h_ = max(len(c) for c in cols_)
             p_rows.append([[c[k] if k < len(c) else '' for c in cols_] for k in range(h_)] + [labs_])
@@ -4073,6 +4094,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the first rule's two numbers also with the cut step on x switched (c+2/-1 -> c+1/-1)",
                        "     declared cell: x = declared x step without cut, other sign and number, y a cut step — also only the cut on y (-1/c-2 -> -1/cut)",
                        "     declared cell: the last round's operation again, on the running value instead of the EP (-1/cut on 27 -> 12)",
+                       "     declared cell: declared operations crossed, y without its cut and step switched on x, x without its cut on y (nc/c-1 -> -2/nc)",
                        "     declared number nc/cut: its tens cut, both digits cut, and the digits reversed of those and of itself",
                        "     declared cell with a cut/cut number: the cut/nc number with its digits reversed",
                        "     declared cell, end: a number of it whose digits reversed stand in another cell brings that number in",

@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 480, 'tens_cut': 82, 'short_list': 127,
-    'table_rounds': 470, 'table_hits': 59, 'table_chance': 33, 'declared': 435, 'declared_hits': 8,
+    'results': 481, 'tens_cut': 82, 'short_list': 127,
+    'table_rounds': 471, 'table_hits': 59, 'table_chance': 33, 'declared': 436, 'declared_hits': 8,
     'band_hits': 45, 'units_hits': 58, 'second_hits': 14,
     'same_tens': 23,
-    'rrr3_rounds': 166, 'rrr3_hits': 6, 'rrr3_rec_rounds': 167, 'rrr3_rec_hits': 50,
-    'rrr3_same_rounds': 139, 'rrr3_same_hits': 6, 'rrr3_wide_rounds': 126, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 121, 'rrr3_yx_hits': 9,
-    'rrr3_strong_rounds': 117, 'rrr3_strong_hits': 13, 'rrr3_same2_rounds': 114, 'rrr3_same2_hits': 2,
-    'rrr3_turn_rounds': 121, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 121, 'rrr3_sameyx_hits': 2,
-    'power_rounds': 56, 'power_hits': 33,
+    'rrr3_rounds': 167, 'rrr3_hits': 6, 'rrr3_rec_rounds': 168, 'rrr3_rec_hits': 50,
+    'rrr3_same_rounds': 140, 'rrr3_same_hits': 6, 'rrr3_wide_rounds': 127, 'rrr3_wide_hits': 12, 'rrr3_yx_rounds': 122, 'rrr3_yx_hits': 9,
+    'rrr3_strong_rounds': 118, 'rrr3_strong_hits': 13, 'rrr3_same2_rounds': 115, 'rrr3_same2_hits': 2,
+    'rrr3_turn_rounds': 122, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 122, 'rrr3_sameyx_hits': 2,
+    'power_rounds': 57, 'power_hits': 33,
 }
 
 
@@ -4145,6 +4145,23 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             strong_lab.setdefault(nv_, f"{OP_ABBREV[sx_]}/c-1")
             if strong_votes.get(nv_, 0) < 14.3995:
                 strong_votes[nv_] = 14.3995
+    # 40. result 71 after 96 — rule 28's number (the last round's operation
+    #     with both signs flipped and its x step switched: c-2/c-1 -> c+1/c+1
+    #     = 76 on EP 10) also with its units digit cut, the y cut switched
+    #     (-> c+1/+1 = 71).  Goes to the declared cell with the family
+    #     numbers, sits under the band
+    if _RRR3_PREV.get('op') and all(_op_parts(o_)[1] in ('+1', '+2', '-1', '-2') for o_ in _RRR3_PREV['op']):
+        m_sw = {'+1': '+2', '+2': '+1', '-1': '-2', '-2': '-1'}
+        hx_, hy_ = _RRR3_PREV['op']
+        qx_ = _op_join(_op_parts(hx_)[0], m_sw[SIGN_FLIP[_op_parts(hx_)[1]]])
+        qy_ = _op_join(not _op_parts(hy_)[0], SIGN_FLIP[_op_parts(hy_)[1]])
+        nv_ = compute_variants(ep, qx_, qy_)[0]
+        lab_ = f"{OP_ABBREV[qx_]}/{OP_ABBREV[qy_]}"
+        if nv_ not in [v for v, _ in fam_seats]:
+            fam_seats = fam_seats + [(nv_, lab_)]
+        strong_lab.setdefault(nv_, lab_)
+        if strong_votes.get(nv_, 0) < 14.3001:
+            strong_votes[nv_] = 14.3001
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json
@@ -4887,6 +4904,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the whole NUMBER BAND (declared number ± 1, ± 2) is in the cell (50, 52, 54 -> also 51, 53)",
                        "     declared cell: the SAME OPERATION AGAIN number (the last round's operation on this EP) is in the cell (cut/c-2 again -> 26)",
                        "     declared cell: the EP and a 3RRR RESULT number of the same family (02 and 70) bring the EP with both digits cut (02 -> 57)",
+                       "     declared cell: the SAME OPERATION AGAIN number mirrored with its x step switched (c-2/c-1 -> c+1/c+1 = 76) also with its units digit cut (-> 71)",
                        "     declared cell: the operation of two rounds back again on this EP is in the cell (c+1/-2 again -> 30)",
                        "     declared cell: the 2nd NUMBER with its x sign flipped (73 (-1/+1) -> 93 (+1/+1)) also with both digits cut (-> 48)",
                        "     declared cell: the 2nd NUMBER's operation applied on the running value instead of the EP (62 = +1/+1 on EP 51; +1/+1 on 08 -> 19)",

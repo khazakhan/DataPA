@@ -3350,6 +3350,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     # declared number alone hit 10 times (2.7% against 1%) and the band 35
     # times (9.3% against 5%) — the best record per number of any source.
     # No other preference for the tens-cut decade.
+    band_v_ = {}    # a band number that loses a rule seat falls back to its band seat
     if live and grid_ep is not None:
         b_t, b_u = cut(grid_ep // 10), (grid_ep % 10 + 4) % 10
         for rank, step in enumerate((0, -1, 1, -2, 2)):
@@ -3359,6 +3360,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             # seats (10 votes) pushed the band's fifth number out and it
             # was the result (23 after 77); the band keeps all 5 seats
             strong_votes[v] = 15 - rank * 0.1
+            band_v_[v] = 15 - rank * 0.1
     # fixed rule seats (2026-10-11), each written after a miss and each
     # taking the seat of the last RRR table number, so the list stays at 16
     # and the band keeps its 5 seats:
@@ -3491,7 +3493,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                                                or strong_votes.get(table_first[t_i], 0) <= 19):
             t_i -= 1
         if 0 <= t_i < len(table_first) and strong_votes.get(table_first[t_i], 0) > 19:
-            strong_votes[table_first[t_i]] = 4.5
+            strong_votes[table_first[t_i]] = band_v_.get(table_first[t_i], 4.5)
         # the 16 hold 11 seats beside the band's 5: a 12th rule seat in one
         # round does not push a band number out, it only fills a free seat
         strong_votes[nv_] = (19.905 - r_k * 0.001 if r_k < 11 and sum(x > 19 for x in strong_votes.values()) < 11
@@ -3540,7 +3542,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        key=lambda v: strong_votes[v])
         if len([v for v in strong_votes if strong_votes[v] > 19]) >= 11 and f_top:
             strong_votes[nv_] = strong_votes[f_top[0]]
-            strong_votes[f_top[0]] = 14.3
+            strong_votes[f_top[0]] = band_v_.get(f_top[0], 14.3)
         else:
             strong_votes[nv_] = 19.8
     fam_seats = fam_x + [e for e in fam_seats if e[0] not in [v for v, _ in fam_x]]
@@ -3553,7 +3555,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                                                or strong_votes.get(table_first[t_i], 0) <= 19):
             t_i -= 1
         if 0 <= t_i < len(table_first) and strong_votes.get(table_first[t_i], 0) > 19:
-            strong_votes[table_first[t_i]] = 4.5
+            strong_votes[table_first[t_i]] = band_v_.get(table_first[t_i], 4.5)
         strong_votes[nv_] = (19.905 - r_k * 0.001 if r_k < 11 and sum(x > 19 for x in strong_votes.values()) < 11
                              else 14.4 - r_k * 0.001)
         r_k += 1
@@ -3568,7 +3570,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             f_top = sorted((v for v in f_all if v not in f_keep), key=lambda v: strong_votes[v])
             if len(f_all) >= 11 and f_top:
                 strong_votes[seat14_[0]] = strong_votes[f_top[0]]
-                strong_votes[f_top[0]] = 14.3
+                strong_votes[f_top[0]] = band_v_.get(f_top[0], 14.3)
             else:
                 strong_votes[seat14_[0]] = 19.7
     # family rule on the EP itself (result 57 after 62, 2026-10-11): the EP
@@ -3589,7 +3591,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             f_top = sorted((v for v in f_all if v not in f_keep), key=lambda v: strong_votes[v])
             if len(f_all) >= 11 and f_top:
                 strong_votes[nv_] = strong_votes[f_top[0]]
-                strong_votes[f_top[0]] = 14.3
+                strong_votes[f_top[0]] = band_v_.get(f_top[0], 14.3)
             else:
                 strong_votes[nv_] = 19.6
     # 15. result 61 after 11 — the declared x with the declared y's step
@@ -3608,7 +3610,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             f_top = sorted((v for v in f_all if v not in f_keep), key=lambda v: strong_votes[v])
             if len(f_all) >= 11 and f_top:
                 strong_votes[nv_] = strong_votes[f_top[0]]
-                strong_votes[f_top[0]] = 14.3
+                strong_votes[f_top[0]] = band_v_.get(f_top[0], 14.3)
             else:
                 strong_votes[nv_] = 19.5
     # crossed family pair, second number (user, 2026-10-11, after 03 came
@@ -3632,7 +3634,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         if (strong_votes[nv_] < 14.5 and strong_votes.get(xv_, 0) > 19 and fam_pre_.get(xv_, 0) <= 19
                 and xv_ not in fam_res):
             strong_votes[nv_] = strong_votes[xv_]
-            strong_votes[xv_] = 14.3
+            strong_votes[xv_] = band_v_.get(xv_, 14.3)
             fam_rev_.add(nv_)
     # 16. result 99 after 55 — the declared x without its step, only the cut,
     #     with the declared y (09 (c+1/c-2) -> 99 (cut/c-2)); beside seat 6
@@ -3650,7 +3652,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             f_top = sorted((v for v in f_all if v not in f_keep), key=lambda v: strong_votes[v])
             if len(f_all) >= 11 and f_top:
                 strong_votes[nv_] = strong_votes[f_top[0]]
-                strong_votes[f_top[0]] = 14.3
+                strong_votes[f_top[0]] = band_v_.get(f_top[0], 14.3)
             else:
                 strong_votes[nv_] = 19.3
     order = list(strong_lab)

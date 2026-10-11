@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 441, 'tens_cut': 73, 'short_list': 115,
-    'table_rounds': 431, 'table_hits': 51, 'table_chance': 33, 'declared': 396, 'declared_hits': 8,
+    'results': 442, 'tens_cut': 73, 'short_list': 115,
+    'table_rounds': 432, 'table_hits': 51, 'table_chance': 33, 'declared': 397, 'declared_hits': 8,
     'band_hits': 40, 'units_hits': 55, 'second_hits': 13,
     'same_tens': 23,
-    'rrr3_rounds': 127, 'rrr3_hits': 3, 'rrr3_rec_rounds': 128, 'rrr3_rec_hits': 31,
-    'rrr3_same_rounds': 100, 'rrr3_same_hits': 1, 'rrr3_wide_rounds': 87, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 82, 'rrr3_yx_hits': 7,
-    'rrr3_strong_rounds': 78, 'rrr3_strong_hits': 4, 'rrr3_same2_rounds': 75, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 82, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 82, 'rrr3_sameyx_hits': 1,
-    'power_rounds': 17, 'power_hits': 11,
+    'rrr3_rounds': 128, 'rrr3_hits': 4, 'rrr3_rec_rounds': 129, 'rrr3_rec_hits': 32,
+    'rrr3_same_rounds': 101, 'rrr3_same_hits': 1, 'rrr3_wide_rounds': 88, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 83, 'rrr3_yx_hits': 7,
+    'rrr3_strong_rounds': 79, 'rrr3_strong_hits': 4, 'rrr3_same2_rounds': 76, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 83, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 83, 'rrr3_sameyx_hits': 1,
+    'power_rounds': 18, 'power_hits': 12,
 }
 
 
@@ -3503,6 +3503,38 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             nv_ = cut(sv_ // 10) * 10 + cut(sv_ % 10)
             if nv_ not in [v for v, _ in fam_seats]:
                 fam_seats.append((nv_, f"{OP_ABBREV[find_op(ep // 10, nv_ // 10)]}/{OP_ABBREV[find_op(ep % 10, nv_ % 10)]}"))
+    # crossed family pair inside the STRONG 16 (user, 2026-10-11, after 30
+    # came on 51): 80 and 03 are the same family with the two digits the
+    # other way round — the first one's tens digit cut, then the other one's
+    # tens digit (80, 03 -> 30).  The same reading gives 08 from 53 and 85.
+    # The 16 looked at is the one after the rule seats; these numbers are
+    # put in front of the other family numbers
+    f_cl = lambda x: min(x, cut(x))
+    f16_ = sorted(strong_lab, key=lambda v: (-strong_votes[v], list(strong_lab).index(v)))[:16]
+    fam_x = []
+    for k_, a_ in enumerate(f16_):
+        for b_ in f16_[k_ + 1:]:
+            if (f_cl(a_ // 10) != f_cl(a_ % 10) and f_cl(a_ // 10) == f_cl(b_ % 10)
+                    and f_cl(a_ % 10) == f_cl(b_ // 10)):
+                nv_ = cut(a_ // 10) * 10 + b_ // 10
+                if nv_ not in [v for v, _ in fam_x]:
+                    fam_x.append((nv_, f"{OP_ABBREV[find_op(ep // 10, nv_ // 10)]}/{OP_ABBREV[find_op(ep % 10, nv_ % 10)]}"))
+    # the 16 are full (rule seats + band): a crossed-pair number that is
+    # also a 3RRR RESULT number (30 was) takes the seat of the lowest ranked
+    # number above the band; giving every pair number a seat pushed four
+    # earlier repairs out, so the others only fill a free seat
+    for nv_, nlab_ in fam_x:
+        strong_lab.setdefault(nv_, nlab_)
+        if strong_votes.get(nv_, 0) >= 14.5 or nv_ not in fam_res:
+            continue
+        f_top = sorted((v for v in strong_votes if strong_votes[v] > 19 and v not in [x for x, _ in fam_x]),
+                       key=lambda v: strong_votes[v])
+        if len([v for v in strong_votes if strong_votes[v] > 19]) >= 11 and f_top:
+            strong_votes[nv_] = strong_votes[f_top[0]]
+            strong_votes[f_top[0]] = 14.3
+        else:
+            strong_votes[nv_] = 19.8
+    fam_seats = fam_x + [e for e in fam_seats if e[0] not in [v for v, _ in fam_x]]
     for nv_, nlab_ in fam_seats:
         strong_lab.setdefault(nv_, nlab_)
         if strong_votes.get(nv_, 0) >= 14:
@@ -4243,6 +4275,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the crossed declared operations (nc/-1 -> -2/nc) applied on the running value instead of the EP (-2/nc on 28 = 08)",
                        "     declared cell: a STRONG 16 number and a 3RRR RESULT number of the same family (53 and 85) bring that STRONG 16 number with both digits cut (53 -> 08)",
                        "     declared cell: the whole NUMBER BAND (declared number ± 1, ± 2) is in the cell (50, 52, 54 -> also 51, 53)",
+                       "     declared cell: two STRONG 16 numbers of one family, digits the other way round (80 and 03): first tens digit cut + the other tens digit (-> 30)",
                        "     declared number nc/cut: its tens cut, both digits cut, and the digits reversed of those and of itself",
                        "     declared cell with a cut/cut number: the cut/nc number with its digits reversed",
                        "     declared cell, end: a number of it whose digits reversed stand in another cell brings that number in",

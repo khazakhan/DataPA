@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 443, 'tens_cut': 73, 'short_list': 115,
-    'table_rounds': 433, 'table_hits': 51, 'table_chance': 33, 'declared': 398, 'declared_hits': 8,
+    'results': 444, 'tens_cut': 73, 'short_list': 115,
+    'table_rounds': 434, 'table_hits': 51, 'table_chance': 33, 'declared': 399, 'declared_hits': 8,
     'band_hits': 40, 'units_hits': 55, 'second_hits': 13,
     'same_tens': 23,
-    'rrr3_rounds': 129, 'rrr3_hits': 4, 'rrr3_rec_rounds': 130, 'rrr3_rec_hits': 32,
-    'rrr3_same_rounds': 102, 'rrr3_same_hits': 1, 'rrr3_wide_rounds': 89, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 84, 'rrr3_yx_hits': 7,
-    'rrr3_strong_rounds': 80, 'rrr3_strong_hits': 4, 'rrr3_same2_rounds': 77, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 84, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 84, 'rrr3_sameyx_hits': 1,
-    'power_rounds': 19, 'power_hits': 13,
+    'rrr3_rounds': 130, 'rrr3_hits': 4, 'rrr3_rec_rounds': 131, 'rrr3_rec_hits': 33,
+    'rrr3_same_rounds': 103, 'rrr3_same_hits': 1, 'rrr3_wide_rounds': 90, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 85, 'rrr3_yx_hits': 7,
+    'rrr3_strong_rounds': 81, 'rrr3_strong_hits': 4, 'rrr3_same2_rounds': 78, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 85, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 85, 'rrr3_sameyx_hits': 1,
+    'power_rounds': 20, 'power_hits': 14,
 }
 
 
@@ -3570,6 +3570,27 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 strong_votes[f_top[0]] = 14.3
             else:
                 strong_votes[seat14_[0]] = 19.7
+    # family rule on the EP itself (result 57 after 62, 2026-10-11): the EP
+    # and a 3RRR RESULT number of the same family (02 and 70) bring the EP
+    # with both digits cut (02 -> 57, cut/cut) — the user's family rule with
+    # the EP in place of the STRONG 16 number; the crossed-pair reading (cut
+    # of the first tens + the other tens) gives the same 57.  Goes to the
+    # declared cell with the family numbers and takes the seat of the lowest
+    # ranked number above the band (not a band, pair or seat 14 number)
+    if ep >= 0 and any(fv_ != ep and fam_key(fv_) == fam_key(ep) for fv_ in fam_res):
+        nv_ = cut(ep // 10) * 10 + cut(ep % 10)
+        if nv_ not in [v for v, _ in fam_seats]:
+            fam_seats = fam_seats + [(nv_, 'cut/cut')]
+        strong_lab.setdefault(nv_, 'cut/cut')
+        if strong_votes.get(nv_, 0) < 14.5:
+            f_keep = {v for v, _ in fam_x if v in fam_res} | ({seat14_[0]} if seat14_ else set())
+            f_all = [v for v in strong_votes if strong_votes[v] > 19]
+            f_top = sorted((v for v in f_all if v not in f_keep), key=lambda v: strong_votes[v])
+            if len(f_all) >= 11 and f_top:
+                strong_votes[nv_] = strong_votes[f_top[0]]
+                strong_votes[f_top[0]] = 14.3
+            else:
+                strong_votes[nv_] = 19.6
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json
@@ -4297,6 +4318,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the crossed declared operations (nc/-1 -> -2/nc) applied on the running value instead of the EP (-2/nc on 28 = 08)",
                        "     declared cell: a STRONG 16 number and a 3RRR RESULT number of the same family (53 and 85) bring that STRONG 16 number with both digits cut (53 -> 08)",
                        "     declared cell: the whole NUMBER BAND (declared number ± 1, ± 2) is in the cell (50, 52, 54 -> also 51, 53)",
+                       "     declared cell: the EP and a 3RRR RESULT number of the same family (02 and 70) bring the EP with both digits cut (02 -> 57)",
                        "     declared cell: two STRONG 16 numbers of one family, digits the other way round (80 and 03): first tens digit cut + the other tens digit (-> 30)",
                        "     declared number nc/cut: its tens cut, both digits cut, and the digits reversed of those and of itself",
                        "     declared cell with a cut/cut number: the cut/nc number with its digits reversed",

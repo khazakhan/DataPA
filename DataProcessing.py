@@ -3905,6 +3905,25 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             # this rule too (told the user, 2026-10-11)
             if sum(strong_votes[v] > 19 for v in strong_votes) < 11:
                 strong_votes[nv_] = 18.65
+    # 25. result 06 after 16 — the declared number with its digits reversed
+    #     (60 -> 06; the same family).  Goes to the declared cell with the
+    #     family numbers; fixed seat above the band when one can be had
+    if live and grid_ep is not None and grid_ep >= 0:
+        dv_ = cut(grid_ep // 10) * 10 + (grid_ep % 10 + 4) % 10
+        nv_ = (dv_ % 10) * 10 + dv_ // 10
+        lab_ = f"{OP_ABBREV[find_op(ep // 10, nv_ // 10)]}/{OP_ABBREV[find_op(ep % 10, nv_ % 10)]}"
+        if nv_ not in [v for v, _ in fam_seats]:
+            fam_seats = fam_seats + [(nv_, lab_)]
+        strong_lab.setdefault(nv_, lab_)
+        strong_votes.setdefault(nv_, 0)
+        if strong_votes[nv_] < 14.5:
+            f_all = sorted((v for v in strong_votes if strong_votes[v] > 19), key=lambda v: strong_votes[v])
+            k_ = int(os.environ.get('RULE25_POS', 0))
+            if len(f_all) >= 11 and 0 <= k_ < len(f_all):
+                strong_votes[nv_] = strong_votes[f_all[k_]]
+                strong_votes[f_all[k_]] = band_v_.get(f_all[k_], 14.3)
+            elif len(f_all) < 11:
+                strong_votes[nv_] = 18.62
     # the SAME OPERATION AGAIN number keeps a seat (2026-10-11): it held the
     # result 3 times in 35 series J rounds (11, 26, 19) — the best record of
     # any single number — but the later rule seats had pushed it out of the
@@ -4670,6 +4689,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the whole NUMBER BAND (declared number ± 1, ± 2) is in the cell (50, 52, 54 -> also 51, 53)",
                        "     declared cell: the SAME OPERATION AGAIN number (the last round's operation on this EP) is in the cell (cut/c-2 again -> 26)",
                        "     declared cell: the EP and a 3RRR RESULT number of the same family (02 and 70) bring the EP with both digits cut (02 -> 57)",
+                       "     declared cell: the declared number with its digits reversed (60 -> 06)",
                        "     declared cell: the 2nd NUMBER with both steps switched, c+2 / c-2 on the running value (19 -> 82)",
                        "     declared cell: the last round's operation with the cut moved to the other side and both steps switched (-2/c+2 -> c-1/+1 = 21)",
                        "     declared cell: the band number one under the declared number (31) also with its units digit cut (-> 36)",

@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 457, 'tens_cut': 77, 'short_list': 121,
-    'table_rounds': 447, 'table_hits': 53, 'table_chance': 33, 'declared': 412, 'declared_hits': 8,
+    'results': 458, 'tens_cut': 77, 'short_list': 121,
+    'table_rounds': 448, 'table_hits': 53, 'table_chance': 33, 'declared': 413, 'declared_hits': 8,
     'band_hits': 42, 'units_hits': 57, 'second_hits': 14,
     'same_tens': 23,
-    'rrr3_rounds': 143, 'rrr3_hits': 4, 'rrr3_rec_rounds': 144, 'rrr3_rec_hits': 37,
-    'rrr3_same_rounds': 116, 'rrr3_same_hits': 3, 'rrr3_wide_rounds': 103, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 98, 'rrr3_yx_hits': 8,
-    'rrr3_strong_rounds': 94, 'rrr3_strong_hits': 8, 'rrr3_same2_rounds': 91, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 98, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 98, 'rrr3_sameyx_hits': 2,
-    'power_rounds': 33, 'power_hits': 21,
+    'rrr3_rounds': 144, 'rrr3_hits': 4, 'rrr3_rec_rounds': 145, 'rrr3_rec_hits': 37,
+    'rrr3_same_rounds': 117, 'rrr3_same_hits': 3, 'rrr3_wide_rounds': 104, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 99, 'rrr3_yx_hits': 8,
+    'rrr3_strong_rounds': 95, 'rrr3_strong_hits': 8, 'rrr3_same2_rounds': 92, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 99, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 99, 'rrr3_sameyx_hits': 2,
+    'power_rounds': 34, 'power_hits': 22,
 }
 
 
@@ -3867,6 +3867,26 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 strong_votes[f_all[k_]] = band_v_.get(f_all[k_], 14.3)
             elif len(f_all) < 11:
                 strong_votes[nv_] = 18.8
+    # 23. result 67 after 21 — rule 22's number with its x step switched,
+    #     the nearest x (57 (-2/c+2) -> 67 (-1/c+2)), as seat 4 does for the
+    #     declared number.  STRONG 16 only; fixed seat above the band
+    if _RRR3_PREV.get('op') and all(_op_parts(o_)[1] in ('+1', '+2', '-1', '-2') for o_ in _RRR3_PREV['op']) \
+            and _op_parts(_RRR3_PREV['op'][0])[0] != _op_parts(_RRR3_PREV['op'][1])[0]:
+        m_sw = {'+1': '+2', '+2': '+1', '-1': '-2', '-2': '-1'}
+        hx_, hy_ = _RRR3_PREV['op']
+        qx_ = _op_join(not _op_parts(hx_)[0], _op_parts(hx_)[1])
+        qy_ = _op_join(not _op_parts(hy_)[0], m_sw[_op_parts(hy_)[1]])
+        nv_ = compute_variants(ep, qx_, qy_)[0]
+        strong_lab.setdefault(nv_, f"{OP_ABBREV[qx_]}/{OP_ABBREV[qy_]}")
+        strong_votes.setdefault(nv_, 0)
+        if strong_votes[nv_] < 14.5:
+            f_all = sorted((v for v in strong_votes if strong_votes[v] > 19), key=lambda v: strong_votes[v])
+            k_ = 5    # the only place of 0-7 that keeps all 34 earlier rounds
+            if len(f_all) >= 11 and k_ < len(f_all):
+                strong_votes[nv_] = strong_votes[f_all[k_]]
+                strong_votes[f_all[k_]] = band_v_.get(f_all[k_], 14.3)
+            elif len(f_all) < 11:
+                strong_votes[nv_] = 18.7
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json

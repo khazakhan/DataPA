@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 440, 'tens_cut': 72, 'short_list': 114,
-    'table_rounds': 430, 'table_hits': 51, 'table_chance': 33, 'declared': 395, 'declared_hits': 8,
-    'band_hits': 39, 'units_hits': 55, 'second_hits': 13,
+    'results': 441, 'tens_cut': 73, 'short_list': 115,
+    'table_rounds': 431, 'table_hits': 51, 'table_chance': 33, 'declared': 396, 'declared_hits': 8,
+    'band_hits': 40, 'units_hits': 55, 'second_hits': 13,
     'same_tens': 23,
-    'rrr3_rounds': 126, 'rrr3_hits': 3, 'rrr3_rec_rounds': 127, 'rrr3_rec_hits': 31,
-    'rrr3_same_rounds': 99, 'rrr3_same_hits': 1, 'rrr3_wide_rounds': 86, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 81, 'rrr3_yx_hits': 7,
-    'rrr3_strong_rounds': 77, 'rrr3_strong_hits': 3, 'rrr3_same2_rounds': 74, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 81, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 81, 'rrr3_sameyx_hits': 1,
-    'power_rounds': 16, 'power_hits': 10,
+    'rrr3_rounds': 127, 'rrr3_hits': 3, 'rrr3_rec_rounds': 128, 'rrr3_rec_hits': 31,
+    'rrr3_same_rounds': 100, 'rrr3_same_hits': 1, 'rrr3_wide_rounds': 87, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 82, 'rrr3_yx_hits': 7,
+    'rrr3_strong_rounds': 78, 'rrr3_strong_hits': 4, 'rrr3_same2_rounds': 75, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 82, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 82, 'rrr3_sameyx_hits': 1,
+    'power_rounds': 17, 'power_hits': 11,
 }
 
 
@@ -4080,6 +4080,20 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 p_groups[0][0][0] = p_join(p_groups[0][0][0],
                                            [', '.join(g_new[k:k + 2]) for k in range(0, len(g_new), 2)])
                 p_user |= {int(e[:2]) for e in g_new}
+        # declared cell: the whole NUMBER BAND (declared number ± 1, ± 2
+        # inside the tens-cut decade) — the cell had 50, 52, 54 and the
+        # result was 51.  Result 51 after 08, 2026-10-11
+        if p_groups and grid_ep is not None and grid_ep >= 0:
+            b_have = {e for l in p_groups[0][0][0] for e in re.findall(r'(\d\d) \(', l)}
+            b_new = []
+            for k_ in (-2, -1, 0, 1, 2):
+                bv_ = cut(grid_ep // 10) * 10 + (grid_ep % 10 + 4 + k_) % 10
+                if f"{bv_:02d}" not in b_have:
+                    b_new.append(f"{bv_:02d} ({OP_ABBREV[find_op(ep // 10, bv_ // 10)]}/{OP_ABBREV[find_op(ep % 10, bv_ % 10)]})")
+            if b_new:
+                p_groups[0][0][0] = p_join(p_groups[0][0][0],
+                                           [', '.join(b_new[k:k + 2]) for k in range(0, len(b_new), 2)])
+                p_user |= {int(e[:2]) for e in b_new}
         for cols_, labs_ in p_groups:
             h_ = max(len(c) for c in cols_)
             p_rows.append([[c[k] if k < len(c) else '' for c in cols_] for k in range(h_)] + [labs_])
@@ -4228,6 +4242,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: declared x without its cut + sign flipped, with the cut steps of the other sign on a +1/+2 declared y (c-2/+2 -> +2/c-1, +2/c-2)",
                        "     declared cell: the crossed declared operations (nc/-1 -> -2/nc) applied on the running value instead of the EP (-2/nc on 28 = 08)",
                        "     declared cell: a STRONG 16 number and a 3RRR RESULT number of the same family (53 and 85) bring that STRONG 16 number with both digits cut (53 -> 08)",
+                       "     declared cell: the whole NUMBER BAND (declared number ± 1, ± 2) is in the cell (50, 52, 54 -> also 51, 53)",
                        "     declared number nc/cut: its tens cut, both digits cut, and the digits reversed of those and of itself",
                        "     declared cell with a cut/cut number: the cut/nc number with its digits reversed",
                        "     declared cell, end: a number of it whose digits reversed stand in another cell brings that number in",

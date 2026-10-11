@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 479, 'tens_cut': 82, 'short_list': 127,
-    'table_rounds': 469, 'table_hits': 59, 'table_chance': 33, 'declared': 434, 'declared_hits': 8,
+    'results': 480, 'tens_cut': 82, 'short_list': 127,
+    'table_rounds': 470, 'table_hits': 59, 'table_chance': 33, 'declared': 435, 'declared_hits': 8,
     'band_hits': 45, 'units_hits': 58, 'second_hits': 14,
     'same_tens': 23,
-    'rrr3_rounds': 165, 'rrr3_hits': 6, 'rrr3_rec_rounds': 166, 'rrr3_rec_hits': 49,
-    'rrr3_same_rounds': 138, 'rrr3_same_hits': 6, 'rrr3_wide_rounds': 125, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 120, 'rrr3_yx_hits': 9,
-    'rrr3_strong_rounds': 116, 'rrr3_strong_hits': 13, 'rrr3_same2_rounds': 113, 'rrr3_same2_hits': 2,
-    'rrr3_turn_rounds': 120, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 120, 'rrr3_sameyx_hits': 2,
-    'power_rounds': 55, 'power_hits': 32,
+    'rrr3_rounds': 166, 'rrr3_hits': 6, 'rrr3_rec_rounds': 167, 'rrr3_rec_hits': 50,
+    'rrr3_same_rounds': 139, 'rrr3_same_hits': 6, 'rrr3_wide_rounds': 126, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 121, 'rrr3_yx_hits': 9,
+    'rrr3_strong_rounds': 117, 'rrr3_strong_hits': 13, 'rrr3_same2_rounds': 114, 'rrr3_same2_hits': 2,
+    'rrr3_turn_rounds': 121, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 121, 'rrr3_sameyx_hits': 2,
+    'power_rounds': 56, 'power_hits': 33,
 }
 
 
@@ -4134,6 +4134,17 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         strong_lab.setdefault(nv_, lab_)
         if strong_votes.get(nv_, 0) < 14.3002:
             strong_votes[nv_] = 14.3002
+    # 39. result 96 after 30 — the 2nd NUMBER read on the EP (94 = c-2/+2
+    #     on EP 62) with rule 12's y: a +1/+2 step on y becomes c-1 (-> 96
+    #     (c-2/c-1)).  STRONG 20 only; sits under the band
+    if grid_ep is not None and grid_ep >= 0:
+        s2_ = ((grid_ep // 10 + 6) % 10) * 10 + (grid_ep % 10 + 4) % 10
+        sx_, sy_ = find_op(ep // 10, s2_ // 10), find_op(ep % 10, s2_ % 10)
+        if sy_ in ('+1', '+2'):
+            nv_ = compute_variants(ep, sx_, 'cut-1')[0]
+            strong_lab.setdefault(nv_, f"{OP_ABBREV[sx_]}/c-1")
+            if strong_votes.get(nv_, 0) < 14.3995:
+                strong_votes[nv_] = 14.3995
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json

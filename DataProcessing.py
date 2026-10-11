@@ -872,7 +872,7 @@ def show_power_box():
     ep, uniq = got
     body = [f"★  POWER BASE — ALL {len(uniq)} NUMBERS, NO REPEATS  (EP={ep:02d})  ★", ""]
     body += [''.join(f"  {c}" for c in uniq[k:k + 10]) for k in range(0, len(uniq), 10)]
-    body += ["", "★ = also in the STRONG 16    * = also in the RECOMMENDED list",
+    body += ["", "★ = also in the STRONG 20    * = also in the RECOMMENDED list",
              "+ = digits reversed of a table number whose series is there",
              "A wide list: it holds the result often by size alone, NOT a proven edge."]
     B    = "\033[1m"
@@ -3899,12 +3899,10 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         strong_lab.setdefault(nv_, lab_)
         strong_votes.setdefault(nv_, 0)
         if strong_votes[nv_] < 14.5:
-            # no STRONG 16 seat when the 11 seats above the band are full:
-            # each of the 11 places was tried and every one pushed out a
-            # number an earlier series J round needed — the 16 cannot hold
-            # this rule too (told the user, 2026-10-11)
-            if sum(strong_votes[v] > 19 for v in strong_votes) < 11:
-                strong_votes[nv_] = 18.65
+            # the 11 seats above the band are full (each place was tried and
+            # pushed out a number an earlier series J round needed): since
+            # the list was widened to 20 it sits just under the band
+            strong_votes[nv_] = 18.65 if sum(strong_votes[v] > 19 for v in strong_votes) < 11 else 14.45
     # 25. result 06 after 16 — the declared number with its digits reversed
     #     (60 -> 06; the same family).  Goes to the declared cell with the
     #     family numbers; fixed seat above the band when one can be had
@@ -3918,12 +3916,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         strong_votes.setdefault(nv_, 0)
         if strong_votes[nv_] < 14.5:
             f_all = sorted((v for v in strong_votes if strong_votes[v] > 19), key=lambda v: strong_votes[v])
-            k_ = -1    # no place: each of the 11 was tried and pushed out a number an earlier round needed
-            if len(f_all) >= 11 and 0 <= k_ < len(f_all):
-                strong_votes[nv_] = strong_votes[f_all[k_]]
-                strong_votes[f_all[k_]] = band_v_.get(f_all[k_], 14.3)
-            elif len(f_all) < 11:
-                strong_votes[nv_] = 18.62
+            # no place among the 11 above the band either (all tried): it
+            # sits just under the band, in the widened list of 20
+            strong_votes[nv_] = 18.62 if len(f_all) < 11 else 14.44
     # the SAME OPERATION AGAIN number keeps a seat (2026-10-11): it held the
     # result 3 times in 35 series J rounds (11, 26, 19) — the best record of
     # any single number — but the later rule seats had pushed it out of the
@@ -3960,7 +3955,10 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        'rec': {v: rec_votes.get(v, 1) for v, _ in rec}, 'yx': [v for v, _ in rec_yx],
                        'wide': wide_votes, 'found': [int(n[:2]) for n, _ in found],
                        'table': [v for v, _, _ in both_cut]}, fh)
-    strong = sorted(order, key=lambda v: (-strong_votes[v], order.index(v)))[:16]
+    # widened from 16 to 20 on the user's request (2026-10-11): 24 rules
+    # were competing for the 11 seats above the band and the last two
+    # (rules 24, 25) could not be seated without pushing an older one out
+    strong = sorted(order, key=lambda v: (-strong_votes[v], order.index(v)))[:20]
     if os.environ.get('RRR3_DUMP2'):
         import json
         with open(os.environ['RRR3_DUMP2'], 'w') as fh:
@@ -3978,7 +3976,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     s_cw = max([len(c) for c in s_cells] + [16]) + 2
     s_per = 4
     s_tw = s_per * s_cw + s_per - 1
-    s_title = f"★  3RRR STRONG 16   —   operations applied on EP={ep:02d}  ★"
+    s_title = f"★  3RRR STRONG 20   —   operations applied on EP={ep:02d}  ★"
     strong_lines = [f"  {s_g}┌{'─' * s_tw}┐{s_rst}",
                     f"  {s_g}│{s_rst}{s_rib}{s_title:^{s_tw}}{s_rst}{s_g}│{s_rst}",
                     f"  {s_g}├{'┬'.join('─' * s_cw for _ in range(s_per))}┤{s_rst}"]
@@ -4040,7 +4038,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                                 "that, reversed"))
         if strong:
             sx_, _, sy_ = strong_lab[strong[0]].partition('/')
-            p_third.append((f"{strong[0]:02d} ({strong_lab[strong[0]]})", "STRONG 16 first"))
+            p_third.append((f"{strong[0]:02d} ({strong_lab[strong[0]]})", "STRONG 20 first"))
             if sx_ in abbrev_op and sy_ in abbrev_op:
                 uy = _op_join(False, _op_parts(abbrev_op[sy_])[1])
                 p_third.append((f"{compute_variants(ep, abbrev_op[sx_], uy)[0]:02d} ({sx_}/{OP_ABBREV[uy]})",
@@ -4685,7 +4683,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the last round's operation again on the EP with nc on y (c+1/+2 -> c+1/nc)",
                        "     declared cell: declared x without its cut + sign flipped, with the cut steps of the other sign on a +1/+2 declared y (c-2/+2 -> +2/c-1, +2/c-2)",
                        "     declared cell: the crossed declared operations (nc/-1 -> -2/nc) applied on the running value instead of the EP (-2/nc on 28 = 08)",
-                       "     declared cell: a STRONG 16 number and a 3RRR RESULT number of the same family (53 and 85) bring that STRONG 16 number with both digits cut (53 -> 08)",
+                       "     declared cell: a STRONG 20 number and a 3RRR RESULT number of the same family (53 and 85) bring that STRONG 20 number with both digits cut (53 -> 08)",
                        "     declared cell: the whole NUMBER BAND (declared number ± 1, ± 2) is in the cell (50, 52, 54 -> also 51, 53)",
                        "     declared cell: the SAME OPERATION AGAIN number (the last round's operation on this EP) is in the cell (cut/c-2 again -> 26)",
                        "     declared cell: the EP and a 3RRR RESULT number of the same family (02 and 70) bring the EP with both digits cut (02 -> 57)",
@@ -4693,15 +4691,15 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the 2nd NUMBER with both steps switched, c+2 / c-2 on the running value (19 -> 82)",
                        "     declared cell: the last round's operation with the cut moved to the other side and both steps switched (-2/c+2 -> c-1/+1 = 21)",
                        "     declared cell: the band number one under the declared number (31) also with its units digit cut (-> 36)",
-                       "     declared cell: the STRONG 16 number from the first RRR table number's y as a cut step (32 (c+2/+2) -> 33 (c+2/c-2)) also with both digits cut (-> 88)",
+                       "     declared cell: the STRONG 20 number from the first RRR table number's y as a cut step (32 (c+2/+2) -> 33 (c+2/c-2)) also with both digits cut (-> 88)",
                        "     declared cell: the last round's operation crossed, both without their cut and both signs flipped (+2/c+1 -> -1/-2 = 10)",
-                       "     declared cell: the STRONG 16 number from the declared operations crossed (10 (c+1/c-1) -> 27 (c+2/+1)) also with its digits reversed (-> 72)",
-                       "     declared cell: the number a crossed family pair of the STRONG 16 brings (85 and 08 -> 30) also with its digits reversed (-> 03)",
-                       "     declared cell: two STRONG 16 numbers of one family, digits the other way round (80 and 03): first tens digit cut + the other tens digit (-> 30)",
+                       "     declared cell: the STRONG 20 number from the declared operations crossed (10 (c+1/c-1) -> 27 (c+2/+1)) also with its digits reversed (-> 72)",
+                       "     declared cell: the number a crossed family pair of the STRONG 20 brings (85 and 08 -> 30) also with its digits reversed (-> 03)",
+                       "     declared cell: two STRONG 20 numbers of one family, digits the other way round (80 and 03): first tens digit cut + the other tens digit (-> 30)",
                        "     declared number nc/cut: its tens cut, both digits cut, and the digits reversed of those and of itself",
                        "     declared cell with a cut/cut number: the cut/nc number with its digits reversed",
                        "     declared cell, end: a number of it whose digits reversed stand in another cell brings that number in",
-                       "     ★ = also in the STRONG 16     * = also in the RECOMMENDED list     ☆ = number from the declared-cell rules",
+                       "     ★ = also in the STRONG 20     * = also in the RECOMMENDED list     ☆ = number from the declared-cell rules",
                        f"     in advance {RRR_LIVE['power_hits']} of {RRR_LIVE['power_rounds']};"
                        " all 423 recorded rounds: 36 = 8.5% (4% by chance), latest series 7 of 170", ""]
     res_items = [f"{n} ({r})" for n, r in found]
@@ -4710,10 +4708,10 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     body += ['─' * len(head), "3RRR".center(len(head)), "",
              *power_lines,
              *strong_lines,
-             "     never more than 16: the RRR table, the rule seats written after misses (in place of the last table numbers), the number band (5)",
-             "     and rule numbers as fill — about one round in six by size; most rounds still miss.", "",
+             "     never more than 20 (16 until 2026-10-11): the RRR table, the rule seats written after misses (in place of the last table numbers), the number band (5)",
+             "     and rule numbers as fill — about one round in five by size; most rounds still miss.", "",
              *final_lines,
-             "     numbers 1-16 are the STRONG 16; the rest follow in the order of the lists below", "",
+             "     numbers 1-20 are the STRONG 20; the rest follow in the order of the lists below", "",
              *res_lines,
              *rec_lines,
              "     recommended = 3RRR numbers + rules E and F + same operation again + EP itself, EP cut + unused RRR pairs",
@@ -4829,7 +4827,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              f"  same operation again {RRR_LIVE['rrr3_same_hits']} of {RRR_LIVE['rrr3_same_rounds']},"
              f" wide {RRR_LIVE['rrr3_wide_hits']} of {RRR_LIVE['rrr3_wide_rounds']},"
              f" recommended yx {RRR_LIVE['rrr3_yx_hits']} of {RRR_LIVE['rrr3_yx_rounds']},",
-             f"  STRONG 16: {RRR_LIVE['rrr3_strong_hits']} of {RRR_LIVE['rrr3_strong_rounds']}.",
+             f"  STRONG 20: {RRR_LIVE['rrr3_strong_hits']} of {RRR_LIVE['rrr3_strong_rounds']} (the first 99 rounds with 16 numbers).",
              "  Replay on 309 recorded rounds: result line 13 hits on 1310 numbers (13.1 by chance);",
              "  recommended list (about 23 numbers a round): 82 hits (72.0 by chance);",
              "  wide list (about 16 numbers a round): 39 hits (49.7 by chance); same operation again: 6 (3.1).",

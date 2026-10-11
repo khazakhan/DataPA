@@ -3486,7 +3486,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             strong_votes[table_first[t_i]] = 4.5
         # the 16 hold 11 seats beside the band's 5: a 12th rule seat in one
         # round does not push a band number out, it only fills a free seat
-        strong_votes[nv_] = 19.905 - r_k * 0.001 if r_k < 11 else 14.4 - r_k * 0.001
+        strong_votes[nv_] = (19.905 - r_k * 0.001 if r_k < 11 and sum(x > 19 for x in strong_votes.values()) < 11
+                             else 14.4 - r_k * 0.001)
         r_k += 1
     # family seats (user, 2026-10-11, after 08 came on 28): a STRONG 16
     # number and a 3RRR RESULT number of the same family — the same two
@@ -3512,7 +3513,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             t_i -= 1
         if 0 <= t_i < len(table_first) and strong_votes.get(table_first[t_i], 0) > 19:
             strong_votes[table_first[t_i]] = 4.5
-        strong_votes[nv_] = 19.905 - r_k * 0.001 if r_k < 11 else 14.4 - r_k * 0.001
+        strong_votes[nv_] = (19.905 - r_k * 0.001 if r_k < 11 and sum(x > 19 for x in strong_votes.values()) < 11
+                             else 14.4 - r_k * 0.001)
         r_k += 1
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):

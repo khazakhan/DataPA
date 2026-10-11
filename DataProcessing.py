@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 473, 'tens_cut': 82, 'short_list': 127,
-    'table_rounds': 463, 'table_hits': 58, 'table_chance': 33, 'declared': 428, 'declared_hits': 8,
+    'results': 474, 'tens_cut': 82, 'short_list': 127,
+    'table_rounds': 464, 'table_hits': 58, 'table_chance': 33, 'declared': 429, 'declared_hits': 8,
     'band_hits': 45, 'units_hits': 58, 'second_hits': 14,
     'same_tens': 23,
-    'rrr3_rounds': 159, 'rrr3_hits': 6, 'rrr3_rec_rounds': 160, 'rrr3_rec_hits': 46,
-    'rrr3_same_rounds': 132, 'rrr3_same_hits': 5, 'rrr3_wide_rounds': 119, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 114, 'rrr3_yx_hits': 8,
-    'rrr3_strong_rounds': 110, 'rrr3_strong_hits': 13, 'rrr3_same2_rounds': 107, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 114, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 114, 'rrr3_sameyx_hits': 2,
-    'power_rounds': 49, 'power_hits': 31,
+    'rrr3_rounds': 160, 'rrr3_hits': 6, 'rrr3_rec_rounds': 161, 'rrr3_rec_hits': 47,
+    'rrr3_same_rounds': 133, 'rrr3_same_hits': 5, 'rrr3_wide_rounds': 120, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 115, 'rrr3_yx_hits': 8,
+    'rrr3_strong_rounds': 111, 'rrr3_strong_hits': 13, 'rrr3_same2_rounds': 108, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 115, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 115, 'rrr3_sameyx_hits': 2,
+    'power_rounds': 50, 'power_hits': 31,
 }
 
 
@@ -4045,6 +4045,27 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             strong_lab.setdefault(nv_, lab_)
             if strong_votes.get(nv_, 0) < 14.4:
                 strong_votes[nv_] = 14.4
+    # 33. result 23 after 33 — two STRONG 20 numbers above the band with the
+    #     same y, one a step under the EP's tens and one a step over (13
+    #     (-1/+2) and 33 (+1/+2)), bring the number between them, nc on x (23
+    #     (nc/+2)).  Goes to the declared cell with the family numbers; takes
+    #     the lowest seat above the band (the places under it were all held)
+    p20_ = [v for v in strong_lab if strong_votes.get(v, 0) > 19]
+    for a_ in p20_:
+        if a_ // 10 == (ep // 10 - 1) % 10 and ((ep // 10 + 1) % 10) * 10 + a_ % 10 in p20_:
+            nv_ = (ep // 10) * 10 + a_ % 10
+            lab_ = f"nc/{OP_ABBREV[find_op(ep % 10, nv_ % 10)]}"
+            if nv_ not in [v for v, _ in fam_seats]:
+                fam_seats = fam_seats + [(nv_, lab_)]
+            strong_lab.setdefault(nv_, lab_)
+            strong_votes.setdefault(nv_, 0)
+            if strong_votes[nv_] < 14.5:
+                f_all = sorted((v for v in strong_votes if strong_votes[v] > 19), key=lambda v: strong_votes[v])
+                if len(f_all) >= 11:    # the lowest seat above the band; fires in 1 of 50 rounds
+                    strong_votes[nv_] = strong_votes[f_all[0]]
+                    strong_votes[f_all[0]] = band_v_.get(f_all[0], 14.3)
+                else:
+                    strong_votes[nv_] = 18.3
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json
@@ -4787,6 +4808,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the whole NUMBER BAND (declared number ± 1, ± 2) is in the cell (50, 52, 54 -> also 51, 53)",
                        "     declared cell: the SAME OPERATION AGAIN number (the last round's operation on this EP) is in the cell (cut/c-2 again -> 26)",
                        "     declared cell: the EP and a 3RRR RESULT number of the same family (02 and 70) bring the EP with both digits cut (02 -> 57)",
+                       "     declared cell: two STRONG 20 numbers above the band, -1 and +1 on x with the same y (13 and 33), bring the number between them, nc on x (-> 23)",
                        "     declared cell: a 3RRR RESULT number that is a STRONG 20 number above the band with both digits cut (88 -> 33) is in the cell",
                        "     declared cell: the declared operation applied on the running value instead of the EP (30 = +2/nc on EP 10; +2/nc on 86 -> 06)",
                        "     declared cell: the SAME OPERATION AGAIN number mirrored (both signs flipped) with its x step switched (c+1/-1 -> c-2/+1 = 68)",

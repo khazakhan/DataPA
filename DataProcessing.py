@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 438, 'tens_cut': 72, 'short_list': 114,
-    'table_rounds': 428, 'table_hits': 51, 'table_chance': 33, 'declared': 393, 'declared_hits': 8,
+    'results': 439, 'tens_cut': 72, 'short_list': 114,
+    'table_rounds': 429, 'table_hits': 51, 'table_chance': 33, 'declared': 394, 'declared_hits': 8,
     'band_hits': 39, 'units_hits': 55, 'second_hits': 13,
     'same_tens': 23,
-    'rrr3_rounds': 124, 'rrr3_hits': 3, 'rrr3_rec_rounds': 125, 'rrr3_rec_hits': 30,
-    'rrr3_same_rounds': 97, 'rrr3_same_hits': 1, 'rrr3_wide_rounds': 84, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 79, 'rrr3_yx_hits': 7,
-    'rrr3_strong_rounds': 75, 'rrr3_strong_hits': 3, 'rrr3_same2_rounds': 72, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 79, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 79, 'rrr3_sameyx_hits': 1,
-    'power_rounds': 14, 'power_hits': 8,
+    'rrr3_rounds': 125, 'rrr3_hits': 3, 'rrr3_rec_rounds': 126, 'rrr3_rec_hits': 31,
+    'rrr3_same_rounds': 98, 'rrr3_same_hits': 1, 'rrr3_wide_rounds': 85, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 80, 'rrr3_yx_hits': 7,
+    'rrr3_strong_rounds': 76, 'rrr3_strong_hits': 3, 'rrr3_same2_rounds': 73, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 80, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 80, 'rrr3_sameyx_hits': 1,
+    'power_rounds': 15, 'power_hits': 9,
 }
 
 
@@ -3456,6 +3456,11 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     if _RRR3_PREV.get('op') and _RRR3_PREV['op'][1] != 'no_change':
         hx_ = _RRR3_PREV['op'][0]
         rule_seats.append((compute_variants(ep, hx_, 'no_change')[0], f"{OP_ABBREV[hx_]}/nc"))
+    # 12. result 28 after 82 — seat 5's x (declared x without its cut, sign
+    #     flipped) with the +1/+2 rule on y (declared y a +1/+2 step -> c-1)
+    #     (36 (c-2/+2) -> 28 (+2/c-1))
+    if grid_ep is not None and d_xn and _op_parts(d_y)[1] in ('+1', '+2') and not _op_parts(d_y)[0]:
+        rule_seats.append((compute_variants(ep, SIGN_FLIP[d_xn], 'cut-1')[0], f"{OP_ABBREV[SIGN_FLIP[d_xn]]}/c-1"))
     r_k = 0
     for nv_, nlab_ in rule_seats:
         strong_lab.setdefault(nv_, nlab_)
@@ -3464,7 +3469,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         t_i = 10 - r_k
         if 0 <= t_i < len(table_first) and strong_votes.get(table_first[t_i], 0) > 19:
             strong_votes[table_first[t_i]] = 4.5
-        strong_votes[nv_] = 19.905 - r_k * 0.001
+        # the 16 hold 11 seats beside the band's 5: a 12th rule seat in one
+        # round does not push a band number out, it only fills a free seat
+        strong_votes[nv_] = 19.905 - r_k * 0.001 if r_k < 11 else 14.4 - r_k * 0.001
         r_k += 1
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
@@ -3986,6 +3993,26 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             if f"{hv_:02d}" not in {e for l in p_groups[0][0][0] for e in re.findall(r'(\d\d) \(', l)}:
                 p_groups[0][0][0] = p_join(p_groups[0][0][0], [f"{hv_:02d} ({OP_ABBREV[hx_]}/nc)"])
                 p_user.add(hv_)
+        # declared cell: two earlier rules together — the declared x without
+        # its cut and sign flipped (30 (+1/-2) -> 10 (-1/-2)) with the cut
+        # steps of the other sign on a +1/+2 declared y (-> c-1, c-2):
+        # 36 (c-2/+2) on EP 04 -> 28 (+2/c-1), 27 (+2/c-2).  Result 28 after
+        # 82, 2026-10-11
+        if p_groups and grid_ep is not None and grid_ep >= 0:
+            cv_ = cut(grid_ep // 10) * 10 + (grid_ep % 10 + 4) % 10
+            cx_, cy_ = find_op(ep // 10, cv_ // 10), find_op(ep % 10, cv_ % 10)
+            if _op_parts(cx_)[1] and cy_ in ('+1', '+2'):
+                fx_ = SIGN_FLIP[_op_parts(cx_)[1]]
+                f_have = {e for l in p_groups[0][0][0] for e in re.findall(r'(\d\d) \(', l)}
+                f_new = []
+                for fy_ in ('cut-1', 'cut-2'):
+                    fv_ = f"{compute_variants(ep, fx_, fy_)[0]:02d}"
+                    if fv_ not in f_have:
+                        f_have.add(fv_)
+                        f_new.append(f"{fv_} ({OP_ABBREV[fx_]}/{OP_ABBREV[fy_]})")
+                if f_new:
+                    p_groups[0][0][0] = p_join(p_groups[0][0][0], [', '.join(f_new)])
+                    p_user |= {int(e[:2]) for e in f_new}
         for cols_, labs_ in p_groups:
             h_ = max(len(c) for c in cols_)
             p_rows.append([[c[k] if k < len(c) else '' for c in cols_] for k in range(h_)] + [labs_])
@@ -4131,6 +4158,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: declared operations crossed, y without its cut and step switched on x, x without its cut on y (nc/c-1 -> -2/nc)",
                        "     declared cell: the last round's operation again on the running value with its x step switched (+2/nc on 06 -> +1/nc on 06 = 16)",
                        "     declared cell: the last round's operation again on the EP with nc on y (c+1/+2 -> c+1/nc)",
+                       "     declared cell: declared x without its cut + sign flipped, with the cut steps of the other sign on a +1/+2 declared y (c-2/+2 -> +2/c-1, +2/c-2)",
                        "     declared number nc/cut: its tens cut, both digits cut, and the digits reversed of those and of itself",
                        "     declared cell with a cut/cut number: the cut/nc number with its digits reversed",
                        "     declared cell, end: a number of it whose digits reversed stand in another cell brings that number in",

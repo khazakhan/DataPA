@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 463, 'tens_cut': 79, 'short_list': 124,
-    'table_rounds': 453, 'table_hits': 53, 'table_chance': 33, 'declared': 418, 'declared_hits': 8,
+    'results': 464, 'tens_cut': 79, 'short_list': 124,
+    'table_rounds': 454, 'table_hits': 54, 'table_chance': 33, 'declared': 419, 'declared_hits': 8,
     'band_hits': 44, 'units_hits': 58, 'second_hits': 14,
     'same_tens': 23,
-    'rrr3_rounds': 149, 'rrr3_hits': 5, 'rrr3_rec_rounds': 150, 'rrr3_rec_hits': 40,
-    'rrr3_same_rounds': 122, 'rrr3_same_hits': 4, 'rrr3_wide_rounds': 109, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 104, 'rrr3_yx_hits': 8,
-    'rrr3_strong_rounds': 100, 'rrr3_strong_hits': 10, 'rrr3_same2_rounds': 97, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 104, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 104, 'rrr3_sameyx_hits': 2,
-    'power_rounds': 39, 'power_hits': 25,
+    'rrr3_rounds': 150, 'rrr3_hits': 5, 'rrr3_rec_rounds': 151, 'rrr3_rec_hits': 40,
+    'rrr3_same_rounds': 123, 'rrr3_same_hits': 4, 'rrr3_wide_rounds': 110, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 105, 'rrr3_yx_hits': 8,
+    'rrr3_strong_rounds': 101, 'rrr3_strong_hits': 10, 'rrr3_same2_rounds': 98, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 105, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 105, 'rrr3_sameyx_hits': 2,
+    'power_rounds': 40, 'power_hits': 25,
 }
 
 
@@ -3947,6 +3947,24 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 strong_votes[f_all[k_]] = band_v_.get(f_all[k_], 14.3)
             elif len(f_all) < 11:
                 strong_votes[nv_] = 18.5
+    # 26. result 74 after 52 — a both-cut family pair in the strong list (24
+    #     and 79: the same family, same digit order, each the other with both
+    #     digits cut) brings the number between them: the lower one with its
+    #     tens digit cut = the higher one with its units digit cut (74).  Goes
+    #     to the declared cell with the family numbers, sits just under the band
+    #     Only pairs among the seats above the band, and not a family whose
+    #     two digits are the same class (00 and 55)
+    p20_ = [v for v in strong_lab if strong_votes.get(v, 0) > 19]
+    for a_ in p20_:
+        b_ = cut(a_ // 10) * 10 + cut(a_ % 10)
+        if a_ < b_ and b_ in p20_ and f_cl(a_ // 10) != f_cl(a_ % 10):
+            for nv_ in ((b_ // 10) * 10 + a_ % 10,):    # the lower one with its tens digit cut
+                lab_ = f"{OP_ABBREV[find_op(ep // 10, nv_ // 10)]}/{OP_ABBREV[find_op(ep % 10, nv_ % 10)]}"
+                if nv_ not in [v for v, _ in fam_seats]:
+                    fam_seats = fam_seats + [(nv_, lab_)]
+                strong_lab.setdefault(nv_, lab_)
+                if strong_votes.get(nv_, 0) < 14.42:
+                    strong_votes[nv_] = 14.42
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json
@@ -4687,6 +4705,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the whole NUMBER BAND (declared number ± 1, ± 2) is in the cell (50, 52, 54 -> also 51, 53)",
                        "     declared cell: the SAME OPERATION AGAIN number (the last round's operation on this EP) is in the cell (cut/c-2 again -> 26)",
                        "     declared cell: the EP and a 3RRR RESULT number of the same family (02 and 70) bring the EP with both digits cut (02 -> 57)",
+                       "     declared cell: two STRONG 20 numbers that are each other with both digits cut (24 and 79) bring the number between them, the lower one with its tens cut (74)",
                        "     declared cell: the declared number with its digits reversed (60 -> 06)",
                        "     declared cell: the 2nd NUMBER with both steps switched, c+2 / c-2 on the running value (19 -> 82)",
                        "     declared cell: the last round's operation with the cut moved to the other side and both steps switched (-2/c+2 -> c-1/+1 = 21)",

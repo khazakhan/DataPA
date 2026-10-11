@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 466, 'tens_cut': 79, 'short_list': 124,
-    'table_rounds': 456, 'table_hits': 55, 'table_chance': 33, 'declared': 421, 'declared_hits': 8,
+    'results': 467, 'tens_cut': 79, 'short_list': 124,
+    'table_rounds': 457, 'table_hits': 56, 'table_chance': 33, 'declared': 422, 'declared_hits': 8,
     'band_hits': 44, 'units_hits': 58, 'second_hits': 14,
     'same_tens': 23,
-    'rrr3_rounds': 152, 'rrr3_hits': 5, 'rrr3_rec_rounds': 153, 'rrr3_rec_hits': 41,
-    'rrr3_same_rounds': 125, 'rrr3_same_hits': 4, 'rrr3_wide_rounds': 112, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 107, 'rrr3_yx_hits': 8,
-    'rrr3_strong_rounds': 103, 'rrr3_strong_hits': 10, 'rrr3_same2_rounds': 100, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 107, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 107, 'rrr3_sameyx_hits': 2,
-    'power_rounds': 42, 'power_hits': 26,
+    'rrr3_rounds': 153, 'rrr3_hits': 5, 'rrr3_rec_rounds': 154, 'rrr3_rec_hits': 42,
+    'rrr3_same_rounds': 126, 'rrr3_same_hits': 4, 'rrr3_wide_rounds': 113, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 108, 'rrr3_yx_hits': 8,
+    'rrr3_strong_rounds': 104, 'rrr3_strong_hits': 10, 'rrr3_same2_rounds': 101, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 108, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 108, 'rrr3_sameyx_hits': 2,
+    'power_rounds': 43, 'power_hits': 27,
 }
 
 
@@ -3991,6 +3991,17 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         strong_lab.setdefault(nv_, lab_)
         if strong_votes.get(nv_, 0) < 14.405:
             strong_votes[nv_] = 14.405
+    # 29. result 85 after 68 — the RRR table's LAST row (the chain's own last
+    #     step) gives two numbers, x/y and y/x; when the y/x one has a seat
+    #     (21 (c-1/nc)) the x/y one sits too (85 (nc/c-1)).  STRONG 20 only;
+    #     sits just under the band
+    if grid_ep is not None and len(both_cut) >= 2:
+        top_ = sorted(strong_votes, key=lambda v: -strong_votes[v])[:20]
+        if both_cut[-1][0] in top_:
+            nv_ = both_cut[-2][0]
+            strong_lab.setdefault(nv_, both_cut[-2][2])
+            if strong_votes.get(nv_, 0) < 14.403:
+                strong_votes[nv_] = 14.403
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json

@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 449, 'tens_cut': 75, 'short_list': 119,
-    'table_rounds': 439, 'table_hits': 52, 'table_chance': 33, 'declared': 404, 'declared_hits': 8,
+    'results': 450, 'tens_cut': 75, 'short_list': 119,
+    'table_rounds': 440, 'table_hits': 52, 'table_chance': 33, 'declared': 405, 'declared_hits': 8,
     'band_hits': 41, 'units_hits': 57, 'second_hits': 14,
     'same_tens': 23,
-    'rrr3_rounds': 135, 'rrr3_hits': 4, 'rrr3_rec_rounds': 136, 'rrr3_rec_hits': 35,
-    'rrr3_same_rounds': 108, 'rrr3_same_hits': 2, 'rrr3_wide_rounds': 95, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 90, 'rrr3_yx_hits': 8,
-    'rrr3_strong_rounds': 86, 'rrr3_strong_hits': 6, 'rrr3_same2_rounds': 83, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 90, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 90, 'rrr3_sameyx_hits': 2,
-    'power_rounds': 25, 'power_hits': 18,
+    'rrr3_rounds': 136, 'rrr3_hits': 4, 'rrr3_rec_rounds': 137, 'rrr3_rec_hits': 36,
+    'rrr3_same_rounds': 109, 'rrr3_same_hits': 3, 'rrr3_wide_rounds': 96, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 91, 'rrr3_yx_hits': 8,
+    'rrr3_strong_rounds': 87, 'rrr3_strong_hits': 7, 'rrr3_same2_rounds': 84, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 91, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 91, 'rrr3_sameyx_hits': 2,
+    'power_rounds': 26, 'power_hits': 18,
 }
 
 
@@ -4231,6 +4231,14 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 p_groups[0][0][0] = p_join(p_groups[0][0][0],
                                            [', '.join(b_new[k:k + 2]) for k in range(0, len(b_new), 2)])
                 p_user |= {int(e[:2]) for e in b_new}
+        # declared cell: the SAME OPERATION AGAIN number (the last round's
+        # operation on this EP) — it had a STRONG 16 seat but was not in the
+        # cell.  Result 26 after 99 (cut/c-2 again), 2026-10-11
+        if p_groups and same:
+            if f"{same[0]:02d}" not in {e for l in p_groups[0][0][0] for e in re.findall(r'(\d\d) \(', l)}:
+                p_groups[0][0][0] = p_join(p_groups[0][0][0], [
+                    f"{same[0]:02d} ({OP_ABBREV[find_op(ep // 10, same[0] // 10)]}/{OP_ABBREV[find_op(ep % 10, same[0] % 10)]})"])
+                p_user.add(same[0])
         for cols_, labs_ in p_groups:
             h_ = max(len(c) for c in cols_)
             p_rows.append([[c[k] if k < len(c) else '' for c in cols_] for k in range(h_)] + [labs_])
@@ -4380,6 +4388,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the crossed declared operations (nc/-1 -> -2/nc) applied on the running value instead of the EP (-2/nc on 28 = 08)",
                        "     declared cell: a STRONG 16 number and a 3RRR RESULT number of the same family (53 and 85) bring that STRONG 16 number with both digits cut (53 -> 08)",
                        "     declared cell: the whole NUMBER BAND (declared number ± 1, ± 2) is in the cell (50, 52, 54 -> also 51, 53)",
+                       "     declared cell: the SAME OPERATION AGAIN number (the last round's operation on this EP) is in the cell (cut/c-2 again -> 26)",
                        "     declared cell: the EP and a 3RRR RESULT number of the same family (02 and 70) bring the EP with both digits cut (02 -> 57)",
                        "     declared cell: the number a crossed family pair of the STRONG 16 brings (85 and 08 -> 30) also with its digits reversed (-> 03)",
                        "     declared cell: two STRONG 16 numbers of one family, digits the other way round (80 and 03): first tens digit cut + the other tens digit (-> 30)",

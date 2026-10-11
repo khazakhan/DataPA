@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 464, 'tens_cut': 79, 'short_list': 124,
-    'table_rounds': 454, 'table_hits': 54, 'table_chance': 33, 'declared': 419, 'declared_hits': 8,
+    'results': 465, 'tens_cut': 79, 'short_list': 124,
+    'table_rounds': 455, 'table_hits': 54, 'table_chance': 33, 'declared': 420, 'declared_hits': 8,
     'band_hits': 44, 'units_hits': 58, 'second_hits': 14,
     'same_tens': 23,
-    'rrr3_rounds': 150, 'rrr3_hits': 5, 'rrr3_rec_rounds': 151, 'rrr3_rec_hits': 40,
-    'rrr3_same_rounds': 123, 'rrr3_same_hits': 4, 'rrr3_wide_rounds': 110, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 105, 'rrr3_yx_hits': 8,
-    'rrr3_strong_rounds': 101, 'rrr3_strong_hits': 10, 'rrr3_same2_rounds': 98, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 105, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 105, 'rrr3_sameyx_hits': 2,
-    'power_rounds': 40, 'power_hits': 25,
+    'rrr3_rounds': 151, 'rrr3_hits': 5, 'rrr3_rec_rounds': 152, 'rrr3_rec_hits': 40,
+    'rrr3_same_rounds': 124, 'rrr3_same_hits': 4, 'rrr3_wide_rounds': 111, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 106, 'rrr3_yx_hits': 8,
+    'rrr3_strong_rounds': 102, 'rrr3_strong_hits': 10, 'rrr3_same2_rounds': 99, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 106, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 106, 'rrr3_sameyx_hits': 2,
+    'power_rounds': 41, 'power_hits': 26,
 }
 
 
@@ -3965,6 +3965,15 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 strong_lab.setdefault(nv_, lab_)
                 if strong_votes.get(nv_, 0) < 14.42:
                     strong_votes[nv_] = 14.42
+    # 27. result 43 after 74 — seat 2's number with its x step switched, the
+    #     nearest x (declared 28 (c-1/c-1): 53 (c+2/-1) -> 43 (c+1/-1)).
+    #     STRONG 20 only; sits just under the band
+    if grid_ep is not None and d_n in d_sw:
+        qx_, qy_ = 'cut' + d_n, _op_join(False, _op_parts(d_x)[1])
+        nv_ = compute_variants(ep, qx_, qy_)[0]
+        strong_lab.setdefault(nv_, f"{OP_ABBREV[qx_]}/{OP_ABBREV[qy_]}")
+        if strong_votes.get(nv_, 0) < 14.41:
+            strong_votes[nv_] = 14.41
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json

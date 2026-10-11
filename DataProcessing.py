@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 465, 'tens_cut': 79, 'short_list': 124,
-    'table_rounds': 455, 'table_hits': 54, 'table_chance': 33, 'declared': 420, 'declared_hits': 8,
+    'results': 466, 'tens_cut': 79, 'short_list': 124,
+    'table_rounds': 456, 'table_hits': 55, 'table_chance': 33, 'declared': 421, 'declared_hits': 8,
     'band_hits': 44, 'units_hits': 58, 'second_hits': 14,
     'same_tens': 23,
-    'rrr3_rounds': 151, 'rrr3_hits': 5, 'rrr3_rec_rounds': 152, 'rrr3_rec_hits': 40,
-    'rrr3_same_rounds': 124, 'rrr3_same_hits': 4, 'rrr3_wide_rounds': 111, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 106, 'rrr3_yx_hits': 8,
-    'rrr3_strong_rounds': 102, 'rrr3_strong_hits': 10, 'rrr3_same2_rounds': 99, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 106, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 106, 'rrr3_sameyx_hits': 2,
-    'power_rounds': 41, 'power_hits': 26,
+    'rrr3_rounds': 152, 'rrr3_hits': 5, 'rrr3_rec_rounds': 153, 'rrr3_rec_hits': 41,
+    'rrr3_same_rounds': 125, 'rrr3_same_hits': 4, 'rrr3_wide_rounds': 112, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 107, 'rrr3_yx_hits': 8,
+    'rrr3_strong_rounds': 103, 'rrr3_strong_hits': 10, 'rrr3_same2_rounds': 100, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 107, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 107, 'rrr3_sameyx_hits': 2,
+    'power_rounds': 42, 'power_hits': 26,
 }
 
 
@@ -3974,6 +3974,23 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         strong_lab.setdefault(nv_, f"{OP_ABBREV[qx_]}/{OP_ABBREV[qy_]}")
         if strong_votes.get(nv_, 0) < 14.41:
             strong_votes[nv_] = 14.41
+    # 28. result 68 after 43 — the SAME OPERATION AGAIN number mirrored (the
+    #     last round's operation with both signs flipped) with its x step
+    #     switched, the nearest x (c+1/-1 -> c-1/+1 = 78 -> c-2/+1 = 68 on EP
+    #     37).  Goes to the declared cell with the family numbers, sits just
+    #     under the band
+    if _RRR3_PREV.get('op') and all(_op_parts(o_)[1] in ('+1', '+2', '-1', '-2') for o_ in _RRR3_PREV['op']):
+        m_sw = {'+1': '+2', '+2': '+1', '-1': '-2', '-2': '-1'}
+        hx_, hy_ = _RRR3_PREV['op']
+        qx_ = _op_join(_op_parts(hx_)[0], m_sw[SIGN_FLIP[_op_parts(hx_)[1]]])
+        qy_ = _op_join(_op_parts(hy_)[0], SIGN_FLIP[_op_parts(hy_)[1]])
+        nv_ = compute_variants(ep, qx_, qy_)[0]
+        lab_ = f"{OP_ABBREV[qx_]}/{OP_ABBREV[qy_]}"
+        if nv_ not in [v for v, _ in fam_seats]:
+            fam_seats = fam_seats + [(nv_, lab_)]
+        strong_lab.setdefault(nv_, lab_)
+        if strong_votes.get(nv_, 0) < 14.405:
+            strong_votes[nv_] = 14.405
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json
@@ -4714,6 +4731,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the whole NUMBER BAND (declared number ± 1, ± 2) is in the cell (50, 52, 54 -> also 51, 53)",
                        "     declared cell: the SAME OPERATION AGAIN number (the last round's operation on this EP) is in the cell (cut/c-2 again -> 26)",
                        "     declared cell: the EP and a 3RRR RESULT number of the same family (02 and 70) bring the EP with both digits cut (02 -> 57)",
+                       "     declared cell: the SAME OPERATION AGAIN number mirrored (both signs flipped) with its x step switched (c+1/-1 -> c-2/+1 = 68)",
                        "     declared cell: two STRONG 20 numbers that are each other with both digits cut (24 and 79) bring the number between them, the lower one with its tens cut (74)",
                        "     declared cell: the declared number with its digits reversed (60 -> 06)",
                        "     declared cell: the 2nd NUMBER with both steps switched, c+2 / c-2 on the running value (19 -> 82)",

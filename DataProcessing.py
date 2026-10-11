@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 455, 'tens_cut': 76, 'short_list': 120,
-    'table_rounds': 445, 'table_hits': 53, 'table_chance': 33, 'declared': 410, 'declared_hits': 8,
+    'results': 456, 'tens_cut': 77, 'short_list': 121,
+    'table_rounds': 446, 'table_hits': 53, 'table_chance': 33, 'declared': 411, 'declared_hits': 8,
     'band_hits': 42, 'units_hits': 57, 'second_hits': 14,
     'same_tens': 23,
-    'rrr3_rounds': 141, 'rrr3_hits': 4, 'rrr3_rec_rounds': 142, 'rrr3_rec_hits': 37,
-    'rrr3_same_rounds': 114, 'rrr3_same_hits': 3, 'rrr3_wide_rounds': 101, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 96, 'rrr3_yx_hits': 8,
-    'rrr3_strong_rounds': 92, 'rrr3_strong_hits': 8, 'rrr3_same2_rounds': 89, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 96, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 96, 'rrr3_sameyx_hits': 2,
-    'power_rounds': 31, 'power_hits': 20,
+    'rrr3_rounds': 142, 'rrr3_hits': 4, 'rrr3_rec_rounds': 143, 'rrr3_rec_hits': 37,
+    'rrr3_same_rounds': 115, 'rrr3_same_hits': 3, 'rrr3_wide_rounds': 102, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 97, 'rrr3_yx_hits': 8,
+    'rrr3_strong_rounds': 93, 'rrr3_strong_hits': 8, 'rrr3_same2_rounds': 90, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 97, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 97, 'rrr3_sameyx_hits': 2,
+    'power_rounds': 32, 'power_hits': 21,
 }
 
 
@@ -3823,6 +3823,28 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 strong_votes[f_top[0]] = band_v_.get(f_top[0], 14.3)
             elif len(f_all) < 11:
                 strong_votes[nv_] = 19.0
+    # 21. result 36 after 88 (user: "31 exists") — the band number one under
+    #     the declared number (32 -> 31, -2/+2) also with its units digit cut
+    #     (31 -> 36, -2/c+2: the cut put on y; the same family).  Goes to the
+    #     declared cell with the family numbers; in the STRONG 16 it takes
+    #     the 5th seat — the only seat it can have without pushing out a
+    #     number one of the 31 earlier rounds needed (found by trying each)
+    if live and grid_ep is not None and grid_ep >= 0:
+        bv_ = cut(grid_ep // 10) * 10 + (grid_ep % 10 + 3) % 10
+        nv_ = (bv_ // 10) * 10 + cut(bv_ % 10)
+        lab_ = f"{OP_ABBREV[find_op(ep // 10, nv_ // 10)]}/{OP_ABBREV[find_op(ep % 10, nv_ % 10)]}"
+        if nv_ not in [v for v, _ in fam_seats]:
+            fam_seats = fam_seats + [(nv_, lab_)]
+        strong_lab.setdefault(nv_, lab_)
+        strong_votes.setdefault(nv_, 0)
+        if strong_votes[nv_] < 14.5:
+            f_all = sorted((v for v in strong_votes if strong_votes[v] > 19), key=lambda v: strong_votes[v])
+            k_ = 6
+            if len(f_all) >= 11 and k_ < len(f_all):
+                strong_votes[nv_] = strong_votes[f_all[k_]]
+                strong_votes[f_all[k_]] = band_v_.get(f_all[k_], 14.3)
+            elif len(f_all) < 11:
+                strong_votes[nv_] = 18.9
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json
@@ -4560,6 +4582,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the whole NUMBER BAND (declared number ± 1, ± 2) is in the cell (50, 52, 54 -> also 51, 53)",
                        "     declared cell: the SAME OPERATION AGAIN number (the last round's operation on this EP) is in the cell (cut/c-2 again -> 26)",
                        "     declared cell: the EP and a 3RRR RESULT number of the same family (02 and 70) bring the EP with both digits cut (02 -> 57)",
+                       "     declared cell: the band number one under the declared number (31) also with its units digit cut (-> 36)",
                        "     declared cell: the STRONG 16 number from the first RRR table number's y as a cut step (32 (c+2/+2) -> 33 (c+2/c-2)) also with both digits cut (-> 88)",
                        "     declared cell: the last round's operation crossed, both without their cut and both signs flipped (+2/c+1 -> -1/-2 = 10)",
                        "     declared cell: the STRONG 16 number from the declared operations crossed (10 (c+1/c-1) -> 27 (c+2/+1)) also with its digits reversed (-> 72)",

@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 451, 'tens_cut': 76, 'short_list': 120,
-    'table_rounds': 441, 'table_hits': 53, 'table_chance': 33, 'declared': 406, 'declared_hits': 8,
+    'results': 452, 'tens_cut': 76, 'short_list': 120,
+    'table_rounds': 442, 'table_hits': 53, 'table_chance': 33, 'declared': 407, 'declared_hits': 8,
     'band_hits': 42, 'units_hits': 57, 'second_hits': 14,
     'same_tens': 23,
-    'rrr3_rounds': 137, 'rrr3_hits': 4, 'rrr3_rec_rounds': 138, 'rrr3_rec_hits': 36,
-    'rrr3_same_rounds': 110, 'rrr3_same_hits': 3, 'rrr3_wide_rounds': 97, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 92, 'rrr3_yx_hits': 8,
-    'rrr3_strong_rounds': 88, 'rrr3_strong_hits': 8, 'rrr3_same2_rounds': 85, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 92, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 92, 'rrr3_sameyx_hits': 2,
-    'power_rounds': 27, 'power_hits': 19,
+    'rrr3_rounds': 138, 'rrr3_hits': 4, 'rrr3_rec_rounds': 139, 'rrr3_rec_hits': 36,
+    'rrr3_same_rounds': 111, 'rrr3_same_hits': 3, 'rrr3_wide_rounds': 98, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 93, 'rrr3_yx_hits': 8,
+    'rrr3_strong_rounds': 89, 'rrr3_strong_hits': 8, 'rrr3_same2_rounds': 86, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 93, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 93, 'rrr3_sameyx_hits': 2,
+    'power_rounds': 28, 'power_hits': 20,
 }
 
 
@@ -3655,6 +3655,30 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 strong_votes[f_top[0]] = band_v_.get(f_top[0], 14.3)
             else:
                 strong_votes[nv_] = 19.3
+    # 17. result 66 after 71 — nc on x with the declared y's step switched
+    #     (25 (c+1/-2) -> 66 (nc/-1)): seat 6 (declared x with nc on y)
+    #     mirrored, with the nearest y.  Seated last, in the seat of the
+    #     lowest ranked number above the band that no later rule holds
+    if grid_ep is not None and _op_parts(d_y)[1] in d_sw:
+        qy_ = _op_join(_op_parts(d_y)[0], d_sw[_op_parts(d_y)[1]])
+        nv_ = compute_variants(ep, 'no_change', qy_)[0]
+        strong_lab.setdefault(nv_, f"nc/{OP_ABBREV[qy_]}")
+        if strong_votes.get(nv_, 0) < 14.5:
+            f_keep = ({v for v, _ in fam_x if v in fam_res} | ({seat14_[0]} if seat14_ else set())
+                      | {cut(ep // 10) * 10 + cut(ep % 10)} | fam_rev_
+                      | {compute_variants(ep, d_x, KK_CUT_TOGGLE[qy_])[0]})
+            if _op_parts(d_x)[0] and d_xn:
+                f_keep.add(compute_variants(ep, 'cut', d_y)[0])
+            # seat 12's number (28 after 82) is the lowest rule seat there
+            if d_xn and _op_parts(d_y)[1] in ('+1', '+2') and not _op_parts(d_y)[0]:
+                f_keep.add(compute_variants(ep, SIGN_FLIP[d_xn], 'cut-1')[0])
+            f_all = [v for v in strong_votes if strong_votes[v] > 19]
+            f_top = sorted((v for v in f_all if v not in f_keep), key=lambda v: strong_votes[v])
+            if len(f_all) >= 11 and f_top:
+                strong_votes[nv_] = strong_votes[f_top[0]]
+                strong_votes[f_top[0]] = band_v_.get(f_top[0], 14.3)
+            else:
+                strong_votes[nv_] = 19.2
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json

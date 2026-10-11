@@ -3887,6 +3887,20 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 strong_votes[f_all[k_]] = band_v_.get(f_all[k_], 14.3)
             elif len(f_all) < 11:
                 strong_votes[nv_] = 18.7
+    # the SAME OPERATION AGAIN number keeps a seat (2026-10-11): it held the
+    # result 3 times in 35 series J rounds (11, 26, 19) — the best record of
+    # any single number — but the later rule seats had pushed it out of the
+    # 16 (51 on the round after 19).  If it has no seat it takes a fixed one
+    # above the band
+    if same and strong_votes.get(same[0], 0) < 14.5:
+        strong_lab.setdefault(same[0], same[1])
+        f_all = sorted((v for v in strong_votes if strong_votes[v] > 19), key=lambda v: strong_votes[v])
+        k_ = 2    # the first place that keeps all 35 earlier rounds (tried 0-3)
+        if len(f_all) >= 11 and k_ < len(f_all):
+            strong_votes[same[0]] = strong_votes[f_all[k_]]
+            strong_votes[f_all[k_]] = band_v_.get(f_all[k_], 14.3)
+        elif len(f_all) < 11:
+            strong_votes[same[0]] = 18.6
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json

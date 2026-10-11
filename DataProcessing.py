@@ -2768,15 +2768,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 452, 'tens_cut': 76, 'short_list': 120,
-    'table_rounds': 442, 'table_hits': 53, 'table_chance': 33, 'declared': 407, 'declared_hits': 8,
+    'results': 453, 'tens_cut': 76, 'short_list': 120,
+    'table_rounds': 443, 'table_hits': 53, 'table_chance': 33, 'declared': 408, 'declared_hits': 8,
     'band_hits': 42, 'units_hits': 57, 'second_hits': 14,
     'same_tens': 23,
-    'rrr3_rounds': 138, 'rrr3_hits': 4, 'rrr3_rec_rounds': 139, 'rrr3_rec_hits': 36,
-    'rrr3_same_rounds': 111, 'rrr3_same_hits': 3, 'rrr3_wide_rounds': 98, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 93, 'rrr3_yx_hits': 8,
-    'rrr3_strong_rounds': 89, 'rrr3_strong_hits': 8, 'rrr3_same2_rounds': 86, 'rrr3_same2_hits': 1,
-    'rrr3_turn_rounds': 93, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 93, 'rrr3_sameyx_hits': 2,
-    'power_rounds': 28, 'power_hits': 20,
+    'rrr3_rounds': 139, 'rrr3_hits': 4, 'rrr3_rec_rounds': 140, 'rrr3_rec_hits': 36,
+    'rrr3_same_rounds': 112, 'rrr3_same_hits': 3, 'rrr3_wide_rounds': 99, 'rrr3_wide_hits': 11, 'rrr3_yx_rounds': 94, 'rrr3_yx_hits': 8,
+    'rrr3_strong_rounds': 90, 'rrr3_strong_hits': 8, 'rrr3_same2_rounds': 87, 'rrr3_same2_hits': 1,
+    'rrr3_turn_rounds': 94, 'rrr3_turn_hits': 1, 'rrr3_sameyx_rounds': 94, 'rrr3_sameyx_hits': 2,
+    'power_rounds': 29, 'power_hits': 20,
 }
 
 
@@ -3371,6 +3371,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     #     y sign flipped with the cut, its step switched, put on x; x without
     #     its cut put on y (84 (-1/c-2) -> 50 (c+1/-1))
     rule_seats = []
+    seat2_ = None    # seat 2's number, for its digits reversed (see rule 18 below)
     # record seats (2026-10-11, replay of all 423 older rounds, one seat =
     # 1% by chance): the 2nd NUMBER (c+1 / c-1 on the running value) held
     # the result 12 times (2.8%) and never had a seat; the last round's
@@ -3395,6 +3396,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         if d_n in d_sw:
             ny_, nx_ = 'cut' + d_sw[d_n], _op_join(False, _op_parts(d_x)[1])
             rule_seats.append((compute_variants(ep, ny_, nx_)[0], f"{OP_ABBREV[ny_]}/{OP_ABBREV[nx_]}"))
+            seat2_ = compute_variants(ep, ny_, nx_)[0]
         #  3. result 27 after 50 — declared x step without its cut, other
         #     sign and other number (c+2 -> -1) on x, the bare cut on y
         #     (04 (c+2/+2) -> 27 (-1/cut))
@@ -3679,6 +3681,41 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 strong_votes[f_top[0]] = band_v_.get(f_top[0], 14.3)
             else:
                 strong_votes[nv_] = 19.2
+    # 18. result 72 after 66 (user: "27 exists in STRONG 16, same family") —
+    #     seat 2's number (the declared operations crossed: 10 (c+1/c-1) ->
+    #     27 (c+2/+1)) also with its digits reversed (27 -> 72, +2/c+1: the
+    #     same steps with the cut moved to y).  Goes to the declared cell
+    #     with the family numbers; seated last, in the seat of the lowest
+    #     ranked number above the band that no later rule holds
+    if seat2_ is not None and seat2_ % 11:
+        nv_ = (seat2_ % 10) * 10 + seat2_ // 10
+        lab_ = f"{OP_ABBREV[find_op(ep // 10, nv_ // 10)]}/{OP_ABBREV[find_op(ep % 10, nv_ % 10)]}"
+        if nv_ not in [v for v, _ in fam_seats]:
+            fam_seats = fam_seats + [(nv_, lab_)]
+        strong_lab.setdefault(nv_, lab_)
+        strong_votes.setdefault(nv_, 0)
+        if strong_votes[nv_] < 14.5:
+            f_keep = ({v for v, _ in fam_x if v in fam_res} | ({seat14_[0]} if seat14_ else set())
+                      | {cut(ep // 10) * 10 + cut(ep % 10), seat2_} | fam_rev_)
+            if _op_parts(d_y)[1] in d_sw:
+                qy_ = _op_join(_op_parts(d_y)[0], d_sw[_op_parts(d_y)[1]])
+                f_keep |= {compute_variants(ep, d_x, KK_CUT_TOGGLE[qy_])[0], compute_variants(ep, 'no_change', qy_)[0]}
+            if _op_parts(d_x)[0] and d_xn:
+                f_keep.add(compute_variants(ep, 'cut', d_y)[0])
+            if d_xn and _op_parts(d_y)[1] in ('+1', '+2') and not _op_parts(d_y)[0]:
+                f_keep.add(compute_variants(ep, SIGN_FLIP[d_xn], 'cut-1')[0])
+            # seat 3's and seat 13's numbers (27 after 50, 08 after 28)
+            if d_xn in d_sw:
+                f_keep.add(compute_variants(ep, SIGN_FLIP[d_sw[d_xn]], 'cut')[0])
+            if grid_ep >= 0 and _op_parts(d_y)[1] in d_sw:
+                f_keep.add(compute_variants(grid_ep, d_sw[_op_parts(d_y)[1]], _op_join(False, d_xn))[0])
+            f_all = [v for v in strong_votes if strong_votes[v] > 19]
+            f_top = sorted((v for v in f_all if v not in f_keep), key=lambda v: strong_votes[v])
+            if len(f_all) >= 11 and f_top:
+                strong_votes[nv_] = strong_votes[f_top[0]]
+                strong_votes[f_top[0]] = band_v_.get(f_top[0], 14.3)
+            else:
+                strong_votes[nv_] = 19.1
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json
@@ -4416,6 +4453,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the whole NUMBER BAND (declared number ± 1, ± 2) is in the cell (50, 52, 54 -> also 51, 53)",
                        "     declared cell: the SAME OPERATION AGAIN number (the last round's operation on this EP) is in the cell (cut/c-2 again -> 26)",
                        "     declared cell: the EP and a 3RRR RESULT number of the same family (02 and 70) bring the EP with both digits cut (02 -> 57)",
+                       "     declared cell: the STRONG 16 number from the declared operations crossed (10 (c+1/c-1) -> 27 (c+2/+1)) also with its digits reversed (-> 72)",
                        "     declared cell: the number a crossed family pair of the STRONG 16 brings (85 and 08 -> 30) also with its digits reversed (-> 03)",
                        "     declared cell: two STRONG 16 numbers of one family, digits the other way round (80 and 03): first tens digit cut + the other tens digit (-> 30)",
                        "     declared number nc/cut: its tens cut, both digits cut, and the digits reversed of those and of itself",

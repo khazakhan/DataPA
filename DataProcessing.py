@@ -5075,7 +5075,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                     x_queue.pop(0)
                 if x_queue:
                     r_, f_, o_ = x_queue.pop(0)
-                    x_note = f"was {v_:02d}; family {f_:02d}, {o_:02d}: {f_:02d} reversed"
+                    x_note = f"was {v_:02d}; {f_:02d}+{o_:02d}, {f_:02d} reversed"
                     v_ = r_
                 else:
                     x_note = "repeat, no family pair left"
@@ -5084,8 +5084,30 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         x_rows = [([_x_lab(v_) for v_, _ in x_new[4 * k_:4 * k_ + 4]],
                    [n_ or lab_ for _, n_ in x_new[4 * k_:4 * k_ + 4]])
                   for k_, (_, lab_) in enumerate(x_rows)]
-        x_title = (f"★  CharRow  —  {len(set(v_ for v_, _ in x_new))} numbers, x only: cut toggled, then sign changed; "
-                   f"repeats replaced, on EP={ep:02d}  ★")
+        # last-operation steps (user's screenshot, 2026-10-13): the steps of
+        # the RRR table's LAST row (new x and new y: +1/+1 has only 1, so +1
+        # and -1; a 2 brings +2 and -2) are put in place of a plain cut on
+        # the x operation of a CharRow number (45 (cut/-2) -> 05 (+1/-2) and
+        # 85 (-1/-2)).  Only new numbers are added; nothing when there is no
+        # plain cut on x or the LAST row has no step
+        x_steps = []
+        if len(both_cut) >= 2:
+            for d_ in '12':
+                if d_ in both_cut[-2][2]:
+                    x_steps += [int(d_), -int(d_)]
+        x_have, x_add = set(v_ for v_, _ in x_new), []
+        for v_, _ in x_new:
+            if (v_ // 10 - ep // 10) % 10 == 5:
+                for st_ in x_steps:
+                    n_ = ((ep // 10 + st_) % 10) * 10 + v_ % 10
+                    if n_ not in x_have:
+                        x_have.add(n_)
+                        x_add.append((n_, f"from {v_:02d}: x cut -> {st_:+d}"))
+        for k_ in range(0, len(x_add), 4):
+            x_grp = x_add[k_:k_ + 4] + [None] * (4 - len(x_add[k_:k_ + 4]))
+            x_rows.append(([_x_lab(g_[0]) if g_ else '' for g_ in x_grp], [g_[1] if g_ else '' for g_ in x_grp]))
+        x_title = (f"★  CharRow  —  {len(x_have)} numbers, x only: cut toggled, then sign changed; "
+                   f"repeats replaced; last-op steps for x cut, on EP={ep:02d}  ★")
         x_lines = [f"  {s_g}┌{'─' * p_tw}┐{s_rst}",
                    f"  {s_g}│{s_rst}{p_rib}{x_title:^{p_tw}}{s_rst}{s_g}│{s_rst}",
                    f"  {s_g}├{'┬'.join('─' * p_cw for _ in range(4))}┤{s_rst}"]

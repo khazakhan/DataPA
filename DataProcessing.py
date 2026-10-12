@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 495, 'tens_cut': 85, 'short_list': 130,
-    'table_rounds': 485, 'table_hits': 60, 'table_chance': 33, 'declared': 450, 'declared_hits': 8,
+    'results': 496, 'tens_cut': 85, 'short_list': 130,
+    'table_rounds': 486, 'table_hits': 60, 'table_chance': 33, 'declared': 451, 'declared_hits': 8,
     'band_hits': 48, 'units_hits': 58, 'second_hits': 14,
-    'same_tens': 23,
-    'rrr3_rounds': 181, 'rrr3_hits': 6, 'rrr3_rec_rounds': 182, 'rrr3_rec_hits': 57,
-    'rrr3_same_rounds': 154, 'rrr3_same_hits': 7, 'rrr3_wide_rounds': 141, 'rrr3_wide_hits': 13, 'rrr3_yx_rounds': 136, 'rrr3_yx_hits': 12,
-    'rrr3_strong_rounds': 132, 'rrr3_strong_hits': 18, 'rrr3_same2_rounds': 129, 'rrr3_same2_hits': 2,
-    'rrr3_turn_rounds': 136, 'rrr3_turn_hits': 2, 'rrr3_sameyx_rounds': 136, 'rrr3_sameyx_hits': 3,
-    'power_rounds': 71, 'power_hits': 40,
+    'same_tens': 24,
+    'rrr3_rounds': 182, 'rrr3_hits': 6, 'rrr3_rec_rounds': 183, 'rrr3_rec_hits': 58,
+    'rrr3_same_rounds': 155, 'rrr3_same_hits': 7, 'rrr3_wide_rounds': 142, 'rrr3_wide_hits': 13, 'rrr3_yx_rounds': 137, 'rrr3_yx_hits': 12,
+    'rrr3_strong_rounds': 133, 'rrr3_strong_hits': 18, 'rrr3_same2_rounds': 130, 'rrr3_same2_hits': 2,
+    'rrr3_turn_rounds': 137, 'rrr3_turn_hits': 2, 'rrr3_sameyx_rounds': 137, 'rrr3_sameyx_hits': 3,
+    'power_rounds': 72, 'power_hits': 40,
 }
 
 
@@ -4309,6 +4309,19 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             strong_lab.setdefault(nv_, lab_)
             if strong_votes.get(nv_, 0) < 14.300002:
                 strong_votes[nv_] = 14.300002
+    # 50. result 02 after 09 — the band number one under the declared number
+    #     with the cut toggled on its x (52 (c-2/c-1) -> 02 (-2/c-1)), the
+    #     CharRow "one below" number: nc / c-2 on the running value (09 ->
+    #     02).  Goes to the declared cell with the family numbers, sits under
+    #     the band
+    if grid_ep is not None and grid_ep >= 0:
+        nv_ = (grid_ep // 10) * 10 + (grid_ep % 10 + 3) % 10
+        lab_ = f"{OP_ABBREV[find_op(ep // 10, nv_ // 10)]}/{OP_ABBREV[find_op(ep % 10, nv_ % 10)]}"
+        if nv_ not in [v for v, _ in fam_seats]:
+            fam_seats = fam_seats + [(nv_, lab_)]
+        strong_lab.setdefault(nv_, lab_)
+        if strong_votes.get(nv_, 0) < 14.3000015:
+            strong_votes[nv_] = 14.3000015
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json
@@ -5206,6 +5219,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the whole NUMBER BAND (declared number ± 1, ± 2) is in the cell (50, 52, 54 -> also 51, 53)",
                        "     declared cell: the SAME OPERATION AGAIN number (the last round's operation on this EP) is in the cell (cut/c-2 again -> 26)",
                        "     declared cell: the EP and a 3RRR RESULT number of the same family (02 and 70) bring the EP with both digits cut (02 -> 57)",
+                       "     declared cell: the band number one under the declared number with the cut toggled on its x, nc / c-2 on the running value (09 -> 02)",
                        "     declared cell: a STRONG 20 number under the band with a plain step of one on y brings the same with nc on y (00 (c+2/-1) -> 01 (c+2/nc))",
                        "     declared cell: a STRONG 20 number above the band with nc on x brings the same with its y cut toggled (25 (nc/+1) -> 20 (nc/c+1))",
                        "     declared cell: the EP itself, nc/nc, is in the cell (EP 68 -> 68)",

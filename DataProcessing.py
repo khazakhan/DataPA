@@ -5263,7 +5263,35 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         # the three tables (STRONG 20, CharRow no repeats, STRONG 20
         # ADJUSTMENTS) once more at the very end of the page, in the triple
         # Indian-flag border (user's screenshot, 2026-10-13)
-        _RRR3_PREV['three_box'] = list(strong_lines)
+        # ROUND SUMMARY above them (user's screenshot, 2026-10-13): the number
+        # the round comes after, the EP the operations are applied on, and
+        # what the declared number and the same-operation-again number are
+        def _s_lab(n_):
+            return f"{n_:02d} ({OP_ABBREV[find_op(ep // 10, n_ // 10)]}/{OP_ABBREV[find_op(ep % 10, n_ % 10)]})"
+        r_band = ' '.join(f"{p_t * 10 + (p_u + k_) % 10:02d}" for k_ in range(-2, 3))
+        r_2nd = ((grid_ep // 10 + 6) % 10) * 10 + p_u
+        r_rows = [("After number", f"{grid_ep:02d}", "the last result; the round comes after it"),
+                  ("Operations on EP", f"{ep:02d}", "the number every operation is applied on"),
+                  ("Declared number", _s_lab(p_decl), f"cut / c-1 on the after number {grid_ep:02d}"),
+                  ("Decade", f"{p_t}0-{p_t}9", "the after number's tens digit cut"),
+                  ("Band", r_band, "the declared number and 1, 2 either side"),
+                  ("2nd number", _s_lab(r_2nd), f"c+1 / c-1 on the after number {grid_ep:02d}"),
+                  ("Same operation again", _s_lab(same[0]) if same else "-",
+                   "the last round's operation applied again on this EP"),
+                  ("3RRR result line", ' '.join(n_[:2] for n_, _ in found[:4]) or "-", "the 3RRR RESULT numbers"),
+                  ("POWER BASE", ', '.join(_s_lab(v_) for v_, _ in p_four), "declared, decade up, one below, one above")]
+        r_w = [max(len(r_[k_]) for r_ in r_rows) + 2 for k_ in range(3)]
+        r_tw = sum(r_w) + 2
+        r_title = f"★  ROUND SUMMARY  —  after {grid_ep:02d}, operations on EP={ep:02d}  ★"
+        r_tw = max(r_tw, len(r_title) + 2)
+        r_w[2] += r_tw - (sum(r_w) + 2)
+        r_box = [f"  {s_g}┌{'─' * r_tw}┐{s_rst}",
+                 f"  {s_g}│{s_rst}{p_rib}{r_title:^{r_tw}}{s_rst}{s_g}│{s_rst}",
+                 f"  {s_g}├{'┬'.join('─' * w_ for w_ in r_w)}┤{s_rst}"]
+        r_box += [f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c_:<{w_ - 1}}" for c_, w_ in zip(r_, r_w)) + f"{s_g}│{s_rst}"
+                  for r_ in r_rows]
+        r_box.append(f"  {s_g}└{'┴'.join('─' * w_ for w_ in r_w)}┘{s_rst}")
+        _RRR3_PREV['three_box'] = r_box + list(strong_lines)
         x_lines = [f"  {s_g}┌{'─' * p_tw}┐{s_rst}",
                    f"  {s_g}│{s_rst}{p_rib}{x_title:^{p_tw}}{s_rst}{s_g}│{s_rst}",
                    f"  {s_g}├{'┬'.join('─' * p_cw for _ in range(4))}┤{s_rst}"]

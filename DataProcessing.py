@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 499, 'tens_cut': 85, 'short_list': 130,
-    'table_rounds': 489, 'table_hits': 61, 'table_chance': 33, 'declared': 454, 'declared_hits': 8,
+    'results': 500, 'tens_cut': 85, 'short_list': 130,
+    'table_rounds': 490, 'table_hits': 61, 'table_chance': 33, 'declared': 455, 'declared_hits': 8,
     'band_hits': 48, 'units_hits': 58, 'second_hits': 14,
     'same_tens': 24,
-    'rrr3_rounds': 185, 'rrr3_hits': 7, 'rrr3_rec_rounds': 186, 'rrr3_rec_hits': 60,
-    'rrr3_same_rounds': 158, 'rrr3_same_hits': 7, 'rrr3_wide_rounds': 145, 'rrr3_wide_hits': 13, 'rrr3_yx_rounds': 140, 'rrr3_yx_hits': 12,
-    'rrr3_strong_rounds': 136, 'rrr3_strong_hits': 19, 'rrr3_same2_rounds': 133, 'rrr3_same2_hits': 2,
-    'rrr3_turn_rounds': 140, 'rrr3_turn_hits': 2, 'rrr3_sameyx_rounds': 140, 'rrr3_sameyx_hits': 4,
-    'power_rounds': 75, 'power_hits': 43,
+    'rrr3_rounds': 186, 'rrr3_hits': 7, 'rrr3_rec_rounds': 187, 'rrr3_rec_hits': 60,
+    'rrr3_same_rounds': 159, 'rrr3_same_hits': 7, 'rrr3_wide_rounds': 146, 'rrr3_wide_hits': 13, 'rrr3_yx_rounds': 141, 'rrr3_yx_hits': 13,
+    'rrr3_strong_rounds': 137, 'rrr3_strong_hits': 19, 'rrr3_same2_rounds': 134, 'rrr3_same2_hits': 2,
+    'rrr3_turn_rounds': 141, 'rrr3_turn_hits': 2, 'rrr3_sameyx_rounds': 141, 'rrr3_sameyx_hits': 4,
+    'power_rounds': 76, 'power_hits': 44,
 }
 
 
@@ -4338,6 +4338,28 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         strong_lab.setdefault(nv_, lab_)
         if strong_votes.get(nv_, 0) < 14.3000014:
             strong_votes[nv_] = 14.3000014
+    # 52. result 84 after 63 — the CharRow last-operation-step numbers: a
+    #     CharRow number with a plain cut on x (44 (cut/c+2)) takes the steps
+    #     of the RRR table's LAST row in place of that cut (+1/+1 -> +1 and
+    #     -1: 04 and 84 (-1/c+2)).  Go to the declared cell with the family
+    #     numbers, sit under the band
+    if grid_ep is not None and grid_ep >= 0 and len(both_cut) >= 2:
+        t52_, u52_ = cut(grid_ep // 10), (grid_ep % 10 + 4) % 10
+        b52_ = [t52_ * 10 + u52_, (t52_ * 10 + u52_ + 10) % 100, t52_ * 10 + (u52_ - 1) % 10, t52_ * 10 + (u52_ + 1) % 10]
+        b52_ += [compute_variants(ep, SIGN_FLIP[find_op(ep % 10, v % 10)], SIGN_FLIP[find_op(ep // 10, v // 10)])[0]
+                 for v in b52_[:4]]
+        c52_ = [((v // 10 + 5) % 10) * 10 + v % 10 for v in b52_]
+        s52_ = [st_ for d_ in '12' if d_ in both_cut[-2][2] for st_ in (int(d_), -int(d_))]
+        for v in c52_:
+            if (v // 10 - ep // 10) % 10 == 5:
+                for st_ in s52_:
+                    nv_ = ((ep // 10 + st_) % 10) * 10 + v % 10
+                    lab_ = f"{OP_ABBREV[find_op(ep // 10, nv_ // 10)]}/{OP_ABBREV[find_op(ep % 10, nv_ % 10)]}"
+                    if nv_ not in [w for w, _ in fam_seats]:
+                        fam_seats = fam_seats + [(nv_, lab_)]
+                    strong_lab.setdefault(nv_, lab_)
+                    if strong_votes.get(nv_, 0) < 14.3000013:
+                        strong_votes[nv_] = 14.3000013
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json
@@ -5157,24 +5179,28 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                         x_add.append((n_, f"from {v_:02d}: x cut -> {st_:+d}"))
         for k_ in range(0, len(x_add), 4):
             x_grp = x_add[k_:k_ + 4] + [None] * (4 - len(x_add[k_:k_ + 4]))
-            x_rows.append(([_x_lab(g_[0]) if g_ else '' for g_ in x_grp], [g_[1] if g_ else '' for g_ in x_grp]))
+            x_rows.append(([_x_lab(g_[0]).replace(' (', '+ (', 1) if g_ else '' for g_ in x_grp],
+                           [g_[1] if g_ else '' for g_ in x_grp]))
         x_title = (f"★  CharRow  —  {len(x_have)} numbers, x only: cut toggled, then sign changed; "
                    f"repeats replaced; last-op steps for x cut, on EP={ep:02d}  ★")
         # the CharRow numbers once each, beside the STRONG 20 table (user's
         # screenshots, 2026-10-13): no repeats, table order, each with its
         # operation on the EP
         c_nums = list(dict.fromkeys([v_ for v_, _ in x_new] + [v_ for v_, _ in x_add]))
-        c_cells = [_x_lab(v_) for v_ in c_nums]
+        c_plus = set(v_ for v_, _ in x_add)      # + = added from the last operation's steps (user, 2026-10-13)
+        c_cells = [_x_lab(v_).replace(' (', '+ (', 1) if v_ in c_plus else _x_lab(v_) for v_ in c_nums]
         c_per = max(3, -(-len(c_cells) // max(s_tbl_n - 4, 1)))
         c_cw = max([len(c) for c in c_cells] + [12]) + 2
         c_head = f"★ CharRow — {len(c_nums)} numbers, no repeats ★"
-        c_tw = max(c_per * (c_cw + 1), len(c_head) + 2)
+        c_tw = max(c_per * (c_cw + 1), len(c_head) + 2, 36)
         c_box = [f"{s_g}┌{'─' * c_tw}┐{s_rst}",
                  f"{s_g}│{s_rst}{p_rib}{c_head:^{c_tw}}{s_rst}{s_g}│{s_rst}",
                  f"{s_g}├{'─' * c_tw}┤{s_rst}"]
         for k_ in range(0, len(c_cells), c_per):
             c_row = ''.join(f" {c:<{c_cw}}" for c in c_cells[k_:k_ + c_per])
             c_box.append(f"{s_g}│{s_rst}{c_row:<{c_tw}}{s_g}│{s_rst}")
+        if c_plus:
+            c_box.append(f"{s_g}│{s_rst}{' + = from the last operation steps':<{c_tw}}{s_g}│{s_rst}")
         c_box.append(f"{s_g}└{'─' * c_tw}┘{s_rst}")
         for k_, l_ in enumerate(c_box):
             if k_ < s_tbl_n:
@@ -5235,6 +5261,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the whole NUMBER BAND (declared number ± 1, ± 2) is in the cell (50, 52, 54 -> also 51, 53)",
                        "     declared cell: the SAME OPERATION AGAIN number (the last round's operation on this EP) is in the cell (cut/c-2 again -> 26)",
                        "     declared cell: the EP and a 3RRR RESULT number of the same family (02 and 70) bring the EP with both digits cut (02 -> 57)",
+                       "     declared cell: a CharRow number with a plain cut on x takes the last operation's steps in place of the cut (44 (cut/c+2) -> 04, 84 (-1/c+2))",
                        "     declared cell: the band number one under the declared number with the cut toggled on its x and the x sign flipped (91 (c+1/+1) -> 21 (-1/+1))",
                        "     declared cell: the band number one under the declared number with the cut toggled on its x, nc / c-2 on the running value (09 -> 02)",
                        "     declared cell: a STRONG 20 number under the band with a plain step of one on y brings the same with nc on y (00 (c+2/-1) -> 01 (c+2/nc))",

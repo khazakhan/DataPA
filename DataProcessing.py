@@ -5054,14 +5054,45 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             return f"{n_:02d} ({OP_ABBREV[find_op(ep // 10, n_ // 10)]}/{OP_ABBREV[find_op(ep % 10, n_ % 10)]})"
         x_rows += [([_xsign(c) for c in x_rows[0][0]], 'x cut toggled, x sign changed'),
                    ([_xsign(c) for c in x_rows[1][0]], 'reversed, x cut, x sign changed')]
-        x_title = f"★  CharRow  —  16 numbers, x only: cut toggled, then sign changed, on EP={ep:02d}  ★"
+        # duplicates (user's screenshot, 2026-10-13): the first cell of a
+        # repeated number stays; a later cell takes a number from the table's
+        # own family pairs — two CharRow numbers of the same family (36 and
+        # 86), the first of them with its digits reversed (36 -> 63).  When
+        # the pairs' first numbers run out, their second numbers reversed
+        def _x_lab(n_):
+            return f"{n_:02d} ({OP_ABBREV[find_op(ep // 10, n_ // 10)]}/{OP_ABBREV[find_op(ep % 10, n_ % 10)]})"
+        x_flat = [int(c[:2]) for cells_, _ in x_rows for c in cells_]
+        x_uniq = list(dict.fromkeys(x_flat))
+        x_pairs = [(a_, b_) for i_, a_ in enumerate(x_uniq) for b_ in x_uniq[i_ + 1:]
+                   if a_ % 5 == b_ % 5 and (a_ // 10) % 5 == (b_ // 10) % 5]
+        x_queue = [(int(f"{a_:02d}"[::-1]), a_, b_) for a_, b_ in x_pairs] \
+            + [(int(f"{b_:02d}"[::-1]), b_, a_) for a_, b_ in x_pairs]
+        x_seen, x_new = set(), []
+        for k_, v_ in enumerate(x_flat):
+            x_note = None
+            if v_ in x_seen:
+                while x_queue and (x_queue[0][0] in x_seen or x_queue[0][0] in x_flat[k_:]):
+                    x_queue.pop(0)
+                if x_queue:
+                    r_, f_, o_ = x_queue.pop(0)
+                    x_note = f"was {v_:02d}; family {f_:02d}, {o_:02d}: {f_:02d} reversed"
+                    v_ = r_
+                else:
+                    x_note = "repeat, no family pair left"
+            x_seen.add(v_)
+            x_new.append((v_, x_note))
+        x_rows = [([_x_lab(v_) for v_, _ in x_new[4 * k_:4 * k_ + 4]],
+                   [n_ or lab_ for _, n_ in x_new[4 * k_:4 * k_ + 4]])
+                  for k_, (_, lab_) in enumerate(x_rows)]
+        x_title = (f"★  CharRow  —  {len(set(v_ for v_, _ in x_new))} numbers, x only: cut toggled, then sign changed; "
+                   f"repeats replaced, on EP={ep:02d}  ★")
         x_lines = [f"  {s_g}┌{'─' * p_tw}┐{s_rst}",
                    f"  {s_g}│{s_rst}{p_rib}{x_title:^{p_tw}}{s_rst}{s_g}│{s_rst}",
                    f"  {s_g}├{'┬'.join('─' * p_cw for _ in range(4))}┤{s_rst}"]
         for k, (x_cells, x_lab) in enumerate(x_rows):
             if k:
                 x_lines.append(f"  {s_g}├{'┼'.join('─' * p_cw for _ in range(4))}┤{s_rst}")
-            for line in (x_cells, [x_lab] * 4):
+            for line in (x_cells, x_lab):
                 x_lines.append(f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{p_cw - 1}}" for c in line)
                                + f"{s_g}│{s_rst}")
         x_lines.append(f"  {s_g}└{'┴'.join('─' * p_cw for _ in range(4))}┘{s_rst}")

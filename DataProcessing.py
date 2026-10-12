@@ -4360,7 +4360,18 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         a_row = a_cells[a_k:a_k + a_per] + [''] * (a_per - len(a_cells[a_k:a_k + a_per]))
         strong_lines.append(f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{a_cw - 1}}" for c in a_row)
                             + f"{s_g}│{s_rst}")
-    strong_lines.append(f"  {s_g}└{'┴'.join('─' * a_cw for _ in range(a_per))}┘{s_rst}")
+    # the total printed in the box too (user, 2026-10-12): the count, the
+    # new numbers the adjustments add and all the numbers together, ascending
+    a_newl = sorted(set(strong_adj) - set(strong))
+    a_alll = sorted(set(strong_adj) | set(strong))
+    a_foot = [f"TOTAL {len(a_alll)} numbers  =  {len(strong)} STRONG + {len(a_newl)} new from the adjustments"]
+    for a_name, a_list in ((f"NEW ({len(a_newl)})", a_newl), (f"ALL ({len(a_alll)})", a_alll)):
+        a_pre, a_room = f"{a_name}: ", max((a_tw - 2 - len(a_name) - 2) // 3, 1)
+        for a_k in range(0, len(a_list), a_room):
+            a_foot.append((a_pre if not a_k else ' ' * len(a_pre)) + ' '.join(f"{n_:02d}" for n_ in a_list[a_k:a_k + a_room]))
+    strong_lines.append(f"  {s_g}├{'┴'.join('─' * a_cw for _ in range(a_per))}┤{s_rst}")
+    strong_lines += [f"  {s_g}│{s_rst} {l_:<{a_tw - 1}}{s_g}│{s_rst}" for l_ in a_foot]
+    strong_lines.append(f"  {s_g}└{'─' * a_tw}┘{s_rst}")
     # 40RRR FINAL-RESULT-TABLE: every recommended number in four columns —
     # the STRONG 16 first, then the rest of the recommended, yx and wide
     # lists in their own order, each with the operation applied to the EP

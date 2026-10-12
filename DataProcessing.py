@@ -890,6 +890,28 @@ def show_power_box():
         print("  " + l)
 
 
+def show_three_box():
+    """3RRR STRONG 20, CharRow (no repeats) and STRONG 20 ADJUSTMENTS again at
+    the very end of the page, below everything else, in the triple
+    Indian-flag border (user's screenshot, 2026-10-13)."""
+    got = _RRR3_PREV.pop('three_box', None)
+    if not got:
+        return
+    vis  = lambda t: len(re.sub(r'\x1b\[[0-9;]*m', '', t))
+    flag = [f"\033[1;38;2;{c}m" for c in ("255;153;51", "255;255;255", "19;136;8")]
+    rst  = "\033[0m"
+    iw   = max(vis(t) for t in got) + 2
+    box  = [f"{t}{' ' * (iw - vis(t))}" for t in got]
+    for lvl in range(2, -1, -1):           # green inner, white, saffron outer
+        c, w = flag[lvl], iw + 2 * (2 - lvl)
+        box = ([f"{c}┏{'━' * w}┓{rst}"]
+               + [f"{c}┃{rst}{t}{c}┃{rst}" for t in box]
+               + [f"{c}┗{'━' * w}┛{rst}"])
+    print()
+    for l in box:
+        print("  " + l)
+
+
 def _root_six(root, nx, ny):
     """The 6 ROOT OPS values for one op pair, each with its (tens/units) ops:
     Number, yx, s+xy, s+yx, cut xy, cut sign."""
@@ -5117,7 +5139,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         c_per = max(3, -(-len(c_cells) // max(s_tbl_n - 4, 1)))
         c_cw = max([len(c) for c in c_cells] + [12]) + 2
         c_head = f"★ CharRow — {len(c_nums)} numbers, no repeats ★"
-        c_tw = max(c_per * c_cw + c_per - 1, len(c_head) + 2)
+        c_tw = max(c_per * (c_cw + 1), len(c_head) + 2)
         c_box = [f"{s_g}┌{'─' * c_tw}┐{s_rst}",
                  f"{s_g}│{s_rst}{p_rib}{c_head:^{c_tw}}{s_rst}{s_g}│{s_rst}",
                  f"{s_g}├{'─' * c_tw}┤{s_rst}"]
@@ -5130,6 +5152,10 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 strong_lines[k_] += '  ' + l_
             else:
                 strong_lines.insert(k_, ' ' * (s_tw + 4) + '  ' + l_)
+        # the three tables (STRONG 20, CharRow no repeats, STRONG 20
+        # ADJUSTMENTS) once more at the very end of the page, in the triple
+        # Indian-flag border (user's screenshot, 2026-10-13)
+        _RRR3_PREV['three_box'] = list(strong_lines)
         x_lines = [f"  {s_g}┌{'─' * p_tw}┐{s_rst}",
                    f"  {s_g}│{s_rst}{p_rib}{x_title:^{p_tw}}{s_rst}{s_g}│{s_rst}",
                    f"  {s_g}├{'┬'.join('─' * p_cw for _ in range(4))}┤{s_rst}"]
@@ -6152,6 +6178,7 @@ def run(data_source, user_x_op=None, user_y_op=None):
     if _rrr_end:
         print()
         print("\n".join(_rrr_end))
+    show_three_box()
     print()
     return root, ops_list, _last_top4, _last_scores
 

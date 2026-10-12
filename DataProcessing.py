@@ -4329,6 +4329,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         strong_lines.append(f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{s_cw - 1}}" for c in s_row)
                             + f"{s_g}│{s_rst}")
     strong_lines.append(f"  {s_g}└{'┴'.join('─' * s_cw for _ in range(s_per))}┘{s_rst}")
+    s_tbl_n = len(strong_lines)
     # STRONG 20 ADJUSTMENTS (user, 2026-10-12): beside each STRONG 20 number,
     # two one-step adjustments of its operation given beforehand — its y
     # with the cut toggled (25 (nc/+1) -> 20 (nc/c+1)) and its x with the
@@ -5108,6 +5109,27 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             x_rows.append(([_x_lab(g_[0]) if g_ else '' for g_ in x_grp], [g_[1] if g_ else '' for g_ in x_grp]))
         x_title = (f"★  CharRow  —  {len(x_have)} numbers, x only: cut toggled, then sign changed; "
                    f"repeats replaced; last-op steps for x cut, on EP={ep:02d}  ★")
+        # the CharRow numbers once each, beside the STRONG 20 table (user's
+        # screenshots, 2026-10-13): no repeats, table order, each with its
+        # operation on the EP
+        c_nums = list(dict.fromkeys([v_ for v_, _ in x_new] + [v_ for v_, _ in x_add]))
+        c_cells = [_x_lab(v_) for v_ in c_nums]
+        c_per = max(3, -(-len(c_cells) // max(s_tbl_n - 4, 1)))
+        c_cw = max([len(c) for c in c_cells] + [12]) + 2
+        c_head = f"★ CharRow — {len(c_nums)} numbers, no repeats ★"
+        c_tw = max(c_per * c_cw + c_per - 1, len(c_head) + 2)
+        c_box = [f"{s_g}┌{'─' * c_tw}┐{s_rst}",
+                 f"{s_g}│{s_rst}{p_rib}{c_head:^{c_tw}}{s_rst}{s_g}│{s_rst}",
+                 f"{s_g}├{'─' * c_tw}┤{s_rst}"]
+        for k_ in range(0, len(c_cells), c_per):
+            c_row = ''.join(f" {c:<{c_cw}}" for c in c_cells[k_:k_ + c_per])
+            c_box.append(f"{s_g}│{s_rst}{c_row:<{c_tw}}{s_g}│{s_rst}")
+        c_box.append(f"{s_g}└{'─' * c_tw}┘{s_rst}")
+        for k_, l_ in enumerate(c_box):
+            if k_ < s_tbl_n:
+                strong_lines[k_] += '  ' + l_
+            else:
+                strong_lines.insert(k_, ' ' * (s_tw + 4) + '  ' + l_)
         x_lines = [f"  {s_g}┌{'─' * p_tw}┐{s_rst}",
                    f"  {s_g}│{s_rst}{p_rib}{x_title:^{p_tw}}{s_rst}{s_g}│{s_rst}",
                    f"  {s_g}├{'┬'.join('─' * p_cw for _ in range(4))}┤{s_rst}"]

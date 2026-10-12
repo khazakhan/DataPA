@@ -4314,6 +4314,35 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         strong_lines.append(f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{s_cw - 1}}" for c in s_row)
                             + f"{s_g}│{s_rst}")
     strong_lines.append(f"  {s_g}└{'┴'.join('─' * s_cw for _ in range(s_per))}┘{s_rst}")
+    # STRONG 20 ADJUSTMENTS (user, 2026-10-12): beside each STRONG 20 number,
+    # two one-step adjustments of its operation given beforehand — its y
+    # with the cut toggled (25 (nc/+1) -> 20 (nc/c+1)) and its x with the
+    # sign flipped.  Display only, counted separately; on the 13 re-run
+    # rounds the STRONG 20 missed these two caught 4 and 3
+    def _adj_lab(v_):
+        return f"{OP_ABBREV[find_op(ep // 10, v_ // 10)]}/{OP_ABBREV[find_op(ep % 10, v_ % 10)]}"
+    a_cells, strong_adj = [], []
+    for k, v in enumerate(strong):
+        a_y = (v // 10) * 10 + cut(v % 10)
+        a_d = (v // 10 - ep // 10) % 10
+        a_c = 5 if a_d in (3, 4, 5, 6, 7) else 0
+        a_s = (a_d - a_c) % 10
+        a_x = ((ep // 10 + a_c - a_s) % 10) * 10 + v % 10
+        a_nums = [a_y] + ([a_x] if a_x != v else [])
+        strong_adj += a_nums
+        a_cells.append(f"#{k + 1:<2} {v:02d} → " + ', '.join(f"{n_:02d} ({_adj_lab(n_)})" for n_ in a_nums))
+    a_per = 2
+    a_cw = max([len(c) for c in a_cells] + [2 * s_cw - 1]) + 2
+    a_tw = a_per * a_cw + a_per - 1
+    a_title = "★  STRONG 20 ADJUSTMENTS  —  y cut toggled, x sign flipped  ★"
+    strong_lines += [f"  {s_g}┌{'─' * a_tw}┐{s_rst}",
+                     f"  {s_g}│{s_rst}{s_rib}{a_title:^{a_tw}}{s_rst}{s_g}│{s_rst}",
+                     f"  {s_g}├{'┬'.join('─' * a_cw for _ in range(a_per))}┤{s_rst}"]
+    for a_k in range(0, len(a_cells), a_per):
+        a_row = a_cells[a_k:a_k + a_per] + [''] * (a_per - len(a_cells[a_k:a_k + a_per]))
+        strong_lines.append(f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c:<{a_cw - 1}}" for c in a_row)
+                            + f"{s_g}│{s_rst}")
+    strong_lines.append(f"  {s_g}└{'┴'.join('─' * a_cw for _ in range(a_per))}┘{s_rst}")
     # 40RRR FINAL-RESULT-TABLE: every recommended number in four columns —
     # the STRONG 16 first, then the rest of the recommended, yx and wide
     # lists in their own order, each with the operation applied to the EP

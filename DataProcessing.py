@@ -5211,13 +5211,36 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             x_grp = x_add[k_:k_ + 4] + [None] * (4 - len(x_add[k_:k_ + 4]))
             x_rows.append(([_x_lab(g_[0]).replace(' (', '+ (', 1) if g_ else '' for g_ in x_grp],
                            [g_[1] if g_ else '' for g_ in x_grp]))
+        # y cut again (user's screenshot, 2026-10-13, after 82 came from 87
+        # (c+2/cut)): a CharRow number with a plain cut on its y operation
+        # takes the cut on y again, which drops it to nc (87 -> 82 (c+2/nc)).
+        # Written in the same cell after a comma with a + mark; only new
+        # numbers
+        x_ycut = {}
+        for v_ in [w_ for w_, _ in x_new] + [w_ for w_, _ in x_add]:
+            if (v_ % 10 - ep % 10) % 10 == 5 and v_ not in x_ycut:
+                n_ = (v_ // 10) * 10 + ep % 10
+                if n_ not in x_have:
+                    x_have.add(n_)
+                    x_ycut[v_] = n_
+        y_done = set()
+        for cells_, _ in x_rows:
+            for k_, c_ in enumerate(cells_):
+                if c_ and int(c_[:2]) in x_ycut and int(c_[:2]) not in y_done:
+                    y_done.add(int(c_[:2]))
+                    cells_[k_] = c_ + ', ' + _x_lab(x_ycut[int(c_[:2])]).replace(' (', '+ (', 1)
         x_title = (f"★  CharRow  —  {len(x_have)} numbers, x only: cut toggled, then sign changed; "
-                   f"repeats replaced; last-op steps for x cut, on EP={ep:02d}  ★")
+                   f"repeats replaced; last-op steps for x cut; y cut again, on EP={ep:02d}  ★")
         # the CharRow numbers once each, beside the STRONG 20 table (user's
         # screenshots, 2026-10-13): no repeats, table order, each with its
         # operation on the EP
-        c_nums = list(dict.fromkeys([v_ for v_, _ in x_new] + [v_ for v_, _ in x_add]))
-        c_plus = set(v_ for v_, _ in x_add)      # + = added from the last operation's steps (user, 2026-10-13)
+        c_nums = []
+        for v_ in dict.fromkeys([v_ for v_, _ in x_new] + [v_ for v_, _ in x_add]):
+            c_nums.append(v_)
+            if v_ in x_ycut:
+                c_nums.append(x_ycut[v_])        # right after the number it came from
+        # + = added from the last operation's steps or by the y cut again (user, 2026-10-13)
+        c_plus = set(v_ for v_, _ in x_add) | set(x_ycut.values())
         c_cells = [_x_lab(v_).replace(' (', '+ (', 1) if v_ in c_plus else _x_lab(v_) for v_ in c_nums]
         c_per = max(3, -(-len(c_cells) // max(s_tbl_n - 4, 1)))
         c_cw = max([len(c) for c in c_cells] + [12]) + 2
@@ -5230,7 +5253,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             c_row = ''.join(f" {c:<{c_cw}}" for c in c_cells[k_:k_ + c_per])
             c_box.append(f"{s_g}│{s_rst}{c_row:<{c_tw}}{s_g}│{s_rst}")
         if c_plus:
-            c_box.append(f"{s_g}│{s_rst}{' + = from the last operation steps':<{c_tw}}{s_g}│{s_rst}")
+            c_box.append(f"{s_g}│{s_rst}{' + = last-op steps, or y cut again':<{c_tw}}{s_g}│{s_rst}")
         c_box.append(f"{s_g}└{'─' * c_tw}┘{s_rst}")
         for k_, l_ in enumerate(c_box):
             if k_ < s_tbl_n:

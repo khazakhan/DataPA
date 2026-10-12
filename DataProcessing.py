@@ -4330,7 +4330,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         a_x = ((ep // 10 + a_c - a_s) % 10) * 10 + v % 10
         a_nums = [a_y] + ([a_x] if a_x != v else [])
         strong_adj += a_nums
-        a_cells.append(f"#{k + 1:<2} {v:02d} → " + ', '.join(f"{n_:02d} ({_adj_lab(n_)})" for n_ in a_nums))
+        a_cells.append(f"#{k + 1:<2} {v:02d} ({strong_lab[v]}) → " + ', '.join(f"{n_:02d} ({_adj_lab(n_)})" for n_ in a_nums))
     a_per = 2
     a_cw = max([len(c) for c in a_cells] + [2 * s_cw - 1]) + 2
     a_tw = a_per * a_cw + a_per - 1

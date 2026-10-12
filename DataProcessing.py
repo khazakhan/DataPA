@@ -4334,7 +4334,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     a_per = 2
     a_cw = max([len(c) for c in a_cells] + [2 * s_cw - 1]) + 2
     a_tw = a_per * a_cw + a_per - 1
-    a_title = "★  STRONG 20 ADJUSTMENTS  —  y cut toggled, x sign flipped  ★"
+    a_after = f"after {grid_ep:02d}, on EP={ep:02d}" if grid_ep is not None and grid_ep >= 0 else f"on EP={ep:02d}"
+    a_title = f"★  STRONG 20 ADJUSTMENTS  —  {a_after}  —  y cut toggled, x sign flipped  ★"
     strong_lines += [f"  {s_g}┌{'─' * a_tw}┐{s_rst}",
                      f"  {s_g}│{s_rst}{s_rib}{a_title:^{a_tw}}{s_rst}{s_g}│{s_rst}",
                      f"  {s_g}├{'┬'.join('─' * a_cw for _ in range(a_per))}┤{s_rst}"]

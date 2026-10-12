@@ -5033,7 +5033,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         while len(power_lines) < len(u_box):
             power_lines.append(' ' * (p_tw + 4))
         power_lines = [l + ('  ' + u_box[k] if k < len(u_box) else '') for k, l in enumerate(power_lines)]
-        # add-on table above the POWER BASE (user's screenshot, 2026-10-12):
+        # DoRow Table (user's name for it), the add-on above the POWER BASE
+        # (user's screenshot, 2026-10-12):
         # the four numbers of its first row and the four of its "operations
         # reversed" row, each with the cut toggled on the x operation only —
         # taken off where x has it, put on where it has not.  8 numbers
@@ -5042,7 +5043,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             return f"{n_:02d} ({OP_ABBREV[find_op(ep // 10, n_ // 10)]}/{OP_ABBREV[find_op(ep % 10, n_ % 10)]})"
         x_rows = [([_xcut(v) for v, _ in p_four], 'x cut toggled'),
                   ([_xcut(int(c[:2])) for c in p_rev], 'reversed, x cut toggled')]
-        x_title = f"★  POWER BASE x CUT  —  8 numbers, cut toggled on x only, on EP={ep:02d}  ★"
+        x_title = f"★  DoRow Table  —  8 numbers, cut toggled on x only, on EP={ep:02d}  ★"
         x_lines = [f"  {s_g}┌{'─' * p_tw}┐{s_rst}",
                    f"  {s_g}│{s_rst}{p_rib}{x_title:^{p_tw}}{s_rst}{s_g}│{s_rst}",
                    f"  {s_g}├{'┬'.join('─' * p_cw for _ in range(4))}┤{s_rst}"]

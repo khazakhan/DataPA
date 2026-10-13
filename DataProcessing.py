@@ -3102,6 +3102,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              "  new x = old y, cut switched + sign flipped   |   new y = old x, cut switched, one step down",
              "  LAST = the chain's own last step.  Backtest (57,662 positions): table hit 6.42% vs 6.44% chance.",
              f"  Live record: table hit {RRR_LIVE['table_hits']} of {RRR_LIVE['table_rounds']} rounds (about {RRR_LIVE['table_chance']} expected by chance)."]
+    rrr_tbl = list(body)    # the RRR table alone, shown again under the ROUND SUMMARY
     la, picks = _rrr3_rows(entries, ep)
     row, why  = _rrr3_last(entries, ep)
     found     = [(f"{p[9]:02d}{star(p[9])}", f"A {OP_ABBREV[p[7]]}/{OP_ABBREV[p[8]]}") for p in picks]
@@ -5308,7 +5309,14 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         r_box += [f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c_:<{w_ - 1}}" for c_, w_ in zip(r_, r_w)) + f"{s_g}│{s_rst}"
                   for r_ in r_rows]
         r_box.append(f"  {s_g}└{'┴'.join('─' * w_ for w_ in r_w)}┘{s_rst}")
-        _RRR3_PREV['three_box'] = r_box + list(strong_lines)
+        # the RRR: NEXT OPERATION table below the ROUND SUMMARY (user's
+        # screenshots, 2026-10-13)
+        t_tw = max(len(l_) for l_ in rrr_tbl) + 2
+        t_box = [f"  {s_g}┌{'─' * t_tw}┐{s_rst}"]
+        t_box += [f"  {s_g}│{s_rst}{p_rib}{l_.strip():^{t_tw}}{s_rst}{s_g}│{s_rst}" if k_ == 0
+                  else f"  {s_g}│{s_rst}{l_:<{t_tw}}{s_g}│{s_rst}" for k_, l_ in enumerate(rrr_tbl)]
+        t_box.append(f"  {s_g}└{'─' * t_tw}┘{s_rst}")
+        _RRR3_PREV['three_box'] = r_box + t_box + list(strong_lines)
         x_lines = [f"  {s_g}┌{'─' * p_tw}┐{s_rst}",
                    f"  {s_g}│{s_rst}{p_rib}{x_title:^{p_tw}}{s_rst}{s_g}│{s_rst}",
                    f"  {s_g}├{'┬'.join('─' * p_cw for _ in range(4))}┤{s_rst}"]

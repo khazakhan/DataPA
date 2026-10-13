@@ -5421,6 +5421,25 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                    "the last round's operation applied again on this EP"),
                   ("3RRR result line", ' '.join(n_[:2] for n_, _ in found[:4]) or "-", "the 3RRR RESULT numbers"),
                   ("POWER BASE", ', '.join(_s_lab(v_) for v_, _ in p_four), "declared, decade up, one below, one above")]
+        # star picks (user, 2026-10-13: "apply * mark on accurate prediction
+        # result"): the three numbers the most lists agree on — STRONG 20,
+        # band, RRR table, RECOMMENDED, yx, wide, 3RRR RESULT, same-operation
+        # lines; one vote a list, ties by lower number.  The first one takes
+        # the star.  Re-run of 94 rounds: star 6, three picks 11 (chance 1
+        # and 3) — it is a pick, not a promise
+        k_votes = {}
+        for k_list in (strong, [p_t * 10 + (p_u + k_) % 10 for k_ in range(-2, 3)], [v_ for v_, _, _ in both_cut],
+                       [v_ for v_, _ in rec], [v_ for v_, _ in rec_yx], [v_ for v_, _ in wide],
+                       [int(n_[:2]) for n_, _ in found],
+                       [a_[0] for a_ in (same, same2, same_turn if same else None, same_yx if same else None) if a_]):
+            for v_ in set(k_list):
+                k_votes[v_] = k_votes.get(v_, 0) + 1
+        k_top = sorted(k_votes, key=lambda v_: (-k_votes[v_], v_))[:3]
+        _RRR3_PREV['star_picks'] = k_top
+        if k_top:
+            r_rows.append(("Star picks", ',  '.join(('★ ' if k_ == 0 else '') + _s_lab(v_) + f" [{k_votes[v_]}]"
+                                                     for k_, v_ in enumerate(k_top)),
+                           "most lists agree on these; [n] = lists; ★ = first pick"))
         r_w = [max(len(r_[k_]) for r_ in r_rows) + 2 for k_ in range(3)]
         r_tw = sum(r_w) + 2
         r_title = f"★  ROUND SUMMARY  —  after {grid_ep:02d}, operations on EP={ep:02d}  ★"

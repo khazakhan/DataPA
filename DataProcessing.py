@@ -5328,6 +5328,16 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         if c_plus:
             c_box.append(f"{s_g}│{s_rst}{' + = last-op steps, or y cut again':<{c_tw}}{s_g}│{s_rst}")
         c_box.append(f"{s_g}└{'─' * c_tw}┘{s_rst}")
+        # the RRR: NEXT OPERATION table beside them too, to the right of the
+        # CharRow box (user's screenshot, 2026-10-13)
+        n_tw = max(len(l_) for l_ in rrr_tbl) + 2
+        n_box = [f"{s_g}┌{'─' * n_tw}┐{s_rst}"]
+        n_box += [f"{s_g}│{s_rst}{p_rib}{l_.strip():^{n_tw}}{s_rst}{s_g}│{s_rst}" if k_ == 0
+                  else f"{s_g}│{s_rst}{l_:<{n_tw}}{s_g}│{s_rst}" for k_, l_ in enumerate(rrr_tbl)]
+        n_box.append(f"{s_g}└{'─' * n_tw}┘{s_rst}")
+        c_box = [(c_box[k_] if k_ < len(c_box) else ' ' * (c_tw + 2))
+                 + ('  ' + n_box[k_] if k_ < len(n_box) else '')
+                 for k_ in range(max(len(c_box), len(n_box)))]
         for k_, l_ in enumerate(c_box):
             if k_ < s_tbl_n:
                 strong_lines[k_] += '  ' + l_

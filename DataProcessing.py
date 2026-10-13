@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 516, 'tens_cut': 85, 'short_list': 130,
-    'table_rounds': 506, 'table_hits': 62, 'table_chance': 33, 'declared': 471, 'declared_hits': 8,
+    'results': 517, 'tens_cut': 85, 'short_list': 130,
+    'table_rounds': 507, 'table_hits': 62, 'table_chance': 33, 'declared': 472, 'declared_hits': 8,
     'band_hits': 48, 'units_hits': 58, 'second_hits': 14,
     'same_tens': 25,
-    'rrr3_rounds': 202, 'rrr3_hits': 9, 'rrr3_rec_rounds': 203, 'rrr3_rec_hits': 68,
-    'rrr3_same_rounds': 175, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 162, 'rrr3_wide_hits': 15, 'rrr3_yx_rounds': 157, 'rrr3_yx_hits': 15,
-    'rrr3_strong_rounds': 153, 'rrr3_strong_hits': 20, 'rrr3_same2_rounds': 150, 'rrr3_same2_hits': 3,
-    'rrr3_turn_rounds': 157, 'rrr3_turn_hits': 2, 'rrr3_sameyx_rounds': 157, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 92, 'power_hits': 54,
+    'rrr3_rounds': 203, 'rrr3_hits': 9, 'rrr3_rec_rounds': 204, 'rrr3_rec_hits': 69,
+    'rrr3_same_rounds': 176, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 163, 'rrr3_wide_hits': 15, 'rrr3_yx_rounds': 158, 'rrr3_yx_hits': 15,
+    'rrr3_strong_rounds': 154, 'rrr3_strong_hits': 20, 'rrr3_same2_rounds': 151, 'rrr3_same2_hits': 3,
+    'rrr3_turn_rounds': 158, 'rrr3_turn_hits': 2, 'rrr3_sameyx_rounds': 158, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 93, 'power_hits': 54,
 }
 
 
@@ -4463,6 +4463,40 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             if strong_votes.get(nv_, 0) < 14.3000006:
                 strong_votes[nv_] = 14.3000006
             break
+    # 60. result 25 after 93 — a CharRow number whose operation is cut/nc
+    #     (70 on EP 20) brings the same operation turned over, nc/cut (25):
+    #     the EP with its y cut.  Goes to the declared cell with the family
+    #     numbers and takes a STRONG 20 seat under the band (user, 2026-10-13:
+    #     "repair it in Strong 20 and CharRow")
+    if grid_ep is not None and grid_ep >= 0:
+        t60_, u60_ = cut(grid_ep // 10), (grid_ep % 10 + 4) % 10
+        b60_ = [t60_ * 10 + u60_, (t60_ * 10 + u60_ + 10) % 100, t60_ * 10 + (u60_ - 1) % 10, t60_ * 10 + (u60_ + 1) % 10]
+        b60_ += [compute_variants(ep, SIGN_FLIP[find_op(ep % 10, v % 10)], SIGN_FLIP[find_op(ep // 10, v // 10)])[0]
+                 for v in b60_[:4]]
+        f60_ = [((v // 10 + 5) % 10) * 10 + v % 10 for v in b60_]
+        for v in list(f60_):                      # the x-sign-changed rows
+            d_ = (v // 10 - ep // 10) % 10
+            k_ = 5 if d_ in (3, 4, 5, 6, 7) else 0
+            f60_.append(((ep // 10 + k_ - (d_ - k_)) % 10) * 10 + v % 10)
+        q60_ = list(dict.fromkeys(f60_))          # repeats take a family pair's number reversed
+        q60_ = [(a_, b_) for i_, a_ in enumerate(q60_) for b_ in q60_[i_ + 1:]
+                if a_ % 5 == b_ % 5 and (a_ // 10) % 5 == (b_ // 10) % 5]
+        q60_ = [int(f"{a_:02d}"[::-1]) for a_, b_ in q60_] + [int(f"{b_:02d}"[::-1]) for a_, b_ in q60_]
+        s60_ = set()
+        for k_, v in enumerate(f60_):
+            if v in s60_:
+                while q60_ and (q60_[0] in s60_ or q60_[0] in f60_[k_:]):
+                    q60_.pop(0)
+                if q60_:
+                    v = q60_.pop(0)
+            s60_.add(v)
+        if cut(ep // 10) * 10 + ep % 10 in s60_:
+            nv_ = (ep // 10) * 10 + cut(ep % 10)
+            if nv_ not in [w for w, _ in fam_seats]:
+                fam_seats = fam_seats + [(nv_, 'nc/cut')]
+            strong_lab.setdefault(nv_, 'nc/cut')
+            if strong_votes.get(nv_, 0) < 14.5:
+                strong_votes[nv_] = 14.5
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json
@@ -5296,6 +5330,16 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 if n_ not in x_have:
                     x_have.add(n_)
                     x_ycut[v_] = n_
+        # operation turned over (user, 2026-10-13, after 25 came beside 70
+        # (cut/nc)): a CharRow number whose operation is cut/nc brings the
+        # same operation turned over, nc/cut — the EP with its y cut.  Same
+        # cell, after a comma, + mark; only a new number
+        for v_ in [w_ for w_, _ in x_new] + [w_ for w_, _ in x_add]:
+            if v_ == cut(ep // 10) * 10 + ep % 10 and v_ not in x_ycut:
+                n_ = (ep // 10) * 10 + cut(ep % 10)
+                if n_ not in x_have:
+                    x_have.add(n_)
+                    x_ycut[v_] = n_
         y_done = set()
         for cells_, _ in x_rows:
             for k_, c_ in enumerate(cells_):
@@ -5303,7 +5347,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                     y_done.add(int(c_[:2]))
                     cells_[k_] = c_ + ', ' + _x_lab(x_ycut[int(c_[:2])]).replace(' (', '+ (', 1)
         x_title = (f"★  CharRow  —  {len(x_have)} numbers, x only: cut toggled, then sign changed; "
-                   f"repeats replaced; last-op steps for x cut; y cut again, on EP={ep:02d}  ★")
+                   f"repeats replaced; last-op steps for x cut; y cut again; cut/nc turned, on EP={ep:02d}  ★")
         # the CharRow numbers once each, beside the STRONG 20 table (user's
         # screenshots, 2026-10-13): no repeats, table order, each with its
         # operation on the EP
@@ -5318,7 +5362,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         c_per = max(3, -(-len(c_cells) // max(s_tbl_n - 4, 1)))
         c_cw = max([len(c) for c in c_cells] + [12]) + 2
         c_head = f"★ CharRow — {len(c_nums)} numbers, no repeats ★"
-        c_tw = max(c_per * (c_cw + 1), len(c_head) + 2, 36)
+        c_tw = max(c_per * (c_cw + 1), len(c_head) + 2, 49)
         c_box = [f"{s_g}┌{'─' * c_tw}┐{s_rst}",
                  f"{s_g}│{s_rst}{p_rib}{c_head:^{c_tw}}{s_rst}{s_g}│{s_rst}",
                  f"{s_g}├{'─' * c_tw}┤{s_rst}"]
@@ -5326,7 +5370,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             c_row = ''.join(f" {c:<{c_cw}}" for c in c_cells[k_:k_ + c_per])
             c_box.append(f"{s_g}│{s_rst}{c_row:<{c_tw}}{s_g}│{s_rst}")
         if c_plus:
-            c_box.append(f"{s_g}│{s_rst}{' + = last-op steps, or y cut again':<{c_tw}}{s_g}│{s_rst}")
+            c_box.append(f"{s_g}│{s_rst}{' + = last-op steps, y cut again, or cut/nc turned':<{c_tw}}{s_g}│{s_rst}")
         c_box.append(f"{s_g}└{'─' * c_tw}┘{s_rst}")
         # the RRR: NEXT OPERATION table beside them too, to the right of the
         # CharRow box (user's screenshot, 2026-10-13)
@@ -5433,6 +5477,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the SAME OPERATION AGAIN number (the last round's operation on this EP) is in the cell (cut/c-2 again -> 26)",
                        "     declared cell: the EP and a 3RRR RESULT number of the same family (02 and 70) bring the EP with both digits cut (02 -> 57)",
                        "     declared cell: the first 3RRR RESULT number itself is in the cell (08)",
+                       "     declared cell: a CharRow number with cut/nc brings the same operation turned over, nc/cut (70 -> 25); it also takes a STRONG 20 seat",
                        "     declared cell: the first STRONG 20 number above the band with a cut and a step on x comes with its x sign flipped (99 (c-2/c+1) -> 39 (c+2/c+1))",
                        "     declared cell: the first 3RRR RESULT number with its x step switched, the nearest x (27 (-1/c+2) -> 17 (-2/c+2))",
                        "     declared cell: the after number itself, the running value coming again (30 -> 30)",

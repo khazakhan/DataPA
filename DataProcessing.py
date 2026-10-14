@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 563, 'tens_cut': 90, 'short_list': 137,
-    'table_rounds': 553, 'table_hits': 69, 'table_chance': 33, 'declared': 518, 'declared_hits': 10,
+    'results': 564, 'tens_cut': 90, 'short_list': 137,
+    'table_rounds': 554, 'table_hits': 69, 'table_chance': 33, 'declared': 519, 'declared_hits': 10,
     'band_hits': 52, 'units_hits': 62, 'second_hits': 14,
     'same_tens': 25,
-    'rrr3_rounds': 249, 'rrr3_hits': 10, 'rrr3_rec_rounds': 250, 'rrr3_rec_hits': 87,
-    'rrr3_same_rounds': 222, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 209, 'rrr3_wide_hits': 22, 'rrr3_yx_rounds': 204, 'rrr3_yx_hits': 18,
-    'rrr3_strong_rounds': 200, 'rrr3_strong_hits': 29, 'rrr3_same2_rounds': 197, 'rrr3_same2_hits': 4,
-    'rrr3_turn_rounds': 204, 'rrr3_turn_hits': 2, 'rrr3_sameyx_rounds': 204, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 139, 'power_hits': 85,
+    'rrr3_rounds': 250, 'rrr3_hits': 10, 'rrr3_rec_rounds': 251, 'rrr3_rec_hits': 88,
+    'rrr3_same_rounds': 223, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 210, 'rrr3_wide_hits': 22, 'rrr3_yx_rounds': 205, 'rrr3_yx_hits': 18,
+    'rrr3_strong_rounds': 201, 'rrr3_strong_hits': 29, 'rrr3_same2_rounds': 198, 'rrr3_same2_hits': 4,
+    'rrr3_turn_rounds': 205, 'rrr3_turn_hits': 2, 'rrr3_sameyx_rounds': 205, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 140, 'power_hits': 86,
 }
 
 
@@ -2896,6 +2896,39 @@ def rrr3_both_cut(x_op, y_op):
     if nx_num not in RRR3_STEP_DOWN or ny_num not in RRR3_STEP_DOWN:
         return None
     return 'cut' + RRR3_STEP_DOWN[nx_num], 'cut' + RRR3_STEP_DOWN[ny_num]
+
+
+def _rrr_ocjp(ep, both_cut):
+    """NEXT OPERATION-OCJP (user's screenshot, 2026-10-14): the two operations
+    of the RRR table's LAST row, X/Y (xy) and Y/X (yx), worked into more
+    operations on the EP.  s = sign flipped, r = cut switched.  The first 20
+    are the user's list (from 61 (c-1/c-2), 52 (c-2/c-1) on EP 28); the
+    last 10 are their mirror forms, added to make the list complete.
+    Returns (number, 'x/y', place 1-30) per operation, repeated operations
+    dropped (the place keeps the user's numbering)."""
+    if len(both_cut) < 2:
+        return []
+    v_ = both_cut[-2][0]
+    X, Y = find_op(ep // 10, v_ // 10), find_op(ep % 10, v_ % 10)
+    if '?' in (X, Y):
+        return []
+    s, r = SIGN_FLIP, KK_CUT_TOGGLE
+    user = [(r[s[X]], s[Y]), (r[s[Y]], s[X]), (r[s[X]], r[Y]), (r[s[Y]], r[X]),
+            (s[Y], X), (s[X], s[Y]), (r[s[Y]], Y), (r[s[X]], X),
+            ('cut', Y), ('cut', X), ('cut', s[Y]), ('cut', s[X]),
+            ('no_change', s[Y]), ('no_change', s[X]),
+            (s[X], 'cut'), (s[Y], 'cut'), (s[X], 'no_change'), (s[Y], 'no_change'),
+            (X, Y), (Y, X)]
+    mirror = [(s[X], Y), (s[Y], s[X]), (r[s[X]], Y), (r[s[Y]], X),
+              ('no_change', Y), ('no_change', X),
+              (X, 'cut'), (Y, 'cut'), (X, 'no_change'), (Y, 'no_change')]
+    out, seen = [], set()
+    for k_, (ox, oy) in enumerate(user + mirror):
+        if (ox, oy) in seen:
+            continue
+        seen.add((ox, oy))
+        out.append((compute_variants(ep, ox, oy)[0], f"{OP_ABBREV[ox]}/{OP_ABBREV[oy]}", k_ + 1))
+    return out
 
 
 def _rrr3_last(entries, ep):
@@ -4750,6 +4783,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         with open(os.environ['RRR3_DUMP2'], 'w') as fh:
             json.dump({'ep': ep, 'grid_ep': grid_ep, 'strong': strong,
                        'table': [[v, lab] for v, _, lab in both_cut],
+                       'ocjp': [v for v, _, _ in _rrr_ocjp(ep, both_cut)],
                        'rule_seats': [v for v, _ in rule_seats], 'fam_seats': [v for v, _ in fam_seats],
                        'rec': [v for v, _ in rec], 'yx': [v for v, _ in rec_yx], 'wide': [v for v, _ in wide],
                        'found': [int(n[:2]) for n, _ in found],
@@ -5621,6 +5655,32 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 strong_lines[k_] += '  ' + l_
             else:
                 strong_lines.insert(k_, ' ' * (s_tw + 4) + '  ' + l_)
+        # NEXT OPERATION-OCJP below the CharRow box, in the triple
+        # Indian-flag border (user's screenshot, 2026-10-14): the LAST row's
+        # two operations worked into 30 operations on the EP
+        o_list = _rrr_ocjp(ep, both_cut)
+        if o_list:
+            o_cells = [f"{k_:>2}. {v_:02d} ({lab_}){' ^' if k_ > 20 else ''}"
+                       for v_, lab_, k_ in o_list]
+            o_cw = max(len(c) for c in o_cells) + 2
+            o_per = 5
+            o_body = [f"★  NEXT OPERATION-OCJP  —  from the LAST row {both_cut[-2][0]:02d} ({both_cut[-2][2]}),"
+                      f" {both_cut[-1][0]:02d} ({both_cut[-1][2]})  on EP={ep:02d}  ★", ""]
+            o_body += [''.join(f"{c:<{o_cw}}" for c in o_cells[k_:k_ + o_per]) for k_ in range(0, len(o_cells), o_per)]
+            o_uniq = sorted(set(v_ for v_, _, _ in o_list))
+            o_body += ["", f"ALL ({len(o_uniq)}): " + ' '.join(f"{v_:02d}" for v_ in o_uniq),
+                       "1-20 = the user's operations;  21-30 ^ = mirror forms added;  a missing place = same operation again",
+                       "built from the two operations: sign flipped, cut switched on / off.  Re-run of 140 J/K rounds:",
+                       "  28 hits, about 31 expected by its size alone — a list to watch, not a proven edge"]
+            o_flag = [f"\033[1;38;2;{c}m" for c in ("255;153;51", "255;255;255", "19;136;8")]
+            o_iw = max(len(l_) for l_ in o_body) + 2
+            o_box = [f" \033[1m{l_:<{o_iw - 2}}{s_rst} " for l_ in o_body]
+            for lvl in range(2, -1, -1):           # green inner, white, saffron outer
+                c_, w_ = o_flag[lvl], o_iw + 2 * (2 - lvl)
+                o_box = ([f"{c_}┏{'━' * w_}┓{s_rst}"] + [f"{c_}┃{s_rst}{l_}{c_}┃{s_rst}" for l_ in o_box]
+                         + [f"{c_}┗{'━' * w_}┛{s_rst}"])
+            _RRR3_PREV['ocjp'] = o_uniq
+            strong_lines += [' ' * (s_tw + 4) + '  ' + l_ for l_ in o_box]
         # the three tables (STRONG 20, CharRow no repeats, STRONG 20
         # ADJUSTMENTS) once more at the very end of the page, in the triple
         # Indian-flag border (user's screenshot, 2026-10-13)

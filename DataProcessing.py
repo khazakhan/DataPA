@@ -2903,8 +2903,9 @@ def _rrr_ocjp(ep, both_cut):
     of the RRR table's LAST row, X/Y (xy) and Y/X (yx), worked into more
     operations on the EP.  s = sign flipped, r = cut switched.  The first 20
     are the user's list (from 61 (c-1/c-2), 52 (c-2/c-1) on EP 28); the
-    last 10 are their mirror forms, added to make the list complete.
-    Returns (number, 'x/y', place 1-30) for all 30 places, repeats kept
+    next 10 (21-30) are their mirror forms; 31-38 are one operation on both
+    sides with the sign flipped on one side (+1/-1), with and without cut.
+    Returns (number, 'x/y', place 1-38) for all 38 places, repeats kept
     (user, 2026-10-14: show every place)."""
     if len(both_cut) < 2:
         return []
@@ -2922,8 +2923,13 @@ def _rrr_ocjp(ep, both_cut):
     mirror = [(s[X], Y), (s[Y], s[X]), (r[s[X]], Y), (r[s[Y]], X),
               ('no_change', Y), ('no_change', X),
               (X, 'cut'), (Y, 'cut'), (X, 'no_change'), (Y, 'no_change')]
+    # 31-38 (user, 2026-10-14: "+1/-1 missed"): one operation on both sides,
+    # the sign flipped on one side, with and without its cut
+    same = []
+    for o_ in (X, Y):
+        same += [(o_, s[o_]), (s[o_], o_), (r[o_], r[s[o_]]), (r[s[o_]], r[o_])]
     out = []
-    for k_, (ox, oy) in enumerate(user + mirror):
+    for k_, (ox, oy) in enumerate(user + mirror + same):
         out.append((compute_variants(ep, ox, oy)[0], f"{OP_ABBREV[ox]}/{OP_ABBREV[oy]}", k_ + 1))
     return out
 
@@ -5659,7 +5665,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         if o_list:
             # a grid like the STRONG 20 box: 5 columns, 6 rows, every place
             # shown, repeats too (user's screenshot, 2026-10-14)
-            o_cells = [f"{k_:>2}. {v_:02d} ({lab_}){' ^' if k_ > 20 else ''}" for v_, lab_, k_ in o_list]
+            o_cells = [f"{k_:>2}. {v_:02d} ({lab_}){' °' if k_ > 30 else ' ^' if k_ > 20 else ''}"
+                       for v_, lab_, k_ in o_list]
             o_cw = max(len(c) for c in o_cells) + 2
             o_per = 5
             o_uniq = sorted(set(v_ for v_, _, _ in o_list))
@@ -5674,9 +5681,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 o_body.append('│' + '│'.join(f" {c:<{o_cw - 1}}" for c in row_) + '│')
             o_body.append('└' + '┴'.join('─' * o_cw for _ in range(o_per)) + '┘')
             o_body += ["", f"ALL ({len(o_uniq)}, no repeats): " + ' '.join(f"{v_:02d}" for v_ in o_uniq),
-                       "1-20 = the user's operations;  21-30 ^ = mirror forms added",
+                       "1-20 = the user's operations;  21-30 ^ = mirror forms;  31-38 ° = one operation, sign flipped on one side",
                        "built from the two operations: sign flipped, cut switched on / off.  Re-run of 140 J/K rounds:",
-                       "  28 hits, about 31 expected by its size alone — a list to watch, not a proven edge"]
+                       "  33 hits, about 38 expected by its size alone — a list to watch, not a proven edge"]
             o_flag = [f"\033[1;38;2;{c}m" for c in ("255;153;51", "255;255;255", "19;136;8")]
             o_iw = max(len(l_) for l_ in o_body) + 2
             o_box = [f" \033[1m{l_:<{o_iw - 2}}{s_rst} " for l_ in o_body]

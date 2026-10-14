@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 572, 'tens_cut': 90, 'short_list': 137,
-    'table_rounds': 562, 'table_hits': 70, 'table_chance': 33, 'declared': 527, 'declared_hits': 10,
+    'results': 573, 'tens_cut': 90, 'short_list': 137,
+    'table_rounds': 563, 'table_hits': 70, 'table_chance': 33, 'declared': 528, 'declared_hits': 10,
     'band_hits': 52, 'units_hits': 62, 'second_hits': 14,
     'same_tens': 25,
-    'rrr3_rounds': 258, 'rrr3_hits': 10, 'rrr3_rec_rounds': 259, 'rrr3_rec_hits': 91,
-    'rrr3_same_rounds': 231, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 218, 'rrr3_wide_hits': 23, 'rrr3_yx_rounds': 213, 'rrr3_yx_hits': 18,
-    'rrr3_strong_rounds': 209, 'rrr3_strong_hits': 29, 'rrr3_same2_rounds': 206, 'rrr3_same2_hits': 4,
-    'rrr3_turn_rounds': 213, 'rrr3_turn_hits': 3, 'rrr3_sameyx_rounds': 213, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 148, 'power_hits': 90,
+    'rrr3_rounds': 259, 'rrr3_hits': 10, 'rrr3_rec_rounds': 260, 'rrr3_rec_hits': 91,
+    'rrr3_same_rounds': 232, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 219, 'rrr3_wide_hits': 23, 'rrr3_yx_rounds': 214, 'rrr3_yx_hits': 18,
+    'rrr3_strong_rounds': 210, 'rrr3_strong_hits': 29, 'rrr3_same2_rounds': 207, 'rrr3_same2_hits': 4,
+    'rrr3_turn_rounds': 214, 'rrr3_turn_hits': 3, 'rrr3_sameyx_rounds': 214, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 149, 'power_hits': 90,
 }
 
 
@@ -4943,6 +4943,21 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         a_nums = [a_y] + ([a_x] if a_x != v else [])
         strong_adj += a_nums
         a_cells.append(f"#{k + 1:<2} {v:02d} ({strong_lab[v]}) → " + ', '.join(f"{n_:02d} ({_adj_lab(n_)})" for n_ in a_nums))
+    # 82. result 93 after 23 (series K) — STRONG 20 ADJUSTMENTS #4 98
+    #     (c+2/nc) with its y cut toggled gave 93 (c+2/cut) but the cell did
+    #     not hold it.  The y-cut-toggled column of the adjustments goes to
+    #     the declared cell (cell only, the STRONG 20 is already chosen)
+    for v in strong:
+        nv_ = (v // 10) * 10 + cut(v % 10)
+        if nv_ not in [w for w, _ in fam_seats]:
+            fam_seats = fam_seats + [(nv_, _adj_lab(nv_))]
+    if os.environ.get('RRR3_DUMP2'):
+        import json
+        with open(os.environ['RRR3_DUMP2']) as fh:
+            d2_ = json.load(fh)
+        d2_['fam_seats'] = [v for v, _ in fam_seats]
+        with open(os.environ['RRR3_DUMP2'], 'w') as fh:
+            json.dump(d2_, fh)
     a_per = 2
     a_cw = max([len(c) for c in a_cells] + [2 * s_cw - 1, 56]) + 2
     a_tw = a_per * a_cw + a_per - 1
@@ -5942,6 +5957,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the SAME OPERATION AGAIN crossed, yx and yx turned (old y cut removed, old x sign flipped) (+1/-1 -> 45 (-1/-1))",
                        "     declared cell: the NEXT OPERATION-OCJP places 31-38, one operation on both sides (-1/-1 -> 57)",
                        "     declared cell: NC/CUT SPECIAL, the row after an nc/cut, cut/nc or nc/nc row modified every way (+2/c+2 -> c+2/c-2 = 33)",
+                       "     declared cell: STRONG 20 ADJUSTMENTS, every seat with its y cut toggled (98 (c+2/nc) -> 93 (c+2/cut))",
                        "     declared cell: every 3RRR RESULT number, not only the first (94 65 66 36 -> 36)",
                        "     declared cell: the 3RRR WIDE list numbers (96 (c+1/+2))",
                        "     declared cell: the band numbers one and two below the declared number with their x sign flipped (74 (+1/+2) -> 54 (-1/+2))",

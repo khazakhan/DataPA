@@ -2904,9 +2904,8 @@ def _rrr_ocjp(ep, both_cut):
     operations on the EP.  s = sign flipped, r = cut switched.  The first 20
     are the user's list (from 61 (c-1/c-2), 52 (c-2/c-1) on EP 28); the
     next 10 (21-30) are their mirror forms; 31-38 are one operation on both
-    sides with the sign flipped on one side (+1/-1), 39-46 the same with
-    the same sign on both sides (-1/-1), with and without cut.
-    Returns (number, 'x/y', place 1-46, replaced) — every place a different
+    sides with the sign flipped on one side (+1/-1), with and without cut.
+    Returns (number, 'x/y', place 1-38, replaced) — every place a different
     operation (user, 2026-10-14)."""
     if len(both_cut) < 2:
         return []
@@ -2929,17 +2928,12 @@ def _rrr_ocjp(ep, both_cut):
     same = []
     for o_ in (X, Y):
         same += [(o_, s[o_]), (s[o_], o_), (r[o_], r[s[o_]]), (r[s[o_]], r[o_])]
-    # 39-46 (user, 2026-10-14: "-1/-1 missed"): one operation on both sides
-    # with the same sign, with and without its cut
-    twin = []
-    for o_ in (X, Y):
-        twin += [(o_, o_), (s[o_], s[o_]), (r[o_], r[o_]), (r[s[o_]], r[s[o_]])]
     # a place whose operation is already shown takes the next unused one
     # (user, 2026-10-14: "all are different operations"): every pair of
     # the two operations' forms (as is, s, r, r s), in that order
     forms = list(dict.fromkeys([X, Y, s[X], s[Y], r[X], r[Y], r[s[X]], r[s[Y]]]))
     spare = [(a_, b_) for a_ in forms for b_ in forms]
-    places = user + mirror + same + twin
+    places = user + mirror + same
     seen = set(places)                 # every place keeps its own operation first
     out, kept = [], set()
     for k_, op_ in enumerate(places):
@@ -5705,7 +5699,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         if o_list:
             # a grid like the STRONG 20 box: 5 columns, 6 rows, every place
             # shown, repeats too (user's screenshot, 2026-10-14)
-            o_cells = [f"{k_:>2}. {v_:02d} ({lab_}){'~' if n_ else ''}{' *' if k_ > 38 else ' °' if k_ > 30 else ' ^' if k_ > 20 else ''}"
+            o_cells = [f"{k_:>2}. {v_:02d} ({lab_}){'~' if n_ else ''}{' °' if k_ > 30 else ' ^' if k_ > 20 else ''}"
                        for v_, lab_, k_, n_ in o_list]
             o_cw = max(len(c) for c in o_cells) + 2
             o_per = 5
@@ -5721,8 +5715,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 o_body.append('│' + '│'.join(f" {c:<{o_cw - 1}}" for c in row_) + '│')
             o_body.append('└' + '┴'.join('─' * o_cw for _ in range(o_per)) + '┘')
             o_body += ["", f"ALL ({len(o_uniq)}): " + ' '.join(f"{v_:02d}" for v_ in o_uniq),
-                       "1-20 = the user's operations;  21-30 ^ = mirror forms;  31-38 ° = one operation, sign flipped on one side;",
-                       "39-46 * = one operation, same sign on both sides",
+                       "1-20 = the user's operations;  21-30 ^ = mirror forms;  31-38 ° = one operation, sign flipped on one side",
                        "~ = that place repeated an operation already shown, so it takes the next unused one (none left = place empty)",
                        "built from the two operations: sign flipped, cut switched on / off.  Re-run of 140 J/K rounds:",
                        "  41 hits, about 47 expected by its size alone — a list to watch, not a proven edge"]

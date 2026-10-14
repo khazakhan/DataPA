@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 574, 'tens_cut': 90, 'short_list': 137,
-    'table_rounds': 564, 'table_hits': 71, 'table_chance': 33, 'declared': 529, 'declared_hits': 10,
+    'results': 575, 'tens_cut': 90, 'short_list': 137,
+    'table_rounds': 565, 'table_hits': 71, 'table_chance': 33, 'declared': 530, 'declared_hits': 10,
     'band_hits': 52, 'units_hits': 62, 'second_hits': 14,
     'same_tens': 25,
-    'rrr3_rounds': 260, 'rrr3_hits': 10, 'rrr3_rec_rounds': 261, 'rrr3_rec_hits': 91,
-    'rrr3_same_rounds': 233, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 220, 'rrr3_wide_hits': 23, 'rrr3_yx_rounds': 215, 'rrr3_yx_hits': 18,
-    'rrr3_strong_rounds': 211, 'rrr3_strong_hits': 29, 'rrr3_same2_rounds': 208, 'rrr3_same2_hits': 4,
-    'rrr3_turn_rounds': 215, 'rrr3_turn_hits': 3, 'rrr3_sameyx_rounds': 215, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 150, 'power_hits': 91,
+    'rrr3_rounds': 261, 'rrr3_hits': 10, 'rrr3_rec_rounds': 262, 'rrr3_rec_hits': 92,
+    'rrr3_same_rounds': 234, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 221, 'rrr3_wide_hits': 23, 'rrr3_yx_rounds': 216, 'rrr3_yx_hits': 18,
+    'rrr3_strong_rounds': 212, 'rrr3_strong_hits': 29, 'rrr3_same2_rounds': 209, 'rrr3_same2_hits': 4,
+    'rrr3_turn_rounds': 216, 'rrr3_turn_hits': 3, 'rrr3_sameyx_rounds': 216, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 151, 'power_hits': 91,
 }
 
 
@@ -4870,6 +4870,17 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         strong_lab.setdefault(nv_, lab_)
         if strong_votes.get(nv_, 0) < 14.300000005:
             strong_votes[nv_] = 14.300000005
+    # 83. result 38 after 02 (series K) — NEXT OPERATION-OCJP place 26 (a
+    #     mirror form ^) held 38 (nc/-1) but the cell did not.  The OCJP
+    #     mirror places 21-30 go to the cell too (rule 80 extended)
+    for nv_, lab_, k_, _ in _rrr_ocjp(ep, both_cut):
+        if not 20 < k_ <= 30:
+            continue
+        if nv_ not in [v for v, _ in fam_seats]:
+            fam_seats = fam_seats + [(nv_, lab_)]
+        strong_lab.setdefault(nv_, lab_)
+        if strong_votes.get(nv_, 0) < 14.300000003:
+            strong_votes[nv_] = 14.300000003
     # 81. result 33 after 57 (series K, user's screenshot) — the NC/CUT
     #     SPECIAL numbers (the row after an nc/cut, cut/nc or nc/nc row,
     #     modified every way) go to the declared cell
@@ -5958,6 +5969,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the NEXT OPERATION-OCJP places 31-38, one operation on both sides (-1/-1 -> 57)",
                        "     declared cell: NC/CUT SPECIAL, the row after an nc/cut, cut/nc or nc/nc row modified every way (+2/c+2 -> c+2/c-2 = 33)",
                        "     declared cell: STRONG 20 ADJUSTMENTS, every seat with its y cut toggled (98 (c+2/nc) -> 93 (c+2/cut))",
+                       "     declared cell: the NEXT OPERATION-OCJP mirror places 21-30 (nc/-1 -> 38)",
                        "     declared cell: every 3RRR RESULT number, not only the first (94 65 66 36 -> 36)",
                        "     declared cell: the 3RRR WIDE list numbers (96 (c+1/+2))",
                        "     declared cell: the band numbers one and two below the declared number with their x sign flipped (74 (+1/+2) -> 54 (-1/+2))",

@@ -2904,8 +2904,8 @@ def _rrr_ocjp(ep, both_cut):
     operations on the EP.  s = sign flipped, r = cut switched.  The first 20
     are the user's list (from 61 (c-1/c-2), 52 (c-2/c-1) on EP 28); the
     last 10 are their mirror forms, added to make the list complete.
-    Returns (number, 'x/y', place 1-30) per operation, repeated operations
-    dropped (the place keeps the user's numbering)."""
+    Returns (number, 'x/y', place 1-30) for all 30 places, repeats kept
+    (user, 2026-10-14: show every place)."""
     if len(both_cut) < 2:
         return []
     v_ = both_cut[-2][0]
@@ -2922,11 +2922,8 @@ def _rrr_ocjp(ep, both_cut):
     mirror = [(s[X], Y), (s[Y], s[X]), (r[s[X]], Y), (r[s[Y]], X),
               ('no_change', Y), ('no_change', X),
               (X, 'cut'), (Y, 'cut'), (X, 'no_change'), (Y, 'no_change')]
-    out, seen = [], set()
+    out = []
     for k_, (ox, oy) in enumerate(user + mirror):
-        if (ox, oy) in seen:
-            continue
-        seen.add((ox, oy))
         out.append((compute_variants(ep, ox, oy)[0], f"{OP_ABBREV[ox]}/{OP_ABBREV[oy]}", k_ + 1))
     return out
 
@@ -5660,16 +5657,24 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         # two operations worked into 30 operations on the EP
         o_list = _rrr_ocjp(ep, both_cut)
         if o_list:
-            o_cells = [f"{k_:>2}. {v_:02d} ({lab_}){' ^' if k_ > 20 else ''}"
-                       for v_, lab_, k_ in o_list]
+            # a grid like the STRONG 20 box: 5 columns, 6 rows, every place
+            # shown, repeats too (user's screenshot, 2026-10-14)
+            o_cells = [f"{k_:>2}. {v_:02d} ({lab_}){' ^' if k_ > 20 else ''}" for v_, lab_, k_ in o_list]
             o_cw = max(len(c) for c in o_cells) + 2
             o_per = 5
-            o_body = [f"★  NEXT OPERATION-OCJP  —  from the LAST row {both_cut[-2][0]:02d} ({both_cut[-2][2]}),"
-                      f" {both_cut[-1][0]:02d} ({both_cut[-1][2]})  on EP={ep:02d}  ★", ""]
-            o_body += [''.join(f"{c:<{o_cw}}" for c in o_cells[k_:k_ + o_per]) for k_ in range(0, len(o_cells), o_per)]
             o_uniq = sorted(set(v_ for v_, _, _ in o_list))
-            o_body += ["", f"ALL ({len(o_uniq)}): " + ' '.join(f"{v_:02d}" for v_ in o_uniq),
-                       "1-20 = the user's operations;  21-30 ^ = mirror forms added;  a missing place = same operation again",
+            o_gw = o_per * (o_cw + 1) - 1
+            o_body = [f"★  NEXT OPERATION-OCJP  —  from the LAST row {both_cut[-2][0]:02d} ({both_cut[-2][2]}),"
+                      f" {both_cut[-1][0]:02d} ({both_cut[-1][2]})  on EP={ep:02d}  ★", "",
+                      '┌' + '┬'.join('─' * o_cw for _ in range(o_per)) + '┐']
+            for k_ in range(0, len(o_cells), o_per):
+                if k_:
+                    o_body.append('├' + '┼'.join('─' * o_cw for _ in range(o_per)) + '┤')
+                row_ = o_cells[k_:k_ + o_per] + [''] * (o_per - len(o_cells[k_:k_ + o_per]))
+                o_body.append('│' + '│'.join(f" {c:<{o_cw - 1}}" for c in row_) + '│')
+            o_body.append('└' + '┴'.join('─' * o_cw for _ in range(o_per)) + '┘')
+            o_body += ["", f"ALL ({len(o_uniq)}, no repeats): " + ' '.join(f"{v_:02d}" for v_ in o_uniq),
+                       "1-20 = the user's operations;  21-30 ^ = mirror forms added",
                        "built from the two operations: sign flipped, cut switched on / off.  Re-run of 140 J/K rounds:",
                        "  28 hits, about 31 expected by its size alone — a list to watch, not a proven edge"]
             o_flag = [f"\033[1;38;2;{c}m" for c in ("255;153;51", "255;255;255", "19;136;8")]

@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 569, 'tens_cut': 90, 'short_list': 137,
-    'table_rounds': 559, 'table_hits': 70, 'table_chance': 33, 'declared': 524, 'declared_hits': 10,
+    'results': 570, 'tens_cut': 90, 'short_list': 137,
+    'table_rounds': 560, 'table_hits': 70, 'table_chance': 33, 'declared': 525, 'declared_hits': 10,
     'band_hits': 52, 'units_hits': 62, 'second_hits': 14,
     'same_tens': 25,
-    'rrr3_rounds': 255, 'rrr3_hits': 10, 'rrr3_rec_rounds': 256, 'rrr3_rec_hits': 91,
-    'rrr3_same_rounds': 228, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 215, 'rrr3_wide_hits': 22, 'rrr3_yx_rounds': 210, 'rrr3_yx_hits': 18,
-    'rrr3_strong_rounds': 206, 'rrr3_strong_hits': 29, 'rrr3_same2_rounds': 203, 'rrr3_same2_hits': 4,
-    'rrr3_turn_rounds': 210, 'rrr3_turn_hits': 3, 'rrr3_sameyx_rounds': 210, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 145, 'power_hits': 88,
+    'rrr3_rounds': 256, 'rrr3_hits': 10, 'rrr3_rec_rounds': 257, 'rrr3_rec_hits': 91,
+    'rrr3_same_rounds': 229, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 216, 'rrr3_wide_hits': 22, 'rrr3_yx_rounds': 211, 'rrr3_yx_hits': 18,
+    'rrr3_strong_rounds': 207, 'rrr3_strong_hits': 29, 'rrr3_same2_rounds': 204, 'rrr3_same2_hits': 4,
+    'rrr3_turn_rounds': 211, 'rrr3_turn_hits': 3, 'rrr3_sameyx_rounds': 211, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 146, 'power_hits': 88,
 }
 
 
@@ -2896,6 +2896,32 @@ def rrr3_both_cut(x_op, y_op):
     if nx_num not in RRR3_STEP_DOWN or ny_num not in RRR3_STEP_DOWN:
         return None
     return 'cut' + RRR3_STEP_DOWN[nx_num], 'cut' + RRR3_STEP_DOWN[ny_num]
+
+
+def _rrr_nc_special(ep, row_ops):
+    """NC/CUT SPECIAL (user, 2026-10-15): for every NEXT OPERATION row whose
+    xy or yx is nc/cut, cut/nc or nc/nc, the row after it with its xy and
+    yx modified every way — each side as is, sign flipped, cut switched,
+    or both.  Returns [(trigger row, next row, [(number, 'x/y'), ...])]."""
+    special = {('no_change', 'cut'), ('cut', 'no_change'), ('no_change', 'no_change')}
+    def forms(o_):
+        return list(dict.fromkeys([o_, SIGN_FLIP[o_], KK_CUT_TOGGLE[o_], KK_CUT_TOGGLE[SIGN_FLIP[o_]]]))
+    out = []
+    for k_ in range(len(row_ops) - 1):
+        _, tx, ty = row_ops[k_]
+        if (tx, ty) not in special and (ty, tx) not in special:
+            continue
+        _, nx, ny = row_ops[k_ + 1]
+        seen, lst = set(), []
+        for a_, b_ in ((nx, ny), (ny, nx)):
+            for fx in forms(a_):
+                for fy in forms(b_):
+                    v_ = compute_variants(ep, fx, fy)[0]
+                    if v_ not in seen:
+                        seen.add(v_)
+                        lst.append((v_, f"{OP_ABBREV[fx]}/{OP_ABBREV[fy]}"))
+        out.append((row_ops[k_], row_ops[k_ + 1], lst))
+    return out
 
 
 def _rrr_ocjp(ep, both_cut):
@@ -3138,8 +3164,10 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     live = grid_ep is not None and grid_ep >= 0
     star = (lambda v: '★' if v // 10 == cut(grid_ep // 10) else ' ') if live else (lambda v: ' ')
     both_cut = []          # every RRR number with the types of its new x / new y
+    row_ops  = []          # (pos, new x, new y) of every row, in table order
     for pos, a, b, x_op, y_op, mark in src:
         nx, ny   = rrr_next_op(x_op, y_op)
+        row_ops.append((pos, nx, ny))
         xy, yx   = compute_variants(ep, nx, ny)[:2]
         nxa, nya = OP_ABBREV[nx], OP_ABBREV[ny]
         both_cut += [(xy, (_op_type(nx), _op_type(ny)), f"{nxa}/{nya}"),
@@ -3152,6 +3180,20 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              "  new x = old y, cut switched + sign flipped   |   new y = old x, cut switched, one step down",
              "  LAST = the chain's own last step.  Backtest (57,662 positions): table hit 6.42% vs 6.44% chance.",
              f"  Live record: table hit {RRR_LIVE['table_hits']} of {RRR_LIVE['table_rounds']} rounds (about {RRR_LIVE['table_chance']} expected by chance)."]
+    # NC/CUT SPECIAL (user's screenshot, 2026-10-15, result 33 after 57):
+    # a row whose xy or yx is nc/cut, cut/nc or nc/nc points to the row
+    # after it; that row's xy and yx are modified every way (each side as
+    # is, sign flipped, cut switched, both) — Op16 65 (nc/cut) -> Op21
+    # +2/c+2 -> c+2/c-2 = 33 on EP 60
+    nc_spec = _rrr_nc_special(ep, row_ops)
+    if nc_spec:
+        body += ["", f"  NC/CUT SPECIAL  —  after an nc/cut, cut/nc or nc/nc row: next row modified, EP={ep:02d}"]
+        for trig, nxt, lst in nc_spec:
+            body.append(f"  [{pos_prefix}{trig[0]}] {OP_ABBREV[trig[1]]}/{OP_ABBREV[trig[2]]}  →  "
+                        f"[{pos_prefix}{nxt[0]}] xy {OP_ABBREV[nxt[1]]}/{OP_ABBREV[nxt[2]]}, yx {OP_ABBREV[nxt[2]]}/{OP_ABBREV[nxt[1]]}:")
+            for k_ in range(0, len(lst), 5):
+                body.append("     " + '   '.join(f"{v_:02d}{star(v_)}({lab_})" for v_, lab_ in lst[k_:k_ + 5]))
+        body.append("  each side as is, sign flipped, cut switched, or both (all in the declared cell)")
     rrr_tbl = list(body)    # the RRR table alone, shown again under the ROUND SUMMARY
     la, picks = _rrr3_rows(entries, ep)
     row, why  = _rrr3_last(entries, ep)
@@ -4812,6 +4854,16 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         strong_lab.setdefault(nv_, lab_)
         if strong_votes.get(nv_, 0) < 14.300000005:
             strong_votes[nv_] = 14.300000005
+    # 81. result 33 after 57 (series K, user's screenshot) — the NC/CUT
+    #     SPECIAL numbers (the row after an nc/cut, cut/nc or nc/nc row,
+    #     modified every way) go to the declared cell
+    for _, _, lst_ in nc_spec:
+        for nv_, lab_ in lst_:
+            if nv_ not in [v for v, _ in fam_seats]:
+                fam_seats = fam_seats + [(nv_, lab_)]
+            strong_lab.setdefault(nv_, lab_)
+            if strong_votes.get(nv_, 0) < 14.300000004:
+                strong_votes[nv_] = 14.300000004
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json
@@ -4832,6 +4884,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             json.dump({'ep': ep, 'grid_ep': grid_ep, 'strong': strong,
                        'table': [[v, lab] for v, _, lab in both_cut],
                        'ocjp': [o[0] for o in _rrr_ocjp(ep, both_cut)],
+                       'ncspec': [v for _, _, l_ in nc_spec for v, _ in l_],
                        'rule_seats': [v for v, _ in rule_seats], 'fam_seats': [v for v, _ in fam_seats],
                        'rec': [v for v, _ in rec], 'yx': [v for v, _ in rec_yx], 'wide': [v for v, _ in wide],
                        'found': [int(n[:2]) for n, _ in found],
@@ -5866,6 +5919,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: every RRR: NEXT OPERATION table number, xy and yx (89 (+1/-1))",
                        "     declared cell: the SAME OPERATION AGAIN crossed, yx and yx turned (old y cut removed, old x sign flipped) (+1/-1 -> 45 (-1/-1))",
                        "     declared cell: the NEXT OPERATION-OCJP places 31-38, one operation on both sides (-1/-1 -> 57)",
+                       "     declared cell: NC/CUT SPECIAL, the row after an nc/cut, cut/nc or nc/nc row modified every way (+2/c+2 -> c+2/c-2 = 33)",
                        "     declared cell: every 3RRR RESULT number, not only the first (94 65 66 36 -> 36)",
                        "     declared cell: the 3RRR WIDE list numbers (96 (c+1/+2))",
                        "     declared cell: the band numbers one and two below the declared number with their x sign flipped (74 (+1/+2) -> 54 (-1/+2))",

@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 570, 'tens_cut': 90, 'short_list': 137,
-    'table_rounds': 560, 'table_hits': 70, 'table_chance': 33, 'declared': 525, 'declared_hits': 10,
+    'results': 571, 'tens_cut': 90, 'short_list': 137,
+    'table_rounds': 561, 'table_hits': 70, 'table_chance': 33, 'declared': 526, 'declared_hits': 10,
     'band_hits': 52, 'units_hits': 62, 'second_hits': 14,
     'same_tens': 25,
-    'rrr3_rounds': 256, 'rrr3_hits': 10, 'rrr3_rec_rounds': 257, 'rrr3_rec_hits': 91,
-    'rrr3_same_rounds': 229, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 216, 'rrr3_wide_hits': 22, 'rrr3_yx_rounds': 211, 'rrr3_yx_hits': 18,
-    'rrr3_strong_rounds': 207, 'rrr3_strong_hits': 29, 'rrr3_same2_rounds': 204, 'rrr3_same2_hits': 4,
-    'rrr3_turn_rounds': 211, 'rrr3_turn_hits': 3, 'rrr3_sameyx_rounds': 211, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 146, 'power_hits': 88,
+    'rrr3_rounds': 257, 'rrr3_hits': 10, 'rrr3_rec_rounds': 258, 'rrr3_rec_hits': 91,
+    'rrr3_same_rounds': 230, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 217, 'rrr3_wide_hits': 23, 'rrr3_yx_rounds': 212, 'rrr3_yx_hits': 18,
+    'rrr3_strong_rounds': 208, 'rrr3_strong_hits': 29, 'rrr3_same2_rounds': 205, 'rrr3_same2_hits': 4,
+    'rrr3_turn_rounds': 212, 'rrr3_turn_hits': 3, 'rrr3_sameyx_rounds': 212, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 147, 'power_hits': 89,
 }
 
 
@@ -2922,6 +2922,22 @@ def _rrr_nc_special(ep, row_ops):
                         lst.append((v_, f"{OP_ABBREV[fx]}/{OP_ABBREV[fy]}"))
         out.append((row_ops[k_], row_ops[k_ + 1], lst))
     return out
+
+
+_X_STEP_SWITCH = {'+1': '+2', '+2': '+1', '-1': '-2', '-2': '-1',
+                  'cut+1': 'cut+2', 'cut+2': 'cut+1', 'cut-1': 'cut-2', 'cut-2': 'cut-1'}
+
+
+def _rrr_ocjp_xswitch(ep, lab):
+    """OCJP companion (user, 2026-10-15: "26. 60 (-1/c+1) please include
+    -2/c+1", result 50 after 33): the place's operation with the x step
+    switched (1 <-> 2), y kept.  None when x has no step (nc, cut)."""
+    rev = {v_: k_ for k_, v_ in OP_ABBREV.items()}
+    lx, ly = lab.split('/')
+    ox = _X_STEP_SWITCH.get(rev[lx])
+    if ox is None:
+        return None
+    return compute_variants(ep, ox, rev[ly])[0], f"{OP_ABBREV[ox]}/{ly}"
 
 
 def _rrr_ocjp(ep, both_cut):
@@ -4883,7 +4899,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         with open(os.environ['RRR3_DUMP2'], 'w') as fh:
             json.dump({'ep': ep, 'grid_ep': grid_ep, 'strong': strong,
                        'table': [[v, lab] for v, _, lab in both_cut],
-                       'ocjp': [o[0] for o in _rrr_ocjp(ep, both_cut)],
+                       'ocjp': [o[0] for o in _rrr_ocjp(ep, both_cut)]
+                               + [w[0] for w in (_rrr_ocjp_xswitch(ep, o[1]) for o in _rrr_ocjp(ep, both_cut)) if w],
                        'ncspec': [v for _, _, l_ in nc_spec for v, _ in l_],
                        'rule_seats': [v for v, _ in rule_seats], 'fam_seats': [v for v, _ in fam_seats],
                        'rec': [v for v, _ in rec], 'yx': [v for v, _ in rec_yx], 'wide': [v for v, _ in wide],
@@ -5763,11 +5780,15 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         if o_list:
             # a grid like the STRONG 20 box: 5 columns, 6 rows, every place
             # shown, repeats too (user's screenshot, 2026-10-14)
+            # every place also with its x step switched, after the comma, + mark
+            # (user, 2026-10-15: 26. 60 (-1/c+1) -> 50 (-2/c+1))
+            o_sw = [_rrr_ocjp_xswitch(ep, lab_) for _, lab_, _, _ in o_list]
             o_cells = [f"{k_:>2}. {v_:02d} ({lab_}){'~' if n_ else ''}{' °' if k_ > 30 else ' ^' if k_ > 20 else ''}"
-                       for v_, lab_, k_, n_ in o_list]
+                       + (f", {w_[0]:02d}+ ({w_[1]})" if w_ else '')
+                       for (v_, lab_, k_, n_), w_ in zip(o_list, o_sw)]
             o_cw = max(len(c) for c in o_cells) + 2
             o_per = 5
-            o_uniq = sorted(set(v_ for v_, _, _, _ in o_list))
+            o_uniq = sorted(set(v_ for v_, _, _, _ in o_list) | {w_[0] for w_ in o_sw if w_})
             o_gw = o_per * (o_cw + 1) - 1
             o_body = [f"★  NEXT OPERATION-OCJP  —  from the LAST row {both_cut[-2][0]:02d} ({both_cut[-2][2]}),"
                       f" {both_cut[-1][0]:02d} ({both_cut[-1][2]})  on EP={ep:02d}  ★", "",
@@ -5780,6 +5801,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             o_body.append('└' + '┴'.join('─' * o_cw for _ in range(o_per)) + '┘')
             o_body += ["", f"ALL ({len(o_uniq)}): " + ' '.join(f"{v_:02d}" for v_ in o_uniq),
                        "1-20 = the user's operations;  21-30 ^ = mirror forms;  31-38 ° = one operation, sign flipped on one side",
+                       "after the comma, + = the same place with its x step switched (1 <-> 2), y kept (-1/c+1 -> -2/c+1)",
                        "~ = that place repeated an operation already shown, so it takes the next unused one (none left = place empty)",
                        "built from the two operations: sign flipped, cut switched on / off.  Re-run of 140 J/K rounds:",
                        "  41 hits, about 47 expected by its size alone — a list to watch, not a proven edge"]

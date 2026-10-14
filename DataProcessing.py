@@ -2960,6 +2960,23 @@ def _rrr_ocjp_more(ep, lab):
             (compute_variants(ep, ox, oy)[0], f"{OP_ABBREV[ox]}/{OP_ABBREV[oy]}")]
 
 
+def _rrr_final4(cands, lists, tie_lists, place):
+    """OCJP FINAL 4 (2026-10-15): among the OCJP numbers, the 4 that the
+    most of the never-repaired lists also hold (RECOMMENDED, RRR table,
+    same op again, WIDE, yx, 3RRR RESULT); ties: more of the other lists
+    (STRONG 20, declared cell, NC/CUT SPECIAL), then the lower number
+    (ranking by the earlier OCJP place instead gave 7.3%, noise).  Walk-forward on 436 past rounds
+    (b c d f h i j k): 36 hits = 8.3% against 4.0% for any 4 numbers,
+    the same in the old series (8.3%) and in J/K (8.2%).
+    Returns [(number, [list names])]."""
+    def votes(v):
+        return [n_ for n_, l_ in lists.items() if v in l_]
+    def tie(v):
+        return sum(v in l_ for l_ in tie_lists)
+    top = sorted(cands, key=lambda v: (-len(votes(v)), -tie(v), v))[:4]
+    return [(v, votes(v)) for v in top]
+
+
 def _rrr_ocjp(ep, both_cut):
     """NEXT OPERATION-OCJP (user's screenshot, 2026-10-14): the two operations
     of the RRR table's LAST row, X/Y (xy) and Y/X (yx), worked into more
@@ -4946,6 +4963,11 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                                + [w[0] for w in (_rrr_ocjp_xswitch(ep, o[1]) for o in _rrr_ocjp(ep, both_cut)) if w]
                                + [m[0] for o in _rrr_ocjp(ep, both_cut) for m in _rrr_ocjp_more(ep, o[1])],
                        'ncspec': [v for _, _, l_ in nc_spec for v, _ in l_],
+                       'ocjp_full': [[o[0], o[1], o[2], 'base'] for o in _rrr_ocjp(ep, both_cut)]
+                                    + [[w[0], w[1], o[2], 'plus'] for o in _rrr_ocjp(ep, both_cut)
+                                       for w in [_rrr_ocjp_xswitch(ep, o[1])] if w]
+                                    + [[m[0], m[1], o[2], 'star'] for o in _rrr_ocjp(ep, both_cut)
+                                       for m in _rrr_ocjp_more(ep, o[1])],
                        'rule_seats': [v for v, _ in rule_seats], 'fam_seats': [v for v, _ in fam_seats],
                        'rec': [v for v, _ in rec], 'yx': [v for v, _ in rec_yx], 'wide': [v for v, _ in wide],
                        'found': [int(n[:2]) for n, _ in found],
@@ -5835,6 +5857,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         # NEXT OPERATION-OCJP below the CharRow box, in the triple
         # Indian-flag border (user's screenshot, 2026-10-14): the LAST row's
         # two operations worked into 30 operations on the EP
+        ocjp_final4 = []
         o_list = _rrr_ocjp(ep, both_cut)
         if o_list:
             # a grid like the STRONG 20 box: 5 columns, 6 rows, every place
@@ -5880,6 +5903,34 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                          + [f"{c_}┗{'━' * w_}┛{s_rst}"])
             _RRR3_PREV['ocjp'] = o_uniq
             strong_lines += [' ' * (s_tw + 4) + '  ' + l_ for l_ in o_box]
+            # OCJP FINAL 4 below the OCJP box (user, 2026-10-15: "mark only 4
+            # as prediction final numbers"), chosen by _rrr_final4
+            f4_lists = {'RECOMMENDED': [v for v, _ in rec], 'RRR table': [v for v, _, _ in both_cut],
+                        'same op again': [a_[0] for a_ in (same, same2, same_turn if same else None,
+                                                           same_yx if same else None) if a_],
+                        'WIDE': [v for v, _ in wide], 'yx': [v for v, _ in rec_yx],
+                        '3RRR RESULT': [int(n_[:2]) for n_, _ in found]}
+            f4_place = {}
+            for v_, _, k_, _ in o_list:
+                f4_place.setdefault(v_, k_)
+            for (_, _, k_, _), w_, mo_ in zip(o_list, o_sw, o_mo):
+                for x_ in ([w_] if w_ else []) + mo_:
+                    f4_place.setdefault(x_[0], k_)
+            ocjp_final4 = _rrr_final4(o_uniq, f4_lists,
+                                      [strong, [v for v, _ in fam_seats], [v for _, _, l_ in nc_spec for v, _ in l_]],
+                                      f4_place)
+            f4_body = [f"★  OCJP FINAL 4  —  after {grid_ep:02d}, EP={ep:02d}  ★", ""]
+            for k_, (v_, nm_) in enumerate(ocjp_final4):
+                f4_body.append(f"{k_ + 1}. {v_:02d} ({OP_ABBREV[find_op(ep // 10, v_ // 10)]}/{OP_ABBREV[find_op(ep % 10, v_ % 10)]})"
+                               f"   in {len(nm_)} lists: {', '.join(nm_) if nm_ else '-'}")
+            f4_body += ["", "the OCJP numbers most of the never-repaired lists also hold",
+                        "(RECOMMENDED, RRR table, same op again, WIDE, yx, 3RRR RESULT)",
+                        "walk-forward, 436 past rounds: 36 hits = 8.3%; any 4 numbers = 4.0%",
+                        "about twice chance, but it still misses about 92 rounds in 100"]
+            f4_w = max(len(l_) for l_ in f4_body) + 2
+            strong_lines += [' ' * (s_tw + 4) + '  ' + f"{s_g}┌{'─' * f4_w}┐{s_rst}"]
+            strong_lines += [' ' * (s_tw + 4) + '  ' + f"{s_g}│{s_rst} \033[1m{l_:<{f4_w - 2}}{s_rst} {s_g}│{s_rst}" for l_ in f4_body]
+            strong_lines += [' ' * (s_tw + 4) + '  ' + f"{s_g}└{'─' * f4_w}┘{s_rst}"]
         # the three tables (STRONG 20, CharRow no repeats, STRONG 20
         # ADJUSTMENTS) once more at the very end of the page, in the triple
         # Indian-flag border (user's screenshot, 2026-10-13)
@@ -5934,6 +5985,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         if hot20:
             r_rows.append(("HOT 20", ' '.join(f"{v_:02d}" for v_ in hot20),
                            "came most often in all the data (23% vs 20%)"))
+        if ocjp_final4:
+            r_rows.append(("OCJP FINAL 4", '  '.join(_s_lab(v_) for v_, _ in ocjp_final4),
+                           "OCJP numbers most never-repaired lists hold (8.3% vs 4%)"))
         r_w = [max(len(r_[k_]) for r_ in r_rows) + 2 for k_ in range(3)]
         r_tw = sum(r_w) + 2
         r_title = f"★  ROUND SUMMARY  —  after {grid_ep:02d}, operations on EP={ep:02d}  ★"

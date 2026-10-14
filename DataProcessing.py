@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 559, 'tens_cut': 90, 'short_list': 137,
-    'table_rounds': 549, 'table_hits': 69, 'table_chance': 33, 'declared': 514, 'declared_hits': 10,
+    'results': 560, 'tens_cut': 90, 'short_list': 137,
+    'table_rounds': 550, 'table_hits': 69, 'table_chance': 33, 'declared': 515, 'declared_hits': 10,
     'band_hits': 52, 'units_hits': 62, 'second_hits': 14,
     'same_tens': 25,
-    'rrr3_rounds': 245, 'rrr3_hits': 9, 'rrr3_rec_rounds': 246, 'rrr3_rec_hits': 85,
-    'rrr3_same_rounds': 218, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 205, 'rrr3_wide_hits': 21, 'rrr3_yx_rounds': 200, 'rrr3_yx_hits': 18,
-    'rrr3_strong_rounds': 196, 'rrr3_strong_hits': 29, 'rrr3_same2_rounds': 193, 'rrr3_same2_hits': 4,
-    'rrr3_turn_rounds': 200, 'rrr3_turn_hits': 2, 'rrr3_sameyx_rounds': 200, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 135, 'power_hits': 83,
+    'rrr3_rounds': 246, 'rrr3_hits': 9, 'rrr3_rec_rounds': 247, 'rrr3_rec_hits': 85,
+    'rrr3_same_rounds': 219, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 206, 'rrr3_wide_hits': 22, 'rrr3_yx_rounds': 201, 'rrr3_yx_hits': 18,
+    'rrr3_strong_rounds': 197, 'rrr3_strong_hits': 29, 'rrr3_same2_rounds': 194, 'rrr3_same2_hits': 4,
+    'rrr3_turn_rounds': 201, 'rrr3_turn_hits': 2, 'rrr3_sameyx_rounds': 201, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 136, 'power_hits': 83,
 }
 
 
@@ -4711,6 +4711,15 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             strong_lab.setdefault(nv_, lab_)
             if strong_votes.get(nv_, 0) < 14.30000001:
                 strong_votes[nv_] = 14.30000001
+    # 76. result 96 after 34 (series K) — the 3RRR WIDE list (rule G: single
+    #     moves seen on middle rows, tried on every row) held 96 (c+1/+2) but
+    #     the cell did not.  The wide numbers go to the declared cell
+    for nv_, lab_ in wide:
+        if nv_ not in [v for v, _ in fam_seats]:
+            fam_seats = fam_seats + [(nv_, lab_)]
+        strong_lab.setdefault(nv_, lab_)
+        if strong_votes.get(nv_, 0) < 14.300000009:
+            strong_votes[nv_] = 14.300000009
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json
@@ -5725,6 +5734,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the SAME OPERATION AGAIN number (the last round's operation on this EP) is in the cell (cut/c-2 again -> 26)",
                        "     declared cell: the EP and a 3RRR RESULT number of the same family (02 and 70) bring the EP with both digits cut (02 -> 57)",
                        "     declared cell: the first 3RRR RESULT number itself is in the cell (08)",
+                       "     declared cell: the 3RRR WIDE list numbers (96 (c+1/+2))",
                        "     declared cell: the band numbers one and two below the declared number with their x sign flipped (74 (+1/+2) -> 54 (-1/+2))",
                        "     declared cell: the STRONG 20 seats below the band with y cut toggled (67 (-1/-1) -> 62 (-1/c-1))",
                        "     declared cell: RECOMMENDED F, the last row not crossed with one side dropped to nc (55 (-2/nc))",

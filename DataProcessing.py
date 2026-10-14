@@ -5536,6 +5536,18 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         if star_turn_:
             r_rows.append(("Star pick turns", ', '.join(_s_lab(v_) for v_ in star_turn_),
                            "the ★ pick with each plain step turned to cut and to nc"))
+        # HOT 20 (2026-10-14): the 20 numbers that came most often in the
+        # whole data so far (ties: lower number).  Walk-forward on 2,823 older
+        # rounds of series J: 23% against 20% by chance — a small edge, the
+        # only one found; shown beside STRONG 20, which it does not change
+        h_cnt = {}
+        for v_ in _RRR3_PREV.get('flat', []):
+            h_cnt[v_] = h_cnt.get(v_, 0) + 1
+        hot20 = sorted(h_cnt, key=lambda v_: (-h_cnt[v_], v_))[:20]
+        _RRR3_PREV['hot20'] = hot20
+        if hot20:
+            r_rows.append(("HOT 20", ' '.join(f"{v_:02d}" for v_ in hot20),
+                           "came most often in all the data (23% vs 20%)"))
         r_w = [max(len(r_[k_]) for r_ in r_rows) + 2 for k_ in range(3)]
         r_tw = sum(r_w) + 2
         r_title = f"★  ROUND SUMMARY  —  after {grid_ep:02d}, operations on EP={ep:02d}  ★"
@@ -6118,6 +6130,7 @@ def run(data_source, user_x_op=None, user_y_op=None):
                                       final40=[v for v, _, _ in _last_top4[:40]])
     _RRR3_PREV['op'] = _rrr3_previous_op(rows)
     _RRR3_PREV['op2'] = _rrr3_previous_op(rows, back=2)
+    _RRR3_PREV['flat'] = [v for row in rows for v in row if v >= 0]
     _kk_chain_vals = show_kk_chain_family(group_index, grid_ep=endpoint)
     _super_add("KK", _kk_vals or [])
     _super_add("KC", _kk_chain_vals or [])

@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 576, 'tens_cut': 90, 'short_list': 137,
-    'table_rounds': 566, 'table_hits': 71, 'table_chance': 33, 'declared': 531, 'declared_hits': 10,
+    'results': 577, 'tens_cut': 90, 'short_list': 137,
+    'table_rounds': 567, 'table_hits': 71, 'table_chance': 33, 'declared': 532, 'declared_hits': 10,
     'band_hits': 52, 'units_hits': 62, 'second_hits': 14,
     'same_tens': 25,
-    'rrr3_rounds': 262, 'rrr3_hits': 10, 'rrr3_rec_rounds': 263, 'rrr3_rec_hits': 92,
-    'rrr3_same_rounds': 235, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 222, 'rrr3_wide_hits': 23, 'rrr3_yx_rounds': 217, 'rrr3_yx_hits': 18,
-    'rrr3_strong_rounds': 213, 'rrr3_strong_hits': 29, 'rrr3_same2_rounds': 210, 'rrr3_same2_hits': 4,
-    'rrr3_turn_rounds': 217, 'rrr3_turn_hits': 3, 'rrr3_sameyx_rounds': 217, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 152, 'power_hits': 91,
+    'rrr3_rounds': 263, 'rrr3_hits': 10, 'rrr3_rec_rounds': 264, 'rrr3_rec_hits': 93,
+    'rrr3_same_rounds': 236, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 223, 'rrr3_wide_hits': 23, 'rrr3_yx_rounds': 218, 'rrr3_yx_hits': 18,
+    'rrr3_strong_rounds': 214, 'rrr3_strong_hits': 29, 'rrr3_same2_rounds': 211, 'rrr3_same2_hits': 4,
+    'rrr3_turn_rounds': 218, 'rrr3_turn_hits': 4, 'rrr3_sameyx_rounds': 218, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 153, 'power_hits': 92,
 }
 
 
@@ -2936,7 +2936,12 @@ def _rrr_ocjp_xswitch(ep, lab):
     lx, ly = lab.split('/')
     ox = _X_STEP_SWITCH.get(rev[lx])
     if ox is None:
-        return None
+        # x has no step (nc, cut): the y step switched instead (user,
+        # 2026-10-15: "nc/+1 missed", 18 (nc/+2) -> 17 (nc/+1) after 45)
+        oy = _X_STEP_SWITCH.get(rev[ly])
+        if oy is None:
+            return None
+        return compute_variants(ep, rev[lx], oy)[0], f"{lx}/{OP_ABBREV[oy]}"
     return compute_variants(ep, ox, rev[ly])[0], f"{OP_ABBREV[ox]}/{ly}"
 
 
@@ -5839,7 +5844,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             o_body.append('└' + '┴'.join('─' * o_cw for _ in range(o_per)) + '┘')
             o_body += ["", f"ALL ({len(o_uniq)}): " + ' '.join(f"{v_:02d}" for v_ in o_uniq),
                        "1-20 = the user's operations;  21-30 ^ = mirror forms;  31-38 ° = one operation, sign flipped on one side",
-                       "after the comma, + = the same place with its x step switched (1 <-> 2), y kept (-1/c+1 -> -2/c+1)",
+                       "after the comma, + = the same place with its x step switched (1 <-> 2), y kept (-1/c+1 -> -2/c+1);",
+                       "  when x is nc or cut, the y step switched instead (nc/+2 -> nc/+1)",
                        "~ = that place repeated an operation already shown, so it takes the next unused one (none left = place empty)",
                        "built from the two operations: sign flipped, cut switched on / off.  Re-run of 140 J/K rounds:",
                        "  41 hits, about 47 expected by its size alone — a list to watch, not a proven edge"]

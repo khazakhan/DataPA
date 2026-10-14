@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 529, 'tens_cut': 87, 'short_list': 134,
-    'table_rounds': 519, 'table_hits': 64, 'table_chance': 33, 'declared': 484, 'declared_hits': 9,
+    'results': 530, 'tens_cut': 87, 'short_list': 134,
+    'table_rounds': 520, 'table_hits': 64, 'table_chance': 33, 'declared': 485, 'declared_hits': 9,
     'band_hits': 50, 'units_hits': 61, 'second_hits': 14,
     'same_tens': 25,
-    'rrr3_rounds': 215, 'rrr3_hits': 9, 'rrr3_rec_rounds': 216, 'rrr3_rec_hits': 74,
-    'rrr3_same_rounds': 188, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 175, 'rrr3_wide_hits': 16, 'rrr3_yx_rounds': 170, 'rrr3_yx_hits': 15,
-    'rrr3_strong_rounds': 166, 'rrr3_strong_hits': 23, 'rrr3_same2_rounds': 163, 'rrr3_same2_hits': 3,
-    'rrr3_turn_rounds': 170, 'rrr3_turn_hits': 2, 'rrr3_sameyx_rounds': 170, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 105, 'power_hits': 62,
+    'rrr3_rounds': 216, 'rrr3_hits': 9, 'rrr3_rec_rounds': 217, 'rrr3_rec_hits': 74,
+    'rrr3_same_rounds': 189, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 176, 'rrr3_wide_hits': 16, 'rrr3_yx_rounds': 171, 'rrr3_yx_hits': 15,
+    'rrr3_strong_rounds': 167, 'rrr3_strong_hits': 23, 'rrr3_same2_rounds': 164, 'rrr3_same2_hits': 3,
+    'rrr3_turn_rounds': 171, 'rrr3_turn_hits': 2, 'rrr3_sameyx_rounds': 171, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 106, 'power_hits': 62,
 }
 
 
@@ -4566,6 +4566,13 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         strong_lab.setdefault(nv_, lab_)
         if strong_votes.get(nv_, 0) < 14.3000001:
             strong_votes[nv_] = 14.3000001
+    # 66. result 72 after 55 — a STRONG 20 rule seat (seat 1: the first both-
+    #     cut number with y sign flipped and cut toggled, 12 (+2/c-2) ->
+    #     72 (-2/c-2)) lost its seat and was in no list.  Every rule seat
+    #     now also goes to the declared cell; the 20 do not change
+    for nv_, nlab_ in rule_seats:
+        if nv_ not in [v for v, _ in fam_seats]:
+            fam_seats = fam_seats + [(nv_, nlab_)]
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json
@@ -5565,6 +5572,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the SAME OPERATION AGAIN number (the last round's operation on this EP) is in the cell (cut/c-2 again -> 26)",
                        "     declared cell: the EP and a 3RRR RESULT number of the same family (02 and 70) bring the EP with both digits cut (02 -> 57)",
                        "     declared cell: the first 3RRR RESULT number itself is in the cell (08)",
+                       "     declared cell: every STRONG 20 rule seat, also the ones that lost their seat (72 (-2/c-2))",
                        "     declared cell: the 2nd number with its y sign flipped (51 (c+1/c-2) -> 55 (c+1/c+2))",
                        "     declared cell: the same STRONG 20 number (step on x, cut on y) brings its full opposite, x sign flipped and the cut taken off y (32 (+1/cut) -> 17 (-1/nc))",
                        "     declared cell: the first STRONG 20 number above the band with a step on x and a cut on y brings its opposite, the cut moved to x (26 (+2/cut) -> 71 (c+2/nc))",

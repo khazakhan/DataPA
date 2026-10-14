@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 539, 'tens_cut': 89, 'short_list': 136,
-    'table_rounds': 529, 'table_hits': 66, 'table_chance': 33, 'declared': 494, 'declared_hits': 9,
+    'results': 540, 'tens_cut': 89, 'short_list': 136,
+    'table_rounds': 530, 'table_hits': 66, 'table_chance': 33, 'declared': 495, 'declared_hits': 9,
     'band_hits': 51, 'units_hits': 61, 'second_hits': 14,
     'same_tens': 25,
-    'rrr3_rounds': 225, 'rrr3_hits': 9, 'rrr3_rec_rounds': 226, 'rrr3_rec_hits': 79,
-    'rrr3_same_rounds': 198, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 185, 'rrr3_wide_hits': 16, 'rrr3_yx_rounds': 180, 'rrr3_yx_hits': 16,
-    'rrr3_strong_rounds': 176, 'rrr3_strong_hits': 25, 'rrr3_same2_rounds': 173, 'rrr3_same2_hits': 4,
-    'rrr3_turn_rounds': 180, 'rrr3_turn_hits': 2, 'rrr3_sameyx_rounds': 180, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 115, 'power_hits': 71,
+    'rrr3_rounds': 226, 'rrr3_hits': 9, 'rrr3_rec_rounds': 227, 'rrr3_rec_hits': 79,
+    'rrr3_same_rounds': 199, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 186, 'rrr3_wide_hits': 16, 'rrr3_yx_rounds': 181, 'rrr3_yx_hits': 16,
+    'rrr3_strong_rounds': 177, 'rrr3_strong_hits': 25, 'rrr3_same2_rounds': 174, 'rrr3_same2_hits': 4,
+    'rrr3_turn_rounds': 181, 'rrr3_turn_hits': 2, 'rrr3_sameyx_rounds': 181, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 116, 'power_hits': 71,
 }
 
 
@@ -4604,6 +4604,18 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             strong_lab.setdefault(nv_, lab_)
             if strong_votes.get(nv_, 0) < 14.30000009:
                 strong_votes[nv_] = 14.30000009
+    # 68. result 45 after 68 (series K) — a star pick turn with a plain cut
+    #     on y (46 (cut/cut)) comes with its y one step down (45 (cut/c-1)),
+    #     as rule 61 does for the STRONG 20.  Declared cell only
+    for a_ in list(star_turn_):
+        if find_op(ep % 10, a_ % 10) == 'cut':
+            nv_ = (a_ // 10) * 10 + (a_ % 10 - 1) % 10
+            lab_ = f"{OP_ABBREV[find_op(ep // 10, nv_ // 10)]}/c-1"
+            if nv_ not in [v for v, _ in fam_seats]:
+                fam_seats = fam_seats + [(nv_, lab_)]
+            strong_lab.setdefault(nv_, lab_)
+            if strong_votes.get(nv_, 0) < 14.30000008:
+                strong_votes[nv_] = 14.30000008
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json
@@ -5618,6 +5630,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the SAME OPERATION AGAIN number (the last round's operation on this EP) is in the cell (cut/c-2 again -> 26)",
                        "     declared cell: the EP and a 3RRR RESULT number of the same family (02 and 70) bring the EP with both digits cut (02 -> 57)",
                        "     declared cell: the first 3RRR RESULT number itself is in the cell (08)",
+                       "     declared cell: a star pick turn with a cut on y comes with its y one step down (46 (cut/cut) -> 45 (cut/c-1))",
                        "     declared cell: the star pick with each plain step (+1/-1, +2/-2) turned to cut and to nc (28 (+1/-2) -> 68 18 25 20)",
                        "     declared cell: every STRONG 20 rule seat, also the ones that lost their seat (72 (-2/c-2))",
                        "     declared cell: the 2nd number with its y sign flipped (51 (c+1/c-2) -> 55 (c+1/c+2))",

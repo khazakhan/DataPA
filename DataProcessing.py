@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 565, 'tens_cut': 90, 'short_list': 137,
-    'table_rounds': 555, 'table_hits': 70, 'table_chance': 33, 'declared': 520, 'declared_hits': 10,
+    'results': 566, 'tens_cut': 90, 'short_list': 137,
+    'table_rounds': 556, 'table_hits': 70, 'table_chance': 33, 'declared': 521, 'declared_hits': 10,
     'band_hits': 52, 'units_hits': 62, 'second_hits': 14,
     'same_tens': 25,
-    'rrr3_rounds': 251, 'rrr3_hits': 10, 'rrr3_rec_rounds': 252, 'rrr3_rec_hits': 89,
-    'rrr3_same_rounds': 224, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 211, 'rrr3_wide_hits': 22, 'rrr3_yx_rounds': 206, 'rrr3_yx_hits': 18,
-    'rrr3_strong_rounds': 202, 'rrr3_strong_hits': 29, 'rrr3_same2_rounds': 199, 'rrr3_same2_hits': 4,
-    'rrr3_turn_rounds': 206, 'rrr3_turn_hits': 2, 'rrr3_sameyx_rounds': 206, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 141, 'power_hits': 86,
+    'rrr3_rounds': 252, 'rrr3_hits': 10, 'rrr3_rec_rounds': 253, 'rrr3_rec_hits': 90,
+    'rrr3_same_rounds': 225, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 212, 'rrr3_wide_hits': 22, 'rrr3_yx_rounds': 207, 'rrr3_yx_hits': 18,
+    'rrr3_strong_rounds': 203, 'rrr3_strong_hits': 29, 'rrr3_same2_rounds': 200, 'rrr3_same2_hits': 4,
+    'rrr3_turn_rounds': 207, 'rrr3_turn_hits': 3, 'rrr3_sameyx_rounds': 207, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 142, 'power_hits': 86,
 }
 
 
@@ -2904,8 +2904,9 @@ def _rrr_ocjp(ep, both_cut):
     operations on the EP.  s = sign flipped, r = cut switched.  The first 20
     are the user's list (from 61 (c-1/c-2), 52 (c-2/c-1) on EP 28); the
     next 10 (21-30) are their mirror forms; 31-38 are one operation on both
-    sides with the sign flipped on one side (+1/-1), with and without cut.
-    Returns (number, 'x/y', place 1-38, replaced) — every place a different
+    sides with the sign flipped on one side (+1/-1), 39-46 the same with
+    the same sign on both sides (-1/-1), with and without cut.
+    Returns (number, 'x/y', place 1-46, replaced) — every place a different
     operation (user, 2026-10-14)."""
     if len(both_cut) < 2:
         return []
@@ -2928,12 +2929,17 @@ def _rrr_ocjp(ep, both_cut):
     same = []
     for o_ in (X, Y):
         same += [(o_, s[o_]), (s[o_], o_), (r[o_], r[s[o_]]), (r[s[o_]], r[o_])]
+    # 39-46 (user, 2026-10-14: "-1/-1 missed"): one operation on both sides
+    # with the same sign, with and without its cut
+    twin = []
+    for o_ in (X, Y):
+        twin += [(o_, o_), (s[o_], s[o_]), (r[o_], r[o_]), (r[s[o_]], r[s[o_]])]
     # a place whose operation is already shown takes the next unused one
     # (user, 2026-10-14: "all are different operations"): every pair of
     # the two operations' forms (as is, s, r, r s), in that order
     forms = list(dict.fromkeys([X, Y, s[X], s[Y], r[X], r[Y], r[s[X]], r[s[Y]]]))
     spare = [(a_, b_) for a_ in forms for b_ in forms]
-    places = user + mirror + same
+    places = user + mirror + same + twin
     seen = set(places)                 # every place keeps its own operation first
     out, kept = [], set()
     for k_, op_ in enumerate(places):
@@ -4790,6 +4796,17 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         strong_lab.setdefault(nv_, lab_)
         if strong_votes.get(nv_, 0) < 14.300000007:
             strong_votes[nv_] = 14.300000007
+    # 79. result 45 after 89 (series K) — the SAME OPERATION AGAIN crossed
+    #     the user's way (old y without its cut, old x sign flipped) gave
+    #     45 (-1/-1) but the cell did not hold it.  Both crossed forms of the
+    #     last round's operation (yx, and yx turned) go to the declared cell
+    for again_ in ((same_yx, same_turn) if same else ()):
+        nv_, lab_ = again_
+        if nv_ not in [v for v, _ in fam_seats]:
+            fam_seats = fam_seats + [(nv_, lab_)]
+        strong_lab.setdefault(nv_, lab_)
+        if strong_votes.get(nv_, 0) < 14.300000006:
+            strong_votes[nv_] = 14.300000006
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json
@@ -5688,7 +5705,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         if o_list:
             # a grid like the STRONG 20 box: 5 columns, 6 rows, every place
             # shown, repeats too (user's screenshot, 2026-10-14)
-            o_cells = [f"{k_:>2}. {v_:02d} ({lab_}){'~' if n_ else ''}{' °' if k_ > 30 else ' ^' if k_ > 20 else ''}"
+            o_cells = [f"{k_:>2}. {v_:02d} ({lab_}){'~' if n_ else ''}{' *' if k_ > 38 else ' °' if k_ > 30 else ' ^' if k_ > 20 else ''}"
                        for v_, lab_, k_, n_ in o_list]
             o_cw = max(len(c) for c in o_cells) + 2
             o_per = 5
@@ -5704,7 +5721,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 o_body.append('│' + '│'.join(f" {c:<{o_cw - 1}}" for c in row_) + '│')
             o_body.append('└' + '┴'.join('─' * o_cw for _ in range(o_per)) + '┘')
             o_body += ["", f"ALL ({len(o_uniq)}): " + ' '.join(f"{v_:02d}" for v_ in o_uniq),
-                       "1-20 = the user's operations;  21-30 ^ = mirror forms;  31-38 ° = one operation, sign flipped on one side",
+                       "1-20 = the user's operations;  21-30 ^ = mirror forms;  31-38 ° = one operation, sign flipped on one side;",
+                       "39-46 * = one operation, same sign on both sides",
                        "~ = that place repeated an operation already shown, so it takes the next unused one (none left = place empty)",
                        "built from the two operations: sign flipped, cut switched on / off.  Re-run of 140 J/K rounds:",
                        "  41 hits, about 47 expected by its size alone — a list to watch, not a proven edge"]
@@ -5842,6 +5860,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the EP and a 3RRR RESULT number of the same family (02 and 70) bring the EP with both digits cut (02 -> 57)",
                        "     declared cell: the first 3RRR RESULT number itself is in the cell (08)",
                        "     declared cell: every RRR: NEXT OPERATION table number, xy and yx (89 (+1/-1))",
+                       "     declared cell: the SAME OPERATION AGAIN crossed, yx and yx turned (old y cut removed, old x sign flipped) (+1/-1 -> 45 (-1/-1))",
                        "     declared cell: every 3RRR RESULT number, not only the first (94 65 66 36 -> 36)",
                        "     declared cell: the 3RRR WIDE list numbers (96 (c+1/+2))",
                        "     declared cell: the band numbers one and two below the declared number with their x sign flipped (74 (+1/+2) -> 54 (-1/+2))",

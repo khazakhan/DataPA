@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 530, 'tens_cut': 87, 'short_list': 134,
-    'table_rounds': 520, 'table_hits': 64, 'table_chance': 33, 'declared': 485, 'declared_hits': 9,
+    'results': 531, 'tens_cut': 87, 'short_list': 134,
+    'table_rounds': 521, 'table_hits': 64, 'table_chance': 33, 'declared': 486, 'declared_hits': 9,
     'band_hits': 50, 'units_hits': 61, 'second_hits': 14,
     'same_tens': 25,
-    'rrr3_rounds': 216, 'rrr3_hits': 9, 'rrr3_rec_rounds': 217, 'rrr3_rec_hits': 74,
-    'rrr3_same_rounds': 189, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 176, 'rrr3_wide_hits': 16, 'rrr3_yx_rounds': 171, 'rrr3_yx_hits': 15,
-    'rrr3_strong_rounds': 167, 'rrr3_strong_hits': 23, 'rrr3_same2_rounds': 164, 'rrr3_same2_hits': 3,
-    'rrr3_turn_rounds': 171, 'rrr3_turn_hits': 2, 'rrr3_sameyx_rounds': 171, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 106, 'power_hits': 62,
+    'rrr3_rounds': 217, 'rrr3_hits': 9, 'rrr3_rec_rounds': 218, 'rrr3_rec_hits': 74,
+    'rrr3_same_rounds': 190, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 177, 'rrr3_wide_hits': 16, 'rrr3_yx_rounds': 172, 'rrr3_yx_hits': 15,
+    'rrr3_strong_rounds': 168, 'rrr3_strong_hits': 23, 'rrr3_same2_rounds': 165, 'rrr3_same2_hits': 3,
+    'rrr3_turn_rounds': 172, 'rrr3_turn_hits': 2, 'rrr3_sameyx_rounds': 172, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 107, 'power_hits': 63,
 }
 
 
@@ -4573,6 +4573,37 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     for nv_, nlab_ in rule_seats:
         if nv_ not in [v for v, _ in fam_seats]:
             fam_seats = fam_seats + [(nv_, nlab_)]
+    # 67. result 68 after 72 (user's rule) — the star pick 28 (+1/-2): where
+    #     a side has a plain step (+1/-1, +2/-2), the cut and nc on that side
+    #     come too (68 (cut/-2), 18 (nc/-2), 25 (+1/cut), 20 (+1/nc)).  The
+    #     star pick is worked out here the same way as in the ROUND SUMMARY
+    #     (the 20 do not move: these numbers sit under the band; a seat at
+    #     14.5 gained 2 hits and broke 3, the cut number alone gained 1 and
+    #     broke 2)
+    star_turn_ = []
+    if grid_ep is not None:
+        s67_ = sorted(order_ := list(strong_lab), key=lambda v: (-strong_votes[v], order_.index(v)))[:20]
+        k67_ = {}
+        for k_list in (s67_, [cut(grid_ep // 10) * 10 + (grid_ep % 10 + 4 + k_) % 10 for k_ in range(-2, 3)],
+                       [v_ for v_, _, _ in both_cut], [v_ for v_, _ in rec], [v_ for v_, _ in rec_yx],
+                       [v_ for v_, _ in wide], [int(n_[:2]) for n_, _ in found],
+                       [a_[0] for a_ in (same, same2, same_turn if same else None, same_yx if same else None) if a_]):
+            for v_ in set(k_list):
+                k67_[v_] = k67_.get(v_, 0) + 1
+        if k67_:
+            a_ = sorted(k67_, key=lambda v_: (-k67_[v_], v_))[0]
+            x67_, y67_ = find_op(ep // 10, a_ // 10), find_op(ep % 10, a_ % 10)
+            if x67_ in ('+1', '-1', '+2', '-2'):
+                star_turn_ += [compute_variants(ep, 'cut', y67_)[0], compute_variants(ep, 'no_change', y67_)[0]]
+            if y67_ in ('+1', '-1', '+2', '-2'):
+                star_turn_ += [compute_variants(ep, x67_, 'cut')[0], compute_variants(ep, x67_, 'no_change')[0]]
+        for nv_ in star_turn_:
+            lab_ = f"{OP_ABBREV[find_op(ep // 10, nv_ // 10)]}/{OP_ABBREV[find_op(ep % 10, nv_ % 10)]}"
+            if nv_ not in [v for v, _ in fam_seats]:
+                fam_seats = fam_seats + [(nv_, lab_)]
+            strong_lab.setdefault(nv_, lab_)
+            if strong_votes.get(nv_, 0) < 14.30000009:
+                strong_votes[nv_] = 14.30000009
     order = list(strong_lab)
     if os.environ.get('RRR3_DUMP'):
         import json
@@ -5502,6 +5533,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             r_rows.append(("Star picks", ',  '.join(('★ ' if k_ == 0 else '') + _s_lab(v_) + f" [{k_votes[v_]}]"
                                                      for k_, v_ in enumerate(k_top)),
                            "most lists agree on these; [n] = lists; ★ = first pick"))
+        if star_turn_:
+            r_rows.append(("Star pick turns", ', '.join(_s_lab(v_) for v_ in star_turn_),
+                           "the ★ pick with each plain step turned to cut and to nc"))
         r_w = [max(len(r_[k_]) for r_ in r_rows) + 2 for k_ in range(3)]
         r_tw = sum(r_w) + 2
         r_title = f"★  ROUND SUMMARY  —  after {grid_ep:02d}, operations on EP={ep:02d}  ★"
@@ -5572,6 +5606,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the SAME OPERATION AGAIN number (the last round's operation on this EP) is in the cell (cut/c-2 again -> 26)",
                        "     declared cell: the EP and a 3RRR RESULT number of the same family (02 and 70) bring the EP with both digits cut (02 -> 57)",
                        "     declared cell: the first 3RRR RESULT number itself is in the cell (08)",
+                       "     declared cell: the star pick with each plain step (+1/-1, +2/-2) turned to cut and to nc (28 (+1/-2) -> 68 18 25 20)",
                        "     declared cell: every STRONG 20 rule seat, also the ones that lost their seat (72 (-2/c-2))",
                        "     declared cell: the 2nd number with its y sign flipped (51 (c+1/c-2) -> 55 (c+1/c+2))",
                        "     declared cell: the same STRONG 20 number (step on x, cut on y) brings its full opposite, x sign flipped and the cut taken off y (32 (+1/cut) -> 17 (-1/nc))",

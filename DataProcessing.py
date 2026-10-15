@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 621, 'tens_cut': 93, 'short_list': 140,
-    'table_rounds': 611, 'table_hits': 75, 'table_chance': 33, 'declared': 576, 'declared_hits': 10,
+    'results': 622, 'tens_cut': 93, 'short_list': 140,
+    'table_rounds': 612, 'table_hits': 76, 'table_chance': 33, 'declared': 577, 'declared_hits': 10,
     'band_hits': 55, 'units_hits': 62, 'second_hits': 14,
     'same_tens': 25,
-    'rrr3_rounds': 307, 'rrr3_hits': 14, 'rrr3_rec_rounds': 308, 'rrr3_rec_hits': 109,
-    'rrr3_same_rounds': 280, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 267, 'rrr3_wide_hits': 31, 'rrr3_yx_rounds': 262, 'rrr3_yx_hits': 24,
-    'rrr3_strong_rounds': 258, 'rrr3_strong_hits': 42, 'rrr3_same2_rounds': 255, 'rrr3_same2_hits': 5,
-    'rrr3_turn_rounds': 262, 'rrr3_turn_hits': 5, 'rrr3_sameyx_rounds': 262, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 197, 'power_hits': 132,
+    'rrr3_rounds': 308, 'rrr3_hits': 14, 'rrr3_rec_rounds': 309, 'rrr3_rec_hits': 110,
+    'rrr3_same_rounds': 281, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 268, 'rrr3_wide_hits': 31, 'rrr3_yx_rounds': 263, 'rrr3_yx_hits': 24,
+    'rrr3_strong_rounds': 259, 'rrr3_strong_hits': 42, 'rrr3_same2_rounds': 256, 'rrr3_same2_hits': 5,
+    'rrr3_turn_rounds': 263, 'rrr3_turn_hits': 5, 'rrr3_sameyx_rounds': 263, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 198, 'power_hits': 133,
 }
 
 
@@ -3056,6 +3056,10 @@ def _rrr_ocjp(ep, both_cut):
             seen.add(op_)
         kept.add(op_)
         out.append((compute_variants(ep, op_[0], op_[1])[0], f"{OP_ABBREV[op_[0]]}/{OP_ABBREV[op_[1]]}", k_ + 1, new_))
+    # 39 (result 59 after 59 on EP 04, cut/cut): the EP with both digits
+    # cut, when no place above already shows it
+    if ('cut', 'cut') not in kept:
+        out.append((compute_variants(ep, 'cut', 'cut')[0], "cut/cut", 39, False))
     return out
 
 
@@ -5965,7 +5969,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             # and, on places 15-18, x with its cut switched, % mark
             # (result 15 after 29: 65 (+2/cut) -> 15 (c+2/cut))
             o_yc = [yc_ + _rrr_ocjp_xcut(ep, lab_, k_) for yc_, (_, lab_, k_, _) in zip(o_yc, o_list)]
-            o_cells = [f"{k_:>2}. {v_:02d} ({lab_}){'~' if n_ else ''}{' °' if k_ > 30 else ' ^' if k_ > 20 else ''}"
+            o_cells = [f"{k_:>2}. {v_:02d} ({lab_}){'~' if n_ else ''}{'' if k_ > 38 else ' °' if k_ > 30 else ' ^' if k_ > 20 else ''}"
                        + (f", {w_[0]:02d}+ ({w_[1]})" if w_ else '')
                        + ''.join(f", {m_[0]:02d}* ({m_[1]})" for m_ in mo_)
                        + ''.join(f", {m_[0]:02d}{'%' if m_[1].split('/')[1] in ('nc', 'cut') and 15 <= k_ <= 18 else '#'} ({m_[1]})" for m_ in yc_)
@@ -5985,7 +5989,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 o_body.append('│' + '│'.join(f" {c:<{o_cw - 1}}" for c in row_) + '│')
             o_body.append('└' + '┴'.join('─' * o_cw for _ in range(o_per)) + '┘')
             o_body += ["", f"ALL ({len(o_uniq)}): " + ' '.join(f"{v_:02d}" for v_ in o_uniq),
-                       "1-20 = the user's operations;  21-30 ^ = mirror forms;  31-38 ° = one operation, sign flipped on one side",
+                       "1-20 = the user's operations;  21-30 ^ = mirror forms;  31-38 ° = one operation, sign flipped on one side;  39 = EP cut/cut",
                        "after the comma, + = the same place with its x step switched (1 <-> 2), y kept (-1/c+1 -> -2/c+1);",
                        "  when x is nc or cut, the y step switched instead (nc/+2 -> nc/+1)",
                        "after the next commas, * = the y step switched, and both steps switched (-2/-2 -> -2/-1, -1/-1)",

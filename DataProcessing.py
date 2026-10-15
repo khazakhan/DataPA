@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 640, 'tens_cut': 94, 'short_list': 141,
-    'table_rounds': 630, 'table_hits': 77, 'table_chance': 33, 'declared': 595, 'declared_hits': 10,
+    'results': 641, 'tens_cut': 94, 'short_list': 141,
+    'table_rounds': 631, 'table_hits': 78, 'table_chance': 33, 'declared': 596, 'declared_hits': 10,
     'band_hits': 56, 'units_hits': 62, 'second_hits': 14,
     'same_tens': 25,
-    'rrr3_rounds': 326, 'rrr3_hits': 15, 'rrr3_rec_rounds': 327, 'rrr3_rec_hits': 119,
-    'rrr3_same_rounds': 299, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 286, 'rrr3_wide_hits': 32, 'rrr3_yx_rounds': 281, 'rrr3_yx_hits': 26,
-    'rrr3_strong_rounds': 277, 'rrr3_strong_hits': 46, 'rrr3_same2_rounds': 274, 'rrr3_same2_hits': 5,
-    'rrr3_turn_rounds': 281, 'rrr3_turn_hits': 6, 'rrr3_sameyx_rounds': 281, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 216, 'power_hits': 151,
+    'rrr3_rounds': 327, 'rrr3_hits': 15, 'rrr3_rec_rounds': 328, 'rrr3_rec_hits': 120,
+    'rrr3_same_rounds': 300, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 287, 'rrr3_wide_hits': 32, 'rrr3_yx_rounds': 282, 'rrr3_yx_hits': 26,
+    'rrr3_strong_rounds': 278, 'rrr3_strong_hits': 46, 'rrr3_same2_rounds': 275, 'rrr3_same2_hits': 5,
+    'rrr3_turn_rounds': 282, 'rrr3_turn_hits': 6, 'rrr3_sameyx_rounds': 282, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 217, 'power_hits': 152,
 }
 
 

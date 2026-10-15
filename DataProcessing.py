@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 615, 'tens_cut': 92, 'short_list': 139,
-    'table_rounds': 605, 'table_hits': 75, 'table_chance': 33, 'declared': 570, 'declared_hits': 10,
+    'results': 616, 'tens_cut': 92, 'short_list': 139,
+    'table_rounds': 606, 'table_hits': 75, 'table_chance': 33, 'declared': 571, 'declared_hits': 10,
     'band_hits': 54, 'units_hits': 62, 'second_hits': 14,
     'same_tens': 25,
-    'rrr3_rounds': 301, 'rrr3_hits': 13, 'rrr3_rec_rounds': 302, 'rrr3_rec_hits': 106,
-    'rrr3_same_rounds': 274, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 261, 'rrr3_wide_hits': 29, 'rrr3_yx_rounds': 256, 'rrr3_yx_hits': 24,
-    'rrr3_strong_rounds': 252, 'rrr3_strong_hits': 38, 'rrr3_same2_rounds': 249, 'rrr3_same2_hits': 5,
-    'rrr3_turn_rounds': 256, 'rrr3_turn_hits': 5, 'rrr3_sameyx_rounds': 256, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 191, 'power_hits': 126,
+    'rrr3_rounds': 302, 'rrr3_hits': 13, 'rrr3_rec_rounds': 303, 'rrr3_rec_hits': 107,
+    'rrr3_same_rounds': 275, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 262, 'rrr3_wide_hits': 29, 'rrr3_yx_rounds': 257, 'rrr3_yx_hits': 24,
+    'rrr3_strong_rounds': 253, 'rrr3_strong_hits': 38, 'rrr3_same2_rounds': 250, 'rrr3_same2_hits': 5,
+    'rrr3_turn_rounds': 257, 'rrr3_turn_hits': 5, 'rrr3_sameyx_rounds': 257, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 192, 'power_hits': 127,
 }
 
 
@@ -2976,6 +2976,20 @@ def _rrr_ocjp_ycut(ep, lab, place=0):
         return []
     return [(compute_variants(ep, rev[lx], KK_CUT_TOGGLE[o_])[0], f"{lx}/{OP_ABBREV[KK_CUT_TOGGLE[o_]]}")
             for o_ in (oy, _X_STEP_SWITCH[oy])]
+
+
+def _rrr_ocjp_xcut(ep, lab, place=0):
+    """OCJP % companions (result 15 after 29 on EP 40, c+2/cut: place 15
+    held 65 (+2/cut), the same op with x cut off): on the places 15-18
+    (y fixed at cut or nc), x with its cut switched, for both x steps
+    (+2/cut -> c+2/cut, c+1/cut)."""
+    rev = {v_: k_ for k_, v_ in OP_ABBREV.items()}
+    lx, ly = lab.split('/')
+    ox = rev[lx]
+    if not 15 <= place <= 18 or ly not in ('nc', 'cut') or ox not in _X_STEP_SWITCH:
+        return []
+    return [(compute_variants(ep, KK_CUT_TOGGLE[o_], rev[ly])[0], f"{OP_ABBREV[KK_CUT_TOGGLE[o_]]}/{ly}")
+            for o_ in (ox, _X_STEP_SWITCH[ox])]
 
 
 def _rrr_final4(cands, lists, tie_lists, place):
@@ -5033,7 +5047,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        'ocjp': [o[0] for o in _rrr_ocjp(ep, both_cut)]
                                + [w[0] for w in (_rrr_ocjp_xswitch(ep, o[1]) for o in _rrr_ocjp(ep, both_cut)) if w]
                                + [m[0] for o in _rrr_ocjp(ep, both_cut) for m in _rrr_ocjp_more(ep, o[1])]
-                               + [m[0] for o in _rrr_ocjp(ep, both_cut) for m in _rrr_ocjp_ycut(ep, o[1], o[2])],
+                               + [m[0] for o in _rrr_ocjp(ep, both_cut) for m in _rrr_ocjp_ycut(ep, o[1], o[2])]
+                               + [m[0] for o in _rrr_ocjp(ep, both_cut) for m in _rrr_ocjp_xcut(ep, o[1], o[2])],
                        'ncspec': [v for _, _, l_ in nc_spec for v, _ in l_],
                        'ocjp_full': [[o[0], o[1], o[2], 'base'] for o in _rrr_ocjp(ep, both_cut)]
                                     + [[w[0], w[1], o[2], 'plus'] for o in _rrr_ocjp(ep, both_cut)
@@ -5041,7 +5056,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                                     + [[m[0], m[1], o[2], 'star'] for o in _rrr_ocjp(ep, both_cut)
                                        for m in _rrr_ocjp_more(ep, o[1])]
                                     + [[m[0], m[1], o[2], 'ycut'] for o in _rrr_ocjp(ep, both_cut)
-                                       for m in _rrr_ocjp_ycut(ep, o[1], o[2])],
+                                       for m in _rrr_ocjp_ycut(ep, o[1], o[2])]
+                                    + [[m[0], m[1], o[2], 'xcut'] for o in _rrr_ocjp(ep, both_cut)
+                                       for m in _rrr_ocjp_xcut(ep, o[1], o[2])],
                        'rule_seats': [v for v, _ in rule_seats], 'fam_seats': [v for v, _ in fam_seats],
                        'rec': [v for v, _ in rec], 'yx': [v for v, _ in rec_yx], 'wide': [v for v, _ in wide],
                        'found': [int(n[:2]) for n, _ in found],
@@ -5945,10 +5962,13 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             # and, when x has no step, y with its cut switched, # mark
             # (result 86 after 04: 81 (nc/+1) -> 86 (nc/c+1))
             o_yc = [_rrr_ocjp_ycut(ep, lab_, k_) for _, lab_, k_, _ in o_list]
+            # and, on places 15-18, x with its cut switched, % mark
+            # (result 15 after 29: 65 (+2/cut) -> 15 (c+2/cut))
+            o_yc = [yc_ + _rrr_ocjp_xcut(ep, lab_, k_) for yc_, (_, lab_, k_, _) in zip(o_yc, o_list)]
             o_cells = [f"{k_:>2}. {v_:02d} ({lab_}){'~' if n_ else ''}{' °' if k_ > 30 else ' ^' if k_ > 20 else ''}"
                        + (f", {w_[0]:02d}+ ({w_[1]})" if w_ else '')
                        + ''.join(f", {m_[0]:02d}* ({m_[1]})" for m_ in mo_)
-                       + ''.join(f", {m_[0]:02d}# ({m_[1]})" for m_ in yc_)
+                       + ''.join(f", {m_[0]:02d}{'%' if m_[1].split('/')[1] in ('nc', 'cut') and 15 <= k_ <= 18 else '#'} ({m_[1]})" for m_ in yc_)
                        for (v_, lab_, k_, n_), w_, mo_, yc_ in zip(o_list, o_sw, o_mo, o_yc)]
             o_cw = max(len(c) for c in o_cells) + 2
             o_per = 5 if o_cw < 40 else 3
@@ -5970,6 +5990,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "  when x is nc or cut, the y step switched instead (nc/+2 -> nc/+1)",
                        "after the next commas, * = the y step switched, and both steps switched (-2/-2 -> -2/-1, -1/-1)",
                        "# = x is nc, cut or a cut step (any x on places 31-38): y with its cut switched, both y steps (nc/+1 -> nc/c+1, nc/c+2; c-1/c-2 -> c-1/-2, -1)",
+                       "% = places 15-18 (y fixed at cut or nc): x with its cut switched, both x steps (+2/cut -> c+2/cut, c+1/cut)",
                        "~ = that place repeated an operation already shown, so it takes the next unused one (none left = place empty)",
                        "built from the two operations: sign flipped, cut switched on / off.  Re-run of 140 J/K rounds:",
                        "  41 hits, about 47 expected by its size alone — a list to watch, not a proven edge"]

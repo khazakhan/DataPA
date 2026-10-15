@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 636, 'tens_cut': 94, 'short_list': 141,
-    'table_rounds': 626, 'table_hits': 77, 'table_chance': 33, 'declared': 591, 'declared_hits': 10,
+    'results': 637, 'tens_cut': 94, 'short_list': 141,
+    'table_rounds': 627, 'table_hits': 77, 'table_chance': 33, 'declared': 592, 'declared_hits': 10,
     'band_hits': 56, 'units_hits': 62, 'second_hits': 14,
     'same_tens': 25,
-    'rrr3_rounds': 322, 'rrr3_hits': 15, 'rrr3_rec_rounds': 323, 'rrr3_rec_hits': 117,
-    'rrr3_same_rounds': 295, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 282, 'rrr3_wide_hits': 32, 'rrr3_yx_rounds': 277, 'rrr3_yx_hits': 25,
-    'rrr3_strong_rounds': 273, 'rrr3_strong_hits': 46, 'rrr3_same2_rounds': 270, 'rrr3_same2_hits': 5,
-    'rrr3_turn_rounds': 277, 'rrr3_turn_hits': 6, 'rrr3_sameyx_rounds': 277, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 212, 'power_hits': 147,
+    'rrr3_rounds': 323, 'rrr3_hits': 15, 'rrr3_rec_rounds': 324, 'rrr3_rec_hits': 118,
+    'rrr3_same_rounds': 296, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 283, 'rrr3_wide_hits': 32, 'rrr3_yx_rounds': 278, 'rrr3_yx_hits': 25,
+    'rrr3_strong_rounds': 274, 'rrr3_strong_hits': 46, 'rrr3_same2_rounds': 271, 'rrr3_same2_hits': 5,
+    'rrr3_turn_rounds': 278, 'rrr3_turn_hits': 6, 'rrr3_sameyx_rounds': 278, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 213, 'power_hits': 148,
 }
 
 
@@ -6047,6 +6047,14 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                         "(RECOMMENDED, RRR table, same op again, WIDE, yx, 3RRR RESULT)",
                         "walk-forward, 436 past rounds: 36 hits = 8.3%; any 4 numbers = 4.0%",
                         "about twice chance, but it still misses about 92 rounds in 100"]
+            # OCJP MASTER (user, 2026-10-16: "finally we are going to use
+            # this one result only"): FINAL 4's #1 as the one exact pick
+            if ocjp_final4:
+                m_ = ocjp_final4[0][0]
+                f4_body += ["", f"OCJP MASTER (one exact pick) = #1  {m_:02d} "
+                                f"({OP_ABBREV[find_op(ep // 10, m_ // 10)]}/{OP_ABBREV[find_op(ep % 10, m_ % 10)]})",
+                            "#1 was the result in 15 of 590 past rounds = 2.5% (one number by chance = 1%);",
+                            "live K46-K99: 3 of 54. It misses most rounds"]
             f4_w = max(len(l_) for l_ in f4_body) + 2
             strong_lines += [' ' * (s_tw + 4) + '  ' + f"{s_g}┌{'─' * f4_w}┐{s_rst}"]
             strong_lines += [' ' * (s_tw + 4) + '  ' + f"{s_g}│{s_rst} \033[1m{l_:<{f4_w - 2}}{s_rst} {s_g}│{s_rst}" for l_ in f4_body]
@@ -6108,6 +6116,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         if ocjp_final4:
             r_rows.append(("OCJP FINAL 4", '  '.join(_s_lab(v_) for v_, _ in ocjp_final4),
                            "OCJP numbers most never-repaired lists hold (8.3% vs 4%)"))
+            r_rows.append(("OCJP MASTER", _s_lab(ocjp_final4[0][0]),
+                           "FINAL 4's #1: one exact pick (2.5% vs 1%)"))
         r_w = [max(len(r_[k_]) for r_ in r_rows) + 2 for k_ in range(3)]
         r_tw = sum(r_w) + 2
         r_title = f"★  ROUND SUMMARY  —  after {grid_ep:02d}, operations on EP={ep:02d}  ★"

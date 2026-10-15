@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 631, 'tens_cut': 94, 'short_list': 141,
-    'table_rounds': 621, 'table_hits': 76, 'table_chance': 33, 'declared': 586, 'declared_hits': 10,
+    'results': 632, 'tens_cut': 94, 'short_list': 141,
+    'table_rounds': 622, 'table_hits': 76, 'table_chance': 33, 'declared': 587, 'declared_hits': 10,
     'band_hits': 56, 'units_hits': 62, 'second_hits': 14,
     'same_tens': 25,
-    'rrr3_rounds': 317, 'rrr3_hits': 15, 'rrr3_rec_rounds': 318, 'rrr3_rec_hits': 116,
-    'rrr3_same_rounds': 290, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 277, 'rrr3_wide_hits': 32, 'rrr3_yx_rounds': 272, 'rrr3_yx_hits': 24,
-    'rrr3_strong_rounds': 268, 'rrr3_strong_hits': 44, 'rrr3_same2_rounds': 265, 'rrr3_same2_hits': 5,
-    'rrr3_turn_rounds': 272, 'rrr3_turn_hits': 6, 'rrr3_sameyx_rounds': 272, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 207, 'power_hits': 142,
+    'rrr3_rounds': 318, 'rrr3_hits': 15, 'rrr3_rec_rounds': 319, 'rrr3_rec_hits': 117,
+    'rrr3_same_rounds': 291, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 278, 'rrr3_wide_hits': 32, 'rrr3_yx_rounds': 273, 'rrr3_yx_hits': 24,
+    'rrr3_strong_rounds': 269, 'rrr3_strong_hits': 44, 'rrr3_same2_rounds': 266, 'rrr3_same2_hits': 5,
+    'rrr3_turn_rounds': 273, 'rrr3_turn_hits': 6, 'rrr3_sameyx_rounds': 273, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 208, 'power_hits': 143,
 }
 
 
@@ -3022,6 +3022,15 @@ def _rrr_ocjp(ep, both_cut):
         return []
     v_ = both_cut[-2][0]
     X, Y = find_op(ep // 10, v_ // 10), find_op(ep % 10, v_ % 10)
+    # a LAST row with no step on either side (nc/cut, cut/nc, nc/nc,
+    # cut/cut) can only make the EP's own 4 nc/cut forms; take the
+    # nearest earlier row that has a step instead (result 34 after 74 on
+    # EP 10: LAST row 15 nc/cut, 60 cut/nc -> OCJP was only 10 15 60 65)
+    row_k = len(both_cut) - 2
+    while X in ('no_change', 'cut') and Y in ('no_change', 'cut') and row_k >= 2:
+        row_k -= 2
+        v_ = both_cut[row_k][0]
+        X, Y = find_op(ep // 10, v_ // 10), find_op(ep % 10, v_ % 10)
     if '?' in (X, Y):
         return []
     s, r = SIGN_FLIP, KK_CUT_TOGGLE
@@ -3060,6 +3069,13 @@ def _rrr_ocjp(ep, both_cut):
     # cut, when no place above already shows it
     if ('cut', 'cut') not in kept:
         out.append((compute_variants(ep, 'cut', 'cut')[0], "cut/cut", 39, False))
+    # when an earlier row was used (LAST row had no step), the LAST row's
+    # own EP forms stay in OCJP too (39-42)
+    if row_k < len(both_cut) - 2:
+        for j_, op_ in enumerate((('no_change', 'no_change'), ('no_change', 'cut'), ('cut', 'no_change'))):
+            if op_ not in kept:
+                out.append((compute_variants(ep, op_[0], op_[1])[0],
+                            f"{OP_ABBREV[op_[0]]}/{OP_ABBREV[op_[1]]}", 40 + j_, False))
     return out
 
 

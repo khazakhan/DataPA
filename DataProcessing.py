@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 611, 'tens_cut': 92, 'short_list': 139,
-    'table_rounds': 601, 'table_hits': 74, 'table_chance': 33, 'declared': 566, 'declared_hits': 10,
+    'results': 612, 'tens_cut': 92, 'short_list': 139,
+    'table_rounds': 602, 'table_hits': 74, 'table_chance': 33, 'declared': 567, 'declared_hits': 10,
     'band_hits': 54, 'units_hits': 62, 'second_hits': 14,
     'same_tens': 25,
-    'rrr3_rounds': 297, 'rrr3_hits': 12, 'rrr3_rec_rounds': 298, 'rrr3_rec_hits': 104,
-    'rrr3_same_rounds': 270, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 257, 'rrr3_wide_hits': 29, 'rrr3_yx_rounds': 252, 'rrr3_yx_hits': 24,
-    'rrr3_strong_rounds': 248, 'rrr3_strong_hits': 36, 'rrr3_same2_rounds': 245, 'rrr3_same2_hits': 4,
-    'rrr3_turn_rounds': 252, 'rrr3_turn_hits': 5, 'rrr3_sameyx_rounds': 252, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 187, 'power_hits': 123,
+    'rrr3_rounds': 298, 'rrr3_hits': 12, 'rrr3_rec_rounds': 299, 'rrr3_rec_hits': 104,
+    'rrr3_same_rounds': 271, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 258, 'rrr3_wide_hits': 29, 'rrr3_yx_rounds': 253, 'rrr3_yx_hits': 24,
+    'rrr3_strong_rounds': 249, 'rrr3_strong_hits': 36, 'rrr3_same2_rounds': 246, 'rrr3_same2_hits': 4,
+    'rrr3_turn_rounds': 253, 'rrr3_turn_hits': 5, 'rrr3_sameyx_rounds': 253, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 188, 'power_hits': 123,
 }
 
 
@@ -4986,6 +4986,21 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             strong_lab.setdefault(nv_, lab_)
             if strong_votes.get(nv_, 0) < 14.3000000011:
                 strong_votes[nv_] = 14.3000000011
+    # 88. result 49 after 78 (series K) — 49 (nc/c-1) was outside the cell;
+    #     OCJP place 13 held it as its + form (48 nc/c-2, y step switched).
+    #     The + forms of the places 9-14 (x fixed at cut or nc) go to the cell
+    for o_ in _rrr_ocjp(ep, both_cut):
+        if not 9 <= o_[2] <= 14:
+            continue
+        w_ = _rrr_ocjp_xswitch(ep, o_[1])
+        if not w_:
+            continue
+        nv_, lab_ = w_
+        if nv_ not in [v for v, _ in fam_seats]:
+            fam_seats = fam_seats + [(nv_, lab_)]
+        strong_lab.setdefault(nv_, lab_)
+        if strong_votes.get(nv_, 0) < 14.30000000105:
+            strong_votes[nv_] = 14.30000000105
     # 81. result 33 after 57 (series K, user's screenshot) — the NC/CUT
     #     SPECIAL numbers (the row after an nc/cut, cut/nc or nc/nc row,
     #     modified every way) go to the declared cell

@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 583, 'tens_cut': 91, 'short_list': 138,
-    'table_rounds': 573, 'table_hits': 71, 'table_chance': 33, 'declared': 538, 'declared_hits': 10,
+    'results': 584, 'tens_cut': 91, 'short_list': 138,
+    'table_rounds': 574, 'table_hits': 71, 'table_chance': 33, 'declared': 539, 'declared_hits': 10,
     'band_hits': 53, 'units_hits': 62, 'second_hits': 14,
     'same_tens': 25,
-    'rrr3_rounds': 269, 'rrr3_hits': 10, 'rrr3_rec_rounds': 270, 'rrr3_rec_hits': 95,
-    'rrr3_same_rounds': 242, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 229, 'rrr3_wide_hits': 24, 'rrr3_yx_rounds': 224, 'rrr3_yx_hits': 18,
-    'rrr3_strong_rounds': 220, 'rrr3_strong_hits': 31, 'rrr3_same2_rounds': 217, 'rrr3_same2_hits': 4,
-    'rrr3_turn_rounds': 224, 'rrr3_turn_hits': 4, 'rrr3_sameyx_rounds': 224, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 159, 'power_hits': 98,
+    'rrr3_rounds': 270, 'rrr3_hits': 10, 'rrr3_rec_rounds': 271, 'rrr3_rec_hits': 95,
+    'rrr3_same_rounds': 243, 'rrr3_same_hits': 8, 'rrr3_wide_rounds': 230, 'rrr3_wide_hits': 24, 'rrr3_yx_rounds': 225, 'rrr3_yx_hits': 19,
+    'rrr3_strong_rounds': 221, 'rrr3_strong_hits': 31, 'rrr3_same2_rounds': 218, 'rrr3_same2_hits': 4,
+    'rrr3_turn_rounds': 225, 'rrr3_turn_hits': 4, 'rrr3_sameyx_rounds': 225, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 160, 'power_hits': 98,
 }
 
 
@@ -2958,6 +2958,20 @@ def _rrr_ocjp_more(ep, lab):
         return []
     return [(compute_variants(ep, rev[lx], oy)[0], f"{lx}/{OP_ABBREV[oy]}"),
             (compute_variants(ep, ox, oy)[0], f"{OP_ABBREV[ox]}/{OP_ABBREV[oy]}")]
+
+
+def _rrr_ocjp_ycut(ep, lab):
+    """OCJP # companions (result 86 after 04 on EP 80, nc/c+1: place 26
+    held 81 (nc/+1), the same op with y cut off): when the place's x has
+    no step (nc, cut) and y has a step, its y with the cut switched, for
+    both y steps (nc/+1 -> nc/c+1, nc/c+2)."""
+    rev = {v_: k_ for k_, v_ in OP_ABBREV.items()}
+    lx, ly = lab.split('/')
+    oy = rev[ly]
+    if lx not in ('nc', 'cut') or oy not in _X_STEP_SWITCH:
+        return []
+    return [(compute_variants(ep, rev[lx], KK_CUT_TOGGLE[o_])[0], f"{lx}/{OP_ABBREV[KK_CUT_TOGGLE[o_]]}")
+            for o_ in (oy, _X_STEP_SWITCH[oy])]
 
 
 def _rrr_final4(cands, lists, tie_lists, place):
@@ -4930,6 +4944,16 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         strong_lab.setdefault(nv_, lab_)
         if strong_votes.get(nv_, 0) < 14.300000002:
             strong_votes[nv_] = 14.300000002
+    # 85. result 86 after 04 (series K) — 86 (nc/c+1) was outside the cell
+    #     and outside OCJP; OCJP place 26 held 81 (nc/+1).  The new OCJP #
+    #     forms (x without a step, y cut switched) go to the cell
+    for o_ in _rrr_ocjp(ep, both_cut):
+        for nv_, lab_ in _rrr_ocjp_ycut(ep, o_[1]):
+            if nv_ not in [v for v, _ in fam_seats]:
+                fam_seats = fam_seats + [(nv_, lab_)]
+            strong_lab.setdefault(nv_, lab_)
+            if strong_votes.get(nv_, 0) < 14.3000000015:
+                strong_votes[nv_] = 14.3000000015
     # 81. result 33 after 57 (series K, user's screenshot) — the NC/CUT
     #     SPECIAL numbers (the row after an nc/cut, cut/nc or nc/nc row,
     #     modified every way) go to the declared cell
@@ -4961,13 +4985,16 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        'table': [[v, lab] for v, _, lab in both_cut],
                        'ocjp': [o[0] for o in _rrr_ocjp(ep, both_cut)]
                                + [w[0] for w in (_rrr_ocjp_xswitch(ep, o[1]) for o in _rrr_ocjp(ep, both_cut)) if w]
-                               + [m[0] for o in _rrr_ocjp(ep, both_cut) for m in _rrr_ocjp_more(ep, o[1])],
+                               + [m[0] for o in _rrr_ocjp(ep, both_cut) for m in _rrr_ocjp_more(ep, o[1])]
+                               + [m[0] for o in _rrr_ocjp(ep, both_cut) for m in _rrr_ocjp_ycut(ep, o[1])],
                        'ncspec': [v for _, _, l_ in nc_spec for v, _ in l_],
                        'ocjp_full': [[o[0], o[1], o[2], 'base'] for o in _rrr_ocjp(ep, both_cut)]
                                     + [[w[0], w[1], o[2], 'plus'] for o in _rrr_ocjp(ep, both_cut)
                                        for w in [_rrr_ocjp_xswitch(ep, o[1])] if w]
                                     + [[m[0], m[1], o[2], 'star'] for o in _rrr_ocjp(ep, both_cut)
-                                       for m in _rrr_ocjp_more(ep, o[1])],
+                                       for m in _rrr_ocjp_more(ep, o[1])]
+                                    + [[m[0], m[1], o[2], 'ycut'] for o in _rrr_ocjp(ep, both_cut)
+                                       for m in _rrr_ocjp_ycut(ep, o[1])],
                        'rule_seats': [v for v, _ in rule_seats], 'fam_seats': [v for v, _ in fam_seats],
                        'rec': [v for v, _ in rec], 'yx': [v for v, _ in rec_yx], 'wide': [v for v, _ in wide],
                        'found': [int(n[:2]) for n, _ in found],
@@ -5868,14 +5895,18 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             # and the y step switched, and both switched, after a second
             # comma, * mark (user, 2026-10-15: -2/-2 -> -2/-1; +2/c-2 -> +1/c-1)
             o_mo = [_rrr_ocjp_more(ep, lab_) for _, lab_, _, _ in o_list]
+            # and, when x has no step, y with its cut switched, # mark
+            # (result 86 after 04: 81 (nc/+1) -> 86 (nc/c+1))
+            o_yc = [_rrr_ocjp_ycut(ep, lab_) for _, lab_, _, _ in o_list]
             o_cells = [f"{k_:>2}. {v_:02d} ({lab_}){'~' if n_ else ''}{' °' if k_ > 30 else ' ^' if k_ > 20 else ''}"
                        + (f", {w_[0]:02d}+ ({w_[1]})" if w_ else '')
                        + ''.join(f", {m_[0]:02d}* ({m_[1]})" for m_ in mo_)
-                       for (v_, lab_, k_, n_), w_, mo_ in zip(o_list, o_sw, o_mo)]
+                       + ''.join(f", {m_[0]:02d}# ({m_[1]})" for m_ in yc_)
+                       for (v_, lab_, k_, n_), w_, mo_, yc_ in zip(o_list, o_sw, o_mo, o_yc)]
             o_cw = max(len(c) for c in o_cells) + 2
             o_per = 5 if o_cw < 40 else 3
             o_uniq = sorted(set(v_ for v_, _, _, _ in o_list) | {w_[0] for w_ in o_sw if w_}
-                            | {m_[0] for mo_ in o_mo for m_ in mo_})
+                            | {m_[0] for mo_ in o_mo for m_ in mo_} | {m_[0] for yc_ in o_yc for m_ in yc_})
             o_gw = o_per * (o_cw + 1) - 1
             o_body = [f"★  NEXT OPERATION-OCJP  —  from the LAST row {both_cut[-2][0]:02d} ({both_cut[-2][2]}),"
                       f" {both_cut[-1][0]:02d} ({both_cut[-1][2]})  on EP={ep:02d}  ★", "",
@@ -5891,6 +5922,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "after the comma, + = the same place with its x step switched (1 <-> 2), y kept (-1/c+1 -> -2/c+1);",
                        "  when x is nc or cut, the y step switched instead (nc/+2 -> nc/+1)",
                        "after the next commas, * = the y step switched, and both steps switched (-2/-2 -> -2/-1, -1/-1)",
+                       "# = x has no step (nc, cut): y with its cut switched, both y steps (nc/+1 -> nc/c+1, nc/c+2)",
                        "~ = that place repeated an operation already shown, so it takes the next unused one (none left = place empty)",
                        "built from the two operations: sign flipped, cut switched on / off.  Re-run of 140 J/K rounds:",
                        "  41 hits, about 47 expected by its size alone — a list to watch, not a proven edge"]
@@ -5913,8 +5945,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             f4_place = {}
             for v_, _, k_, _ in o_list:
                 f4_place.setdefault(v_, k_)
-            for (_, _, k_, _), w_, mo_ in zip(o_list, o_sw, o_mo):
-                for x_ in ([w_] if w_ else []) + mo_:
+            for (_, _, k_, _), w_, mo_, yc_ in zip(o_list, o_sw, o_mo, o_yc):
+                for x_ in ([w_] if w_ else []) + mo_ + yc_:
                     f4_place.setdefault(x_[0], k_)
             ocjp_final4 = _rrr_final4(o_uniq, f4_lists,
                                       [strong, [v for v, _ in fam_seats], [v for _, _, l_ in nc_spec for v, _ in l_]],

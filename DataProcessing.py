@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 690, 'tens_cut': 100, 'short_list': 147,
-    'table_rounds': 680, 'table_hits': 89, 'table_chance': 33, 'declared': 645, 'declared_hits': 12,
+    'results': 691, 'tens_cut': 100, 'short_list': 147,
+    'table_rounds': 681, 'table_hits': 89, 'table_chance': 33, 'declared': 646, 'declared_hits': 12,
     'band_hits': 61, 'units_hits': 64, 'second_hits': 14,
     'same_tens': 25,
-    'rrr3_rounds': 376, 'rrr3_hits': 17, 'rrr3_rec_rounds': 377, 'rrr3_rec_hits': 139,
-    'rrr3_same_rounds': 349, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 336, 'rrr3_wide_hits': 40, 'rrr3_yx_rounds': 331, 'rrr3_yx_hits': 32,
-    'rrr3_strong_rounds': 327, 'rrr3_strong_hits': 55, 'rrr3_same2_rounds': 324, 'rrr3_same2_hits': 5,
-    'rrr3_turn_rounds': 331, 'rrr3_turn_hits': 6, 'rrr3_sameyx_rounds': 331, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 266, 'power_hits': 199,
+    'rrr3_rounds': 377, 'rrr3_hits': 17, 'rrr3_rec_rounds': 378, 'rrr3_rec_hits': 139,
+    'rrr3_same_rounds': 350, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 337, 'rrr3_wide_hits': 40, 'rrr3_yx_rounds': 332, 'rrr3_yx_hits': 33,
+    'rrr3_strong_rounds': 328, 'rrr3_strong_hits': 55, 'rrr3_same2_rounds': 325, 'rrr3_same2_hits': 5,
+    'rrr3_turn_rounds': 332, 'rrr3_turn_hits': 6, 'rrr3_sameyx_rounds': 332, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 267, 'power_hits': 199,
 }
 
 
@@ -2902,16 +2902,18 @@ def _rrr_nc_special(ep, row_ops):
     """NC/CUT SPECIAL (user, 2026-10-15): for every NEXT OPERATION row whose
     xy or yx is nc/cut, cut/nc or nc/nc, the row after it with its xy and
     yx modified every way — each side as is, sign flipped, cut switched,
-    or both.  Returns [(trigger row, next row, [(number, 'x/y'), ...])]."""
+    or both.  Also the trigger row's own old operation again on this EP,
+    xy and yx (result 00 after 48, EP 45: Op4 90 -> 55 was c+1/cut).
+    Returns [(trigger row, next row, [(number, 'x/y'), ...])]."""
     special = {('no_change', 'cut'), ('cut', 'no_change'), ('no_change', 'no_change')}
     def forms(o_):
         return list(dict.fromkeys([o_, SIGN_FLIP[o_], KK_CUT_TOGGLE[o_], KK_CUT_TOGGLE[SIGN_FLIP[o_]]]))
     out = []
     for k_ in range(len(row_ops) - 1):
-        _, tx, ty = row_ops[k_]
+        _, tx, ty = row_ops[k_][:3]
         if (tx, ty) not in special and (ty, tx) not in special:
             continue
-        _, nx, ny = row_ops[k_ + 1]
+        _, nx, ny = row_ops[k_ + 1][:3]
         seen, lst = set(), []
         for a_, b_ in ((nx, ny), (ny, nx)):
             for fx in forms(a_):
@@ -2920,6 +2922,13 @@ def _rrr_nc_special(ep, row_ops):
                     if v_ not in seen:
                         seen.add(v_)
                         lst.append((v_, f"{OP_ABBREV[fx]}/{OP_ABBREV[fy]}"))
+        # the trigger row's old operation again (result 00 after 48, EP 45)
+        ox, oy = row_ops[k_][3:5]
+        for a_, b_ in ((ox, oy), (oy, ox)):
+            v_ = compute_variants(ep, a_, b_)[0]
+            if v_ not in seen:
+                seen.add(v_)
+                lst.append((v_, f"{OP_ABBREV[a_]}/{OP_ABBREV[b_]}"))
         out.append((row_ops[k_], row_ops[k_ + 1], lst))
     return out
 
@@ -3272,7 +3281,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     row_ops  = []          # (pos, new x, new y) of every row, in table order
     for pos, a, b, x_op, y_op, mark in src:
         nx, ny   = rrr_next_op(x_op, y_op)
-        row_ops.append((pos, nx, ny))
+        row_ops.append((pos, nx, ny, x_op, y_op))
         xy, yx   = compute_variants(ep, nx, ny)[:2]
         nxa, nya = OP_ABBREV[nx], OP_ABBREV[ny]
         both_cut += [(xy, (_op_type(nx), _op_type(ny)), f"{nxa}/{nya}"),
@@ -3298,7 +3307,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                         f"[{pos_prefix}{nxt[0]}] xy {OP_ABBREV[nxt[1]]}/{OP_ABBREV[nxt[2]]}, yx {OP_ABBREV[nxt[2]]}/{OP_ABBREV[nxt[1]]}:")
             for k_ in range(0, len(lst), 5):
                 body.append("     " + '   '.join(f"{v_:02d}{star(v_)}({lab_})" for v_, lab_ in lst[k_:k_ + 5]))
-        body.append("  each side as is, sign flipped, cut switched, or both (all in the declared cell)")
+        body.append("  each side as is, sign flipped, cut switched, or both; then the trigger row's old operation again, xy and yx (all in the declared cell)")
     rrr_tbl = list(body)    # the RRR table alone, shown again under the ROUND SUMMARY
     la, picks = _rrr3_rows(entries, ep)
     row, why  = _rrr3_last(entries, ep)

@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 692, 'tens_cut': 100, 'short_list': 148,
-    'table_rounds': 682, 'table_hits': 89, 'table_chance': 33, 'declared': 647, 'declared_hits': 12,
+    'results': 693, 'tens_cut': 100, 'short_list': 148,
+    'table_rounds': 683, 'table_hits': 89, 'table_chance': 33, 'declared': 648, 'declared_hits': 12,
     'band_hits': 61, 'units_hits': 65, 'second_hits': 15,
     'same_tens': 25,
-    'rrr3_rounds': 378, 'rrr3_hits': 17, 'rrr3_rec_rounds': 379, 'rrr3_rec_hits': 140,
-    'rrr3_same_rounds': 351, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 338, 'rrr3_wide_hits': 40, 'rrr3_yx_rounds': 333, 'rrr3_yx_hits': 33,
-    'rrr3_strong_rounds': 329, 'rrr3_strong_hits': 56, 'rrr3_same2_rounds': 326, 'rrr3_same2_hits': 5,
-    'rrr3_turn_rounds': 333, 'rrr3_turn_hits': 6, 'rrr3_sameyx_rounds': 333, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 268, 'power_hits': 200,
+    'rrr3_rounds': 379, 'rrr3_hits': 17, 'rrr3_rec_rounds': 380, 'rrr3_rec_hits': 141,
+    'rrr3_same_rounds': 352, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 339, 'rrr3_wide_hits': 40, 'rrr3_yx_rounds': 334, 'rrr3_yx_hits': 33,
+    'rrr3_strong_rounds': 330, 'rrr3_strong_hits': 56, 'rrr3_same2_rounds': 327, 'rrr3_same2_hits': 5,
+    'rrr3_turn_rounds': 334, 'rrr3_turn_hits': 6, 'rrr3_sameyx_rounds': 334, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 269, 'power_hits': 201,
 }
 
 
@@ -3078,6 +3078,11 @@ def _rrr_ocjp(ep, both_cut):
     # cut, when no place above already shows it
     if ('cut', 'cut') not in kept:
         out.append((compute_variants(ep, 'cut', 'cut')[0], "cut/cut", 39, False))
+    # 40 (result 20 after 64 on EP 20, nc/nc): the EP itself, when no
+    # place above already shows it
+    if ('no_change', 'no_change') not in kept:
+        out.append((compute_variants(ep, 'no_change', 'no_change')[0], "nc/nc", 40, False))
+        kept.add(('no_change', 'no_change'))
     # when an earlier row was used (LAST row had no step), the LAST row's
     # own EP forms stay in OCJP too (39-42)
     if row_k < len(both_cut) - 2:
@@ -6042,7 +6047,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 o_body.append('│' + '│'.join(f" {c:<{o_cw - 1}}" for c in row_) + '│')
             o_body.append('└' + '┴'.join('─' * o_cw for _ in range(o_per)) + '┘')
             o_body += ["", f"ALL ({len(o_uniq)}): " + ' '.join(f"{v_:02d}" for v_ in o_uniq),
-                       "1-20 = the user's operations;  21-30 ^ = mirror forms;  31-38 ° = one operation, sign flipped on one side;  39 = EP cut/cut",
+                       "1-20 = the user's operations;  21-30 ^ = mirror forms;  31-38 ° = one operation, sign flipped on one side;  39 = EP cut/cut;  40 = EP itself nc/nc",
                        "after the comma, + = the same place with its x step switched (1 <-> 2), y kept (-1/c+1 -> -2/c+1);",
                        "  when x is nc or cut, the y step switched instead (nc/+2 -> nc/+1)",
                        "after the next commas, * = the y step switched, and both steps switched (-2/-2 -> -2/-1, -1/-1)",

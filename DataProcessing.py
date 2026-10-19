@@ -2791,14 +2791,14 @@ def _rrr_frame(body):
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
     'results': 693, 'tens_cut': 100, 'short_list': 148,
-    'table_rounds': 683, 'table_hits': 89, 'table_chance': 33, 'declared': 648, 'declared_hits': 12,
+    'table_rounds': 684, 'table_hits': 90, 'table_chance': 33, 'declared': 649, 'declared_hits': 12,
     'band_hits': 61, 'units_hits': 65, 'second_hits': 15,
     'same_tens': 25,
-    'rrr3_rounds': 379, 'rrr3_hits': 17, 'rrr3_rec_rounds': 380, 'rrr3_rec_hits': 141,
-    'rrr3_same_rounds': 352, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 339, 'rrr3_wide_hits': 40, 'rrr3_yx_rounds': 334, 'rrr3_yx_hits': 33,
-    'rrr3_strong_rounds': 330, 'rrr3_strong_hits': 56, 'rrr3_same2_rounds': 327, 'rrr3_same2_hits': 5,
-    'rrr3_turn_rounds': 334, 'rrr3_turn_hits': 6, 'rrr3_sameyx_rounds': 334, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 269, 'power_hits': 201,
+    'rrr3_rounds': 380, 'rrr3_hits': 17, 'rrr3_rec_rounds': 381, 'rrr3_rec_hits': 142,
+    'rrr3_same_rounds': 353, 'rrr3_same_hits': 11, 'rrr3_wide_rounds': 340, 'rrr3_wide_hits': 40, 'rrr3_yx_rounds': 335, 'rrr3_yx_hits': 33,
+    'rrr3_strong_rounds': 331, 'rrr3_strong_hits': 57, 'rrr3_same2_rounds': 328, 'rrr3_same2_hits': 5,
+    'rrr3_turn_rounds': 335, 'rrr3_turn_hits': 7, 'rrr3_sameyx_rounds': 335, 'rrr3_sameyx_hits': 6,
+    'power_rounds': 270, 'power_hits': 202,
 }
 
 

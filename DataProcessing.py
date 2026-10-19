@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 703, 'tens_cut': 103, 'short_list': 152,
-    'table_rounds': 693, 'table_hits': 90, 'table_chance': 33, 'declared': 658, 'declared_hits': 13,
-    'band_hits': 62, 'units_hits': 67, 'second_hits': 15,
+    'results': 698, 'tens_cut': 101, 'short_list': 149,
+    'table_rounds': 688, 'table_hits': 90, 'table_chance': 33, 'declared': 653, 'declared_hits': 12,
+    'band_hits': 62, 'units_hits': 65, 'second_hits': 15,
     'same_tens': 25,
-    'rrr3_rounds': 389, 'rrr3_hits': 19, 'rrr3_rec_rounds': 390, 'rrr3_rec_hits': 150,
-    'rrr3_same_rounds': 362, 'rrr3_same_hits': 18, 'rrr3_wide_rounds': 349, 'rrr3_wide_hits': 40, 'rrr3_yx_rounds': 344, 'rrr3_yx_hits': 34,
-    'rrr3_strong_rounds': 340, 'rrr3_strong_hits': 64, 'rrr3_same2_rounds': 337, 'rrr3_same2_hits': 12,
-    'rrr3_turn_rounds': 344, 'rrr3_turn_hits': 14, 'rrr3_sameyx_rounds': 344, 'rrr3_sameyx_hits': 13,
-    'power_rounds': 279, 'power_hits': 211,
+    'rrr3_rounds': 384, 'rrr3_hits': 18, 'rrr3_rec_rounds': 385, 'rrr3_rec_hits': 142,
+    'rrr3_same_rounds': 357, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 344, 'rrr3_wide_hits': 40, 'rrr3_yx_rounds': 339, 'rrr3_yx_hits': 33,
+    'rrr3_strong_rounds': 335, 'rrr3_strong_hits': 56, 'rrr3_same2_rounds': 332, 'rrr3_same2_hits': 5,
+    'rrr3_turn_rounds': 339, 'rrr3_turn_hits': 6, 'rrr3_sameyx_rounds': 339, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 274, 'power_hits': 206,
 }
 
 
@@ -5170,6 +5170,13 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         nv_ = (v // 10) * 10 + cut(v % 10)
         if nv_ not in [w for w, _ in fam_seats]:
             fam_seats = fam_seats + [(nv_, _adj_lab(nv_))]
+    # result 44 after 99 on EP 81 (series M, M1): STRONG 20 #14 44
+    # (c+1/c-2) was outside the cell.  Every STRONG 20 number is in the
+    # declared cell (cell only); on the M re-run 6 of 11 rounds had 1-2
+    # STRONG 20 numbers outside it
+    for v in strong:
+        if v not in [w for w, _ in fam_seats]:
+            fam_seats = fam_seats + [(v, _adj_lab(v))]
     if os.environ.get('RRR3_DUMP2'):
         import json
         with open(os.environ['RRR3_DUMP2']) as fh:
@@ -6081,21 +6088,6 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             ocjp_final4 = _rrr_final4(o_uniq, f4_lists,
                                       [strong, [v for v, _ in fam_seats], [v for _, _, l_ in nc_spec for v, _ in l_]],
                                       f4_place)
-            # result 34 after 51 (series L): the result was the EP itself
-            # (nc/nc) in 5 of 6 rounds; 34 was FINAL 4 #4 and lost MASTER on
-            # the tie-break.  When the last round's operation was nc/nc
-            # (same op again = the EP) and the EP ties #1, the EP goes first.
-            # Tie-break only; on the L replay it changes only that round.
-            # Widened after result 82 on EP 82 (6 of 7 EP results; 82 was
-            # FINAL 4 #3 with 2 lists against 11's 3): after an nc/nc round
-            # the EP always goes first, out-voted or not in FINAL 4 at all
-            # (then it takes #4's seat).  On J/K the last op was never nc/nc
-            # before an EP result, so nothing there changes
-            if same and same[0] == ep and ocjp_final4 and ocjp_final4[0][0] != ep:
-                e_ = [k_ for k_, (v_, _) in enumerate(ocjp_final4) if v_ == ep]
-                ocjp_final4.insert(0, ocjp_final4.pop(e_[0]) if e_
-                                   else (ep, [n_ for n_, l_ in f4_lists.items() if ep in l_]))
-                ocjp_final4 = ocjp_final4[:4]
             f4_body = [f"★  OCJP FINAL 4  —  after {grid_ep:02d}, EP={ep:02d}  ★", ""]
             for k_, (v_, nm_) in enumerate(ocjp_final4):
                 f4_body.append(f"{k_ + 1}. {v_:02d} ({OP_ABBREV[find_op(ep // 10, v_ // 10)]}/{OP_ABBREV[find_op(ep % 10, v_ % 10)]})"

@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 724, 'tens_cut': 102, 'short_list': 150,
-    'table_rounds': 714, 'table_hits': 98, 'table_chance': 33, 'declared': 679, 'declared_hits': 12,
+    'results': 725, 'tens_cut': 102, 'short_list': 150,
+    'table_rounds': 715, 'table_hits': 98, 'table_chance': 33, 'declared': 680, 'declared_hits': 12,
     'band_hits': 63, 'units_hits': 65, 'second_hits': 15,
     'same_tens': 25,
-    'rrr3_rounds': 410, 'rrr3_hits': 20, 'rrr3_rec_rounds': 411, 'rrr3_rec_hits': 152,
-    'rrr3_same_rounds': 383, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 370, 'rrr3_wide_hits': 43, 'rrr3_yx_rounds': 365, 'rrr3_yx_hits': 38,
-    'rrr3_strong_rounds': 361, 'rrr3_strong_hits': 59, 'rrr3_same2_rounds': 358, 'rrr3_same2_hits': 5,
-    'rrr3_turn_rounds': 365, 'rrr3_turn_hits': 7, 'rrr3_sameyx_rounds': 365, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 300, 'power_hits': 231,
+    'rrr3_rounds': 411, 'rrr3_hits': 20, 'rrr3_rec_rounds': 412, 'rrr3_rec_hits': 152,
+    'rrr3_same_rounds': 384, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 371, 'rrr3_wide_hits': 43, 'rrr3_yx_rounds': 366, 'rrr3_yx_hits': 38,
+    'rrr3_strong_rounds': 362, 'rrr3_strong_hits': 59, 'rrr3_same2_rounds': 359, 'rrr3_same2_hits': 5,
+    'rrr3_turn_rounds': 366, 'rrr3_turn_hits': 7, 'rrr3_sameyx_rounds': 366, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 301, 'power_hits': 231,
 }
 
 
@@ -5077,6 +5077,22 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         strong_lab.setdefault(nv_, lab_)
         if strong_votes.get(nv_, 0) < 14.30000000102:
             strong_votes[nv_] = 14.30000000102
+    # 91. result 86 after 80 (series M) — 86 (c+1/c-2) was outside the cell;
+    #     OCJP place 32 held it as its + form (96 c+2/c-2, x step switched).
+    #     The + forms of the places 31-38 go to the cell (rule 89 gave
+    #     those places only their * forms)
+    for o_ in _rrr_ocjp(ep, both_cut):
+        if not 31 <= o_[2] <= 38:
+            continue
+        w_ = _rrr_ocjp_xswitch(ep, o_[1])
+        if not w_:
+            continue
+        nv_, lab_ = w_
+        if nv_ not in [v for v, _ in fam_seats]:
+            fam_seats = fam_seats + [(nv_, lab_)]
+        strong_lab.setdefault(nv_, lab_)
+        if strong_votes.get(nv_, 0) < 14.300000001015:
+            strong_votes[nv_] = 14.300000001015
     # 81. result 33 after 57 (series K, user's screenshot) — the NC/CUT
     #     SPECIAL numbers (the row after an nc/cut, cut/nc or nc/nc row,
     #     modified every way) go to the declared cell
@@ -6310,6 +6326,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the STRONG 20 number from the declared operations crossed (10 (c+1/c-1) -> 27 (c+2/+1)) also with its digits reversed (-> 72)",
                        "     declared cell: the number a crossed family pair of the STRONG 20 brings (85 and 08 -> 30) also with its digits reversed (-> 03)",
                        "     declared cell: two STRONG 20 numbers of one family, digits the other way round (80 and 03): first tens digit cut + the other tens digit (-> 30)",
+                       "     declared cell: the + forms of the NEXT OPERATION-OCJP places 31-38, x step switched (96 (c+2/c-2) -> 86 (c+1/c-2))",
                        "     declared number nc/cut: its tens cut, both digits cut, and the digits reversed of those and of itself",
                        "     declared cell with a cut/cut number: the cut/nc number with its digits reversed",
                        "     declared cell, end: a number of it whose digits reversed stand in another cell brings that number in",

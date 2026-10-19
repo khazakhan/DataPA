@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 698, 'tens_cut': 101, 'short_list': 149,
-    'table_rounds': 688, 'table_hits': 90, 'table_chance': 33, 'declared': 653, 'declared_hits': 12,
+    'results': 699, 'tens_cut': 102, 'short_list': 150,
+    'table_rounds': 689, 'table_hits': 90, 'table_chance': 33, 'declared': 654, 'declared_hits': 12,
     'band_hits': 61, 'units_hits': 65, 'second_hits': 15,
     'same_tens': 25,
-    'rrr3_rounds': 384, 'rrr3_hits': 18, 'rrr3_rec_rounds': 385, 'rrr3_rec_hits': 145,
-    'rrr3_same_rounds': 357, 'rrr3_same_hits': 13, 'rrr3_wide_rounds': 344, 'rrr3_wide_hits': 40, 'rrr3_yx_rounds': 339, 'rrr3_yx_hits': 34,
-    'rrr3_strong_rounds': 335, 'rrr3_strong_hits': 59, 'rrr3_same2_rounds': 332, 'rrr3_same2_hits': 7,
-    'rrr3_turn_rounds': 339, 'rrr3_turn_hits': 9, 'rrr3_sameyx_rounds': 339, 'rrr3_sameyx_hits': 8,
-    'power_rounds': 274, 'power_hits': 206,
+    'rrr3_rounds': 385, 'rrr3_hits': 18, 'rrr3_rec_rounds': 386, 'rrr3_rec_hits': 146,
+    'rrr3_same_rounds': 358, 'rrr3_same_hits': 14, 'rrr3_wide_rounds': 345, 'rrr3_wide_hits': 40, 'rrr3_yx_rounds': 340, 'rrr3_yx_hits': 34,
+    'rrr3_strong_rounds': 336, 'rrr3_strong_hits': 60, 'rrr3_same2_rounds': 333, 'rrr3_same2_hits': 8,
+    'rrr3_turn_rounds': 340, 'rrr3_turn_hits': 10, 'rrr3_sameyx_rounds': 340, 'rrr3_sameyx_hits': 9,
+    'power_rounds': 275, 'power_hits': 207,
 }
 
 
@@ -6085,11 +6085,17 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             # (nc/nc) in 5 of 6 rounds; 34 was FINAL 4 #4 and lost MASTER on
             # the tie-break.  When the last round's operation was nc/nc
             # (same op again = the EP) and the EP ties #1, the EP goes first.
-            # Tie-break only; on the L replay it changes only that round
+            # Tie-break only; on the L replay it changes only that round.
+            # Widened after result 82 on EP 82 (6 of 7 EP results; 82 was
+            # FINAL 4 #3 with 2 lists against 11's 3): after an nc/nc round
+            # the EP always goes first, out-voted or not in FINAL 4 at all
+            # (then it takes #4's seat).  On J/K the last op was never nc/nc
+            # before an EP result, so nothing there changes
             if same and same[0] == ep and ocjp_final4 and ocjp_final4[0][0] != ep:
                 e_ = [k_ for k_, (v_, _) in enumerate(ocjp_final4) if v_ == ep]
-                if e_ and len(ocjp_final4[e_[0]][1]) == len(ocjp_final4[0][1]):
-                    ocjp_final4.insert(0, ocjp_final4.pop(e_[0]))
+                ocjp_final4.insert(0, ocjp_final4.pop(e_[0]) if e_
+                                   else (ep, [n_ for n_, l_ in f4_lists.items() if ep in l_]))
+                ocjp_final4 = ocjp_final4[:4]
             f4_body = [f"★  OCJP FINAL 4  —  after {grid_ep:02d}, EP={ep:02d}  ★", ""]
             for k_, (v_, nm_) in enumerate(ocjp_final4):
                 f4_body.append(f"{k_ + 1}. {v_:02d} ({OP_ABBREV[find_op(ep // 10, v_ // 10)]}/{OP_ABBREV[find_op(ep % 10, v_ % 10)]})"

@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 740, 'tens_cut': 104, 'short_list': 152,
-    'table_rounds': 730, 'table_hits': 100, 'table_chance': 33, 'declared': 695, 'declared_hits': 13,
-    'band_hits': 64, 'units_hits': 66, 'second_hits': 15,
+    'results': 741, 'tens_cut': 105, 'short_list': 153,
+    'table_rounds': 731, 'table_hits': 100, 'table_chance': 33, 'declared': 696, 'declared_hits': 13,
+    'band_hits': 65, 'units_hits': 66, 'second_hits': 15,
     'same_tens': 25,
-    'rrr3_rounds': 426, 'rrr3_hits': 22, 'rrr3_rec_rounds': 427, 'rrr3_rec_hits': 160,
-    'rrr3_same_rounds': 399, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 386, 'rrr3_wide_hits': 45, 'rrr3_yx_rounds': 381, 'rrr3_yx_hits': 40,
-    'rrr3_strong_rounds': 377, 'rrr3_strong_hits': 62, 'rrr3_same2_rounds': 374, 'rrr3_same2_hits': 6,
-    'rrr3_turn_rounds': 381, 'rrr3_turn_hits': 7, 'rrr3_sameyx_rounds': 381, 'rrr3_sameyx_hits': 5,
-    'power_rounds': 316, 'power_hits': 246,
+    'rrr3_rounds': 427, 'rrr3_hits': 22, 'rrr3_rec_rounds': 428, 'rrr3_rec_hits': 160,
+    'rrr3_same_rounds': 400, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 387, 'rrr3_wide_hits': 45, 'rrr3_yx_rounds': 382, 'rrr3_yx_hits': 41,
+    'rrr3_strong_rounds': 378, 'rrr3_strong_hits': 63, 'rrr3_same2_rounds': 375, 'rrr3_same2_hits': 6,
+    'rrr3_turn_rounds': 382, 'rrr3_turn_hits': 7, 'rrr3_sameyx_rounds': 382, 'rrr3_sameyx_hits': 5,
+    'power_rounds': 317, 'power_hits': 247,
 }
 
 
@@ -2977,11 +2977,14 @@ def _rrr_ocjp_ycut(ep, lab, place=0):
     step (result 10 after 75 on EP 71, c-1/-1: place 6 held 14 (c-1/c-2)
     -> 10 (c-1/-1), 19 (c-1/-2)).  On the places 31-38 (°) for any x
     (result 25 after 40 on EP 12, +1/c-2: place 35 held 21 (+1/-1) and
-    20* (+1/-2) -> 26 (+1/c-1), 25 (+1/c-2))."""
+    20* (+1/-2) -> 26 (+1/c-1), 25 (+1/c-2)).  On the places 1-8 for any
+    x too (result 82 after 36 on EP 70, +1/+2: place 2 held 87 (+1/c+2)
+    -> 82 (+1/+2), 81 (+1/+1)); replay of 754 rounds: 730 -> 732 hits,
+    size +0.4 (3.0 expected) = chance, no loss."""
     rev = {v_: k_ for k_, v_ in OP_ABBREV.items()}
     lx, ly = lab.split('/')
     oy = rev[ly]
-    if not (lx in ('nc', 'cut') or lx.startswith('c') or place > 30) or oy not in _X_STEP_SWITCH:
+    if not (lx in ('nc', 'cut') or lx.startswith('c') or place > 30 or 1 <= place <= 8) or oy not in _X_STEP_SWITCH:
         return []
     return [(compute_variants(ep, rev[lx], KK_CUT_TOGGLE[o_])[0], f"{lx}/{OP_ABBREV[KK_CUT_TOGGLE[o_]]}")
             for o_ in (oy, _X_STEP_SWITCH[oy])]

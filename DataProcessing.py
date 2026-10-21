@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 820, 'tens_cut': 115, 'short_list': 168,
-    'table_rounds': 810, 'table_hits': 112, 'table_chance': 33, 'declared': 775, 'declared_hits': 15,
+    'results': 821, 'tens_cut': 115, 'short_list': 168,
+    'table_rounds': 811, 'table_hits': 112, 'table_chance': 33, 'declared': 776, 'declared_hits': 15,
     'band_hits': 72, 'units_hits': 73, 'second_hits': 17,
     'same_tens': 25,
-    'rrr3_rounds': 506, 'rrr3_hits': 30, 'rrr3_rec_rounds': 507, 'rrr3_rec_hits': 192,
-    'rrr3_same_rounds': 479, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 466, 'rrr3_wide_hits': 52, 'rrr3_yx_rounds': 461, 'rrr3_yx_hits': 51,
-    'rrr3_strong_rounds': 457, 'rrr3_strong_hits': 80, 'rrr3_same2_rounds': 454, 'rrr3_same2_hits': 9,
-    'rrr3_turn_rounds': 461, 'rrr3_turn_hits': 9, 'rrr3_sameyx_rounds': 461, 'rrr3_sameyx_hits': 6,
-    'power_rounds': 396, 'power_hits': 325,
+    'rrr3_rounds': 507, 'rrr3_hits': 30, 'rrr3_rec_rounds': 508, 'rrr3_rec_hits': 192,
+    'rrr3_same_rounds': 480, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 467, 'rrr3_wide_hits': 52, 'rrr3_yx_rounds': 462, 'rrr3_yx_hits': 51,
+    'rrr3_strong_rounds': 458, 'rrr3_strong_hits': 80, 'rrr3_same2_rounds': 455, 'rrr3_same2_hits': 9,
+    'rrr3_turn_rounds': 462, 'rrr3_turn_hits': 9, 'rrr3_sameyx_rounds': 462, 'rrr3_sameyx_hits': 6,
+    'power_rounds': 397, 'power_hits': 325,
 }
 
 
@@ -5216,6 +5216,13 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         nv_ = (v // 10) * 10 + cut(v % 10)
         if nv_ not in [w for w, _ in fam_seats]:
             fam_seats = fam_seats + [(nv_, _adj_lab(nv_))]
+    # result 85 after 25 on EP 90 (series N, N28): STRONG 20 ADJUSTMENTS #4
+    #     05 (+1/cut) with its x sign flipped gave 85 (-1/cut) but the cell
+    #     did not hold it.  The x-sign-flipped column of the adjustments goes
+    #     to the declared cell too, so every adjustments number is in it
+    for v in strong_adj:
+        if v not in [w for w, _ in fam_seats]:
+            fam_seats = fam_seats + [(v, _adj_lab(v))]
     # result 44 after 99 on EP 81 (series M, M1): STRONG 20 #14 44
     # (c+1/c-2) was outside the cell.  Every STRONG 20 number is in the
     # declared cell (cell only); on the M re-run 6 of 11 rounds had 1-2
@@ -6305,6 +6312,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the NEXT OPERATION-OCJP places 31-38, one operation on both sides (-1/-1 -> 57)",
                        "     declared cell: NC/CUT SPECIAL, the row after an nc/cut, cut/nc or nc/nc row modified every way (+2/c+2 -> c+2/c-2 = 33)",
                        "     declared cell: STRONG 20 ADJUSTMENTS, every seat with its y cut toggled (98 (c+2/nc) -> 93 (c+2/cut))",
+                       "     declared cell: STRONG 20 ADJUSTMENTS, every seat with its x sign flipped too (05 (+1/cut) -> 85 (-1/cut))",
                        "     declared cell: the NEXT OPERATION-OCJP mirror places 21-30 (nc/-1 -> 38)",
                        "     declared cell: the NEXT OPERATION-OCJP places 1-20 (-1/cut -> 45), so every OCJP place is in the cell",
                        "     declared cell: every 3RRR RESULT number, not only the first (94 65 66 36 -> 36)",

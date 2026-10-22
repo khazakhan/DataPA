@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 838, 'tens_cut': 116, 'short_list': 169,
-    'table_rounds': 828, 'table_hits': 112, 'table_chance': 33, 'declared': 793, 'declared_hits': 15,
+    'results': 839, 'tens_cut': 116, 'short_list': 169,
+    'table_rounds': 829, 'table_hits': 112, 'table_chance': 33, 'declared': 794, 'declared_hits': 15,
     'band_hits': 73, 'units_hits': 73, 'second_hits': 17,
     'same_tens': 25,
-    'rrr3_rounds': 524, 'rrr3_hits': 30, 'rrr3_rec_rounds': 525, 'rrr3_rec_hits': 198,
-    'rrr3_same_rounds': 497, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 484, 'rrr3_wide_hits': 54, 'rrr3_yx_rounds': 479, 'rrr3_yx_hits': 54,
-    'rrr3_strong_rounds': 475, 'rrr3_strong_hits': 86, 'rrr3_same2_rounds': 472, 'rrr3_same2_hits': 10,
-    'rrr3_turn_rounds': 479, 'rrr3_turn_hits': 9, 'rrr3_sameyx_rounds': 479, 'rrr3_sameyx_hits': 6,
-    'power_rounds': 414, 'power_hits': 342,
+    'rrr3_rounds': 525, 'rrr3_hits': 30, 'rrr3_rec_rounds': 526, 'rrr3_rec_hits': 198,
+    'rrr3_same_rounds': 498, 'rrr3_same_hits': 10, 'rrr3_wide_rounds': 485, 'rrr3_wide_hits': 54, 'rrr3_yx_rounds': 480, 'rrr3_yx_hits': 54,
+    'rrr3_strong_rounds': 476, 'rrr3_strong_hits': 86, 'rrr3_same2_rounds': 473, 'rrr3_same2_hits': 10,
+    'rrr3_turn_rounds': 480, 'rrr3_turn_hits': 9, 'rrr3_sameyx_rounds': 480, 'rrr3_sameyx_hits': 6,
+    'power_rounds': 415, 'power_hits': 343,
 }
 
 
@@ -3040,6 +3040,10 @@ def _rrr_final4(cands, lists, tie_lists, place):
     return [(v, votes(v)) for v in top]
 
 
+# the old (x, y) operations of every RRR table row, set by _rrr_box
+_RRR_OCJP_OLD = []
+
+
 def _rrr_ocjp(ep, both_cut):
     """NEXT OPERATION-OCJP (user's screenshot, 2026-10-14): the two operations
     of the RRR table's LAST row, X/Y (xy) and Y/X (yx), worked into more
@@ -3062,6 +3066,14 @@ def _rrr_ocjp(ep, both_cut):
         row_k -= 2
         v_ = both_cut[row_k][0]
         X, Y = find_op(ep // 10, v_ // 10), find_op(ep % 10, v_ % 10)
+    # no row has a step at all (result 41 after 43 on EP 99, series N, N46:
+    # the table's only row was LAST 49 cut/nc, 94 nc/cut, and OCJP was only
+    # 44 49 94 99): take the LAST row's old operation (c+1/nc) instead.
+    # Replay 853 rounds: 3 such rounds (I43, K34, N46), 0 -> 3 hits, but
+    # OCJP then holds all 100 there — the hits come from size, not skill
+    # (the previous round's operation instead: 2 of 3)
+    if X in ('no_change', 'cut') and Y in ('no_change', 'cut') and _RRR_OCJP_OLD:
+        X, Y = _RRR_OCJP_OLD[-1]
     if '?' in (X, Y):
         return []
     s, r = SIGN_FLIP, KK_CUT_TOGGLE
@@ -3317,6 +3329,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         body.append(f"  {tag:<12} {a:02d} → {b:02d}   {OP_ABBREV[x_op]:<6} {OP_ABBREV[y_op]:<6} →  "
                     f"{nxa:<6} {nya:<6}  " + f"{xy:02d}{star(xy)}({nxa}/{nya})".ljust(KW)
                     + f"{yx:02d}{star(yx)}({nya}/{nxa})".ljust(KW))
+    _RRR_OCJP_OLD[:] = [(x_, y_) for _, _, _, x_, y_ in row_ops]
     body += ['─' * len(head),
              "  new x = old y, cut switched + sign flipped   |   new y = old x, cut switched, one step down",
              "  LAST = the chain's own last step.  Backtest (57,662 positions): table hit 6.42% vs 6.44% chance.",

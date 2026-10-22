@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 896, 'tens_cut': 122, 'short_list': 175,
-    'table_rounds': 886, 'table_hits': 118, 'table_chance': 33, 'declared': 851, 'declared_hits': 15,
+    'results': 897, 'tens_cut': 122, 'short_list': 175,
+    'table_rounds': 887, 'table_hits': 118, 'table_chance': 33, 'declared': 852, 'declared_hits': 15,
     'band_hits': 78, 'units_hits': 75, 'second_hits': 18,
     'same_tens': 25,
-    'rrr3_rounds': 582, 'rrr3_hits': 32, 'rrr3_rec_rounds': 583, 'rrr3_rec_hits': 219,
-    'rrr3_same_rounds': 555, 'rrr3_same_hits': 11, 'rrr3_wide_rounds': 542, 'rrr3_wide_hits': 61, 'rrr3_yx_rounds': 537, 'rrr3_yx_hits': 60,
-    'rrr3_strong_rounds': 533, 'rrr3_strong_hits': 101, 'rrr3_same2_rounds': 530, 'rrr3_same2_hits': 10,
-    'rrr3_turn_rounds': 537, 'rrr3_turn_hits': 12, 'rrr3_sameyx_rounds': 537, 'rrr3_sameyx_hits': 6,
-    'power_rounds': 472, 'power_hits': 399,
+    'rrr3_rounds': 583, 'rrr3_hits': 32, 'rrr3_rec_rounds': 584, 'rrr3_rec_hits': 220,
+    'rrr3_same_rounds': 556, 'rrr3_same_hits': 11, 'rrr3_wide_rounds': 543, 'rrr3_wide_hits': 61, 'rrr3_yx_rounds': 538, 'rrr3_yx_hits': 60,
+    'rrr3_strong_rounds': 534, 'rrr3_strong_hits': 101, 'rrr3_same2_rounds': 531, 'rrr3_same2_hits': 10,
+    'rrr3_turn_rounds': 538, 'rrr3_turn_hits': 12, 'rrr3_sameyx_rounds': 538, 'rrr3_sameyx_hits': 6,
+    'power_rounds': 473, 'power_hits': 400,
 }
 
 
@@ -3117,13 +3117,16 @@ def _rrr_ocjp(ep, both_cut):
     if ('no_change', 'no_change') not in kept:
         out.append((compute_variants(ep, 'no_change', 'no_change')[0], "nc/nc", 40, False))
         kept.add(('no_change', 'no_change'))
-    # when an earlier row was used (LAST row had no step), the LAST row's
-    # own EP forms stay in OCJP too (39-42)
-    if row_k < len(both_cut) - 2:
-        for j_, op_ in enumerate((('no_change', 'no_change'), ('no_change', 'cut'), ('cut', 'no_change'))):
-            if op_ not in kept:
-                out.append((compute_variants(ep, op_[0], op_[1])[0],
-                            f"{OP_ABBREV[op_[0]]}/{OP_ABBREV[op_[1]]}", 40 + j_, False))
+    # 41-42 (result 23 after 13 on EP 28, series N, N104: nc/cut; the
+    # LAST row was 31 +1/c-2, 59 c-2/+1 and OCJP held the EP's cut/cut 73
+    # and nc/nc 28 but not its nc/cut 23 or cut/nc 78; N101 left out the
+    # same pair 22 77): the EP with one digit cut, always (before, only
+    # when an earlier row stood in for a no-step LAST row)
+    for j_, op_ in enumerate((('no_change', 'cut'), ('cut', 'no_change'))):
+        if op_ not in kept:
+            out.append((compute_variants(ep, op_[0], op_[1])[0],
+                        f"{OP_ABBREV[op_[0]]}/{OP_ABBREV[op_[1]]}", 41 + j_, False))
+            kept.add(op_)
     return out
 
 

@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 940, 'tens_cut': 128, 'short_list': 185,
-    'table_rounds': 930, 'table_hits': 122, 'table_chance': 33, 'declared': 895, 'declared_hits': 16,
+    'results': 941, 'tens_cut': 128, 'short_list': 185,
+    'table_rounds': 931, 'table_hits': 122, 'table_chance': 33, 'declared': 896, 'declared_hits': 16,
     'band_hits': 83, 'units_hits': 83, 'second_hits': 19,
     'same_tens': 25,
-    'rrr3_rounds': 626, 'rrr3_hits': 34, 'rrr3_rec_rounds': 627, 'rrr3_rec_hits': 233,
-    'rrr3_same_rounds': 599, 'rrr3_same_hits': 12, 'rrr3_wide_rounds': 586, 'rrr3_wide_hits': 67, 'rrr3_yx_rounds': 581, 'rrr3_yx_hits': 63,
-    'rrr3_strong_rounds': 577, 'rrr3_strong_hits': 118, 'rrr3_same2_rounds': 574, 'rrr3_same2_hits': 10,
-    'rrr3_turn_rounds': 581, 'rrr3_turn_hits': 13, 'rrr3_sameyx_rounds': 581, 'rrr3_sameyx_hits': 6,
-    'power_rounds': 516, 'power_hits': 423,
+    'rrr3_rounds': 627, 'rrr3_hits': 34, 'rrr3_rec_rounds': 628, 'rrr3_rec_hits': 233,
+    'rrr3_same_rounds': 600, 'rrr3_same_hits': 12, 'rrr3_wide_rounds': 587, 'rrr3_wide_hits': 67, 'rrr3_yx_rounds': 582, 'rrr3_yx_hits': 64,
+    'rrr3_strong_rounds': 578, 'rrr3_strong_hits': 118, 'rrr3_same2_rounds': 575, 'rrr3_same2_hits': 10,
+    'rrr3_turn_rounds': 582, 'rrr3_turn_hits': 13, 'rrr3_sameyx_rounds': 582, 'rrr3_sameyx_hits': 6,
+    'power_rounds': 517, 'power_hits': 423,
 }
 
 
@@ -6283,6 +6283,23 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         r_box += [f"  {s_g}│{s_rst}" + f"{s_g}│{s_rst}".join(f" {c_:<{w_ - 1}}" for c_, w_ in zip(r_, r_w)) + f"{s_g}│{s_rst}"
                   for r_ in r_rows]
         r_box.append(f"  {s_g}└{'┴'.join('─' * w_ for w_ in r_w)}┘{s_rst}")
+        # SUMMARY NUMBERS below the OCJP FINAL 4 / MASTER rows (user,
+        # 2026-10-23): every two-digit number in the summary's value column
+        # (After number and EP left out), no repeats, ascending, one row a
+        # decade 00-09 .. 90-99, each number in its own units slot
+        u_nums = sorted({int(v_) for r_ in r_rows if r_[0] not in ("After number", "Operations on EP")
+                         for v_ in re.findall(r'\b\d\d\b', r_[1])})
+        u_title = f"★  SUMMARY NUMBERS  —  {len(u_nums)}, no repeats, after {grid_ep:02d}, EP={ep:02d}  ★"
+        u_rows = [(f"{d_}0-{d_}9", ' '.join(f"{d_ * 10 + k_:02d}" if d_ * 10 + k_ in u_nums else '  '
+                                             for k_ in range(10))) for d_ in range(10)]
+        u_w = [max(len(a_) for a_, _ in u_rows) + 2, len(u_rows[0][1]) + 2]
+        u_tw = max(sum(u_w) + 1, len(u_title) + 2)
+        u_w[1] = u_tw - 1 - u_w[0]
+        r_box += [f"  {s_g}┌{'─' * u_tw}┐{s_rst}",
+                  f"  {s_g}│{s_rst}{p_rib}{u_title:^{u_tw}}{s_rst}{s_g}│{s_rst}",
+                  f"  {s_g}├{'─' * u_w[0]}┬{'─' * u_w[1]}┤{s_rst}"]
+        r_box += [f"  {s_g}│{s_rst} {a_:<{u_w[0] - 1}}{s_g}│{s_rst} {b_:<{u_w[1] - 1}}{s_g}│{s_rst}" for a_, b_ in u_rows]
+        r_box.append(f"  {s_g}└{'─' * u_w[0]}┴{'─' * u_w[1]}┘{s_rst}")
         # the RRR: NEXT OPERATION table below the ROUND SUMMARY (user's
         # screenshots, 2026-10-13)
         t_tw = max(len(l_) for l_ in rrr_tbl) + 2

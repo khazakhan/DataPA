@@ -38,3 +38,17 @@ Data: (A) 885 real rounds, every series b–n, re-run with today's script (`rrr_
 | random 4 of OCJP | 32 = 4.1% | 15 = 4.1% |
 
 **Conclusion:** no operation-based score beats the shipped rule. The ops on their own (op, x op, y op, place, form) pick at the random rate: the result's operation carries no memory from earlier rounds. Combined A+B, current 80/1138 = 7.0% vs best alternative 78/1138 = 6.9%. FINAL 4 left unchanged.
+
+# Declared block as FINAL 4? (2026-10-23, after N148)
+
+User asked again for a FINAL 4 change after 25 rounds without a hit (series N: 7/148 = 4.7%). On series N, STRONG #12–15 (declared number and its neighbours) held 14/148 = 9.5% — but that was picked after looking. Out-of-sample check on all 954 replayed rounds (`rrr_datasets/dump_all.py`, today's script):
+
+| Pick | older series (807) | series N (147) |
+|---|---|---|
+| **FINAL 4 shipped** | **67 = 8.3%** | 7 = 4.8% |
+| STRONG #1–4 | 50 = 6.2% | 6 = 4.1% |
+| STRONG #9–12 | 53 = 6.6% | 10 = 6.8% |
+| STRONG #12–15 | 55 = 6.8% | 14 = 9.5% |
+| STRONG #13–16 | 48 = 5.9% | 13 = 8.8% |
+
+The N advantage of the declared block does not hold on the older rounds; the shipped rule is still best overall (74/954 = 7.8% vs 69/954 = 7.2%). FINAL 4 left unchanged.

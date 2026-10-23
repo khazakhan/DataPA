@@ -68,3 +68,10 @@ User idea: the result is often a FINAL 4 operation turned around on the EP: x an
 | swap + signs + cut (all) | 47.4 | 45.5% | 47.4% | 0.96 |
 
 Every move adds numbers at or below chance. The step-toward rule used **in place of** FINAL 4 holds 49/951 = 5.2% vs shipped FINAL 4 74/951 = 7.8%. The examples (N156 23 → 07, N158 05 → 04) are real, but a move set that size catches results by chance just as often. FINAL 4 left unchanged.
+
+## FINAL 4 tie-break (2026-10-23, after N162=67)
+
+67 was in 2 lists (RRR table, yx) and lost the "lower number" tie-break (rank 13).
+`tiebreak_study.py all.json`, 963 replayed rounds, tie-break after votes + STRONG:
+lower 74, OCJP place 70, rec 77, table 73, again 77, wide 72, yx 70, found 68.
+All within noise (±6 of 963), halves disagree; shipped tie-break kept.

@@ -75,3 +75,22 @@ Every move adds numbers at or below chance. The step-toward rule used **in place
 `tiebreak_study.py all.json`, 963 replayed rounds, tie-break after votes + STRONG:
 lower 74, OCJP place 70, rec 77, table 73, again 77, wide 72, yx 70, found 68.
 All within noise (±6 of 963), halves disagree; shipped tie-break kept.
+
+## Star pick vs FINAL 4 (2026-10-24, after N177)
+
+Dumped every star vote (`star` key in RRR3_DUMP2) and replayed 977 rounds
+(`rrr_datasets/dump_all.py`, then `rrr_final4/star_vs_f4.py all.json`).
+
+| Pick | Hits | Rate | Chance |
+|---|---|---|---|
+| FINAL 4 (shipped) | 74/977 | 7.6% | 4% |
+| star top 4 | 73/977 | 7.5% | 4% |
+| FINAL 4 + star top 4 (5.5 numbers) | 98/977 | 10.0% | 5.5% |
+| MASTER | 21/977 | 2.1% | 1% |
+| star #1 | 29/977 | 3.0% | 1% |
+
+Star #1 vs MASTER: same pick in 420 rounds; where they differ star #1 hit 16,
+MASTER 8 (sign test p about 0.15). Star #1 ahead or level in every quarter.
+Kept FINAL 4 and MASTER; star #1 is tracked live as a second single pick from N178.
+Note: rounds replayed after the N176 OCJP repair (places 19-20 % form) used the
+new OCJP; the effect on FINAL 4 is a few numbers on ~11% of rounds.

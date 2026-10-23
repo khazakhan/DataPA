@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 964, 'tens_cut': 128, 'short_list': 185,
-    'table_rounds': 954, 'table_hits': 125, 'table_chance': 33, 'declared': 919, 'declared_hits': 16,
-    'band_hits': 83, 'units_hits': 83, 'second_hits': 19,
+    'results': 965, 'tens_cut': 129, 'short_list': 186,
+    'table_rounds': 955, 'table_hits': 125, 'table_chance': 33, 'declared': 920, 'declared_hits': 16,
+    'band_hits': 84, 'units_hits': 83, 'second_hits': 19,
     'same_tens': 25,
-    'rrr3_rounds': 650, 'rrr3_hits': 35, 'rrr3_rec_rounds': 651, 'rrr3_rec_hits': 239,
-    'rrr3_same_rounds': 623, 'rrr3_same_hits': 12, 'rrr3_wide_rounds': 610, 'rrr3_wide_hits': 68, 'rrr3_yx_rounds': 605, 'rrr3_yx_hits': 69,
-    'rrr3_strong_rounds': 601, 'rrr3_strong_hits': 118, 'rrr3_same2_rounds': 598, 'rrr3_same2_hits': 11,
-    'rrr3_turn_rounds': 605, 'rrr3_turn_hits': 13, 'rrr3_sameyx_rounds': 605, 'rrr3_sameyx_hits': 6,
-    'power_rounds': 540, 'power_hits': 423,
+    'rrr3_rounds': 651, 'rrr3_hits': 35, 'rrr3_rec_rounds': 652, 'rrr3_rec_hits': 240,
+    'rrr3_same_rounds': 624, 'rrr3_same_hits': 12, 'rrr3_wide_rounds': 611, 'rrr3_wide_hits': 68, 'rrr3_yx_rounds': 606, 'rrr3_yx_hits': 69,
+    'rrr3_strong_rounds': 602, 'rrr3_strong_hits': 119, 'rrr3_same2_rounds': 599, 'rrr3_same2_hits': 11,
+    'rrr3_turn_rounds': 606, 'rrr3_turn_hits': 13, 'rrr3_sameyx_rounds': 606, 'rrr3_sameyx_hits': 6,
+    'power_rounds': 541, 'power_hits': 423,
 }
 
 
@@ -6248,6 +6248,13 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 k_votes[v_] = k_votes.get(v_, 0) + 1
         k_top = sorted(k_votes, key=lambda v_: (-k_votes[v_], v_))[:3]
         _RRR3_PREV['star_picks'] = k_top
+        if os.environ.get('RRR3_DUMP2') and os.path.exists(os.environ['RRR3_DUMP2']):
+            import json
+            with open(os.environ['RRR3_DUMP2']) as fh:
+                d2_ = json.load(fh)
+            d2_['star'] = [[v_, k_votes[v_]] for v_ in sorted(k_votes, key=lambda v_: (-k_votes[v_], v_))]
+            with open(os.environ['RRR3_DUMP2'], 'w') as fh:
+                json.dump(d2_, fh)
         if k_top:
             r_rows.append(("Star picks", ',  '.join(('★ ' if k_ == 0 else '') + _s_lab(v_) + f" [{k_votes[v_]}]"
                                                      for k_, v_ in enumerate(k_top)),

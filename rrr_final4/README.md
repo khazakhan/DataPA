@@ -52,3 +52,19 @@ User asked again for a FINAL 4 change after 25 rounds without a hit (series N: 7
 | STRONG #13–16 | 48 = 5.9% | 13 = 8.8% |
 
 The N advantage of the declared block does not hold on the older rounds; the shipped rule is still best overall (74/954 = 7.8% vs 69/954 = 7.2%). FINAL 4 left unchanged.
+
+# FINAL 4 ops flipped / stepped? (2026-10-23, after N158)
+
+User idea: the result is often a FINAL 4 operation turned around on the EP: x and y ops swapped (yx), a sign flipped, the cut added or removed, and the step moved one up or down toward the last operation's step. `flip_study.py` builds those forms from the shipped FINAL 4 ops in all 963 replayed rounds (`rrr_datasets/dump_all.py`, today's script) and counts hits on the **new numbers only** (FINAL 4 itself left out), against their size.
+
+| Moves | New numbers a round | Hits on new numbers | Chance | Hits / chance |
+|---|---|---|---|---|
+| step 1 toward last op | 2.7 | 2.5% | 2.7% | 0.94 |
+| swap x/y only (yx) | 2.8 | 2.0% | 2.8% | 0.71 |
+| signs flipped only | 7.7 | 7.3% | 7.7% | 0.95 |
+| cut added/removed only | 11.0 | 10.9% | 11.0% | 1.00 |
+| swap + signs | 14.4 | 13.2% | 14.4% | 0.91 |
+| step free ±1 | 19.8 | 18.5% | 19.8% | 0.93 |
+| swap + signs + cut (all) | 47.4 | 45.5% | 47.4% | 0.96 |
+
+Every move adds numbers at or below chance. The step-toward rule used **in place of** FINAL 4 holds 49/951 = 5.2% vs shipped FINAL 4 74/951 = 7.8%. The examples (N156 23 → 07, N158 05 → 04) are real, but a move set that size catches results by chance just as often. FINAL 4 left unchanged.

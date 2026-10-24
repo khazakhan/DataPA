@@ -94,3 +94,21 @@ MASTER 8 (sign test p about 0.15). Star #1 ahead or level in every quarter.
 Kept FINAL 4 and MASTER; star #1 is tracked live as a second single pick from N178.
 Note: rounds replayed after the N176 OCJP repair (places 19-20 % form) used the
 new OCJP; the effect on FINAL 4 is a few numbers on ~11% of rounds.
+
+## Tens / units digit study (2026-10-24, after N208 = 22, FINAL 4 #1 was 23)
+User question: FINAL 4 often has the result's tens digit; can the units be found?
+Script: `digit_study.py <all.json>` on 1018 replayed rounds.
+- Tens digit of the result in FINAL 4's tens: 35.9%. FINAL 4 has 2-4 distinct tens,
+  so chance is 33.5%; with results shuffled the 95% band is 31.4%-36.8%. So the tens
+  is not found more often than chance. Each rank's tens: 10.4%-11.6% (chance 10%).
+- When #1's tens is right (118 rounds), the units distance to #1 is 0:24, 1:21,
+  2:26, 3:21, 4:20, 5:6. Apart from exact hits this is uniform: a units digit one
+  off (22 vs 23) is no more common than chance.
+- 15 single units-digit rules tested (#1 units ±1/cut, EP units, after units, most
+  or least common units in the lists, ...). #1 units 13.9% is just FINAL 4's own
+  exact hits (11.5% after removing them, chance about 9%). Most common units digit
+  in the lists 12.4% (126 vs shuffle band 85-121; halves 11.2% / 13.6%), but as a
+  FINAL 4 tie-break it gives 73 hits against the shipped 83 (both halves worse).
+- 4-number sets built on #1's tens (#1 band ±1 + #2, #1/#2 with units +1): 5.5%
+  and 6.1% vs FINAL 4 8.2%.
+Kept FINAL 4 unchanged.

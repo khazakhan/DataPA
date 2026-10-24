@@ -141,3 +141,8 @@ FINAL 4 77/1029 = 7.5%, MASTER 21/1029 = 2.0%. The older replay's 83/1018 counte
 six bad rounds (n206-n211 built from the old results re-sent by mistake on
 2026-10-24, result = EP): corrected figure is 7.5%, not 8.2%. No code change moved
 a FINAL 4 hit in any series.
+
+## N225 OCJP repair: % form on places 27-30 when X == Y (2026-10-25)
+Result 92 (+2/cut) after 89 on EP 77; LAST row c+2/c+2 twice. Global replay after
+the change, all 13 series, 1032 rounds: 0 errors, OCJP 1031/1032 (b 63/64, all
+others 100%), no hit lost in any series, FINAL 4 78/1032, MASTER 21/1032.

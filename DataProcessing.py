@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 1017, 'tens_cut': 135, 'short_list': 192,
-    'table_rounds': 1007, 'table_hits': 128, 'table_chance': 33, 'declared': 972, 'declared_hits': 19,
+    'results': 1018, 'tens_cut': 135, 'short_list': 192,
+    'table_rounds': 1008, 'table_hits': 128, 'table_chance': 33, 'declared': 973, 'declared_hits': 19,
     'band_hits': 87, 'units_hits': 87, 'second_hits': 20,
     'same_tens': 26,
-    'rrr3_rounds': 703, 'rrr3_hits': 37, 'rrr3_rec_rounds': 704, 'rrr3_rec_hits': 254,
-    'rrr3_same_rounds': 676, 'rrr3_same_hits': 13, 'rrr3_wide_rounds': 663, 'rrr3_wide_hits': 72, 'rrr3_yx_rounds': 658, 'rrr3_yx_hits': 77,
-    'rrr3_strong_rounds': 654, 'rrr3_strong_hits': 130, 'rrr3_same2_rounds': 651, 'rrr3_same2_hits': 12,
-    'rrr3_turn_rounds': 658, 'rrr3_turn_hits': 13, 'rrr3_sameyx_rounds': 658, 'rrr3_sameyx_hits': 6,
-    'power_rounds': 593, 'power_hits': 425,
+    'rrr3_rounds': 704, 'rrr3_hits': 37, 'rrr3_rec_rounds': 705, 'rrr3_rec_hits': 254,
+    'rrr3_same_rounds': 677, 'rrr3_same_hits': 13, 'rrr3_wide_rounds': 664, 'rrr3_wide_hits': 72, 'rrr3_yx_rounds': 659, 'rrr3_yx_hits': 77,
+    'rrr3_strong_rounds': 655, 'rrr3_strong_hits': 130, 'rrr3_same2_rounds': 652, 'rrr3_same2_hits': 12,
+    'rrr3_turn_rounds': 659, 'rrr3_turn_hits': 13, 'rrr3_sameyx_rounds': 659, 'rrr3_sameyx_hits': 6,
+    'power_rounds': 594, 'power_hits': 425,
 }
 
 
@@ -3006,7 +3006,14 @@ def _rrr_ocjp_xcut(ep, lab, place=0):
     ox = rev[lx]
     # places 19-20 (the LAST row's own xy and yx) too, any y (result 84
     # after 70 on EP 55: place 20 held 34 (-2/-1), the result was c-2/-1)
-    if not (15 <= place <= 18 and ly in ('nc', 'cut') or 19 <= place <= 20) or ox not in _X_STEP_SWITCH:
+    # places 27-30 (X/cut, Y/cut, X/nc, Y/nc: the same shape as 15-18) too,
+    # when the LAST row's two operations are the same (result 92 after 89 on
+    # EP 77, series N, N225, +2/cut: LAST row 44 c+2/c+2 twice, so half the
+    # places repeated and stood empty; place 27 held 42 (c+2/cut)).  Replay
+    # of all 13 series, 1029 rounds: 167 such rounds, +2 hits (b, d), size
+    # +0.33 a round (3.4 expected) = chance, no loss (ocjp_xcut_mirror_test.py)
+    mirror_ = 27 <= place <= 30 and ly in ('nc', 'cut') and _RRR_OCJP_SAME[0]
+    if not (15 <= place <= 18 and ly in ('nc', 'cut') or 19 <= place <= 20 or mirror_) or ox not in _X_STEP_SWITCH:
         return []
     ys_ = [rev[ly]]
     # result 16 after 22 on EP 83 (series N, N209), c-2/c-2: place 19 held
@@ -3072,6 +3079,8 @@ def _rrr_final4(cands, lists, tie_lists, place):
 
 # the old (x, y) operations of every RRR table row, set by _rrr_box
 _RRR_OCJP_OLD = []
+# True when the OCJP LAST row's two operations are the same (set by _rrr_ocjp)
+_RRR_OCJP_SAME = [False]
 
 
 def _rrr_ocjp(ep, both_cut):
@@ -3106,6 +3115,7 @@ def _rrr_ocjp(ep, both_cut):
         X, Y = _RRR_OCJP_OLD[-1]
     if '?' in (X, Y):
         return []
+    _RRR_OCJP_SAME[0] = X == Y
     s, r = SIGN_FLIP, KK_CUT_TOGGLE
     user = [(r[s[X]], s[Y]), (r[s[Y]], s[X]), (r[s[X]], r[Y]), (r[s[Y]], r[X]),
             (s[Y], X), (s[X], s[Y]), (r[s[Y]], Y), (r[s[X]], X),

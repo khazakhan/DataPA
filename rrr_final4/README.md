@@ -112,3 +112,23 @@ Script: `digit_study.py <all.json>` on 1018 replayed rounds.
 - 4-number sets built on #1's tens (#1 band ±1 + #2, #1/#2 with units +1): 5.5%
   and 6.1% vs FINAL 4 8.2%.
 Kept FINAL 4 unchanged.
+
+## Deep diagnosis (2026-10-25, after N222 = 83, user: "6 months, FINAL 4 / MASTER 1")
+Script: `diagnosis.py <all.json>`, all series b..n together (1018 replayed rounds).
+- The result's digit change from the EP is uniform: tens chi2 7.8, units chi2 6.7
+  (9 df, 5% cut 16.9). Every operation x/y is about equally likely, every round.
+  Results 00-99 are uniform too (chi2 79.6, cut 123.2).
+- One non-uniform sign (tens digit after the previous tens digit, chi2 110 / 123 / 107
+  on all / halves) does not predict walk-forward: top-1 tens 10.9% (chance 10%,
+  p 0.21), top-3 31.2% (chance 30%, p 0.24).
+- Ordering: ranks 1-4 hold 83 results (41 by chance, ratio 2.0), ranks 5-10 1.3,
+  ranks 11-40 1.0-1.1, ranks 41-100 0.84-0.93. Votes per number: 0 votes 0.91%,
+  1 vote 0.97%, 2 votes 1.34%, 3 votes 1.70% (chance 1%). The best single number
+  in a round is about 1.3-1.7%, so MASTER cannot be expected to hit often.
+- The replay is in-sample: lists and OCJP forms were repaired on these rounds.
+  Live (out of sample): FINAL 4 24 of 432 = 5.6% (17.3 by chance, p 0.07),
+  MASTER 2 of 378 = 0.5% (3.8 by chance), star #1 1 of 45, step-toward 3 of 65
+  (2.6 by chance). Live FINAL 4 is about a third better than chance, not proven.
+- The declared cell holds 96-100 numbers, so its ~99% is by its size, not prediction.
+Conclusion: with uniform digit changes, no op-based list can be much better than
+its size. Kept FINAL 4; OCJP repairs keep the cell full, they are not an edge.

@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 1001, 'tens_cut': 131, 'short_list': 188,
-    'table_rounds': 991, 'table_hits': 127, 'table_chance': 33, 'declared': 956, 'declared_hits': 17,
+    'results': 1002, 'tens_cut': 131, 'short_list': 188,
+    'table_rounds': 992, 'table_hits': 127, 'table_chance': 33, 'declared': 957, 'declared_hits': 17,
     'band_hits': 85, 'units_hits': 85, 'second_hits': 20,
     'same_tens': 26,
-    'rrr3_rounds': 687, 'rrr3_hits': 37, 'rrr3_rec_rounds': 688, 'rrr3_rec_hits': 251,
-    'rrr3_same_rounds': 660, 'rrr3_same_hits': 12, 'rrr3_wide_rounds': 647, 'rrr3_wide_hits': 72, 'rrr3_yx_rounds': 642, 'rrr3_yx_hits': 73,
-    'rrr3_strong_rounds': 638, 'rrr3_strong_hits': 126, 'rrr3_same2_rounds': 635, 'rrr3_same2_hits': 12,
-    'rrr3_turn_rounds': 642, 'rrr3_turn_hits': 13, 'rrr3_sameyx_rounds': 642, 'rrr3_sameyx_hits': 6,
-    'power_rounds': 577, 'power_hits': 423,
+    'rrr3_rounds': 688, 'rrr3_hits': 37, 'rrr3_rec_rounds': 689, 'rrr3_rec_hits': 251,
+    'rrr3_same_rounds': 661, 'rrr3_same_hits': 12, 'rrr3_wide_rounds': 648, 'rrr3_wide_hits': 72, 'rrr3_yx_rounds': 643, 'rrr3_yx_hits': 73,
+    'rrr3_strong_rounds': 639, 'rrr3_strong_hits': 126, 'rrr3_same2_rounds': 636, 'rrr3_same2_hits': 12,
+    'rrr3_turn_rounds': 643, 'rrr3_turn_hits': 13, 'rrr3_sameyx_rounds': 643, 'rrr3_sameyx_hits': 6,
+    'power_rounds': 578, 'power_hits': 423,
 }
 
 
@@ -3008,8 +3008,15 @@ def _rrr_ocjp_xcut(ep, lab, place=0):
     # after 70 on EP 55: place 20 held 34 (-2/-1), the result was c-2/-1)
     if not (15 <= place <= 18 and ly in ('nc', 'cut') or 19 <= place <= 20) or ox not in _X_STEP_SWITCH:
         return []
-    return [(compute_variants(ep, KK_CUT_TOGGLE[o_], rev[ly])[0], f"{OP_ABBREV[KK_CUT_TOGGLE[o_]]}/{ly}")
-            for o_ in (ox, _X_STEP_SWITCH[ox])]
+    ys_ = [rev[ly]]
+    # result 16 after 22 on EP 83 (series N, N209), c-2/c-2: place 19 held
+    # 71 (-1/-2) and 11% (c-2/-2); on the places 19-20 a y step gets its
+    # cut switched too.  Replay 1018 rounds: 1011 -> 1014 hits, size +0.26
+    # (2.6 expected) = chance, no loss (rrr_final4/ocjp_bothcut_test.py)
+    if 19 <= place <= 20 and rev[ly] in _X_STEP_SWITCH:
+        ys_.append(KK_CUT_TOGGLE[rev[ly]])
+    return [(compute_variants(ep, KK_CUT_TOGGLE[o_], oy_)[0], f"{OP_ABBREV[KK_CUT_TOGGLE[o_]]}/{OP_ABBREV[oy_]}")
+            for oy_ in ys_ for o_ in (ox, _X_STEP_SWITCH[ox])]
 
 
 def _rrr_ocjp_xflip(ep, lab, place=0):

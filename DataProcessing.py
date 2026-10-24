@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 1010, 'tens_cut': 134, 'short_list': 191,
-    'table_rounds': 1000, 'table_hits': 128, 'table_chance': 33, 'declared': 965, 'declared_hits': 19,
+    'results': 1011, 'tens_cut': 134, 'short_list': 191,
+    'table_rounds': 1001, 'table_hits': 128, 'table_chance': 33, 'declared': 966, 'declared_hits': 19,
     'band_hits': 87, 'units_hits': 87, 'second_hits': 20,
     'same_tens': 26,
-    'rrr3_rounds': 696, 'rrr3_hits': 37, 'rrr3_rec_rounds': 697, 'rrr3_rec_hits': 252,
-    'rrr3_same_rounds': 669, 'rrr3_same_hits': 12, 'rrr3_wide_rounds': 656, 'rrr3_wide_hits': 72, 'rrr3_yx_rounds': 651, 'rrr3_yx_hits': 75,
-    'rrr3_strong_rounds': 647, 'rrr3_strong_hits': 128, 'rrr3_same2_rounds': 644, 'rrr3_same2_hits': 12,
-    'rrr3_turn_rounds': 651, 'rrr3_turn_hits': 13, 'rrr3_sameyx_rounds': 651, 'rrr3_sameyx_hits': 6,
-    'power_rounds': 586, 'power_hits': 425,
+    'rrr3_rounds': 697, 'rrr3_hits': 37, 'rrr3_rec_rounds': 698, 'rrr3_rec_hits': 252,
+    'rrr3_same_rounds': 670, 'rrr3_same_hits': 12, 'rrr3_wide_rounds': 657, 'rrr3_wide_hits': 72, 'rrr3_yx_rounds': 652, 'rrr3_yx_hits': 76,
+    'rrr3_strong_rounds': 648, 'rrr3_strong_hits': 128, 'rrr3_same2_rounds': 645, 'rrr3_same2_hits': 12,
+    'rrr3_turn_rounds': 652, 'rrr3_turn_hits': 13, 'rrr3_sameyx_rounds': 652, 'rrr3_sameyx_hits': 6,
+    'power_rounds': 587, 'power_hits': 425,
 }
 
 
@@ -3030,6 +3030,27 @@ def _rrr_ocjp_xflip(ep, lab, place=0):
     if not 1 <= place <= 8 or ox not in ('+1', '+2', '-1', '-2'):
         return []
     return [(compute_variants(ep, SIGN_FLIP[ox], rev[ly])[0], f"{OP_ABBREV[SIGN_FLIP[ox]]}/{ly}")]
+
+
+def _rrr_ocjp_samecut(ep, lab, place=0):
+    """OCJP = companions (result 31 after 52 on EP 58, series N, N218,
+    -2/c-2: the LAST row was 77 (+2/-1), 40 (-1/+2); places 31-38 held each
+    operation on both sides with the sign flipped on one side, with the cut
+    on both sides or none, but never the cut on one side only): on places
+    31 and 35 (o/s[o] of the two operations), o on both sides with the cut
+    on one side, either sign (+2/c+2, c+2/+2, -2/c-2, c-2/-2).  Replay 1018
+    rounds: +1 hit, size +0.16 (1.6 expected) = chance, no loss
+    (rrr_final4/ocjp_samecut_test.py)."""
+    rev = {v_: k_ for k_, v_ in OP_ABBREV.items()}
+    ox = rev[lab.split('/')[0]]
+    if place not in (31, 35) or ox not in SIGN_FLIP or ox not in KK_CUT_TOGGLE or ox in ('no_change', 'cut'):
+        return []
+    out = []
+    for o_ in (ox, SIGN_FLIP[ox]):
+        c_ = KK_CUT_TOGGLE[o_]
+        for a_, b_ in ((o_, c_), (c_, o_)):
+            out.append((compute_variants(ep, a_, b_)[0], f"{OP_ABBREV[a_]}/{OP_ABBREV[b_]}"))
+    return out
 
 
 def _rrr_final4(cands, lists, tie_lists, place):
@@ -5158,7 +5179,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     #     cell, so the cell holds every OCJP number
     for o_ in _rrr_ocjp(ep, both_cut):
         w_ = _rrr_ocjp_xswitch(ep, o_[1])
-        for nv_, lab_ in ([w_] if w_ else []) + _rrr_ocjp_more(ep, o_[1]) + _rrr_ocjp_xcut(ep, o_[1], o_[2]):
+        for nv_, lab_ in (([w_] if w_ else []) + _rrr_ocjp_more(ep, o_[1]) + _rrr_ocjp_xcut(ep, o_[1], o_[2])
+                          + _rrr_ocjp_samecut(ep, o_[1], o_[2])):
             if nv_ not in [v for v, _ in fam_seats]:
                 fam_seats = fam_seats + [(nv_, lab_)]
             strong_lab.setdefault(nv_, lab_)
@@ -5198,7 +5220,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                                + [m[0] for o in _rrr_ocjp(ep, both_cut) for m in _rrr_ocjp_more(ep, o[1])]
                                + [m[0] for o in _rrr_ocjp(ep, both_cut) for m in _rrr_ocjp_ycut(ep, o[1], o[2])]
                                + [m[0] for o in _rrr_ocjp(ep, both_cut) for m in _rrr_ocjp_xcut(ep, o[1], o[2])]
-                               + [m[0] for o in _rrr_ocjp(ep, both_cut) for m in _rrr_ocjp_xflip(ep, o[1], o[2])],
+                               + [m[0] for o in _rrr_ocjp(ep, both_cut) for m in _rrr_ocjp_xflip(ep, o[1], o[2])]
+                               + [m[0] for o in _rrr_ocjp(ep, both_cut) for m in _rrr_ocjp_samecut(ep, o[1], o[2])],
                        'ncspec': [v for _, _, l_ in nc_spec for v, _ in l_],
                        'ocjp_full': [[o[0], o[1], o[2], 'base'] for o in _rrr_ocjp(ep, both_cut)]
                                     + [[w[0], w[1], o[2], 'plus'] for o in _rrr_ocjp(ep, both_cut)
@@ -5210,7 +5233,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                                     + [[m[0], m[1], o[2], 'xcut'] for o in _rrr_ocjp(ep, both_cut)
                                        for m in _rrr_ocjp_xcut(ep, o[1], o[2])]
                                     + [[m[0], m[1], o[2], 'xflip'] for o in _rrr_ocjp(ep, both_cut)
-                                       for m in _rrr_ocjp_xflip(ep, o[1], o[2])],
+                                       for m in _rrr_ocjp_xflip(ep, o[1], o[2])]
+                                    + [[m[0], m[1], o[2], 'samecut'] for o in _rrr_ocjp(ep, both_cut)
+                                       for m in _rrr_ocjp_samecut(ep, o[1], o[2])],
                        'rule_seats': [v for v, _ in rule_seats], 'fam_seats': [v for v, _ in fam_seats],
                        'rec': [v for v, _ in rec], 'yx': [v for v, _ in rec_yx], 'wide': [v for v, _ in wide],
                        'found': [int(n[:2]) for n, _ in found],
@@ -6142,6 +6167,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             # and, on places 15-20, x with its cut switched, % mark
             # (result 15 after 29: 65 (+2/cut) -> 15 (c+2/cut); 84 after 70)
             o_yc = [yc_ + [m_ + ('%',) for m_ in _rrr_ocjp_xcut(ep, lab_, k_)] for yc_, (_, lab_, k_, _) in zip(o_yc, o_list)]
+            # and, on places 31 and 35, the operation on both sides with the
+            # cut on one side only, = mark (result 31 after 52: -2/c-2)
+            o_yc = [yc_ + [m_ + ('=',) for m_ in _rrr_ocjp_samecut(ep, lab_, k_)] for yc_, (_, lab_, k_, _) in zip(o_yc, o_list)]
             # and, on places 1-8, x with its sign flipped, ! mark
             # (result 83 after 82: 43 (-2/+1) -> 83 (+2/+1))
             o_xf = [_rrr_ocjp_xflip(ep, lab_, k_) for _, lab_, k_, _ in o_list]
@@ -6174,6 +6202,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "# = x is nc, cut or a cut step (any x on places 31-38): y with its cut switched, both y steps (nc/+1 -> nc/c+1, nc/c+2; c-1/c-2 -> c-1/-2, -1)",
                        "% = places 15-18 (y fixed at cut or nc) and 19-20 (any y): x with its cut switched, both x steps (+2/cut -> c+2/cut, c+1/cut; -2/-1 -> c-2/-1)",
                        "! = places 1-8 with a plain step on x: x with its sign flipped, y kept (-2/+1 -> +2/+1)",
+                       "= = places 31 and 35: the operation on both sides with the cut on one side only, either sign (+2/-2 -> +2/c+2, c+2/+2, -2/c-2, c-2/-2)",
                        "~ = that place repeated an operation already shown, so it takes the next unused one (none left = place empty)",
                        "built from the two operations: sign flipped, cut switched on / off.  Re-run of 140 J/K rounds:",
                        "  41 hits, about 47 expected by its size alone — a list to watch, not a proven edge"]

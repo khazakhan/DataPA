@@ -132,3 +132,12 @@ Script: `diagnosis.py <all.json>`, all series b..n together (1018 replayed round
 - The declared cell holds 96-100 numbers, so its ~99% is by its size, not prediction.
 Conclusion: with uniform digit changes, no op-based list can be much better than
 its size. Kept FINAL 4; OCJP repairs keep the cell full, they are not an edge.
+
+## Global check on all data sets (2026-10-25)
+`series_check.py <new dump> [old dump]`: the current script (with the N209 and N218
+OCJP forms) run on every round of all 13 series, 1029 rounds: 0 errors, OCJP holds
+the result in 1026 (every series 97-100%), no OCJP hit lost against the older dump.
+FINAL 4 77/1029 = 7.5%, MASTER 21/1029 = 2.0%. The older replay's 83/1018 counted
+six bad rounds (n206-n211 built from the old results re-sent by mistake on
+2026-10-24, result = EP): corrected figure is 7.5%, not 8.2%. No code change moved
+a FINAL 4 hit in any series.

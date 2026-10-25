@@ -236,3 +236,7 @@ MASTER 14 with its digits reversed is 41. `reverse_test.py`, 1085 rounds: the re
 - equal on old series N and on live (4 of 57).
 
 It is never worse in any split, so it shipped on 2026-10-26. A rerun of the script on all 57 live rounds matches the test exactly and keeps all 4 live hits. Variants with STRONG 20 voting lost on series N and were not shipped.
+
+## User x-flip + y-cut turn after N298 = 17 (2026-10-26)
+
+FINAL 4 #2 52 (c+2/nc) with the x sign flipped and the y cut switched gives c−2/cut = 17. `xflip_ycut_test.py` applies that turn to every FINAL 4 op under the shipped 4-list ranking (`rank_now.py`). It adds 3.8 new numbers a round and hits 3.8% on the old replay (chance 3.8%) and 4.3% on old series N (chance 3.9%). On live N235+ it hits 1 of 64 (1.6%), counting this round. It is at chance and was not added.

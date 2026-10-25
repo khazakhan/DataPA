@@ -160,3 +160,16 @@ Replay test (`ocjp_last_ycut_test.py`, 1032 rounds before N235):
 | C: full `#` form (shipped) | +1 (b) | 0.25 | 2.6 |
 
 All at chance. C was chosen because it is the same `#` form as places 1-8. Global check over 1041 rounds: 0 errors, OCJP 1041/1041, 0 hits lost, and FINAL 4 78 is unchanged.
+
+## Series N check after N251 = 57 (2026-10-25)
+
+The user asked why FINAL 4 keeps missing. Replay `all4.json` (1041 rounds, 234 of them series N):
+
+| Set | All 13 series | Series N | Chance |
+|---|---|---|---|
+| MASTER | 2.0% | 0.4% | 1% |
+| FINAL 4 | 7.5% | 4.7% | 4% |
+| top 8 | 13.3% | 8.5% | 8% |
+| top 20 | 26.6% | 22.6% | 20% |
+
+Per-number hit rate by votes, series N: 0v 0.98%, 1v 0.97%, 2v 1.22%, 3v 0/154. On the other 12 series: 0.89%, 0.96%, 1.30%, 1.83%. On N the votes carry no signal, and 44% of N results have 0 votes. FINAL 4 is at chance on N, and the all-series 7.5% is in-sample. No change was made.

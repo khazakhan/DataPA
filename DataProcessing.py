@@ -1004,15 +1004,26 @@ def show_final_box():
         if i == 0:
             body.append(sep_)
     body.append(sep_)
-    body += ["", f"top 10 : {two(rk[:10])}", f"top 20 : {two(rk[:20])}", "",
-             f"OCJP MASTER : {m:02d} ({lab(m)})",
-             f"star #1     : {star[0]:02d} ({lab(star[0])})" if star else "star #1     : -", "",
-             "On test (user rules, not part of FINAL 4):",
-             f"  1. step 1 toward last op ({fb['last_op'] or '-'}) : {two(r1) if r1 else '-'}",
-             f"  2. one per step family      : {two(r2)}",
-             f"  3. sides swapped + y flipped: {two(r3)}",
-             f"  4. MASTER digits reversed   : {r4:02d}",
-             f"  5. families of FINAL 4 ({len(r5)}): {two(r5)}"]
+    # every number with its operation on the EP (user, 2026-10-26: "i need
+    # with operations"), five to a row in fixed columns
+    wop = lambda n: f"{n:02d} ({lab(n)})"
+    def grid(title, ns, per=5):
+        if not ns:
+            return [f"{title}: -"]
+        cw = max(len(wop(n)) for n in ns) + 2
+        out = [f"{title}:"]
+        for i in range(0, len(ns), per):
+            out.append("    " + ''.join(wop(n).ljust(cw) for n in ns[i:i + per]).rstrip())
+        return out
+    body += [""] + grid("top 10", rk[:10]) + [""] + grid("top 20", rk[:20]) + ["",
+             f"OCJP MASTER : {wop(m)}",
+             f"star #1     : {wop(star[0])}" if star else "star #1     : -", "",
+             "On test (user rules, not part of FINAL 4):"]
+    body += grid(f"  1. step 1 toward last op ({fb['last_op'] or '-'})", r1 or [])
+    body += grid("  2. one per step family", r2)
+    body += grid("  3. sides swapped + new y sign flipped", r3)
+    body += grid("  4. MASTER digits reversed", [r4])
+    body += grid(f"  5. families of FINAL 4 ({len(r5)} numbers)", r5)
     body = [x for l_ in body for x in (textwrap.wrap(l_, _term_w() - 8, subsequent_indent='      ') or [''])]
     g, rst = "\033[1;32m", "\033[0m"
     iw = max(len(l_) for l_ in body) + 2

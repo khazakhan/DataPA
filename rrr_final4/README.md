@@ -186,3 +186,15 @@ FINAL 4 #2 61 (c-2/c-1), with its sides swapped and the new y sign flipped, give
 | swap, flip both | 3.6% | 3.0% | 3.4% |
 
 All at chance, so the rule was not added.
+
+## User "same family" idea after N265 = 87 (2026-10-25)
+
+FINAL 4 held 23 (c-1/c+2) and 78 (-1/+2): the same steps, with only the cuts different. 87 came 5th. Rule tested (`family_test.py`, 1071 rounds): keep at most one number per step family in FINAL 4.
+
+| Rule | All series | Series N |
+|---|---|---|
+| shipped FINAL 4 | 81 | 14 |
+| one per step family | 82 | 12 |
+| one per step size | 82 | 13 |
+
+With N265 included the rule is 83 vs 81 on all series and 13 vs 14 on N, a draw. It was not shipped, but it is tracked as an on-test line in the round outputs from N266 (record 1 of 1 at the start).

@@ -912,6 +912,117 @@ def _cell_wrap(c, w):
     return out + [cur]
 
 
+def _op_side(s):
+    """One side of an op label (nc, cut, c+1, -2 ...) as (cut flag, step)."""
+    c = s.startswith('c')
+    t = s[3:] if s.startswith('cut') else s[1:] if c else s
+    return c, (0 if t in ('', 'nc') else int(t))
+
+
+def _op_apply(d, c, k):
+    """A digit with its cut flag and step applied."""
+    return (((d + 5) % 10 if c else d) + k) % 10
+
+
+def _op_label(c, k):
+    """(cut flag, step) back to an op label."""
+    if c:
+        return 'cut' if k == 0 else f"c{k:+d}"
+    return 'nc' if k == 0 else f"{k:+d}"
+
+
+def _digit_family(n):
+    """The 8-number family: both digits as is or cut, in both orders (10 -> 10 15 60 65 01 51 06 56)."""
+    a, b = n // 10, n % 10
+    xs, ys = (a, (a + 5) % 10), (b, (b + 5) % 10)
+    return sorted({x * 10 + y for x in xs for y in ys} | {y * 10 + x for x in xs for y in ys})
+
+
+def show_final_box():
+    """OCJP FINAL 4 with operations, the wider top 10 / top 20, the single
+    picks and the user's on-test rules 1-5, as the very last block of the
+    page, the same view as the chat round notes (user, 2026-10-26)."""
+    fb = _RRR3_PREV.pop('final_box', None)
+    if not fb or not fb['final4']:
+        return
+    ep, f4, rk = fb['ep'], fb['final4'], fb['rank']
+    ex, ey = ep // 10, ep % 10
+    lab = lambda v: f"{OP_ABBREV[find_op(ex, v // 10)]}/{OP_ABBREV[find_op(ey, v % 10)]}"
+    def made(v):
+        out = []
+        for name, d, t in (('x', ex, v // 10), ('y', ey, v % 10)):
+            c, k = _op_side(OP_ABBREV[find_op(d, t)])
+            if c and k:
+                out.append(f"{name} cut {d}->{(d + 5) % 10}, {k:+d} -> {t}")
+            elif c:
+                out.append(f"{name} cut {d}->{t}")
+            elif k:
+                out.append(f"{name} {d}->{t} ({k:+d})")
+            else:
+                out.append(f"{name} stays {d}")
+        return '; '.join(out)
+    rows = [["#", "Number", "Operation", "How it's made", "Votes (lists)"]]
+    for k_, (v, names) in enumerate(f4):
+        rows.append(["MASTER = 1" if k_ == 0 else str(k_ + 1), f"{v:02d}", lab(v), made(v),
+                     f"{len(names)} ({', '.join(names)})"])
+    top4 = [v for v, _ in f4]
+    # user rules on test (display only, never part of FINAL 4)
+    r1 = r3 = None
+    if fb['last_op']:
+        lx, ly = (_op_side(t) for t in fb['last_op'].split('/'))
+        r1 = []
+        for v in top4:
+            (cx, kx), (cy, ky) = (_op_side(t) for t in lab(v).split('/'))
+            kx += (lx[1] > kx) - (lx[1] < kx)
+            ky += (ly[1] > ky) - (ly[1] < ky)
+            n = _op_apply(ex, cx, kx) * 10 + _op_apply(ey, cy, ky)
+            if n not in r1:
+                r1.append(n)
+    seen, r2 = set(), []
+    for v in rk:
+        fam = tuple(_op_side(t)[1] for t in lab(v).split('/'))
+        if fam not in seen:
+            seen.add(fam)
+            r2.append(v)
+        if len(r2) == 4:
+            break
+    r3 = []
+    for v in top4:
+        (cx, kx), (cy, ky) = (_op_side(t) for t in lab(v).split('/'))
+        r3.append(_op_apply(ex, cy, ky) * 10 + _op_apply(ey, cx, -kx))
+    m = top4[0]
+    r4 = (m % 10) * 10 + m // 10
+    r5 = sorted(set().union(*(_digit_family(v) for v in top4)))
+    two = lambda ns: ' '.join(f"{n:02d}" for n in ns)
+    star = _RRR3_PREV.get('star_picks') or []
+    body = [f"★  OCJP FINAL 4 with operations (the prediction)  —  after {fb['after']:02d}, EP={ep:02d}  ★", ""]
+    w = [max(len(r[i]) for r in rows) for i in range(5)]
+    sep_ = '+' + '+'.join('-' * (x + 2) for x in w) + '+'
+    body.append(sep_)
+    for i, r in enumerate(rows):
+        body.append('| ' + ' | '.join(c.ljust(x) for c, x in zip(r, w)) + ' |')
+        if i == 0:
+            body.append(sep_)
+    body.append(sep_)
+    body += ["", f"top 10 : {two(rk[:10])}", f"top 20 : {two(rk[:20])}", "",
+             f"OCJP MASTER : {m:02d} ({lab(m)})",
+             f"star #1     : {star[0]:02d} ({lab(star[0])})" if star else "star #1     : -", "",
+             "On test (user rules, not part of FINAL 4):",
+             f"  1. step 1 toward last op ({fb['last_op'] or '-'}) : {two(r1) if r1 else '-'}",
+             f"  2. one per step family      : {two(r2)}",
+             f"  3. sides swapped + y flipped: {two(r3)}",
+             f"  4. MASTER digits reversed   : {r4:02d}",
+             f"  5. families of FINAL 4 ({len(r5)}): {two(r5)}"]
+    body = [x for l_ in body for x in (textwrap.wrap(l_, _term_w() - 8, subsequent_indent='      ') or [''])]
+    g, rst = "\033[1;32m", "\033[0m"
+    iw = max(len(l_) for l_ in body) + 2
+    print()
+    print(f"  {g}┏{'━' * iw}┓{rst}")
+    for l_ in body:
+        print(f"  {g}┃{rst} \033[1m{l_:<{iw - 2}}{rst} {g}┃{rst}")
+    print(f"  {g}┗{'━' * iw}┛{rst}")
+
+
 def show_three_box():
     """3RRR STRONG 20, CharRow (no repeats) and STRONG 20 ADJUSTMENTS again at
     the very end of the page, below everything else, in the triple
@@ -6319,6 +6430,14 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             strong_lines += [o_ind + f"{s_g}┌{'─' * f4_w}┐{s_rst}"]
             strong_lines += [o_ind + f"{s_g}│{s_rst} \033[1m{l_:<{f4_w - 2}}{s_rst} {s_g}│{s_rst}" for l_ in f4_body]
             strong_lines += [o_ind + f"{s_g}└{'─' * f4_w}┘{s_rst}"]
+            # the same FINAL 4 view as in the chat round notes, printed at the
+            # very bottom of the page (user, 2026-10-26: "same to same in the
+            # local terminal, very below")
+            f4_tie = [strong, [v for v, _ in fam_seats], [v for _, _, l_ in nc_spec for v, _ in l_]]
+            f4_votes = lambda v: sum(v in l_ for l_ in f4_lists.values())
+            f4_rank = sorted(o_uniq, key=lambda v: (-f4_votes(v), -sum(v in l_ for l_ in f4_tie), v))
+            _RRR3_PREV['final_box'] = {'ep': ep, 'after': grid_ep, 'final4': ocjp_final4, 'rank': f4_rank,
+                                       'last_op': same[1] if same else None}
         # the three tables (STRONG 20, CharRow no repeats, STRONG 20
         # ADJUSTMENTS) once more at the very end of the page, in the triple
         # Indian-flag border (user's screenshot, 2026-10-13)
@@ -7483,6 +7602,7 @@ def run(data_source, user_x_op=None, user_y_op=None):
         print()
         print("\n".join(_rrr_end))
     show_three_box()
+    show_final_box()
     print()
     return root, ops_list, _last_top4, _last_scores
 

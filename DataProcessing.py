@@ -18,6 +18,8 @@ import os
 import json
 import argparse
 import re
+import shutil
+import textwrap
 from collections import defaultdict
 
 # ── Constants ─────────────────────────────────────────────────────────────────
@@ -890,6 +892,26 @@ def show_power_box():
         print("  " + l)
 
 
+def _term_w():
+    """Width the framed tables may use: the terminal width less the triple
+    border and margins, so no line wraps (user's screenshot, 2026-10-26:
+    the OCJP grid wrapped and the page looked broken)."""
+    return max(100, shutil.get_terminal_size((200, 40)).columns - 12)
+
+
+def _cell_wrap(c, w):
+    """One table cell broken into lines of at most w characters, at its commas."""
+    out, cur = [], ''
+    for p in c.split(', '):
+        add = p if not cur else cur + ', ' + p
+        if len(add) + 1 > w and cur.strip():
+            out.append(cur + ',')
+            cur = '    ' + p
+        else:
+            cur = add
+    return out + [cur]
+
+
 def show_three_box():
     """3RRR STRONG 20, CharRow (no repeats) and STRONG 20 ADJUSTMENTS again at
     the very end of the page, below everything else, in the triple
@@ -1409,16 +1431,23 @@ def show_next_op_after_last(rows):
     right4 += ["║" + x.ljust(iw4) + "║" for x in notes4]
     right4 += ["╚" + "═" * iw4 + "╝"]
 
-    lw = max(len(l) for l in left) + 4
-    rw = max(len(r) for r in right) + 4
-    r4w = max(len(r) for r in right4) + 4
-    for k in range(max(len(left), len(right), len(right2), len(right4))):
-        l  = left[k] if k < len(left) else ""
-        r  = right[k] if k < len(right) else ""
-        r4 = right4[k] if k < len(right4) else ""
-        r2 = right2[k] if k < len(right2) else ""
-        print(f"  {l:<{lw}}{r:<{rw}}{r4:<{r4w}}{r2}".rstrip())
-    print()
+    # the four boxes side by side as far as the terminal allows, the rest
+    # on the next band (user's screenshot, 2026-10-26: lines wrapped)
+    cols = [c_ for c_ in (left, right, right4, right2) if c_]
+    room = shutil.get_terminal_size((200, 40)).columns - 2
+    bands, cur, cur_w = [], [], 0
+    for c_ in cols:
+        w_ = max(len(x) for x in c_) + 4
+        if cur and cur_w + w_ > room:
+            bands.append(cur)
+            cur, cur_w = [], 0
+        cur.append((c_, w_))
+        cur_w += w_
+    bands.append(cur)
+    for b_ in bands:
+        for k in range(max(len(c_) for c_, _ in b_)):
+            print("  " + "".join(f"{(c_[k] if k < len(c_) else ''):<{w_}}" for c_, w_ in b_).rstrip())
+        print()
 
     counts = defaultdict(int)
     for _, nop in matches:
@@ -2221,12 +2250,13 @@ def show_prediction(endpoint, root, ops_list, group_index, rows=None):
         def _fmt(vx, vy):
             vxy, vyx, _, _ = compute_variants(root, vx, vy)
             return f"(x:{vx} y:{vy})→xy={vxy:02d} yx={vyx:02d}"
-        if vary_x:
-            print(f"       Vary-x: " + "  |  ".join(_fmt(vx, vy) for vx, vy in sorted(vary_x)))
-        if vary_y:
-            print(f"       Vary-y: " + "  |  ".join(_fmt(vx, vy) for vx, vy in sorted(vary_y)))
-        if swap_v:
-            print(f"       Swap:   " + "  |  ".join(_fmt(vx, vy) for vx, vy in swap_v))
+        # wrapped to the terminal width (user's screenshot, 2026-10-26)
+        v_w = shutil.get_terminal_size((200, 40)).columns - 2
+        for v_lab, v_l in (("Vary-x: ", sorted(vary_x)), ("Vary-y: ", sorted(vary_y)), ("Swap:   ", swap_v)):
+            if v_l:
+                print("\n".join(textwrap.wrap(v_lab + "  |  ".join(_fmt(vx, vy) for vx, vy in v_l), v_w,
+                                               initial_indent="       ", subsequent_indent=" " * 15,
+                                               break_long_words=False)))
     print()
 
     # ── 5B. Digit Resonance — src/dest digit alignment with rx, ry ──────────
@@ -2729,7 +2759,8 @@ def _kk_round_trip_box(entries, ep, pos_prefix):
         pairs.append((rest[0], rest[-1]))
         inner = rest[1:-1]
         pairs += [(inner[i], inner[i + 1]) for i in range(0, len(inner), 2)]
-    body.append(f"Rows ({len(rows)}):  " + "  ".join(f"{tag(e)} {e[1]:02d}→{e[2]:02d}" for e in rows))
+    body += textwrap.wrap(f"Rows ({len(rows)}):  " + "  ".join(f"{tag(e)} {e[1]:02d}→{e[2]:02d}" for e in rows),
+                          _term_w() - 6, subsequent_indent=" " * 11, break_long_words=False)
     for k, (p, q) in enumerate(pairs):
         kind = "outer" if k == 0 and len(pairs) > 1 else "inner" if k else "pair "
         body.append(f"Cancelled ({kind}):  {tag(p)} {p[1]:02d}→{p[2]:02d} ({OP_ABBREV[p[3]]}/{OP_ABBREV[p[4]]})"
@@ -2790,15 +2821,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 1081, 'tens_cut': 140, 'short_list': 198,
-    'table_rounds': 1071, 'table_hits': 134, 'table_chance': 33, 'declared': 1036, 'declared_hits': 19,
+    'results': 1082, 'tens_cut': 140, 'short_list': 198,
+    'table_rounds': 1072, 'table_hits': 134, 'table_chance': 33, 'declared': 1037, 'declared_hits': 19,
     'band_hits': 92, 'units_hits': 88, 'second_hits': 20,
     'same_tens': 26,
-    'rrr3_rounds': 767, 'rrr3_hits': 44, 'rrr3_rec_rounds': 768, 'rrr3_rec_hits': 278,
-    'rrr3_same_rounds': 740, 'rrr3_same_hits': 13, 'rrr3_wide_rounds': 727, 'rrr3_wide_hits': 76, 'rrr3_yx_rounds': 722, 'rrr3_yx_hits': 84,
-    'rrr3_strong_rounds': 718, 'rrr3_strong_hits': 148, 'rrr3_same2_rounds': 715, 'rrr3_same2_hits': 12,
-    'rrr3_turn_rounds': 722, 'rrr3_turn_hits': 14, 'rrr3_sameyx_rounds': 722, 'rrr3_sameyx_hits': 6,
-    'power_rounds': 657, 'power_hits': 428,
+    'rrr3_rounds': 768, 'rrr3_hits': 44, 'rrr3_rec_rounds': 769, 'rrr3_rec_hits': 278,
+    'rrr3_same_rounds': 741, 'rrr3_same_hits': 13, 'rrr3_wide_rounds': 728, 'rrr3_wide_hits': 76, 'rrr3_yx_rounds': 723, 'rrr3_yx_hits': 84,
+    'rrr3_strong_rounds': 719, 'rrr3_strong_hits': 148, 'rrr3_same2_rounds': 716, 'rrr3_same2_hits': 12,
+    'rrr3_turn_rounds': 723, 'rrr3_turn_hits': 14, 'rrr3_sameyx_rounds': 723, 'rrr3_sameyx_hits': 6,
+    'power_rounds': 658, 'power_hits': 428,
 }
 
 
@@ -6155,14 +6186,23 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         n_box += [f"{s_g}│{s_rst}{p_rib}{l_.strip():^{n_tw}}{s_rst}{s_g}│{s_rst}" if k_ == 0
                   else f"{s_g}│{s_rst}{l_:<{n_tw}}{s_g}│{s_rst}" for k_, l_ in enumerate(rrr_tbl)]
         n_box.append(f"{s_g}└{'─' * n_tw}┘{s_rst}")
-        c_box = [(c_box[k_] if k_ < len(c_box) else ' ' * (c_tw + 2))
-                 + ('  ' + n_box[k_] if k_ < len(n_box) else '')
-                 for k_ in range(max(len(c_box), len(n_box)))]
-        for k_, l_ in enumerate(c_box):
-            if k_ < s_tbl_n:
-                strong_lines[k_] += '  ' + l_
-            else:
-                strong_lines.insert(k_, ' ' * (s_tw + 4) + '  ' + l_)
+        # beside the STRONG 20 table only when the terminal is wide enough,
+        # otherwise below it (user's screenshot, 2026-10-26)
+        t_w = _term_w()
+        if s_tw + c_tw + n_tw + 12 <= t_w:
+            c_box = [(c_box[k_] if k_ < len(c_box) else ' ' * (c_tw + 2))
+                     + ('  ' + n_box[k_] if k_ < len(n_box) else '')
+                     for k_ in range(max(len(c_box), len(n_box)))]
+        else:
+            c_box = c_box + n_box
+        if s_tw + max(c_tw + n_tw + 4, c_tw, n_tw) + 8 <= t_w and len(c_box) < 3 * s_tbl_n:
+            for k_, l_ in enumerate(c_box):
+                if k_ < s_tbl_n:
+                    strong_lines[k_] += '  ' + l_
+                else:
+                    strong_lines.insert(k_, ' ' * (s_tw + 4) + '  ' + l_)
+        else:
+            strong_lines[s_tbl_n:s_tbl_n] = ['  ' + l_ for l_ in c_box]
         # NEXT OPERATION-OCJP below the CharRow box, in the triple
         # Indian-flag border (user's screenshot, 2026-10-14): the LAST row's
         # two operations worked into 30 operations on the EP
@@ -6195,8 +6235,14 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        + ''.join(f", {m_[0]:02d}{m_[2]} ({m_[1]})" for m_ in yc_)
                        + ''.join(f", {m_[0]:02d}! ({m_[1]})" for m_ in xf_)
                        for (v_, lab_, k_, n_), w_, mo_, yc_, xf_ in zip(o_list, o_sw, o_mo, o_yc, o_xf)]
-            o_cw = max(len(c) for c in o_cells) + 2
-            o_per = 5 if o_cw < 40 else 3
+            # sized to the terminal, from the left; long cells wrap at their
+            # commas (user's screenshot, 2026-10-26: the grid was wider than
+            # the screen)
+            t_w = _term_w()
+            o_ind, o_room = '  ', t_w - 10
+            o_per = max(1, min(5, (o_room + 1) // 46))
+            o_cw = (o_room - 1) // o_per - 1
+            o_cells = [_cell_wrap(c, o_cw - 2) for c in o_cells]
             o_uniq = sorted(set(v_ for v_, _, _, _ in o_list) | {w_[0] for w_ in o_sw if w_}
                             | {m_[0] for mo_ in o_mo for m_ in mo_} | {m_[0] for yc_ in o_yc for m_ in yc_}
                             | {m_[0] for xf_ in o_xf for m_ in xf_})
@@ -6207,8 +6253,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             for k_ in range(0, len(o_cells), o_per):
                 if k_:
                     o_body.append('├' + '┼'.join('─' * o_cw for _ in range(o_per)) + '┤')
-                row_ = o_cells[k_:k_ + o_per] + [''] * (o_per - len(o_cells[k_:k_ + o_per]))
-                o_body.append('│' + '│'.join(f" {c:<{o_cw - 1}}" for c in row_) + '│')
+                row_ = o_cells[k_:k_ + o_per] + [['']] * (o_per - len(o_cells[k_:k_ + o_per]))
+                for j_ in range(max(len(c) for c in row_)):
+                    o_body.append('│' + '│'.join(f" {(c[j_] if j_ < len(c) else ''):<{o_cw - 1}}" for c in row_) + '│')
             o_body.append('└' + '┴'.join('─' * o_cw for _ in range(o_per)) + '┘')
             o_body += ["", f"ALL ({len(o_uniq)}): " + ' '.join(f"{v_:02d}" for v_ in o_uniq),
                        "1-20 = the user's operations;  21-30 ^ = mirror forms;  31-38 ° = one operation, sign flipped on one side;  39 = EP cut/cut;  40 = EP itself nc/nc",
@@ -6222,6 +6269,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "~ = that place repeated an operation already shown, so it takes the next unused one (none left = place empty)",
                        "built from the two operations: sign flipped, cut switched on / off.  Re-run of 140 J/K rounds:",
                        "  41 hits, about 47 expected by its size alone — a list to watch, not a proven edge"]
+            o_body = [w_ for l_ in o_body for w_ in (textwrap.wrap(l_, o_room, subsequent_indent='    ') or [''])]
             o_flag = [f"\033[1;38;2;{c}m" for c in ("255;153;51", "255;255;255", "19;136;8")]
             o_iw = max(len(l_) for l_ in o_body) + 2
             o_box = [f" \033[1m{l_:<{o_iw - 2}}{s_rst} " for l_ in o_body]
@@ -6230,7 +6278,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 o_box = ([f"{c_}┏{'━' * w_}┓{s_rst}"] + [f"{c_}┃{s_rst}{l_}{c_}┃{s_rst}" for l_ in o_box]
                          + [f"{c_}┗{'━' * w_}┛{s_rst}"])
             _RRR3_PREV['ocjp'] = o_uniq
-            strong_lines += [' ' * (s_tw + 4) + '  ' + l_ for l_ in o_box]
+            strong_lines += [o_ind + l_ for l_ in o_box]
             # OCJP FINAL 4 below the OCJP box (user, 2026-10-15: "mark only 4
             # as prediction final numbers"), chosen by _rrr_final4
             f4_lists = {'RECOMMENDED': [v for v, _ in rec], 'RRR table': [v for v, _, _ in both_cut],
@@ -6264,9 +6312,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                             "#1 was the result in 15 of 590 past rounds = 2.5% (one number by chance = 1%);",
                             "live K46-K99: 3 of 54. It misses most rounds"]
             f4_w = max(len(l_) for l_ in f4_body) + 2
-            strong_lines += [' ' * (s_tw + 4) + '  ' + f"{s_g}┌{'─' * f4_w}┐{s_rst}"]
-            strong_lines += [' ' * (s_tw + 4) + '  ' + f"{s_g}│{s_rst} \033[1m{l_:<{f4_w - 2}}{s_rst} {s_g}│{s_rst}" for l_ in f4_body]
-            strong_lines += [' ' * (s_tw + 4) + '  ' + f"{s_g}└{'─' * f4_w}┘{s_rst}"]
+            strong_lines += [o_ind + f"{s_g}┌{'─' * f4_w}┐{s_rst}"]
+            strong_lines += [o_ind + f"{s_g}│{s_rst} \033[1m{l_:<{f4_w - 2}}{s_rst} {s_g}│{s_rst}" for l_ in f4_body]
+            strong_lines += [o_ind + f"{s_g}└{'─' * f4_w}┘{s_rst}"]
         # the three tables (STRONG 20, CharRow no repeats, STRONG 20
         # ADJUSTMENTS) once more at the very end of the page, in the triple
         # Indian-flag border (user's screenshot, 2026-10-13)

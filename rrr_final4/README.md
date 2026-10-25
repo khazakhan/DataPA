@@ -240,3 +240,15 @@ It is never worse in any split, so it shipped on 2026-10-26. A rerun of the scri
 ## User x-flip + y-cut turn after N298 = 17 (2026-10-26)
 
 FINAL 4 #2 52 (c+2/nc) with the x sign flipped and the y cut switched gives c−2/cut = 17. `xflip_ycut_test.py` applies that turn to every FINAL 4 op under the shipped 4-list ranking (`rank_now.py`). It adds 3.8 new numbers a round and hits 3.8% on the old replay (chance 3.8%) and 4.3% on old series N (chance 3.9%). On live N235+ it hits 1 of 64 (1.6%), counting this round. It is at chance and was not added.
+
+## User family idea after N316 (2026-10-26)
+
+The family of a number is its digits as is or cut, in both orders (10 → 10 15 60 65 01 51 06 56). `family8_test.py`, current ranking:
+
+| What is played | Old replay | Old series N | Live N235+ |
+|---|---|---|---|
+| MASTER family | 8.2% (chance 7.2%) | 4.3% (chance 7.3%) | 9.9% (chance 7.2%) |
+| all FINAL 4 families | 29.5% (chance 25.2%) | 24.4% (chance 25.5%) | 38.3% (chance 25.2%) |
+| family numbers added to FINAL 4 | 21.5% (chance 21.2%) | 19.7% (chance 21.5%) | 30.9% (chance 21.2%), p about 0.02 |
+
+At chance on the old data and above chance on the short live run. The idea came after seeing the live run, so it is tracked on test as rule 5 from N316.

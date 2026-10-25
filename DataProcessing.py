@@ -2790,15 +2790,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 1027, 'tens_cut': 136, 'short_list': 194,
-    'table_rounds': 1017, 'table_hits': 129, 'table_chance': 33, 'declared': 982, 'declared_hits': 19,
+    'results': 1028, 'tens_cut': 136, 'short_list': 194,
+    'table_rounds': 1018, 'table_hits': 129, 'table_chance': 33, 'declared': 983, 'declared_hits': 19,
     'band_hits': 88, 'units_hits': 88, 'second_hits': 20,
     'same_tens': 26,
-    'rrr3_rounds': 713, 'rrr3_hits': 37, 'rrr3_rec_rounds': 714, 'rrr3_rec_hits': 256,
-    'rrr3_same_rounds': 686, 'rrr3_same_hits': 13, 'rrr3_wide_rounds': 673, 'rrr3_wide_hits': 73, 'rrr3_yx_rounds': 668, 'rrr3_yx_hits': 79,
-    'rrr3_strong_rounds': 664, 'rrr3_strong_hits': 132, 'rrr3_same2_rounds': 661, 'rrr3_same2_hits': 12,
-    'rrr3_turn_rounds': 668, 'rrr3_turn_hits': 13, 'rrr3_sameyx_rounds': 668, 'rrr3_sameyx_hits': 6,
-    'power_rounds': 603, 'power_hits': 426,
+    'rrr3_rounds': 714, 'rrr3_hits': 37, 'rrr3_rec_rounds': 715, 'rrr3_rec_hits': 256,
+    'rrr3_same_rounds': 687, 'rrr3_same_hits': 13, 'rrr3_wide_rounds': 674, 'rrr3_wide_hits': 73, 'rrr3_yx_rounds': 669, 'rrr3_yx_hits': 79,
+    'rrr3_strong_rounds': 665, 'rrr3_strong_hits': 132, 'rrr3_same2_rounds': 662, 'rrr3_same2_hits': 12,
+    'rrr3_turn_rounds': 669, 'rrr3_turn_hits': 13, 'rrr3_sameyx_rounds': 669, 'rrr3_sameyx_hits': 6,
+    'power_rounds': 604, 'power_hits': 426,
 }
 
 
@@ -2985,7 +2985,13 @@ def _rrr_ocjp_ycut(ep, lab, place=0):
     rev = {v_: k_ for k_, v_ in OP_ABBREV.items()}
     lx, ly = lab.split('/')
     oy = rev[ly]
-    if not (lx in ('nc', 'cut') or lx.startswith('c') or place > 30 or 1 <= place <= 8) or oy not in _X_STEP_SWITCH:
+    # places 19-20 (the LAST row's own xy and yx) too, any x (result 04 after
+    # 62 on EP 97, series N, N235, +1/c+2: LAST row 09 (+1/+2), 18 (+2/+1);
+    # place 19 held the x cut switched (%) but never the y cut alone).
+    # Replay of all 13 series, 1032 rounds: +1 hit (b), size +0.25 a round
+    # (2.6 expected) = chance, no loss (rrr_final4/ocjp_last_ycut_test.py)
+    if not (lx in ('nc', 'cut') or lx.startswith('c') or place > 30 or 1 <= place <= 8
+            or 19 <= place <= 20) or oy not in _X_STEP_SWITCH:
         return []
     # result 76 after 17 on EP 09 (series N, N31), c+2/c+2: place 19 held
     # 61 (c+1/+2) and 71+ (c+2/+2); the + companion's x step gets the y cut
@@ -6209,7 +6215,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "after the comma, + = the same place with its x step switched (1 <-> 2), y kept (-1/c+1 -> -2/c+1);",
                        "  when x is nc or cut, the y step switched instead (nc/+2 -> nc/+1)",
                        "after the next commas, * = the y step switched, and both steps switched (-2/-2 -> -2/-1, -1/-1)",
-                       "# = x is nc, cut or a cut step (any x on places 31-38): y with its cut switched, both y steps (nc/+1 -> nc/c+1, nc/c+2; c-1/c-2 -> c-1/-2, -1)",
+                       "# = x is nc, cut or a cut step (any x on places 1-8, 19-20 and 31-38): y with its cut switched, both y steps (nc/+1 -> nc/c+1, nc/c+2; c-1/c-2 -> c-1/-2, -1)",
                        "% = places 15-18 (y fixed at cut or nc) and 19-20 (any y): x with its cut switched, both x steps (+2/cut -> c+2/cut, c+1/cut; -2/-1 -> c-2/-1)",
                        "! = places 1-8 with a plain step on x: x with its sign flipped, y kept (-2/+1 -> +2/+1)",
                        "= = places 31 and 35: the operation on both sides with the cut on one side only, either sign (+2/-2 -> +2/c+2, c+2/+2, -2/c-2, c-2/-2)",

@@ -146,3 +146,17 @@ a FINAL 4 hit in any series.
 Result 92 (+2/cut) after 89 on EP 77; LAST row c+2/c+2 twice. Global replay after
 the change, all 13 series, 1032 rounds: 0 errors, OCJP 1031/1032 (b 63/64, all
 others 100%), no hit lost in any series, FINAL 4 78/1032, MASTER 21/1032.
+
+## N235 repair: `#` form on places 19-20 (2026-10-25)
+
+Result 04 after 62 on EP 97 (+1/c+2) fell outside OCJP and the cell. The LAST row was 09 (+1/+2), 18 (+2/+1), and place 19 held the % forms (x cut switched) but never the y cut alone. The `#` form (y cut switched, both x steps and both y steps) now runs on places 19-20 too.
+
+Replay test (`ocjp_last_ycut_test.py`, 1032 rounds before N235):
+
+| Form | Old hits gained | Size per round | Expected by chance |
+|---|---|---|---|
+| A: y cut alone | 0 | 0.17 | 1.8 |
+| B: A + y step switched | 0 | 0.17 | 1.8 |
+| C: full `#` form (shipped) | +1 (b) | 0.25 | 2.6 |
+
+All at chance. C was chosen because it is the same `#` form as places 1-8. Global check over 1041 rounds: 0 errors, OCJP 1041/1041, 0 hits lost, and FINAL 4 78 is unchanged.

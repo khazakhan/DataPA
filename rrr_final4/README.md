@@ -173,3 +173,16 @@ The user asked why FINAL 4 keeps missing. Replay `all4.json` (1041 rounds, 234 o
 | top 20 | 26.6% | 22.6% | 20% |
 
 Per-number hit rate by votes, series N: 0v 0.98%, 1v 0.97%, 2v 1.22%, 3v 0/154. On the other 12 series: 0.89%, 0.96%, 1.30%, 1.83%. On N the votes carry no signal, and 44% of N results have 0 votes. FINAL 4 is at chance on N, and the all-series 7.5% is in-sample. No change was made.
+
+## User swap/flip idea after N264 = 74 (2026-10-25)
+
+FINAL 4 #2 61 (c-2/c-1), with its sides swapped and the new y sign flipped, gives c-1/c+2 = 74, the result. `swap_flip_test.py` tests this on 1070 rounds (all series plus live N up to N263). Each FINAL 4 op makes one number:
+
+| Form | All series | Series N | Chance |
+|---|---|---|---|
+| swap, flip new y (user) | 3.4% | 3.8% | 3.5% |
+| swap, flip new x | 2.9% | 3.8% | 3.5% |
+| swap only | 2.2% | 3.0% | 2.8% |
+| swap, flip both | 3.6% | 3.0% | 3.4% |
+
+All at chance, so the rule was not added.

@@ -2821,15 +2821,15 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 1083, 'tens_cut': 140, 'short_list': 198,
-    'table_rounds': 1073, 'table_hits': 134, 'table_chance': 33, 'declared': 1038, 'declared_hits': 19,
+    'results': 1084, 'tens_cut': 140, 'short_list': 198,
+    'table_rounds': 1074, 'table_hits': 134, 'table_chance': 33, 'declared': 1039, 'declared_hits': 19,
     'band_hits': 92, 'units_hits': 88, 'second_hits': 20,
     'same_tens': 26,
-    'rrr3_rounds': 769, 'rrr3_hits': 45, 'rrr3_rec_rounds': 770, 'rrr3_rec_hits': 279,
-    'rrr3_same_rounds': 742, 'rrr3_same_hits': 13, 'rrr3_wide_rounds': 729, 'rrr3_wide_hits': 76, 'rrr3_yx_rounds': 724, 'rrr3_yx_hits': 84,
-    'rrr3_strong_rounds': 720, 'rrr3_strong_hits': 148, 'rrr3_same2_rounds': 717, 'rrr3_same2_hits': 12,
-    'rrr3_turn_rounds': 724, 'rrr3_turn_hits': 14, 'rrr3_sameyx_rounds': 724, 'rrr3_sameyx_hits': 6,
-    'power_rounds': 659, 'power_hits': 428,
+    'rrr3_rounds': 770, 'rrr3_hits': 45, 'rrr3_rec_rounds': 771, 'rrr3_rec_hits': 280,
+    'rrr3_same_rounds': 743, 'rrr3_same_hits': 13, 'rrr3_wide_rounds': 730, 'rrr3_wide_hits': 76, 'rrr3_yx_rounds': 725, 'rrr3_yx_hits': 84,
+    'rrr3_strong_rounds': 721, 'rrr3_strong_hits': 148, 'rrr3_same2_rounds': 718, 'rrr3_same2_hits': 12,
+    'rrr3_turn_rounds': 725, 'rrr3_turn_hits': 14, 'rrr3_sameyx_rounds': 725, 'rrr3_sameyx_hits': 6,
+    'power_rounds': 660, 'power_hits': 428,
 }
 
 
@@ -3100,7 +3100,7 @@ def _rrr_ocjp_samecut(ep, lab, place=0):
 def _rrr_final4(cands, lists, tie_lists, place):
     """OCJP FINAL 4 (2026-10-15): among the OCJP numbers, the 4 that the
     most of the never-repaired lists also hold (RECOMMENDED, RRR table,
-    same op again, WIDE, yx, 3RRR RESULT); ties: more of the other lists
+    same op again, 3RRR RESULT; WIDE and yx until 2026-10-26); ties: more of the other lists
     (STRONG 20, declared cell, NC/CUT SPECIAL), then the lower number
     (ranking by the earlier OCJP place instead gave 7.3%, noise).  Walk-forward on 436 past rounds
     (b c d f h i j k): 36 hits = 8.3% against 4.0% for any 4 numbers,
@@ -6284,8 +6284,12 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             f4_lists = {'RECOMMENDED': [v for v, _ in rec], 'RRR table': [v for v, _, _ in both_cut],
                         'same op again': [a_[0] for a_ in (same, same2, same_turn if same else None,
                                                            same_yx if same else None) if a_],
-                        'WIDE': [v for v, _ in wide], 'yx': [v for v, _ in rec_yx],
                         '3RRR RESULT': [int(n_[:2]) for n_, _ in found]}
+            # WIDE and yx no longer vote (2026-10-26): both fell below chance in
+            # the old replay (lift 0.92 / 0.82) and in the untuned live rounds
+            # N235-N290 (0.53 / 0.66); without them FINAL 4 is 83 of 1041 against
+            # 78, never worse in any half, on series N or live
+            # (rrr_final4/vote_lists_test.py)
             f4_place = {}
             for v_, _, k_, _ in o_list:
                 f4_place.setdefault(v_, k_)
@@ -6300,7 +6304,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 f4_body.append(f"{k_ + 1}. {v_:02d} ({OP_ABBREV[find_op(ep // 10, v_ // 10)]}/{OP_ABBREV[find_op(ep % 10, v_ % 10)]})"
                                f"   in {len(nm_)} lists: {', '.join(nm_) if nm_ else '-'}")
             f4_body += ["", "the OCJP numbers most of the never-repaired lists also hold",
-                        "(RECOMMENDED, RRR table, same op again, WIDE, yx, 3RRR RESULT)",
+                        "(RECOMMENDED, RRR table, same op again, 3RRR RESULT; WIDE and yx dropped 2026-10-26)",
                         "walk-forward, 436 past rounds: 36 hits = 8.3%; any 4 numbers = 4.0%",
                         "about twice chance, but it still misses about 92 rounds in 100"]
             # OCJP MASTER (user, 2026-10-16: "finally we are going to use

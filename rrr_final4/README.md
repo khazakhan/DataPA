@@ -222,3 +222,17 @@ MASTER 14 with its digits reversed is 41. `reverse_test.py`, 1085 rounds: the re
 ## RECOMMENDED-position tie-break after N285 = 57 (2026-10-25)
 
 55 (N282, REC #1) and 57 (N285, REC #3) both lost 2-vote tie-breaks. `rec_tiebreak_test.py`, 1041 rounds: the shipped order (votes, STRONG, lower number) hits 78 = 7.5%. Breaking ties by REC position after STRONG hits 71 = 6.8%, and REC position without STRONG hits 52 = 5.0%. The shipped order also wins on series N and in both halves, so it is kept.
+
+## Live out-of-sample diagnosis after N291 = 70 (2026-10-26)
+
+`live_diagnosis.py` covers the 57 live rounds N235–N291, which were never used for tuning, beside the old 1041-round replay.
+- Lift above chance in both datasets: 3RRR RESULT (3.67 live / 1.40 old), STRONG 20 (1.40 / 1.43) and RECOMMENDED (1.30 / 1.20).
+- Below chance in both: WIDE (0.53 / 0.92) and yx (0.66 / 0.82).
+- 2-vote results have lift 1.82 live; 44% of live results have 0 votes.
+
+`vote_lists_test.py` tests FINAL 4 without the WIDE and yx votes:
+- 83 vs 78 over 1041 rounds;
+- equal in the 1st half, 36 vs 31 in the 2nd half;
+- equal on old series N and on live (4 of 57).
+
+It is never worse in any split, so it shipped on 2026-10-26. A rerun of the script on all 57 live rounds matches the test exactly and keeps all 4 live hits. Variants with STRONG 20 voting lost on series N and were not shipped.

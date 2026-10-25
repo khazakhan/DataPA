@@ -198,3 +198,15 @@ FINAL 4 held 23 (c-1/c+2) and 78 (-1/+2): the same steps, with only the cuts dif
 | one per step size | 82 | 13 |
 
 With N265 included the rule is 83 vs 81 on all series and 13 vs 14 on N, a draw. It was not shipped, but it is tracked as an on-test line in the round outputs from N266 (record 1 of 1 at the start).
+
+## How much the after-the-fact turns of FINAL 4 cover (after N272 = 79, 2026-10-25)
+
+Since N264 the user has found three different turns of a FINAL 4 op that each matched one result. `transform_cover.py` measures, over 1078 replayed rounds, how many numbers such turns of the 4 FINAL 4 ops reach each round, and how often the result is among them:
+
+| Turns allowed | Numbers reached | Result among them |
+|---|---|---|
+| swap sides and/or flip signs (8 forms) | 18.4 | 21.1% |
+| + cut moved or toggled (32 forms) | 50.9 | 53.6% |
+| + one step up/down | 97.6 | 98.2% |
+
+The hit rate tracks the coverage, so some turn can almost always be found after the fact. New turns are not added as rules. User rules 1-3 stay tracked on test.

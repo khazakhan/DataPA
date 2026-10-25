@@ -214,3 +214,7 @@ The hit rate tracks the coverage, so some turn can almost always be found after 
 ## User reverse idea after N279 = 41 (2026-10-25)
 
 MASTER 14 with its digits reversed is 41. `reverse_test.py`, 1085 rounds: the reversed MASTER hit 0.9% (10 times) on all series and 0 of 278 on series N, against 1% chance. The reversed FINAL 4 hit 3.6% for 3.4 numbers a round, also chance. The rule was not added; it is tracked on test as rule 4 from N280.
+
+## OCJP entry count after N283 = 96 (2026-10-25)
+
+96 sat in OCJP four times (places 7!, 12, 19%, 31=) but had 0 votes, so FINAL 4 ranked it 100th. `ocjp_count_test.py`, 1041 rounds: the hit rate per number for 1, 2, 3, 4 and 5+ OCJP entries is 1.05%, 1.00%, 1.23%, 0.64% and 0.84%, which is flat around 1%. A FINAL 4 built from the top 4 by OCJP count hits 4.2% (chance 4%). It was not added.

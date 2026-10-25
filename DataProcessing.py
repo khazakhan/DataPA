@@ -996,14 +996,21 @@ def show_final_box():
     two = lambda ns: ' '.join(f"{n:02d}" for n in ns)
     star = _RRR3_PREV.get('star_picks') or []
     body = [f"★  OCJP FINAL 4 with operations (the prediction)  —  after {fb['after']:02d}, EP={ep:02d}  ★", ""]
-    w = [max(len(r[i]) for r in rows) for i in range(5)]
-    sep_ = '+' + '+'.join('-' * (x + 2) for x in w) + '+'
-    body.append(sep_)
-    for i, r in enumerate(rows):
-        body.append('| ' + ' | '.join(c.ljust(x) for c, x in zip(r, w)) + ' |')
-        if i == 0:
-            body.append(sep_)
-    body.append(sep_)
+    def table(head, rows_, wrap_col):
+        # box lines with a rule between rows, the same look as the chat tables
+        room = _term_w() - 12
+        w_ = [max(len(r_[i]) for r_ in [head] + rows_) for i in range(len(head))]
+        w_[wrap_col] = max(10, min(w_[wrap_col], room - sum(w_) + w_[wrap_col] - 3 * len(head)))
+        rule = lambda l, m_, r: l + m_.join('─' * (x + 2) for x in w_) + r
+        out = [rule('┌', '┬', '┐')]
+        for i_, r_ in enumerate([head] + rows_):
+            if i_:
+                out.append(rule('├', '┼', '┤'))
+            cells = [textwrap.wrap(c, w_[j]) or [''] if j == wrap_col else [c] for j, c in enumerate(r_)]
+            for k2 in range(max(len(c) for c in cells)):
+                out.append('│ ' + ' │ '.join((c[k2] if k2 < len(c) else '').ljust(x) for c, x in zip(cells, w_)) + ' │')
+        return out + [rule('└', '┴', '┘')]
+    body += table(rows[0], rows[1:], 3)
     # every number with its operation on the EP (user, 2026-10-26: "i need
     # with operations"), five to a row in fixed columns
     wop = lambda n: f"{n:02d} ({lab(n)})"
@@ -1021,19 +1028,6 @@ def show_final_box():
         body += [""] + grid(f"top {k_} (adds)", rk[k_ - 10:k_])
     # single picks and the user's rules as tables with a live record column,
     # the same as the chat round notes (user, 2026-10-26)
-    def table(head, rows_, wrap_col):
-        room = _term_w() - 12
-        w_ = [max(len(r_[i]) for r_ in [head] + rows_) for i in range(len(head))]
-        w_[wrap_col] = max(10, min(w_[wrap_col], room - sum(w_) + w_[wrap_col] - 3 * len(head)))
-        sep2 = '+' + '+'.join('-' * (x + 2) for x in w_) + '+'
-        out = [sep2]
-        for i_, r_ in enumerate([head] + rows_):
-            cells = [textwrap.wrap(c, w_[j]) or [''] if j == wrap_col else [c] for j, c in enumerate(r_)]
-            for k2 in range(max(len(c) for c in cells)):
-                out.append('| ' + ' | '.join((c[k2] if k2 < len(c) else '').ljust(x) for c, x in zip(cells, w_)) + ' |')
-            if i_ == 0:
-                out.append(sep2)
-        return out + [sep2]
     rec = lambda key: f"{RRR_LIVE.get(f'rrr3_{key}_hits', 0)} of {RRR_LIVE.get(f'rrr3_{key}_rounds', 0)}"
     ops_ = lambda ns: ' · '.join(wop(n) for n in ns) if ns else '-'
     body += [""] + table(["Single picks", "Number", "Operation", "Record"],
@@ -1046,8 +1040,9 @@ def show_final_box():
                    ["2. one per step family", ops_(r2), rec('rule2')],
                    ["3. sides swapped + new y sign flipped", ops_(r3), rec('rule3')],
                    ["4. MASTER digits reversed", ops_([r4]), rec('rule4')],
-                   [f"5. families of FINAL 4 ({len(r5)})", ops_(r5), rec('rule5')]], 1)
-    body = [x for l_ in body for x in ([l_] if l_.startswith(('|', '+')) else
+                   [f"5. families of FINAL 4 ({len(r5)})",
+                    ' · '.join(two(r5[i:i + 4]) for i in range(0, len(r5), 4)), rec('rule5')]], 1)
+    body = [x for l_ in body for x in ([l_] if l_.startswith(('|', '+', '┌', '├', '│', '└')) else
                                        (textwrap.wrap(l_, _term_w() - 8, subsequent_indent='      ') or ['']))]
     g, rst = "\033[1;32m", "\033[0m"
     iw = max(len(l_) for l_ in body) + 2

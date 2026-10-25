@@ -1015,7 +1015,11 @@ def show_final_box():
         for i in range(0, len(ns), per):
             out.append("    " + ''.join(wop(n).ljust(cw) for n in ns[i:i + per]).rstrip())
         return out
-    body += [""] + grid("top 10", rk[:10]) + [""] + grid("top 20", rk[:20]) + ["",
+    # top 10, then what the top 20, 30 and 40 add (user, 2026-10-26)
+    body += [""] + grid("top 10", rk[:10])
+    for k_ in (20, 30, 40):
+        body += [""] + grid(f"top {k_} (adds)", rk[k_ - 10:k_])
+    body += ["",
              f"OCJP MASTER : {wop(m)}",
              f"star #1     : {wop(star[0])}" if star else "star #1     : -", "",
              "On test (user rules, not part of FINAL 4):"]

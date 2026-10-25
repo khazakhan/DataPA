@@ -1019,16 +1019,36 @@ def show_final_box():
     body += [""] + grid("top 10", rk[:10])
     for k_ in (20, 30, 40):
         body += [""] + grid(f"top {k_} (adds)", rk[k_ - 10:k_])
-    body += ["",
-             f"OCJP MASTER : {wop(m)}",
-             f"star #1     : {wop(star[0])}" if star else "star #1     : -", "",
-             "On test (user rules, not part of FINAL 4):"]
-    body += grid(f"  1. step 1 toward last op ({fb['last_op'] or '-'})", r1 or [])
-    body += grid("  2. one per step family", r2)
-    body += grid("  3. sides swapped + new y sign flipped", r3)
-    body += grid("  4. MASTER digits reversed", [r4])
-    body += grid(f"  5. families of FINAL 4 ({len(r5)} numbers)", r5)
-    body = [x for l_ in body for x in (textwrap.wrap(l_, _term_w() - 8, subsequent_indent='      ') or [''])]
+    # single picks and the user's rules as tables with a live record column,
+    # the same as the chat round notes (user, 2026-10-26)
+    def table(head, rows_, wrap_col):
+        room = _term_w() - 12
+        w_ = [max(len(r_[i]) for r_ in [head] + rows_) for i in range(len(head))]
+        w_[wrap_col] = max(10, min(w_[wrap_col], room - sum(w_) + w_[wrap_col] - 3 * len(head)))
+        sep2 = '+' + '+'.join('-' * (x + 2) for x in w_) + '+'
+        out = [sep2]
+        for i_, r_ in enumerate([head] + rows_):
+            cells = [textwrap.wrap(c, w_[j]) or [''] if j == wrap_col else [c] for j, c in enumerate(r_)]
+            for k2 in range(max(len(c) for c in cells)):
+                out.append('| ' + ' | '.join((c[k2] if k2 < len(c) else '').ljust(x) for c, x in zip(cells, w_)) + ' |')
+            if i_ == 0:
+                out.append(sep2)
+        return out + [sep2]
+    rec = lambda key: f"{RRR_LIVE.get(f'rrr3_{key}_hits', 0)} of {RRR_LIVE.get(f'rrr3_{key}_rounds', 0)}"
+    ops_ = lambda ns: ' · '.join(wop(n) for n in ns) if ns else '-'
+    body += [""] + table(["Single picks", "Number", "Operation", "Record"],
+                         [["OCJP FINAL 4", ' '.join(f"{v:02d}" for v in top4), "see table above", rec('final4')],
+                          ["OCJP MASTER", f"{m:02d}", lab(m), rec('master')],
+                          ["star #1", f"{star[0]:02d}" if star else '-', lab(star[0]) if star else '-', rec('star1')]], 2)
+    body += ["", "On test (user rules, not part of FINAL 4):"]
+    body += table(["On test (your rules)", "Numbers with operations", "Record"],
+                  [[f"1. step 1 toward last op ({fb['last_op'] or '-'})", ops_(r1), rec('rule1')],
+                   ["2. one per step family", ops_(r2), rec('rule2')],
+                   ["3. sides swapped + new y sign flipped", ops_(r3), rec('rule3')],
+                   ["4. MASTER digits reversed", ops_([r4]), rec('rule4')],
+                   [f"5. families of FINAL 4 ({len(r5)})", ops_(r5), rec('rule5')]], 1)
+    body = [x for l_ in body for x in ([l_] if l_.startswith(('|', '+')) else
+                                       (textwrap.wrap(l_, _term_w() - 8, subsequent_indent='      ') or ['']))]
     g, rst = "\033[1;32m", "\033[0m"
     iw = max(len(l_) for l_ in body) + 2
     print()
@@ -2956,6 +2976,13 @@ RRR_LIVE = {
     'rrr3_strong_rounds': 750, 'rrr3_strong_hits': 154, 'rrr3_same2_rounds': 747, 'rrr3_same2_hits': 12,
     'rrr3_turn_rounds': 754, 'rrr3_turn_hits': 14, 'rrr3_sameyx_rounds': 754, 'rrr3_sameyx_hits': 6,
     'power_rounds': 689, 'power_hits': 428,
+    # live records shown in the bottom FINAL 4 box (user, 2026-10-26); the
+    # user's rules 1-5 stay on test and never feed FINAL 4
+    'rrr3_final4_rounds': 530, 'rrr3_final4_hits': 31, 'rrr3_master_rounds': 476, 'rrr3_master_hits': 2,
+    'rrr3_star1_rounds': 143, 'rrr3_star1_hits': 3,
+    'rrr3_rule1_rounds': 163, 'rrr3_rule1_hits': 5, 'rrr3_rule2_rounds': 56, 'rrr3_rule2_hits': 4,
+    'rrr3_rule3_rounds': 57, 'rrr3_rule3_hits': 3, 'rrr3_rule4_rounds': 42, 'rrr3_rule4_hits': 1,
+    'rrr3_rule5_rounds': 5, 'rrr3_rule5_hits': 2,
 }
 
 

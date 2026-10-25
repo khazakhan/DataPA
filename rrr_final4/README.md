@@ -210,3 +210,7 @@ Since N264 the user has found three different turns of a FINAL 4 op that each ma
 | + one step up/down | 97.6 | 98.2% |
 
 The hit rate tracks the coverage, so some turn can almost always be found after the fact. New turns are not added as rules. User rules 1-3 stay tracked on test.
+
+## User reverse idea after N279 = 41 (2026-10-25)
+
+MASTER 14 with its digits reversed is 41. `reverse_test.py`, 1085 rounds: the reversed MASTER hit 0.9% (10 times) on all series and 0 of 278 on series N, against 1% chance. The reversed FINAL 4 hit 3.6% for 3.4 numbers a round, also chance. The rule was not added; it is tracked on test as rule 4 from N280.

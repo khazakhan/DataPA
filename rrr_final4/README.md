@@ -218,3 +218,7 @@ MASTER 14 with its digits reversed is 41. `reverse_test.py`, 1085 rounds: the re
 ## OCJP entry count after N283 = 96 (2026-10-25)
 
 96 sat in OCJP four times (places 7!, 12, 19%, 31=) but had 0 votes, so FINAL 4 ranked it 100th. `ocjp_count_test.py`, 1041 rounds: the hit rate per number for 1, 2, 3, 4 and 5+ OCJP entries is 1.05%, 1.00%, 1.23%, 0.64% and 0.84%, which is flat around 1%. A FINAL 4 built from the top 4 by OCJP count hits 4.2% (chance 4%). It was not added.
+
+## RECOMMENDED-position tie-break after N285 = 57 (2026-10-25)
+
+55 (N282, REC #1) and 57 (N285, REC #3) both lost 2-vote tie-breaks. `rec_tiebreak_test.py`, 1041 rounds: the shipped order (votes, STRONG, lower number) hits 78 = 7.5%. Breaking ties by REC position after STRONG hits 71 = 6.8%, and REC position without STRONG hits 52 = 5.0%. The shipped order also wins on series N and in both halves, so it is kept.

@@ -70,5 +70,17 @@
    39
   ],
   "result": 39
+ },
+ {
+  "time": "2026-10-30",
+  "round": "F57",
+  "after": 39,
+  "ep": 6,
+  "kind": "op_number",
+  "entry": "Op5 01->84 (84 = 39 both digits cut) new +2/+2 -> x cut switched c+2, y +2 kept",
+  "numbers": [
+   78
+  ],
+  "result": null
  }
 ]

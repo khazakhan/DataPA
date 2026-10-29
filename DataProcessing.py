@@ -1014,6 +1014,19 @@ def show_final_box():
     # Op7 16->93 ... Op39 50->17), priority to the last one; its new x with
     # the cut switched (sign kept), new y kept: Op39 -2/nc -> c-2/nc -> 47
     r7 = r8 = r9 = r10 = ''
+    # rule 11 (user, 2026-10-30, F57 after 39 EP 06): the after number with
+    # both digits cut (39 -> 84); every row whose source ends there (Op5
+    # 01->84), its new x with the cut switched (sign kept), new y kept:
+    # +2/+2 -> c+2/+2 = 78
+    full11 = cut(a_ // 10) * 10 + cut(a_ % 10)
+    r11 = []
+    for pos11, _, b11, _, _, nx11, ny11, _ in (_RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else []):
+        if b11 != full11:
+            continue
+        cx11, kx11 = _op_side(OP_ABBREV[nx11])
+        cy11, ky11 = _op_side(OP_ABBREV[ny11])
+        n11 = _op_apply(ex, not cx11, kx11) * 10 + _op_apply(ey, cy11, ky11)
+        r11.append(f"Op{pos11} {b11:02d}: {n11:02d} ({_op_label(not cx11, kx11)}/{OP_ABBREV[ny11]})")
     # rule 10 (user, 2026-10-30, F56 after 56 EP 51): the rows whose first
     # source number has the after's tens digit, leaving out rows with nc or a
     # plain cut in their old or new ops ("already fired with nc and cut many
@@ -1113,7 +1126,9 @@ def show_final_box():
                    ["9. first-source tens row: old ops crossed, y flipped",
                     r9 or '- (no first source number has that tens digit)', rec('rule9')],
                    ["10. first-source tens row without nc/cut: new x cut+flip",
-                    r10 or '- (no such row)', rec('rule10')]], 1)
+                    r10 or '- (no such row)', rec('rule10')],
+                   [f"11. row ending at after full cut ({full11:02d}): new x cut switched",
+                    ' · '.join(r11) or '- (no row ends there)', rec('rule11')]], 1)
     body = [x for l_ in body for x in ([l_] if l_.startswith(('|', '+', '┌', '├', '│', '└')) else
                                        (textwrap.wrap(l_, _term_w() - 8, subsequent_indent='      ') or ['']))]
     g, rst = "\033[1;32m", "\033[0m"
@@ -3050,7 +3065,7 @@ RRR_LIVE = {
     'rrr3_rule1_rounds': 172, 'rrr3_rule1_hits': 5, 'rrr3_rule2_rounds': 65, 'rrr3_rule2_hits': 4,
     'rrr3_rule3_rounds': 66, 'rrr3_rule3_hits': 3, 'rrr3_rule4_rounds': 51, 'rrr3_rule4_hits': 1,
     'rrr3_rule5_rounds': 14, 'rrr3_rule5_hits': 4, 'rrr3_rule6_rounds': 3, 'rrr3_rule6_hits': 1,
-    'rrr3_rule7_rounds': 4, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 4, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 2, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 1, 'rrr3_rule10_hits': 1,
+    'rrr3_rule7_rounds': 4, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 4, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 2, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 1, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 0, 'rrr3_rule11_hits': 0,
 }
 
 

@@ -1013,7 +1013,22 @@ def show_final_box():
     # source has the after number's tens digit on either side (Op6 62->16,
     # Op7 16->93 ... Op39 50->17), priority to the last one; its new x with
     # the cut switched (sign kept), new y kept: Op39 -2/nc -> c-2/nc -> 47
-    r7 = r8 = r9 = ''
+    r7 = r8 = r9 = r10 = ''
+    # rule 10 (user, 2026-10-30, F56 after 56 EP 51): the rows whose first
+    # source number has the after's tens digit, leaving out rows with nc or a
+    # plain cut in their old or new ops ("already fired with nc and cut many
+    # times"); the last one left (Op13 56->94), its new x with the cut switched
+    # and the sign flipped, new y kept: c+2/-2 -> -2/-2 = 39
+    plain = {'no_change', 'cut'}
+    rows10 = [r for r in (_RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else [])
+              if r[1] // 10 == a_ // 10 and not plain & {r[3], r[4], r[5], r[6]}]
+    if rows10:
+        pos10, a10, b10, _, _, nx10, ny10, _ = rows10[-1]
+        cx10, kx10 = _op_side(OP_ABBREV[nx10])
+        cy10, ky10 = _op_side(OP_ABBREV[ny10])
+        n10 = _op_apply(ex, not cx10, -kx10) * 10 + _op_apply(ey, cy10, ky10)
+        r10 = (f"Op{pos10} {a10:02d}->{b10:02d} new {OP_ABBREV[nx10]}/{OP_ABBREV[ny10]}: "
+               f"{n10:02d} ({_op_label(not cx10, -kx10)}/{OP_ABBREV[ny10]})")
     # rule 9 (user, 2026-10-30, F55 after 54 EP 58): the last RRR row whose
     # FIRST source number has the after number's tens digit (Op32 58->78; Op38
     # 65->58 does not count), its OLD ops crossed: x = old y, y = old x with
@@ -1096,7 +1111,9 @@ def show_final_box():
                    ["8. rule 7 row: new x cut switched, new y sign flipped",
                     r8 or '- (no row has that tens digit)', rec('rule8')],
                    ["9. first-source tens row: old ops crossed, y flipped",
-                    r9 or '- (no first source number has that tens digit)', rec('rule9')]], 1)
+                    r9 or '- (no first source number has that tens digit)', rec('rule9')],
+                   ["10. first-source tens row without nc/cut: new x cut+flip",
+                    r10 or '- (no such row)', rec('rule10')]], 1)
     body = [x for l_ in body for x in ([l_] if l_.startswith(('|', '+', '┌', '├', '│', '└')) else
                                        (textwrap.wrap(l_, _term_w() - 8, subsequent_indent='      ') or ['']))]
     g, rst = "\033[1;32m", "\033[0m"
@@ -3033,7 +3050,7 @@ RRR_LIVE = {
     'rrr3_rule1_rounds': 171, 'rrr3_rule1_hits': 5, 'rrr3_rule2_rounds': 64, 'rrr3_rule2_hits': 4,
     'rrr3_rule3_rounds': 65, 'rrr3_rule3_hits': 3, 'rrr3_rule4_rounds': 50, 'rrr3_rule4_hits': 1,
     'rrr3_rule5_rounds': 13, 'rrr3_rule5_hits': 4, 'rrr3_rule6_rounds': 2, 'rrr3_rule6_hits': 1,
-    'rrr3_rule7_rounds': 3, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 3, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 1, 'rrr3_rule9_hits': 1,
+    'rrr3_rule7_rounds': 3, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 3, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 1, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 0, 'rrr3_rule10_hits': 0,
 }
 
 

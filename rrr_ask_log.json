@@ -58,5 +58,17 @@
    56
   ],
   "result": 56
+ },
+ {
+  "time": "2026-10-30",
+  "round": "F56",
+  "after": 56,
+  "ep": 51,
+  "kind": "op_number",
+  "entry": "Op13 56->94 (first-source tens 5, rows with nc/cut skipped) new c+2/-2 -> x cut removed + sign flipped -2, y -2 kept",
+  "numbers": [
+   39
+  ],
+  "result": null
  }
 ]

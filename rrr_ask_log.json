@@ -1,0 +1,26 @@
+[
+ {
+  "time": "2026-10-30",
+  "round": "F52",
+  "after": 98,
+  "ep": 75,
+  "kind": "op_number",
+  "entry": "Op33 +1/+1 -> x cut+flip c-1, y +1 (74->48, 48 = 98 tens cut)",
+  "numbers": [
+   16
+  ],
+  "result": 16
+ },
+ {
+  "time": "2026-10-30",
+  "round": "F53",
+  "after": 16,
+  "ep": 17,
+  "kind": "op_number",
+  "entry": "Op39 -2/nc -> c-2/nc (last RRR row with after's tens digit 1; rows Op6 7 27 28 34 39)",
+  "numbers": [
+   47
+  ],
+  "result": null
+ }
+]

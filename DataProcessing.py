@@ -994,6 +994,21 @@ def show_final_box():
     m = top4[0]
     r4 = (m % 10) * 10 + m // 10
     r5 = sorted(set().union(*(_digit_family(v) for v in top4)))
+    # rule 6 (user, 2026-10-30, F52 after 98: Op33 74 -> 48, 48 = 98 tens
+    # cut; new +1/+1 -> x cut switched + sign flipped c-1, y kept -> 16 on
+    # EP 75): every RRR: NEXT OPERATION row whose source ends at the after
+    # number with either digit cut or not, its new x cut switched and sign
+    # flipped, new y kept
+    a_ = fb['after']
+    fam6 = {x * 10 + y for x in (a_ // 10, (a_ // 10 + 5) % 10) for y in (a_ % 10, (a_ % 10 + 5) % 10)}
+    r6 = []
+    for pos6, _, b6, _, _, nx6, ny6, _ in _RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else []:
+        if b6 not in fam6:
+            continue
+        cx6, kx6 = _op_side(OP_ABBREV[nx6])
+        cy6, ky6 = _op_side(OP_ABBREV[ny6])
+        n6 = _op_apply(ex, not cx6, -kx6) * 10 + _op_apply(ey, cy6, ky6)
+        r6.append(f"Op{pos6} {b6:02d}: {n6:02d} ({_op_label(not cx6, -kx6)}/{OP_ABBREV[ny6]})")
     two = lambda ns: ' '.join(f"{n:02d}" for n in ns)
     star = _RRR3_PREV.get('star_picks') or []
     body = [f"★  OCJP FINAL 4 with operations (the prediction)  —  after {fb['after']:02d}, EP={ep:02d}  ★", ""]
@@ -1042,7 +1057,9 @@ def show_final_box():
                    ["3. sides swapped + new y sign flipped", ops_(r3), rec('rule3')],
                    ["4. MASTER digits reversed", ops_([r4]), rec('rule4')],
                    [f"5. families of FINAL 4 ({len(r5)})",
-                    ' · '.join(two(r5[i:i + 4]) for i in range(0, len(r5), 4)), rec('rule5')]], 1)
+                    ' · '.join(two(r5[i:i + 4]) for i in range(0, len(r5), 4)), rec('rule5')],
+                   ["6. row ending at after (or cut): new x cut+flip",
+                    ' · '.join(r6) or '- (no row ends in that family)', rec('rule6')]], 1)
     body = [x for l_ in body for x in ([l_] if l_.startswith(('|', '+', '┌', '├', '│', '└')) else
                                        (textwrap.wrap(l_, _term_w() - 8, subsequent_indent='      ') or ['']))]
     g, rst = "\033[1;32m", "\033[0m"
@@ -2978,7 +2995,7 @@ RRR_LIVE = {
     'rrr3_star1_rounds': 147, 'rrr3_star1_hits': 3,
     'rrr3_rule1_rounds': 167, 'rrr3_rule1_hits': 5, 'rrr3_rule2_rounds': 60, 'rrr3_rule2_hits': 4,
     'rrr3_rule3_rounds': 61, 'rrr3_rule3_hits': 3, 'rrr3_rule4_rounds': 46, 'rrr3_rule4_hits': 1,
-    'rrr3_rule5_rounds': 9, 'rrr3_rule5_hits': 4,
+    'rrr3_rule5_rounds': 9, 'rrr3_rule5_hits': 4, 'rrr3_rule6_rounds': 0, 'rrr3_rule6_hits': 0,
 }
 
 

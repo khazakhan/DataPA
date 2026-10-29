@@ -3523,6 +3523,9 @@ def _rrr3_rows(entries, ep):
     return la, rows
 
 
+_RRR_ASK = {}      # the last RRR: NEXT OPERATION table: EP, Pos prefix and rows
+
+
 def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     """RRR table — display only. Every WIN - WIN row (plus the chain's own
     last step, marked LAST) gives a next operation by the RRR rule, applied
@@ -3558,6 +3561,10 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                     f"{nxa:<6} {nya:<6}  " + f"{xy:02d}{star(xy)}({nxa}/{nya})".ljust(KW)
                     + f"{yx:02d}{star(yx)}({nya}/{nxa})".ljust(KW))
     _RRR_OCJP_OLD[:] = [(x_, y_) for _, _, _, x_, y_ in row_ops]
+    # kept for the questions at the end of the page (rrr_ask_ops)
+    _RRR_ASK.update(ep=ep, prefix=pos_prefix,
+                    rows=[(p_, s_[1], s_[2], x_, y_, nx_, ny_, s_[5])
+                          for (p_, nx_, ny_, x_, y_), s_ in zip(row_ops, src)])
     body += ['─' * len(head),
              "  new x = old y, cut switched + sign flipped   |   new y = old x, cut switched, one step down",
              "  LAST = the chain's own last step.  Backtest (57,662 positions): table hit 6.42% vs 6.44% chance.",
@@ -7640,6 +7647,7 @@ def run(data_source, user_x_op=None, user_y_op=None):
         print("\n".join(_rrr_end))
     show_three_box()
     show_final_box()
+    rrr_ask_ops()
     print()
     return root, ops_list, _last_top4, _last_scores
 
@@ -7749,6 +7757,105 @@ def show_operation_result(root, ux, uy):
           f"   y:{fx}({ry})={apply_op(ry,fx)}"
           f"   →   {sign_yx:02d}")
     sep('═')
+
+
+def _tty_input(text):
+    """Ask on the terminal even when the data came in through stdin
+    (python3 DataProcessing.py < temp_data.txt). None when there is no
+    terminal or the user pressed Ctrl-D / Ctrl-C."""
+    try:
+        with open('/dev/tty', 'w') as out, open('/dev/tty') as tty:
+            out.write(text)
+            out.flush()
+            line = tty.readline()
+    except (OSError, KeyboardInterrupt):
+        return None
+    return line.strip() if line else None
+
+
+def _parse_op(raw):
+    """One side of an operation as the tables write it: nc, cut, +1, -2,
+    c+1, c-2 (a typed minus sign − is fine too)."""
+    s = raw.strip().lower().replace('−', '-').replace('–', '-').replace(' ', '')
+    if s.startswith('c') and not s.startswith('cut') and s[1:2] in ('+', '-'):
+        s = 'cut' + s[1:]
+    return normalize_op(s)
+
+
+def _ask_op_line(ep, nx, ny):
+    """xy, yx, sign+xy and sign+yx of one operation on EP, with the ops."""
+    fx, fy = SIGN_FLIP[nx], SIGN_FLIP[ny]
+    xy, yx, sxy, syx = compute_variants(ep, nx, ny)
+    a = lambda o: OP_ABBREV[o]
+    return [(xy, f"{a(nx)}/{a(ny)}"), (yx, f"{a(ny)}/{a(nx)}"),
+            (sxy, f"{a(fx)}/{a(fy)}"), (syx, f"{a(fy)}/{a(fx)}")]
+
+
+def rrr_ask_ops():
+    """After the RRR: NEXT OPERATION table (user, 2026-10-29): ask for an
+    Op number from the table and run that row's new x / new y on EP; then
+    ask for the user's own operations and run them on EP. Shows the number
+    series. Only on a terminal; RRR_ASK=0 turns it off."""
+    if not _RRR_ASK.get('rows') or os.environ.get('RRR_ASK') == '0':
+        return
+    ep, pre, rows = _RRR_ASK['ep'], _RRR_ASK['prefix'], _RRR_ASK['rows']
+    by_pos = {str(r[0]): r for r in rows}
+    a = lambda o: OP_ABBREV[o]
+    print()
+    sep('═')
+    print(f"  RRR: NEXT OPERATION  →  EP={ep:02d}  (x = {ep // 10}, y = {ep % 10})")
+    print(f"  {'Pos':<12} {'Source':<9} {'old x':<6} {'old y':<6}    {'new x':<6} {'new y':<6}  {'xy (op)':<15}{'yx (op)':<15}")
+    for pos, s_a, s_b, x_op, y_op, nx, ny, mark in rows:
+        xy, yx = compute_variants(ep, nx, ny)[:2]
+        print(f"  {'[' + pre + str(pos) + '] ' + mark:<12} {s_a:02d} → {s_b:02d}   {a(x_op):<6} {a(y_op):<6} →  "
+              f"{a(nx):<6} {a(ny):<6}  " + f"{xy:02d} ({a(nx)}/{a(ny)})".ljust(15) + f"{yx:02d} ({a(ny)}/{a(nx)})")
+    sep('═')
+    try:
+        open('/dev/tty').close()
+    except OSError:
+        return          # no terminal (a piped or background run): nothing to ask
+    # 1. an Op number from the table
+    while True:
+        raw = _tty_input(f"\n  Enter the Op number to execute ({', '.join(by_pos)}; Enter = next step): ")
+        if not raw:
+            break
+        key = raw.lower().lstrip('op').strip('[] ')
+        row = by_pos.get(key)
+        if row is None:
+            print(f"  ! '{raw}' is not in the table. Op numbers: {', '.join(by_pos)}")
+            continue
+        pos, s_a, s_b, x_op, y_op, nx, ny, mark = row
+        cells = _ask_op_line(ep, nx, ny)
+        print(f"\n  Op{pos}{(' ' + mark) if mark else ''}: source {s_a:02d} → {s_b:02d}, old {a(x_op)}/{a(y_op)} → new {a(nx)}/{a(ny)}")
+        print(f"  on EP {ep:02d}:  x {ep // 10} → {apply_op(ep // 10, nx)} ({a(nx)}),  y {ep % 10} → {apply_op(ep % 10, ny)} ({a(ny)})")
+        for lab, (v, o) in zip(('xy', 'yx', 'sign+xy', 'sign+yx'), cells):
+            print(f"     {lab:<8} {v:02d} ({o})")
+        print(f"  Number series: {'  '.join(dict.fromkeys(f'{v:02d}' for v, _ in cells))}")
+    # 2. the user's own operations on EP
+    while True:
+        raw = _tty_input(f"\n  Enter operations on EP {ep:02d} as x/y, several with commas or spaces "
+                         f"(e.g. +2/-2, c-1/cut, nc/+1; Enter = finish): ")
+        if not raw:
+            break
+        series, bad = [], []
+        for part in [t for t in re.split(r'[,;\s]+', raw) if t.strip()]:
+            sides = part.strip().split('/')
+            if len(sides) == 1:
+                sides = sides * 2
+            ox, oy = (_parse_op(t) for t in sides[:2]) if len(sides) == 2 else (None, None)
+            if ox is None or oy is None:
+                bad.append(part.strip())
+                continue
+            cells = _ask_op_line(ep, ox, oy)
+            print(f"  {a(ox)}/{a(oy)} on EP {ep:02d}:  xy {cells[0][0]:02d} ({cells[0][1]})   yx {cells[1][0]:02d} ({cells[1][1]})"
+                  f"   sign+xy {cells[2][0]:02d} ({cells[2][1]})   sign+yx {cells[3][0]:02d} ({cells[3][1]})")
+            series += [v for v, _ in cells]
+        if bad:
+            print(f"  ! not understood: {', '.join(bad)}  (use nc, cut, +1, -1, +2, -2, c+1, c-1, c+2, c-2)")
+        if series:
+            print(f"  Number series (xy, yx, sign+xy, sign+yx): {'  '.join(f'{v:02d}' for v in series)}")
+            uniq = sorted(set(series))
+            print(f"  Sorted, no repeats ({len(uniq)}): {'  '.join(f'{v:02d}' for v in uniq)}")
 
 
 # ── Entry Point ───────────────────────────────────────────────────────────────

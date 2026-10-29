@@ -34,5 +34,17 @@
    50
   ],
   "result": null
+ },
+ {
+  "time": "2026-10-30",
+  "round": "F54",
+  "after": 47,
+  "ep": 52,
+  "kind": "op_number",
+  "entry": "Op9 cut/-2 -> x cut switched nc, y sign flipped +2",
+  "numbers": [
+   54
+  ],
+  "result": null
  }
 ]

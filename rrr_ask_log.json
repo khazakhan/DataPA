@@ -46,5 +46,17 @@
    54
   ],
   "result": 54
+ },
+ {
+  "time": "2026-10-30",
+  "round": "F55",
+  "after": 54,
+  "ep": 58,
+  "kind": "op_number",
+  "entry": "Op32 58->78 (first source tens 5; Op38 65->58 ignored) old +2/nc -> x old y nc, y old x flipped -2",
+  "numbers": [
+   56
+  ],
+  "result": null
  }
 ]

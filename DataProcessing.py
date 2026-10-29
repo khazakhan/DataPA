@@ -16,6 +16,7 @@ Usage:
 import sys
 import os
 import json
+from datetime import datetime
 import argparse
 import re
 import shutil
@@ -7759,6 +7760,28 @@ def show_operation_result(root, ux, uy):
     sep('═')
 
 
+RRR_ASK_LOG = os.path.join(os.path.dirname(os.path.abspath(__file__)), "rrr_ask_log.json")
+
+
+def _ask_log(kind, entry, numbers):
+    """Save every Op number / operation the user enters (user, 2026-10-29:
+    'observe which Op numbers and operations I entered') so each one can be
+    checked against the result when it comes."""
+    try:
+        with open(RRR_ASK_LOG) as f:
+            log = json.load(f)
+    except (OSError, ValueError):
+        log = []
+    log.append({'time': datetime.now().isoformat(timespec='seconds'),
+                'ep': _RRR_ASK.get('ep'),
+                'kind': kind, 'entry': entry, 'numbers': numbers, 'result': None})
+    try:
+        with open(RRR_ASK_LOG, 'w') as f:
+            json.dump(log, f, indent=1)
+    except OSError:
+        pass
+
+
 def _tty_input(text):
     """Ask on the terminal even when the data came in through stdin
     (python3 DataProcessing.py < temp_data.txt). None when there is no
@@ -7831,6 +7854,7 @@ def rrr_ask_ops():
         for lab, (v, o) in zip(('xy', 'yx', 'sign+xy', 'sign+yx'), cells):
             print(f"     {lab:<8} {v:02d} ({o})")
         print(f"  Number series: {'  '.join(dict.fromkeys(f'{v:02d}' for v, _ in cells))}")
+        _ask_log('op_number', f"Op{pos} {a(nx)}/{a(ny)}", list(dict.fromkeys(v for v, _ in cells)))
     # 2. the user's own operations on EP
     while True:
         raw = _tty_input(f"\n  Enter operations on EP {ep:02d} as x/y, several with commas or spaces "
@@ -7850,6 +7874,7 @@ def rrr_ask_ops():
             print(f"  {a(ox)}/{a(oy)} on EP {ep:02d}:  xy {cells[0][0]:02d} ({cells[0][1]})   yx {cells[1][0]:02d} ({cells[1][1]})"
                   f"   sign+xy {cells[2][0]:02d} ({cells[2][1]})   sign+yx {cells[3][0]:02d} ({cells[3][1]})")
             series += [v for v, _ in cells]
+            _ask_log('operation', f"{a(ox)}/{a(oy)}", list(dict.fromkeys(v for v, _ in cells)))
         if bad:
             print(f"  ! not understood: {', '.join(bad)}  (use nc, cut, +1, -1, +2, -2, c+1, c-1, c+2, c-2)")
         if series:

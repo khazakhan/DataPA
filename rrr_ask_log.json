@@ -525,5 +525,17 @@
    32
   ],
   "result": 32
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O21",
+  "after": 32,
+  "ep": 45,
+  "kind": "result_only_explained",
+  "entry": "result 32 again = -1/c+2 on EP 45; Op25 92->88 new y flipped (not a finder row); rule 3 live, HOT 20",
+  "numbers": [
+   32
+  ],
+  "result": 32
  }
 ]

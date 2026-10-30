@@ -309,5 +309,17 @@
    94
   ],
   "result": 94
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O3",
+  "after": 94,
+  "ep": 72,
+  "kind": "result_only_explained",
+  "entry": "result 13 = c-1/+1 on EP 72; no table row gives it (only 2 rows); ADJUSTMENTS x-flip + HOT 20 held it",
+  "numbers": [
+   13
+  ],
+  "result": 13
  }
 ]

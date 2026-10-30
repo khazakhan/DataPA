@@ -82,5 +82,17 @@
    78
   ],
   "result": 78
+ },
+ {
+  "time": "2026-10-30",
+  "round": "F58",
+  "after": 78,
+  "ep": 0,
+  "kind": "op_number",
+  "entry": "Op27 57->60 (after tens 7 = units of 57; LAST Op35 17->00 skipped) new +2/cut -> x plain cut, y cut kept",
+  "numbers": [
+   55
+  ],
+  "result": null
  }
 ]

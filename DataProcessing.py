@@ -939,6 +939,45 @@ def _digit_family(n):
     return sorted({x * 10 + y for x in xs for y in ys} | {y * 10 + x for x in xs for y in ys})
 
 
+EP_FINDER_VARIANTS = ('as', 'yx', 'xF', 'yF', 'bF', 'xC', 'yC', 'old', 'oldX')
+EP_FINDER_NAMES = {'as': 'new ops as they are', 'yx': 'new ops crossed', 'xF': 'x sign flipped',
+                   'yF': 'y sign flipped', 'bF': 'both signs flipped', 'xC': 'x cut switched',
+                   'yC': 'y cut switched', 'old': 'old ops as they are', 'oldX': 'old ops crossed'}
+
+
+def ep_row_finder(ep, rows):
+    """EP ROW FINDER (user, 2026-10-31): the RRR: NEXT OPERATION rows whose
+    FIRST source number is the EP or one of its cut forms come first (EP,
+    full cut, units cut, tens cut), then the rows one units step from those.
+    Each row gives the standard operation changes on the EP. In 4 of 8
+    explained rounds (F61-F70) the right row started exactly at an EP form
+    (about 1 in 8 by chance); the right change still differs by round.
+    Returns [(pos, first, relation, {variant: (number, 'x/y')})]."""
+    ex, ey = ep // 10, ep % 10
+    forms = [(ep, 'EP'), (cut(ex) * 10 + cut(ey), 'full cut'),
+             (ex * 10 + cut(ey), 'units cut'), (cut(ex) * 10 + ey, 'tens cut')]
+    rel = {}
+    for n, lab in forms:
+        rel.setdefault(n, (0, lab))
+    for k, (n, lab) in enumerate(forms):
+        for d in (-1, 1):
+            m = (n // 10) * 10 + (n % 10 + d) % 10
+            rel.setdefault(m, (1, f"{lab} {'-' if d < 0 else '+'}1"))
+    one = lambda xo, yo: (apply_op(ex, xo) * 10 + apply_op(ey, yo), f"{OP_ABBREV[xo]}/{OP_ABBREV[yo]}")
+    out = []
+    for pos, a, b, ox, oy, nx, ny, _ in rows:
+        if a not in rel:
+            continue
+        v = {'as': one(nx, ny), 'yx': one(ny, nx), 'xF': one(SIGN_FLIP[nx], ny),
+             'yF': one(nx, SIGN_FLIP[ny]), 'bF': one(SIGN_FLIP[nx], SIGN_FLIP[ny]),
+             'xC': one(KK_CUT_TOGGLE[nx], ny), 'yC': one(nx, KK_CUT_TOGGLE[ny]),
+             'old': one(ox, oy), 'oldX': one(oy, ox)}
+        out.append((rel[a][0], pos, a, b, rel[a][1], v))
+    out.sort(key=lambda t: (t[0], [f for f, _ in forms].index(next(n for n, l in forms if t[4].startswith(l)))
+                            if t[0] == 0 else 9, -t[1]))
+    return [(pos, a, b, lab, v) for _, pos, a, b, lab, v in out]
+
+
 def show_final_box():
     """OCJP FINAL 4 with operations, the wider top 10 / top 20, the single
     picks and the user's on-test rules 1-5, as the very last block of the
@@ -1264,6 +1303,17 @@ def show_final_box():
                          [["OCJP FINAL 4", ' '.join(f"{v:02d}" for v in top4), "see table above", rec('final4')],
                           ["OCJP MASTER", f"{m:02d}", lab(m), rec('master')],
                           ["star #1", f"{star[0]:02d}" if star else '-', lab(star[0]) if star else '-', rec('star1')]], 2)
+    finder = ep_row_finder(ep, _RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else [])
+    body += ["", f"EP ROW FINDER (EP {ep:02d}): rows starting at the EP or its cut forms first, then one step away;"
+                 " as/yx = new ops, xF/yF/bF = sign flipped x/y/both, xC/yC = cut switched, old/oldX = old ops"]
+    if finder:
+        body += table(["Row", "Starts at", "as", "yx", "xF", "yF", "bF", "xC", "yC", "old", "oldX"],
+                      [[f"Op{pos}", f"{a:02d} ({lab})"] + [f"{v[k][0]:02d}" for k in EP_FINDER_VARIANTS]
+                       for pos, a, b, lab, v in finder], 1)
+        uniq = sorted({v[k][0] for *_, v in finder for k in EP_FINDER_VARIANTS})
+        body.append(f"  {len(uniq)} different numbers: " + ' '.join(f"{n:02d}" for n in uniq))
+    else:
+        body.append("  - no row starts at the EP, its cut forms or one step from them")
     body += ["", "On test (user rules, not part of FINAL 4):"]
     body += table(["On test (your rules)", "Numbers with operations", "Record"],
                   [[f"1. step 1 toward last op ({fb['last_op'] or '-'})", ops_(r1), rec('rule1')],

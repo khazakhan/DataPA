@@ -417,5 +417,17 @@
    45
   ],
   "result": 45
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O12",
+  "after": 45,
+  "ep": 45,
+  "kind": "result_only_explained",
+  "entry": "result 41 = nc/c+1 on EP 45; EP ROW FINDER LIVE hit Op19 41->45 (units cut +1) oldF; WIDE, rule 3",
+  "numbers": [
+   41
+  ],
+  "result": 41
  }
 ]

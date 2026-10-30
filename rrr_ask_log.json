@@ -164,5 +164,18 @@
    77
   ],
   "result": 77
+ },
+ {
+  "time": "2026-10-31",
+  "round": "F64",
+  "after": 77,
+  "ep": 53,
+  "kind": "family_gap",
+  "entry": "EP 53 tens family 5x/0x: first source numbers fill 50-57 (0x->5x; 5x not EP also fills units-cut slot); first gap 58 -> nc/cut. Same family as MASTER 08 (cut/cut).",
+  "numbers": [
+   58,
+   8
+  ],
+  "result": null
  }
 ]

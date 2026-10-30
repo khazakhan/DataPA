@@ -1029,6 +1029,23 @@ def show_final_box():
     # cut/cut), the last one; its new x with the cut switched, new y kept,
     # read crossed (yx): nc/-1 -> cut/-1 -> yx -1/cut = 34
     r13 = ''
+    # rule 18 "gun shot" (user, 2026-10-31, F64 after 77 EP 53): the EP's
+    # tens family (5 and its cut 0). Every first source number with one of
+    # those tens digits fills a slot t0..t9 (t = EP tens): 0x counts as 5x;
+    # a number with the EP's own tens (not the EP itself) also fills its
+    # units-cut slot (52 -> 57, 51 -> 56, 55 -> 50). The first slot nobody
+    # fills is the pick, made on the EP (53 -> 58 = nc/cut).
+    t18, filled18 = ex, set()
+    for r in (_RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else []):
+        a18 = r[1]
+        if a18 // 10 not in (t18, cut(t18)):
+            continue
+        filled18.add(a18 % 10)
+        if a18 // 10 == t18 and a18 != ep:
+            filled18.add(cut(a18 % 10))
+    gaps18 = [t18 * 10 + u for u in range(10) if u not in filled18]
+    r18 = (' · '.join(f"{g:02d} ({OP_ABBREV[find_op(ex, g // 10)]}/{OP_ABBREV[find_op(ey, g % 10)]})"
+                      for g in gaps18) if filled18 else '')
     # rule 17 (user, 2026-10-30, F63 after 18 EP 84): the rows whose FIRST
     # source number is the EP itself (Op1 84->78), the last one; new x with
     # its sign flipped (cut kept), new y kept: +1/c-2 -> -1/c-2 = 77
@@ -1213,7 +1230,9 @@ def show_final_box():
                    ["16. row ending at after +-1: new ops as they are, yx",
                     ' · '.join(r16) or '- (no row ends there)', rec('rule16')],
                    ["17. first number = EP: new x sign flipped, y kept",
-                    r17 or '- (no such row)', rec('rule17')]], 1)
+                    r17 or '- (no such row)', rec('rule17')],
+                   [f"18. EP family gap ({ex}x/{cut(ex)}x first numbers): first missing = pick",
+                    r18 or '- (no row in the EP family)', rec('rule18')]], 1)
     body = [x for l_ in body for x in ([l_] if l_.startswith(('|', '+', '┌', '├', '│', '└')) else
                                        (textwrap.wrap(l_, _term_w() - 8, subsequent_indent='      ') or ['']))]
     g, rst = "\033[1;32m", "\033[0m"
@@ -3150,7 +3169,7 @@ RRR_LIVE = {
     'rrr3_rule1_rounds': 179, 'rrr3_rule1_hits': 6, 'rrr3_rule2_rounds': 72, 'rrr3_rule2_hits': 6,
     'rrr3_rule3_rounds': 73, 'rrr3_rule3_hits': 4, 'rrr3_rule4_rounds': 58, 'rrr3_rule4_hits': 2,
     'rrr3_rule5_rounds': 21, 'rrr3_rule5_hits': 9, 'rrr3_rule6_rounds': 6, 'rrr3_rule6_hits': 1,
-    'rrr3_rule7_rounds': 7, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 7, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 3, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 2, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 4, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 1, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 1, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 1, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 1, 'rrr3_rule17_hits': 1,
+    'rrr3_rule7_rounds': 7, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 7, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 3, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 2, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 4, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 1, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 1, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 1, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 1, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 0, 'rrr3_rule18_hits': 0,
 }
 
 

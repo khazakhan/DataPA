@@ -106,5 +106,17 @@
    34
   ],
   "result": 34
+ },
+ {
+  "time": "2026-10-30",
+  "round": "F60",
+  "after": 34,
+  "ep": 6,
+  "kind": "op_number",
+  "entry": "Op18 58->34 (source ends at the after number 34) new -1/+2 taken as is, xy",
+  "numbers": [
+   98
+  ],
+  "result": null
  }
 ]

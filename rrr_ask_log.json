@@ -537,5 +537,17 @@
    32
   ],
   "result": 32
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O22",
+  "after": 32,
+  "ep": 32,
+  "kind": "result_only_explained",
+  "entry": "result 68 = c-2/c+1 on EP 32; only 2-step changes on finder rows; STRONG 20 + ADJ + cell",
+  "numbers": [
+   68
+  ],
+  "result": 68
  }
 ]

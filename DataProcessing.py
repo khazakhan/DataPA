@@ -1304,6 +1304,19 @@ def show_final_box():
                          [["OCJP FINAL 4", ' '.join(f"{v:02d}" for v in top4), "see table above", rec('final4')],
                           ["OCJP MASTER", f"{m:02d}", lab(m), rec('master')],
                           ["star #1", f"{star[0]:02d}" if star else '-', lab(star[0]) if star else '-', rec('star1')]], 2)
+    # PRIME 4 / PRIME 10 (2026-10-31, after the series F test): every number
+    # gets one vote from each of rule 5 (families of FINAL 4), rule 2 (one
+    # per step family) and rule 18 (EP family gaps); ties go by the FINAL 4
+    # ranking. Replay, 263 rounds of series F/N/M/K: top 4 held 23 (FINAL 4
+    # order 19, chance 10.5), top 10 held 45 (37, chance 26.3).
+    votes_p = {n: (n in set(r5)) + (n in set(r2)) + (n in set(gaps18)) for n in range(100)}
+    rpos = {v: i for i, v in enumerate(rk)}
+    prime = sorted(range(100), key=lambda n: (-votes_p[n], rpos.get(n, 999), n))[:10]
+    body += ["", f"PRIME 4 / PRIME 10 (votes from rule 5, rule 2, rule 18; ties by FINAL 4 order)"]
+    body += table(["PRIME", "Numbers with operations", "Record"],
+                  [["PRIME 4", ' · '.join(wop(n) for n in prime[:4]), rec('prime4')],
+                   ["PRIME 10", ' · '.join(wop(n) for n in prime[4:10]) + "  (adds)", rec('prime10')]], 1)
+    _RRR3_PREV['prime'] = prime
     finder = ep_row_finder(ep, _RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else [])
     body += ["", f"EP ROW FINDER (EP {ep:02d}): rows starting at the EP or its cut forms first, then one step away;"
                  " as/yx = new ops, xF/yF/bF = sign flipped x/y/both, xC/yC = cut switched, old/oldX/oldF = old ops as is/crossed/flipped"]
@@ -3296,7 +3309,7 @@ RRR_LIVE = {
     'rrr3_rule1_rounds': 190, 'rrr3_rule1_hits': 7, 'rrr3_rule2_rounds': 83, 'rrr3_rule2_hits': 7,
     'rrr3_rule3_rounds': 84, 'rrr3_rule3_hits': 4, 'rrr3_rule4_rounds': 69, 'rrr3_rule4_hits': 2,
     'rrr3_rule5_rounds': 32, 'rrr3_rule5_hits': 12, 'rrr3_rule6_rounds': 7, 'rrr3_rule6_hits': 1,
-    'rrr3_rule7_rounds': 9, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 9, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 3, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 2, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 4, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 1, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 1, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 1, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 2, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 5, 'rrr3_rule18_hits': 1, 'rrr3_rule19_rounds': 1, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 3, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 4, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 6, 'rrr3_rule22_hits': 1, 'rrr3_rule23_rounds': 1, 'rrr3_rule23_hits': 0, 'rrr3_finder_rounds': 3, 'rrr3_finder_hits': 2,
+    'rrr3_rule7_rounds': 9, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 9, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 3, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 2, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 4, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 1, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 1, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 1, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 2, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 5, 'rrr3_rule18_hits': 1, 'rrr3_rule19_rounds': 1, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 3, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 4, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 6, 'rrr3_rule22_hits': 1, 'rrr3_rule23_rounds': 1, 'rrr3_rule23_hits': 0, 'rrr3_finder_rounds': 3, 'rrr3_finder_hits': 2, 'rrr3_prime4_rounds': 0, 'rrr3_prime4_hits': 0, 'rrr3_prime10_rounds': 0, 'rrr3_prime10_hits': 0,
 }
 
 

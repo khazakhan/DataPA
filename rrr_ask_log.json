@@ -142,5 +142,15 @@
    26
   ],
   "result": 26
+ },
+ {
+  "time": "2026-10-30",
+  "round": "F62",
+  "after": 26,
+  "ep": 33,
+  "kind": "result_only",
+  "entry": "no pick given; result 18 = FINAL 4 #2, Op9 yx (-2/cut)",
+  "numbers": [],
+  "result": 18
  }
 ]

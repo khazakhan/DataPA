@@ -477,5 +477,17 @@
    13
   ],
   "result": 13
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O17",
+  "after": 13,
+  "ep": 42,
+  "kind": "result_only_explained",
+  "entry": "result 60 = +2/-2 on EP 42 = FINAL 4 #3 + PRIME 10 + 3RRR RESULT + REC + STRONG + ADJ + HOT + rules 1/2/5",
+  "numbers": [
+   60
+  ],
+  "result": 60
  }
 ]

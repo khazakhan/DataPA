@@ -213,5 +213,17 @@
    12
   ],
   "result": 12
+ },
+ {
+  "time": "2026-10-31",
+  "round": "F68",
+  "after": 12,
+  "ep": 33,
+  "kind": "result_only_explained",
+  "entry": "result 73 = c-1/nc on EP 33 = Op6 35->39 old nc/c-1 crossed (rule 22, EP tens rows); also rule 1 and rule 5 had it",
+  "numbers": [
+   73
+  ],
+  "result": 73
  }
 ]

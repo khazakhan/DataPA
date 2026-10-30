@@ -369,5 +369,17 @@
    24
   ],
   "result": 24
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O8",
+  "after": 24,
+  "ep": 22,
+  "kind": "result_only_explained",
+  "entry": "result 34 = +1/+2 on EP 22; PRIME 10 HIT (2nd), top 10, REC, rule 5; rows only via 2-step changes (Op6 yx xF yC etc.), finder no",
+  "numbers": [
+   34
+  ],
+  "result": 34
  }
 ]

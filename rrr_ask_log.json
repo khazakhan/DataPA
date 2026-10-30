@@ -321,5 +321,17 @@
    13
   ],
   "result": 13
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O4",
+  "after": 13,
+  "ep": 21,
+  "kind": "result_only_explained",
+  "entry": "result 42 = +2/+1 on EP 21; simplest Op2 23->70 new -2/-1 both flipped (not a finder row); finder rows Op16/Op3 need old-yF / yFC (not in the 10 changes); only the cell held it",
+  "numbers": [
+   42
+  ],
+  "result": 42
  }
 ]

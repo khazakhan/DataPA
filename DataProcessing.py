@@ -1029,6 +1029,16 @@ def show_final_box():
     # cut/cut), the last one; its new x with the cut switched, new y kept,
     # read crossed (yx): nc/-1 -> cut/-1 -> yx -1/cut = 34
     r13 = ''
+    # rule 16 (user asked for it, 2026-10-30, F62 after 26 EP 33 -> 18): every
+    # row whose source ENDS one step from the after number (same tens digit,
+    # units +-1: 25 or 27 after 26; Op9 85->25), its new ops as they are, read
+    # yx: Op9 cut/-2 -> yx -2/cut = 18
+    near16 = {(a_ // 10) * 10 + (a_ % 10 + d) % 10 for d in (-1, 1)}
+    r16 = []
+    for pos16, _, b16, _, _, nx16, ny16, _ in (_RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else []):
+        if b16 in near16:
+            n16 = compute_variants(ep, nx16, ny16)[1]
+            r16.append(f"Op{pos16} {b16:02d}: {n16:02d} ({OP_ABBREV[ny16]}/{OP_ABBREV[nx16]})")
     # rule 15 (user, 2026-10-30, F61 after 91 EP 78): the rows whose FIRST
     # source number is in the EP's family (78 28 73 23: digits cut or not),
     # the last one (Op34 73->63); new x kept, new y with the cut switched,
@@ -1188,7 +1198,9 @@ def show_final_box():
                    ["14. row ending at after: x cut+flip, y cut, on the after no.",
                     ' · '.join(r14) or '- (no row ends there)', rec('rule14')],
                    ["15. first number in EP's family: x kept, y cut switched",
-                    r15 or '- (no such row)', rec('rule15')]], 1)
+                    r15 or '- (no such row)', rec('rule15')],
+                   ["16. row ending at after +-1: new ops as they are, yx",
+                    ' · '.join(r16) or '- (no row ends there)', rec('rule16')]], 1)
     body = [x for l_ in body for x in ([l_] if l_.startswith(('|', '+', '┌', '├', '│', '└')) else
                                        (textwrap.wrap(l_, _term_w() - 8, subsequent_indent='      ') or ['']))]
     g, rst = "\033[1;32m", "\033[0m"
@@ -3125,7 +3137,7 @@ RRR_LIVE = {
     'rrr3_rule1_rounds': 178, 'rrr3_rule1_hits': 6, 'rrr3_rule2_rounds': 71, 'rrr3_rule2_hits': 6,
     'rrr3_rule3_rounds': 72, 'rrr3_rule3_hits': 4, 'rrr3_rule4_rounds': 57, 'rrr3_rule4_hits': 2,
     'rrr3_rule5_rounds': 20, 'rrr3_rule5_hits': 9, 'rrr3_rule6_rounds': 6, 'rrr3_rule6_hits': 1,
-    'rrr3_rule7_rounds': 7, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 7, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 3, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 2, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 4, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 1, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 1, 'rrr3_rule15_hits': 1,
+    'rrr3_rule7_rounds': 7, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 7, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 3, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 2, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 4, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 1, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 1, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 0, 'rrr3_rule16_hits': 0,
 }
 
 

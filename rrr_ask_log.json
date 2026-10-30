@@ -513,5 +513,17 @@
    73
   ],
   "result": 73
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O20",
+  "after": 73,
+  "ep": 90,
+  "kind": "result_only_explained",
+  "entry": "result 32 = c-1/+2 on EP 90; only 2-step old-op changes (Op5, Op20); ADJ + HOT 20 + cell",
+  "numbers": [
+   32
+  ],
+  "result": 32
  }
 ]

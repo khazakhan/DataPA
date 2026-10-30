@@ -405,5 +405,17 @@
    45
   ],
   "result": 45
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O11",
+  "after": 45,
+  "ep": 41,
+  "kind": "result_only_explained",
+  "entry": "result 45 again = nc/c-1 on EP 41; Op18 LAST (finder row 1) old cut/c-1 x cut switched (not a finder change); rule 5, REC, ADJ, top 30",
+  "numbers": [
+   45
+  ],
+  "result": 45
  }
 ]

@@ -273,5 +273,17 @@
    64
   ],
   "result": 64
+ },
+ {
+  "time": "2026-10-31",
+  "round": "F73",
+  "after": 64,
+  "ep": 96,
+  "kind": "result_only_explained",
+  "entry": "result 48 = cut/+2 on EP 96 = EP ROW FINDER row 2 Op9 41->26 (full cut) xC (new nc/+2, x cut switched) LIVE; also WIDE, rule 5",
+  "numbers": [
+   48
+  ],
+  "result": 48
  }
 ]

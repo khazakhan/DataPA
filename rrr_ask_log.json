@@ -357,5 +357,17 @@
    0
   ],
   "result": 0
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O7",
+  "after": 0,
+  "ep": 3,
+  "kind": "result_only_explained",
+  "entry": "result 24 = +2/+1 on EP 03; no row gives it; HOT 20 + cell only",
+  "numbers": [
+   24
+  ],
+  "result": 24
  }
 ]

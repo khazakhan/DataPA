@@ -345,5 +345,17 @@
    82
   ],
   "result": 82
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O6",
+  "after": 82,
+  "ep": 73,
+  "kind": "result_only_explained",
+  "entry": "result 00 = c-2/c+2 on EP 73 = Op22 LAST 91->73 new c-2/+2 with y cut switched; PRIME 10 HIT live, REC, rule 5, top 20",
+  "numbers": [
+   0
+  ],
+  "result": 0
  }
 ]

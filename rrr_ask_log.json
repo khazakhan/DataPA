@@ -549,5 +549,17 @@
    68
   ],
   "result": 68
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O23",
+  "after": 68,
+  "ep": 22,
+  "kind": "result_only_explained",
+  "entry": "result 57 = c-2/cut on EP 22; Op14 LAST old c+2/nc x flip + y cut switch; ADJ + cell",
+  "numbers": [
+   57
+  ],
+  "result": 57
  }
 ]

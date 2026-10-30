@@ -94,5 +94,17 @@
    55
   ],
   "result": 55
+ },
+ {
+  "time": "2026-10-30",
+  "round": "F59",
+  "after": 55,
+  "ep": 49,
+  "kind": "op_number",
+  "entry": "Op42 97->42 (old cut/cut = last op) new nc/-1 -> x cut, y -1 -> read yx -1/cut",
+  "numbers": [
+   34
+  ],
+  "result": null
  }
 ]

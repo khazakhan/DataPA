@@ -1024,6 +1024,21 @@ def show_final_box():
     # the chain's LAST row left out; the last one (Op27 57->60), new x made a
     # plain cut, new y kept: +2/cut -> cut/cut = 55
     r12 = ''
+    # rule 13 (user, 2026-10-30, F59 after 55 EP 49): the rows whose OLD
+    # ops are the last round's op (55 came by cut/cut; Op42 97->42 old
+    # cut/cut), the last one; its new x with the cut switched, new y kept,
+    # read crossed (yx): nc/-1 -> cut/-1 -> yx -1/cut = 34
+    r13 = ''
+    rows13 = [r for r in (_RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else [])
+              if fb['last_op'] and f"{OP_ABBREV[r[3]]}/{OP_ABBREV[r[4]]}" == fb['last_op']]
+    if rows13:
+        pos13, a13, b13, _, _, nx13, ny13, _ = rows13[-1]
+        cx13, kx13 = _op_side(OP_ABBREV[nx13])
+        cy13, ky13 = _op_side(OP_ABBREV[ny13])
+        yx13 = _op_apply(ex, cy13, ky13) * 10 + _op_apply(ey, not cx13, kx13)
+        xy13 = _op_apply(ex, not cx13, kx13) * 10 + _op_apply(ey, cy13, ky13)
+        r13 = (f"Op{pos13} {a13:02d}->{b13:02d}: yx {yx13:02d} ({OP_ABBREV[ny13]}/{_op_label(not cx13, kx13)})"
+               f", xy {xy13:02d}")
     rows12 = [r for r in (_RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else [])
               if r[1] % 10 == a_ // 10 and r[7] != 'LAST']
     if rows12:
@@ -1142,7 +1157,9 @@ def show_final_box():
                    [f"11. row ending at after full cut ({full11:02d}): new x cut switched",
                     ' · '.join(r11) or '- (no row ends there)', rec('rule11')],
                    ["12. first number's units = after's tens (not LAST): x plain cut",
-                    r12 or '- (no such row)', rec('rule12')]], 1)
+                    r12 or '- (no such row)', rec('rule12')],
+                   [f"13. row whose old op = last op ({fb['last_op'] or '-'}): x cut switched, yx",
+                    r13 or '- (no such row)', rec('rule13')]], 1)
     body = [x for l_ in body for x in ([l_] if l_.startswith(('|', '+', '┌', '├', '│', '└')) else
                                        (textwrap.wrap(l_, _term_w() - 8, subsequent_indent='      ') or ['']))]
     g, rst = "\033[1;32m", "\033[0m"
@@ -3079,7 +3096,7 @@ RRR_LIVE = {
     'rrr3_rule1_rounds': 174, 'rrr3_rule1_hits': 5, 'rrr3_rule2_rounds': 67, 'rrr3_rule2_hits': 4,
     'rrr3_rule3_rounds': 68, 'rrr3_rule3_hits': 3, 'rrr3_rule4_rounds': 53, 'rrr3_rule4_hits': 1,
     'rrr3_rule5_rounds': 16, 'rrr3_rule5_hits': 5, 'rrr3_rule6_rounds': 5, 'rrr3_rule6_hits': 1,
-    'rrr3_rule7_rounds': 6, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 6, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 3, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 2, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 1, 'rrr3_rule12_hits': 1,
+    'rrr3_rule7_rounds': 6, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 6, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 3, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 2, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 1, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 0, 'rrr3_rule13_hits': 0,
 }
 
 

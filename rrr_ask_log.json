@@ -441,5 +441,17 @@
    11
   ],
   "result": 11
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O14",
+  "after": 11,
+  "ep": 19,
+  "kind": "result_only_explained",
+  "entry": "result 14 = nc/cut on EP 19; no row; rule 5, REC, CharRow, HOT 20, top 20",
+  "numbers": [
+   14
+  ],
+  "result": 14
  }
 ]

@@ -453,5 +453,17 @@
    14
   ],
   "result": 14
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O15",
+  "after": 14,
+  "ep": 50,
+  "kind": "result_only_explained",
+  "entry": "result 83 = c-2/c-2 on EP 50; finder row Op22 (EP-1) only via 2-step old change; rule 2 live, top 30",
+  "numbers": [
+   83
+  ],
+  "result": 83
  }
 ]

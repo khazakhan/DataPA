@@ -130,17 +130,5 @@
    91
   ],
   "result": 91
- },
- {
-  "time": "2026-10-30",
-  "round": "F61",
-  "after": 91,
-  "ep": 78,
-  "kind": "op_number",
-  "entry": "Op38 29->35 (after tens 9 = units of 29, not LAST) new -1/cut -> x step dropped nc, y cut kept",
-  "numbers": [
-   73
-  ],
-  "result": null
  }
 ]

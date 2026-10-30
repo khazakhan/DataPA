@@ -489,5 +489,17 @@
    60
   ],
   "result": 60
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O18",
+  "after": 60,
+  "ep": 80,
+  "kind": "result_only_explained",
+  "entry": "result 69 = -2/-1 on EP 80; one row (Op10, 2-step change); only the cell",
+  "numbers": [
+   69
+  ],
+  "result": 69
  }
 ]

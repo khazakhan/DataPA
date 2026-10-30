@@ -939,10 +939,11 @@ def _digit_family(n):
     return sorted({x * 10 + y for x in xs for y in ys} | {y * 10 + x for x in xs for y in ys})
 
 
-EP_FINDER_VARIANTS = ('as', 'yx', 'xF', 'yF', 'bF', 'xC', 'yC', 'old', 'oldX')
+EP_FINDER_VARIANTS = ('as', 'yx', 'xF', 'yF', 'bF', 'xC', 'yC', 'old', 'oldX', 'oldF')
 EP_FINDER_NAMES = {'as': 'new ops as they are', 'yx': 'new ops crossed', 'xF': 'x sign flipped',
                    'yF': 'y sign flipped', 'bF': 'both signs flipped', 'xC': 'x cut switched',
-                   'yC': 'y cut switched', 'old': 'old ops as they are', 'oldX': 'old ops crossed'}
+                   'yC': 'y cut switched', 'old': 'old ops as they are', 'oldX': 'old ops crossed',
+                   'oldF': 'old ops, both signs flipped'}
 
 
 def ep_row_finder(ep, rows):
@@ -971,7 +972,7 @@ def ep_row_finder(ep, rows):
         v = {'as': one(nx, ny), 'yx': one(ny, nx), 'xF': one(SIGN_FLIP[nx], ny),
              'yF': one(nx, SIGN_FLIP[ny]), 'bF': one(SIGN_FLIP[nx], SIGN_FLIP[ny]),
              'xC': one(KK_CUT_TOGGLE[nx], ny), 'yC': one(nx, KK_CUT_TOGGLE[ny]),
-             'old': one(ox, oy), 'oldX': one(oy, ox)}
+             'old': one(ox, oy), 'oldX': one(oy, ox), 'oldF': one(SIGN_FLIP[ox], SIGN_FLIP[oy])}
         out.append((rel[a][0], pos, a, b, rel[a][1], v))
     out.sort(key=lambda t: (t[0], [f for f, _ in forms].index(next(n for n, l in forms if t[4].startswith(l)))
                             if t[0] == 0 else 9, -t[1]))
@@ -1305,9 +1306,9 @@ def show_final_box():
                           ["star #1", f"{star[0]:02d}" if star else '-', lab(star[0]) if star else '-', rec('star1')]], 2)
     finder = ep_row_finder(ep, _RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else [])
     body += ["", f"EP ROW FINDER (EP {ep:02d}): rows starting at the EP or its cut forms first, then one step away;"
-                 " as/yx = new ops, xF/yF/bF = sign flipped x/y/both, xC/yC = cut switched, old/oldX = old ops"]
+                 " as/yx = new ops, xF/yF/bF = sign flipped x/y/both, xC/yC = cut switched, old/oldX/oldF = old ops as is/crossed/flipped"]
     if finder:
-        body += table(["Row", "Starts at", "as", "yx", "xF", "yF", "bF", "xC", "yC", "old", "oldX"],
+        body += table(["Row", "Starts at", "as", "yx", "xF", "yF", "bF", "xC", "yC", "old", "oldX", "oldF"],
                       [[f"Op{pos}", f"{a:02d} ({lab})"] + [f"{v[k][0]:02d}" for k in EP_FINDER_VARIANTS]
                        for pos, a, b, lab, v in finder], 1)
         uniq = sorted({v[k][0] for *_, v in finder for k in EP_FINDER_VARIANTS})
@@ -3278,23 +3279,23 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 1136, 'tens_cut': 140, 'short_list': 198,
-    'table_rounds': 1126, 'table_hits': 140, 'table_chance': 33, 'declared': 1091, 'declared_hits': 19,
+    'results': 1137, 'tens_cut': 140, 'short_list': 198,
+    'table_rounds': 1127, 'table_hits': 140, 'table_chance': 33, 'declared': 1092, 'declared_hits': 19,
     'band_hits': 92, 'units_hits': 88, 'second_hits': 20,
     'same_tens': 26,
-    'rrr3_rounds': 822, 'rrr3_hits': 47, 'rrr3_rec_rounds': 823, 'rrr3_rec_hits': 295,
-    'rrr3_same_rounds': 795, 'rrr3_same_hits': 14, 'rrr3_wide_rounds': 782, 'rrr3_wide_hits': 84, 'rrr3_yx_rounds': 777, 'rrr3_yx_hits': 93,
-    'rrr3_strong_rounds': 773, 'rrr3_strong_hits': 157, 'rrr3_same2_rounds': 770, 'rrr3_same2_hits': 12,
-    'rrr3_turn_rounds': 777, 'rrr3_turn_hits': 14, 'rrr3_sameyx_rounds': 777, 'rrr3_sameyx_hits': 7,
-    'power_rounds': 712, 'power_hits': 447,
+    'rrr3_rounds': 823, 'rrr3_hits': 47, 'rrr3_rec_rounds': 824, 'rrr3_rec_hits': 295,
+    'rrr3_same_rounds': 796, 'rrr3_same_hits': 14, 'rrr3_wide_rounds': 783, 'rrr3_wide_hits': 84, 'rrr3_yx_rounds': 778, 'rrr3_yx_hits': 93,
+    'rrr3_strong_rounds': 774, 'rrr3_strong_hits': 158, 'rrr3_same2_rounds': 771, 'rrr3_same2_hits': 12,
+    'rrr3_turn_rounds': 778, 'rrr3_turn_hits': 14, 'rrr3_sameyx_rounds': 778, 'rrr3_sameyx_hits': 7,
+    'power_rounds': 713, 'power_hits': 448,
     # live records shown in the bottom FINAL 4 box (user, 2026-10-26); the
     # user's rules 1-5 stay on test and never feed FINAL 4
-    'rrr3_final4_rounds': 553, 'rrr3_final4_hits': 33, 'rrr3_master_rounds': 499, 'rrr3_master_hits': 2,
-    'rrr3_star1_rounds': 166, 'rrr3_star1_hits': 3,
-    'rrr3_rule1_rounds': 186, 'rrr3_rule1_hits': 7, 'rrr3_rule2_rounds': 79, 'rrr3_rule2_hits': 6,
-    'rrr3_rule3_rounds': 80, 'rrr3_rule3_hits': 4, 'rrr3_rule4_rounds': 65, 'rrr3_rule4_hits': 2,
-    'rrr3_rule5_rounds': 28, 'rrr3_rule5_hits': 11, 'rrr3_rule6_rounds': 6, 'rrr3_rule6_hits': 1,
-    'rrr3_rule7_rounds': 8, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 8, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 3, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 2, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 4, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 1, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 1, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 1, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 2, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 5, 'rrr3_rule18_hits': 1, 'rrr3_rule19_rounds': 1, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 2, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 2, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 2, 'rrr3_rule22_hits': 0, 'rrr3_rule23_rounds': 0, 'rrr3_rule23_hits': 0,
+    'rrr3_final4_rounds': 554, 'rrr3_final4_hits': 33, 'rrr3_master_rounds': 500, 'rrr3_master_hits': 2,
+    'rrr3_star1_rounds': 167, 'rrr3_star1_hits': 3,
+    'rrr3_rule1_rounds': 187, 'rrr3_rule1_hits': 7, 'rrr3_rule2_rounds': 80, 'rrr3_rule2_hits': 6,
+    'rrr3_rule3_rounds': 81, 'rrr3_rule3_hits': 4, 'rrr3_rule4_rounds': 66, 'rrr3_rule4_hits': 2,
+    'rrr3_rule5_rounds': 29, 'rrr3_rule5_hits': 11, 'rrr3_rule6_rounds': 6, 'rrr3_rule6_hits': 1,
+    'rrr3_rule7_rounds': 8, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 8, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 3, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 2, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 4, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 1, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 1, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 1, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 2, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 5, 'rrr3_rule18_hits': 1, 'rrr3_rule19_rounds': 1, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 2, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 3, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 3, 'rrr3_rule22_hits': 0, 'rrr3_rule23_rounds': 0, 'rrr3_rule23_hits': 0,
 }
 
 

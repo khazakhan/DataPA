@@ -249,5 +249,17 @@
    68
   ],
   "result": 68
+ },
+ {
+  "time": "2026-10-31",
+  "round": "F71",
+  "after": 68,
+  "ep": 95,
+  "kind": "result_only_explained",
+  "entry": "result 63 = c+2/-2 on EP 95 = Op6 94->26 (EP -1, finder row 2) old c-2/+2 both signs flipped (finder oldF added); STRONG 20 + CharRow had it",
+  "numbers": [
+   63
+  ],
+  "result": 63
  }
 ]

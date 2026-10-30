@@ -561,5 +561,17 @@
    57
   ],
   "result": 57
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O24",
+  "after": 57,
+  "ep": 59,
+  "kind": "result_only_explained",
+  "entry": "result 01 = cut/+2 on EP 59; no row; STRONG 20, top 30, cell",
+  "numbers": [
+   1
+  ],
+  "result": 1
  }
 ]

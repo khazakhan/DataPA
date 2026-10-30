@@ -1029,6 +1029,18 @@ def show_final_box():
     # cut/cut), the last one; its new x with the cut switched, new y kept,
     # read crossed (yx): nc/-1 -> cut/-1 -> yx -1/cut = 34
     r13 = ''
+    # rule 21 (from F67 = 12, after 95 EP 75; the user asked me to find it):
+    # the EP with its tens cut (75 -> 25), one below it (24); the row that
+    # starts there (Op13 24->13), its new ops with BOTH signs flipped, xy:
+    # c+1/c-2 -> c-1/c+2 = 12. Why one below is my reading, not confirmed.
+    k21 = cut(ex) * 10 + (ey - 1) % 10
+    rows21 = [r for r in (_RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else []) if r[1] == k21]
+    r21 = ''
+    if rows21:
+        pos21, a21, b21, _, _, nx21, ny21, _ = rows21[-1]
+        n21 = compute_variants(ep, nx21, ny21)[2]
+        r21 = (f"Op{pos21} {a21:02d}->{b21:02d}: {n21:02d} "
+               f"({OP_ABBREV[SIGN_FLIP[nx21]]}/{OP_ABBREV[SIGN_FLIP[ny21]]})")
     # rule 20 "gun shot 3" (user, 2026-10-31, F66 after 16 EP 47): the EP
     # with its units cut (47 -> 42); when 2+ rows already start there (Op20,
     # Op31) it is used up, so step to the next number (43); the last row
@@ -1264,7 +1276,9 @@ def show_final_box():
                    [f"19. first number = EP full cut ({full19:02d}): old ops on EP",
                     ' · '.join(r19) or '- (no row starts there)', rec('rule19')],
                    [f"20. EP units cut ({ex}{cut(ey)}), used twice -> next: yx as is",
-                    r20 or f'- (no row starts at {k20:02d})', rec('rule20')]], 1)
+                    r20 or f'- (no row starts at {k20:02d})', rec('rule20')],
+                   [f"21. row at EP tens-cut - 1 ({k21:02d}): both signs flipped",
+                    r21 or f'- (no row starts at {k21:02d})', rec('rule21')]], 1)
     body = [x for l_ in body for x in ([l_] if l_.startswith(('|', '+', '┌', '├', '│', '└')) else
                                        (textwrap.wrap(l_, _term_w() - 8, subsequent_indent='      ') or ['']))]
     g, rst = "\033[1;32m", "\033[0m"
@@ -3185,23 +3199,23 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 1132, 'tens_cut': 140, 'short_list': 198,
-    'table_rounds': 1122, 'table_hits': 140, 'table_chance': 33, 'declared': 1087, 'declared_hits': 19,
+    'results': 1133, 'tens_cut': 140, 'short_list': 198,
+    'table_rounds': 1123, 'table_hits': 140, 'table_chance': 33, 'declared': 1088, 'declared_hits': 19,
     'band_hits': 92, 'units_hits': 88, 'second_hits': 20,
     'same_tens': 26,
-    'rrr3_rounds': 818, 'rrr3_hits': 47, 'rrr3_rec_rounds': 819, 'rrr3_rec_hits': 294,
-    'rrr3_same_rounds': 791, 'rrr3_same_hits': 14, 'rrr3_wide_rounds': 778, 'rrr3_wide_hits': 83, 'rrr3_yx_rounds': 773, 'rrr3_yx_hits': 93,
-    'rrr3_strong_rounds': 769, 'rrr3_strong_hits': 157, 'rrr3_same2_rounds': 766, 'rrr3_same2_hits': 12,
-    'rrr3_turn_rounds': 773, 'rrr3_turn_hits': 14, 'rrr3_sameyx_rounds': 773, 'rrr3_sameyx_hits': 7,
-    'power_rounds': 708, 'power_hits': 443,
+    'rrr3_rounds': 819, 'rrr3_hits': 47, 'rrr3_rec_rounds': 820, 'rrr3_rec_hits': 294,
+    'rrr3_same_rounds': 792, 'rrr3_same_hits': 14, 'rrr3_wide_rounds': 779, 'rrr3_wide_hits': 83, 'rrr3_yx_rounds': 774, 'rrr3_yx_hits': 93,
+    'rrr3_strong_rounds': 770, 'rrr3_strong_hits': 157, 'rrr3_same2_rounds': 767, 'rrr3_same2_hits': 12,
+    'rrr3_turn_rounds': 774, 'rrr3_turn_hits': 14, 'rrr3_sameyx_rounds': 774, 'rrr3_sameyx_hits': 7,
+    'power_rounds': 709, 'power_hits': 444,
     # live records shown in the bottom FINAL 4 box (user, 2026-10-26); the
     # user's rules 1-5 stay on test and never feed FINAL 4
-    'rrr3_final4_rounds': 549, 'rrr3_final4_hits': 33, 'rrr3_master_rounds': 495, 'rrr3_master_hits': 2,
-    'rrr3_star1_rounds': 162, 'rrr3_star1_hits': 3,
-    'rrr3_rule1_rounds': 182, 'rrr3_rule1_hits': 6, 'rrr3_rule2_rounds': 75, 'rrr3_rule2_hits': 6,
-    'rrr3_rule3_rounds': 76, 'rrr3_rule3_hits': 4, 'rrr3_rule4_rounds': 61, 'rrr3_rule4_hits': 2,
-    'rrr3_rule5_rounds': 24, 'rrr3_rule5_hits': 10, 'rrr3_rule6_rounds': 6, 'rrr3_rule6_hits': 1,
-    'rrr3_rule7_rounds': 8, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 8, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 3, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 2, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 4, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 1, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 1, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 1, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 2, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 2, 'rrr3_rule18_hits': 1, 'rrr3_rule19_rounds': 1, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 1, 'rrr3_rule20_hits': 1,
+    'rrr3_final4_rounds': 550, 'rrr3_final4_hits': 33, 'rrr3_master_rounds': 496, 'rrr3_master_hits': 2,
+    'rrr3_star1_rounds': 163, 'rrr3_star1_hits': 3,
+    'rrr3_rule1_rounds': 183, 'rrr3_rule1_hits': 6, 'rrr3_rule2_rounds': 76, 'rrr3_rule2_hits': 6,
+    'rrr3_rule3_rounds': 77, 'rrr3_rule3_hits': 4, 'rrr3_rule4_rounds': 62, 'rrr3_rule4_hits': 2,
+    'rrr3_rule5_rounds': 25, 'rrr3_rule5_hits': 10, 'rrr3_rule6_rounds': 6, 'rrr3_rule6_hits': 1,
+    'rrr3_rule7_rounds': 8, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 8, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 3, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 2, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 4, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 1, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 1, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 1, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 2, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 3, 'rrr3_rule18_hits': 1, 'rrr3_rule19_rounds': 1, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 1, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 0, 'rrr3_rule21_hits': 0,
 }
 
 

@@ -465,5 +465,17 @@
    83
   ],
   "result": 83
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O16",
+  "after": 83,
+  "ep": 45,
+  "kind": "result_only_explained",
+  "entry": "result 13 = c+2/-2 on EP 45; no row; rec yx, ADJ, HOT 20",
+  "numbers": [
+   13
+  ],
+  "result": 13
  }
 ]

@@ -333,5 +333,17 @@
    42
   ],
   "result": 42
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O5",
+  "after": 42,
+  "ep": 39,
+  "kind": "result_only_explained",
+  "entry": "result 82 = cut/c-2 on EP 39; no row (2 rows) gives it, no list; only the cell",
+  "numbers": [
+   82
+  ],
+  "result": 82
  }
 ]

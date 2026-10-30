@@ -501,5 +501,17 @@
    69
   ],
   "result": 69
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O19",
+  "after": 69,
+  "ep": 74,
+  "kind": "result_only_explained",
+  "entry": "result 73 = nc/-1 on EP 74; no row; RULE 18 (EP family gap) LIVE hit, STRONG 20, CharRow",
+  "numbers": [
+   73
+  ],
+  "result": 73
  }
 ]

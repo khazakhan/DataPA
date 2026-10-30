@@ -381,5 +381,17 @@
    34
   ],
   "result": 34
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O9",
+  "after": 34,
+  "ep": 6,
+  "kind": "result_only_explained",
+  "entry": "result 32 = c-2/c+1 on EP 06; no row; rule 5 + HOT 20 + cell",
+  "numbers": [
+   32
+  ],
+  "result": 32
  }
 ]

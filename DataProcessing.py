@@ -1029,6 +1029,21 @@ def show_final_box():
     # cut/cut), the last one; its new x with the cut switched, new y kept,
     # read crossed (yx): nc/-1 -> cut/-1 -> yx -1/cut = 34
     r13 = ''
+    # rule 20 "gun shot 3" (user, 2026-10-31, F66 after 16 EP 47): the EP
+    # with its units cut (47 -> 42); when 2+ rows already start there (Op20,
+    # Op31) it is used up, so step to the next number (43); the last row
+    # starting there (Op38 43->50), its new ops read yx as they are:
+    # -2/cut -> yx cut/-2 = 95
+    rows_all20 = _RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else []
+    k20 = ex * 10 + cut(ey)
+    if sum(1 for r in rows_all20 if r[1] == k20) >= 2:
+        k20 = ex * 10 + (cut(ey) + 1) % 10
+    rows20 = [r for r in rows_all20 if r[1] == k20]
+    r20 = ''
+    if rows20:
+        pos20, a20, b20, _, _, nx20, ny20, _ = rows20[-1]
+        n20 = compute_variants(ep, nx20, ny20)[1]
+        r20 = f"Op{pos20} {a20:02d}->{b20:02d}: yx {n20:02d} ({OP_ABBREV[ny20]}/{OP_ABBREV[nx20]})"
     # rule 19 "gun shot 2" (user, 2026-10-31, F65 after 58 EP 73): the EP
     # with both digits cut (73 -> 28); the row whose FIRST source number is
     # that (Op33 28->61), its OLD ops as they are, on the EP: c-1/c-2 -> 16
@@ -1247,7 +1262,9 @@ def show_final_box():
                    [f"18. EP family gap ({ex}x/{cut(ex)}x first numbers): first missing = pick",
                     r18 or '- (no row in the EP family)', rec('rule18')],
                    [f"19. first number = EP full cut ({full19:02d}): old ops on EP",
-                    ' · '.join(r19) or '- (no row starts there)', rec('rule19')]], 1)
+                    ' · '.join(r19) or '- (no row starts there)', rec('rule19')],
+                   [f"20. EP units cut ({ex}{cut(ey)}), used twice -> next: yx as is",
+                    r20 or f'- (no row starts at {k20:02d})', rec('rule20')]], 1)
     body = [x for l_ in body for x in ([l_] if l_.startswith(('|', '+', '┌', '├', '│', '└')) else
                                        (textwrap.wrap(l_, _term_w() - 8, subsequent_indent='      ') or ['']))]
     g, rst = "\033[1;32m", "\033[0m"
@@ -3184,7 +3201,7 @@ RRR_LIVE = {
     'rrr3_rule1_rounds': 181, 'rrr3_rule1_hits': 6, 'rrr3_rule2_rounds': 74, 'rrr3_rule2_hits': 6,
     'rrr3_rule3_rounds': 75, 'rrr3_rule3_hits': 4, 'rrr3_rule4_rounds': 60, 'rrr3_rule4_hits': 2,
     'rrr3_rule5_rounds': 23, 'rrr3_rule5_hits': 10, 'rrr3_rule6_rounds': 6, 'rrr3_rule6_hits': 1,
-    'rrr3_rule7_rounds': 7, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 7, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 3, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 2, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 4, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 1, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 1, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 1, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 2, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 2, 'rrr3_rule18_hits': 1, 'rrr3_rule19_rounds': 1, 'rrr3_rule19_hits': 1,
+    'rrr3_rule7_rounds': 7, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 7, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 3, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 2, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 4, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 1, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 1, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 1, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 2, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 2, 'rrr3_rule18_hits': 1, 'rrr3_rule19_rounds': 1, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 0, 'rrr3_rule20_hits': 0,
 }
 
 

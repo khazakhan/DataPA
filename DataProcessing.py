@@ -1029,6 +1029,17 @@ def show_final_box():
     # cut/cut), the last one; its new x with the cut switched, new y kept,
     # read crossed (yx): nc/-1 -> cut/-1 -> yx -1/cut = 34
     r13 = ''
+    # rule 19 "gun shot 2" (user, 2026-10-31, F65 after 58 EP 73): the EP
+    # with both digits cut (73 -> 28); the row whose FIRST source number is
+    # that (Op33 28->61), its OLD ops as they are, on the EP: c-1/c-2 -> 16
+    # (= 61, the row's end, reversed)
+    full19 = cut(ex) * 10 + cut(ey)
+    r19 = []
+    for pos19, a19, b19, ox19, oy19, _, _, _ in (_RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else []):
+        if a19 == full19:
+            n19 = compute_variants(ep, ox19, oy19)[0]
+            r19.append(f"Op{pos19} {a19:02d}->{b19:02d}: {n19:02d} ({OP_ABBREV[ox19]}/{OP_ABBREV[oy19]})"
+                       + (" = end reversed" if n19 == (b19 % 10) * 10 + b19 // 10 else ""))
     # rule 18 "gun shot" (user, 2026-10-31, F64 after 77 EP 53): the EP's
     # tens family (5 and its cut 0). Every first source number with one of
     # those tens digits fills a slot t0..t9 (t = EP tens): 0x counts as 5x;
@@ -1232,7 +1243,9 @@ def show_final_box():
                    ["17. first number = EP: new x sign flipped, y kept",
                     r17 or '- (no such row)', rec('rule17')],
                    [f"18. EP family gap ({ex}x/{cut(ex)}x first numbers): first missing = pick",
-                    r18 or '- (no row in the EP family)', rec('rule18')]], 1)
+                    r18 or '- (no row in the EP family)', rec('rule18')],
+                   [f"19. first number = EP full cut ({full19:02d}): old ops on EP",
+                    ' · '.join(r19) or '- (no row starts there)', rec('rule19')]], 1)
     body = [x for l_ in body for x in ([l_] if l_.startswith(('|', '+', '┌', '├', '│', '└')) else
                                        (textwrap.wrap(l_, _term_w() - 8, subsequent_indent='      ') or ['']))]
     g, rst = "\033[1;32m", "\033[0m"
@@ -3169,7 +3182,7 @@ RRR_LIVE = {
     'rrr3_rule1_rounds': 180, 'rrr3_rule1_hits': 6, 'rrr3_rule2_rounds': 73, 'rrr3_rule2_hits': 6,
     'rrr3_rule3_rounds': 74, 'rrr3_rule3_hits': 4, 'rrr3_rule4_rounds': 59, 'rrr3_rule4_hits': 2,
     'rrr3_rule5_rounds': 22, 'rrr3_rule5_hits': 10, 'rrr3_rule6_rounds': 6, 'rrr3_rule6_hits': 1,
-    'rrr3_rule7_rounds': 7, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 7, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 3, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 2, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 4, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 1, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 1, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 1, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 2, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 1, 'rrr3_rule18_hits': 1,
+    'rrr3_rule7_rounds': 7, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 7, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 3, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 2, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 4, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 1, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 1, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 1, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 2, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 1, 'rrr3_rule18_hits': 1, 'rrr3_rule19_rounds': 0, 'rrr3_rule19_hits': 0,
 }
 
 

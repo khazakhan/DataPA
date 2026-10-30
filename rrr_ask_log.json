@@ -177,5 +177,17 @@
    8
   ],
   "result": 58
+ },
+ {
+  "time": "2026-10-31",
+  "round": "F65",
+  "after": 58,
+  "ep": 73,
+  "kind": "gun_shot_2",
+  "entry": "EP 73 full cut = 28; Op33 28->61 old c-1/c-2 on EP -> 16 (= 61 reversed)",
+  "numbers": [
+   16
+  ],
+  "result": null
  }
 ]

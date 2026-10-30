@@ -1029,14 +1029,17 @@ def show_final_box():
     # cut/cut), the last one; its new x with the cut switched, new y kept,
     # read crossed (yx): nc/-1 -> cut/-1 -> yx -1/cut = 34
     r13 = ''
-    # rule 14 (user, 2026-10-30, F60 after 34 EP 06): every row whose source
-    # ENDS at the after number itself (Op18 58->34), its new ops taken as
-    # they are, xy: -1/+2 -> 98
+    # rule 14 (user, 2026-10-30, F60 after 34, corrected): every row whose
+    # source ENDS at the after number itself (Op18 58->34); its new x with the
+    # cut switched and the sign flipped, new y with the cut switched, applied
+    # on the AFTER number: -1/+2 -> c+1/c+2 on 34 = 91
     r14 = []
     for pos14, _, b14, _, _, nx14, ny14, _ in (_RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else []):
         if b14 == a_:
-            n14 = compute_variants(ep, nx14, ny14)[0]
-            r14.append(f"Op{pos14} {b14:02d}: {n14:02d} ({OP_ABBREV[nx14]}/{OP_ABBREV[ny14]})")
+            cx14, kx14 = _op_side(OP_ABBREV[nx14])
+            cy14, ky14 = _op_side(OP_ABBREV[ny14])
+            n14 = _op_apply(a_ // 10, not cx14, -kx14) * 10 + _op_apply(a_ % 10, not cy14, ky14)
+            r14.append(f"Op{pos14} {b14:02d}: {n14:02d} ({_op_label(not cx14, -kx14)}/{_op_label(not cy14, ky14)} on {a_:02d})")
     rows13 = [r for r in (_RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else [])
               if fb['last_op'] and f"{OP_ABBREV[r[3]]}/{OP_ABBREV[r[4]]}" == fb['last_op']]
     if rows13:
@@ -1168,7 +1171,7 @@ def show_final_box():
                     r12 or '- (no such row)', rec('rule12')],
                    [f"13. row whose old op = last op ({fb['last_op'] or '-'}): x cut switched, yx",
                     r13 or '- (no such row)', rec('rule13')],
-                   ["14. row ending at the after number: new ops as they are (xy)",
+                   ["14. row ending at after: x cut+flip, y cut, on the after no.",
                     ' · '.join(r14) or '- (no row ends there)', rec('rule14')]], 1)
     body = [x for l_ in body for x in ([l_] if l_.startswith(('|', '+', '┌', '├', '│', '└')) else
                                        (textwrap.wrap(l_, _term_w() - 8, subsequent_indent='      ') or ['']))]
@@ -3091,22 +3094,22 @@ def _rrr_frame(body):
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
     'results': 1126, 'tens_cut': 140, 'short_list': 198,
-    'table_rounds': 1116, 'table_hits': 138, 'table_chance': 33, 'declared': 1081, 'declared_hits': 19,
+    'table_rounds': 1116, 'table_hits': 137, 'table_chance': 33, 'declared': 1081, 'declared_hits': 19,
     'band_hits': 92, 'units_hits': 88, 'second_hits': 20,
     'same_tens': 26,
     'rrr3_rounds': 812, 'rrr3_hits': 47, 'rrr3_rec_rounds': 813, 'rrr3_rec_hits': 291,
-    'rrr3_same_rounds': 785, 'rrr3_same_hits': 13, 'rrr3_wide_rounds': 772, 'rrr3_wide_hits': 81, 'rrr3_yx_rounds': 767, 'rrr3_yx_hits': 93,
+    'rrr3_same_rounds': 785, 'rrr3_same_hits': 14, 'rrr3_wide_rounds': 772, 'rrr3_wide_hits': 81, 'rrr3_yx_rounds': 767, 'rrr3_yx_hits': 93,
     'rrr3_strong_rounds': 763, 'rrr3_strong_hits': 157, 'rrr3_same2_rounds': 760, 'rrr3_same2_hits': 12,
     'rrr3_turn_rounds': 767, 'rrr3_turn_hits': 14, 'rrr3_sameyx_rounds': 767, 'rrr3_sameyx_hits': 6,
     'power_rounds': 702, 'power_hits': 437,
     # live records shown in the bottom FINAL 4 box (user, 2026-10-26); the
     # user's rules 1-5 stay on test and never feed FINAL 4
-    'rrr3_final4_rounds': 543, 'rrr3_final4_hits': 31, 'rrr3_master_rounds': 489, 'rrr3_master_hits': 2,
+    'rrr3_final4_rounds': 543, 'rrr3_final4_hits': 32, 'rrr3_master_rounds': 489, 'rrr3_master_hits': 2,
     'rrr3_star1_rounds': 156, 'rrr3_star1_hits': 3,
-    'rrr3_rule1_rounds': 176, 'rrr3_rule1_hits': 5, 'rrr3_rule2_rounds': 69, 'rrr3_rule2_hits': 4,
+    'rrr3_rule1_rounds': 176, 'rrr3_rule1_hits': 6, 'rrr3_rule2_rounds': 69, 'rrr3_rule2_hits': 5,
     'rrr3_rule3_rounds': 70, 'rrr3_rule3_hits': 3, 'rrr3_rule4_rounds': 55, 'rrr3_rule4_hits': 1,
-    'rrr3_rule5_rounds': 18, 'rrr3_rule5_hits': 6, 'rrr3_rule6_rounds': 6, 'rrr3_rule6_hits': 1,
-    'rrr3_rule7_rounds': 7, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 7, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 3, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 2, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 3, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 1, 'rrr3_rule14_hits': 1,
+    'rrr3_rule5_rounds': 18, 'rrr3_rule5_hits': 7, 'rrr3_rule6_rounds': 6, 'rrr3_rule6_hits': 1,
+    'rrr3_rule7_rounds': 7, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 7, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 3, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 2, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 3, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 1, 'rrr3_rule14_hits': 0,
 }
 
 

@@ -297,5 +297,17 @@
    34
   ],
   "result": 34
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O2",
+  "after": 35,
+  "ep": 33,
+  "kind": "result_only_explained",
+  "entry": "result 94 = c+1/+1 on EP 33 = finder Op11 87->58 (full cut -1) xF (new c-1/+1, x sign flipped) LIVE; REC, top 20",
+  "numbers": [
+   94
+  ],
+  "result": 94
  }
 ]

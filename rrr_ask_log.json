@@ -225,5 +225,17 @@
    73
   ],
   "result": 73
+ },
+ {
+  "time": "2026-10-31",
+  "round": "F69",
+  "after": 73,
+  "ep": 43,
+  "kind": "result_only_explained",
+  "entry": "result 91 = cut/-2 on EP 43 = Op36 43->55 (starts at EP) new c-2/cut yx with y cut switched (rule 23); only HOT 20 + cell had it",
+  "numbers": [
+   91
+  ],
+  "result": 91
  }
 ]

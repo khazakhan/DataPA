@@ -152,5 +152,17 @@
   "entry": "no pick given; result 18 = FINAL 4 #2, Op9 yx (-2/cut)",
   "numbers": [],
   "result": 18
+ },
+ {
+  "time": "2026-10-30",
+  "round": "F63",
+  "after": 18,
+  "ep": 84,
+  "kind": "op_number",
+  "entry": "Op1 84->78 (first source number = EP 84) new +1/c-2 -> x sign flipped -1, y c-2 kept",
+  "numbers": [
+   77
+  ],
+  "result": null
  }
 ]

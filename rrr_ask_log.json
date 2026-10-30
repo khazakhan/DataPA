@@ -237,5 +237,17 @@
    91
   ],
   "result": 91
+ },
+ {
+  "time": "2026-10-31",
+  "round": "F70",
+  "after": 91,
+  "ep": 26,
+  "kind": "result_only_explained",
+  "entry": "result 68 = c-1/+2 on EP 26 = Op44 75->16 (75 = EP tens cut 76 - 1; the row rule 21 picked LIVE) new c-1/-2 with y sign flipped; rule 21 had the right row but flipped both signs (88)",
+  "numbers": [
+   68
+  ],
+  "result": 68
  }
 ]

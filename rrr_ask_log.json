@@ -130,5 +130,17 @@
    91
   ],
   "result": 91
+ },
+ {
+  "time": "2026-10-30",
+  "round": "F61",
+  "after": 91,
+  "ep": 78,
+  "kind": "op_number",
+  "entry": "Op34 73->63 (73 in EP 78's family; last of Op1/Op34) new cut/c-2 -> x kept, y cut removed -2",
+  "numbers": [
+   26
+  ],
+  "result": null
  }
 ]

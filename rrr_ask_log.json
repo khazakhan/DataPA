@@ -393,5 +393,17 @@
    32
   ],
   "result": 32
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O10",
+  "after": 32,
+  "ep": 29,
+  "kind": "result_only_explained",
+  "entry": "result 45 = +2/c+1 on EP 29; Op26 LAST yx both flipped; finder row Op11 old yF (not a listed change); rule 5 + ADJ + cell",
+  "numbers": [
+   45
+  ],
+  "result": 45
  }
 ]

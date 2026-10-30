@@ -261,5 +261,17 @@
    63
   ],
   "result": 63
+ },
+ {
+  "time": "2026-10-31",
+  "round": "F72",
+  "after": 63,
+  "ep": 96,
+  "kind": "result_only_explained",
+  "entry": "result 64 = c+2/-2 on EP 96 = EP ROW FINDER row 1 Op35 91->23 (units cut) oldF (old c-2/+2 both flipped) LIVE; also rule 22, rule 2, REC, STRONG, CharRow, HOT, top 10",
+  "numbers": [
+   64
+  ],
+  "result": 64
  }
 ]

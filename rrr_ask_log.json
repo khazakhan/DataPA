@@ -429,5 +429,17 @@
    41
   ],
   "result": 41
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O13",
+  "after": 41,
+  "ep": 93,
+  "kind": "result_only_explained",
+  "entry": "result 11 = +2/-2 on EP 93; only Op19 LAST old ops with 2-step changes; WIDE + cell",
+  "numbers": [
+   11
+  ],
+  "result": 11
  }
 ]

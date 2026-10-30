@@ -285,5 +285,17 @@
    48
   ],
   "result": 48
+ },
+ {
+  "time": "2026-10-31",
+  "round": "F74",
+  "after": 48,
+  "ep": 4,
+  "kind": "result_only_explained",
+  "entry": "result 34 = c-2/nc on EP 04; NO table row gives it with any flip/cut/crossed change (new or old); finder MISS; in RECOMMENDED, CharRow, HOT 20, top 40",
+  "numbers": [
+   34
+  ],
+  "result": 34
  }
 ]

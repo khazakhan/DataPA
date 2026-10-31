@@ -945,5 +945,17 @@
    18
   ],
   "result": 18
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P25",
+  "after": 18,
+  "ep": 33,
+  "kind": "result_only",
+  "entry": "result 71 = c-1/-2 on EP 33; PRIME 4 FAMILY HIT (21 tens cut), rule 5; no row within 2 changes",
+  "numbers": [
+   71
+  ],
+  "result": 71
  }
 ]

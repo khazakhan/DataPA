@@ -1341,5 +1341,17 @@
    43
   ],
   "result": 43
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q27",
+  "after": 43,
+  "ep": 19,
+  "kind": "last_move",
+  "entry": "user LAST-row move: result 07 = -1/-2 on EP 19; LAST Op32 old -1/c-1 new +1/c-2; x -1 = new x sign flipped; y -2 = new y cut switched; RRR table (Op26 yx), STRONG, finder",
+  "numbers": [
+   7
+  ],
+  "result": 7
  }
 ]

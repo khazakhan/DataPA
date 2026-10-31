@@ -801,5 +801,17 @@
    92
   ],
   "result": 92
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P13",
+  "after": 92,
+  "ep": 89,
+  "kind": "result_only",
+  "entry": "result 96 = +1/c+2 on EP 89: OCJP MASTER = FINAL 4 #1 = PRIME 4 #1 HIT; Op13 new xy as is; REC, table, same op, rules 2/3/5, finder; ONE ROW PICK (LAST) missed",
+  "numbers": [
+   96
+  ],
+  "result": 96
  }
 ]

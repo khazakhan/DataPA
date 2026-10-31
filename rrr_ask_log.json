@@ -775,6 +775,19 @@
   "entry": "user: Op22 08->95 (row ending at the after), old ops crossed: x = old y c+2 sign flipped -> c-2 (5->8), y = old x -1 cut switched -> c-1 (0->4) = 84 -> rule 24",
   "numbers": [
    84
-  ]
+  ],
+  "result": 84
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P11",
+  "after": 95,
+  "ep": 50,
+  "kind": "result_only",
+  "entry": "result 84 = c-2/c-1 on EP 50: USER PICK HIT (Op22 08->95 old crossed, x flip, y cut sw); rule 24 1/1, ONE ROW PICK 1/1, rule 5",
+  "numbers": [
+   84
+  ],
+  "result": 84
  }
 ]

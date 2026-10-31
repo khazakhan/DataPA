@@ -1365,5 +1365,17 @@
    81
   ],
   "result": 81
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q29",
+  "after": 81,
+  "ep": 62,
+  "kind": "last_move",
+  "entry": "user ops x c+2, y -1, result 81 again on EP 62; c+2 on x gives 3 not 8 -> true op +2/-1 (logged as +2/-1); crossed: x +2 from new y c-2 = cut sw + flip; y -1 from new x cut = cut sw + step added; rule 28 (47/42) miss; REC, top20, rule 22",
+  "numbers": [
+   81
+  ],
+  "result": 81
  }
 ]

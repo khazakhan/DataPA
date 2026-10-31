@@ -946,6 +946,38 @@ EP_FINDER_NAMES = {'as': 'new ops as they are', 'yx': 'new ops crossed', 'xF': '
                    'oldF': 'old ops, both signs flipped'}
 
 
+def number_sources(ep, rows, n, limit=2):
+    """Which RRR: NEXT OPERATION rows make the number n on the EP, simplest
+    change first (user, 2026-10-31: show 'from which Op' beside PRIME).
+    Level 0 = new/old ops as they are, xy or yx; level 1 = one side sign
+    flipped or cut switched; level 2 = two changes. Returns up to `limit`
+    labels from the lowest level that has any, e.g. 'Op8 yx', 'Op3 old xy, x flip'."""
+    ex, ey = ep // 10, ep % 10
+    mods = {'': '', 'F': 'flip', 'C': 'cut sw', 'FC': 'cut sw+flip'}
+    def t(o, f):
+        if 'C' in f: o = KK_CUT_TOGGLE[o]
+        if 'F' in f: o = SIGN_FLIP[o]
+        return o
+    found = {0: [], 1: [], 2: []}
+    for pos, a, b, ox, oy, nx, ny, mark in rows:
+        for base, (xo, yo) in (('', (nx, ny)), ('old ', (ox, oy))):
+            for lab, (p_, q_) in (('xy', (xo, yo)), ('yx', (yo, xo))):
+                for fx in ('', 'F', 'C', 'FC'):
+                    for fy in ('', 'F', 'C', 'FC'):
+                        if apply_op(ex, t(p_, fx)) * 10 + apply_op(ey, t(q_, fy)) != n:
+                            continue
+                        lvl = (fx != '') + (fy != '') + (len(fx) == 2) + (len(fy) == 2)
+                        lvl = min(lvl, 2)
+                        extra = ', '.join(f"{s_} {mods[f_]}" for s_, f_ in (('x', fx), ('y', fy)) if f_)
+                        lbl = f"Op{pos}{' LAST' if mark == 'LAST' else ''} {base}{lab}" + (f", {extra}" if extra else '')
+                        if lbl not in found[lvl]:
+                            found[lvl].append(lbl)
+    for lvl in (0, 1, 2):
+        if found[lvl]:
+            return found[lvl][:limit]
+    return []
+
+
 def ep_row_finder(ep, rows):
     """EP ROW FINDER (user, 2026-10-31): the RRR: NEXT OPERATION rows whose
     FIRST source number is the EP or one of its cut forms come first (EP,
@@ -1319,6 +1351,17 @@ def show_final_box():
                    ["PRIME 8", ' · '.join(wop(n) for n in prime[4:8]) + "  (adds)", rec('prime8')],
                    ["PRIME 10", ' · '.join(wop(n) for n in prime[8:10]) + "  (adds)", rec('prime10')]], 1)
     _RRR3_PREV['prime'] = prime
+    # each PRIME number: which rules voted for it, and which Op row makes it
+    # (user, 2026-10-31: "mention from which Op ... in the Prime column")
+    rows_p = _RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else []
+    s5, s2, s18 = set(r5), set(r2), set(gaps18)
+    prow = []
+    for k_, n_ in enumerate(prime, 1):
+        why = ' '.join(t_ for t_, ss in (('R5', s5), ('R2', s2), ('R18', s18)) if n_ in ss) or '-'
+        src = number_sources(ep, rows_p, n_)
+        prow.append([f"{k_}", wop(n_), why, ' · '.join(src) if src else 'no row makes it'])
+    body += table(["#", "PRIME number", "Votes", "From which Op (simplest change)"], prow, 3)
+    body.append("  Votes: R5 = family of a FINAL 4 number, R2 = one per step family, R18 = EP family gap")
     finder = ep_row_finder(ep, _RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else [])
     body += ["", "EP ROW FINDER — display only: in replay over 293 rounds it held the result at chance (79 vs 76.5)",
              f"EP ROW FINDER (EP {ep:02d}): rows starting at the EP or its cut forms first, then one step away;"
@@ -3297,23 +3340,23 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 1171, 'tens_cut': 140, 'short_list': 198,
-    'table_rounds': 1161, 'table_hits': 141, 'table_chance': 33, 'declared': 1126, 'declared_hits': 19,
+    'results': 1172, 'tens_cut': 140, 'short_list': 198,
+    'table_rounds': 1162, 'table_hits': 141, 'table_chance': 33, 'declared': 1127, 'declared_hits': 19,
     'band_hits': 92, 'units_hits': 88, 'second_hits': 20,
     'same_tens': 26,
-    'rrr3_rounds': 857, 'rrr3_hits': 49, 'rrr3_rec_rounds': 858, 'rrr3_rec_hits': 305,
-    'rrr3_same_rounds': 830, 'rrr3_same_hits': 15, 'rrr3_wide_rounds': 817, 'rrr3_wide_hits': 88, 'rrr3_yx_rounds': 812, 'rrr3_yx_hits': 94,
-    'rrr3_strong_rounds': 808, 'rrr3_strong_hits': 165, 'rrr3_same2_rounds': 805, 'rrr3_same2_hits': 12,
-    'rrr3_turn_rounds': 812, 'rrr3_turn_hits': 14, 'rrr3_sameyx_rounds': 812, 'rrr3_sameyx_hits': 7,
-    'power_rounds': 747, 'power_hits': 480,
+    'rrr3_rounds': 858, 'rrr3_hits': 49, 'rrr3_rec_rounds': 859, 'rrr3_rec_hits': 305,
+    'rrr3_same_rounds': 831, 'rrr3_same_hits': 15, 'rrr3_wide_rounds': 818, 'rrr3_wide_hits': 88, 'rrr3_yx_rounds': 813, 'rrr3_yx_hits': 94,
+    'rrr3_strong_rounds': 809, 'rrr3_strong_hits': 165, 'rrr3_same2_rounds': 806, 'rrr3_same2_hits': 12,
+    'rrr3_turn_rounds': 813, 'rrr3_turn_hits': 14, 'rrr3_sameyx_rounds': 813, 'rrr3_sameyx_hits': 7,
+    'power_rounds': 748, 'power_hits': 481,
     # live records shown in the bottom FINAL 4 box (user, 2026-10-26); the
     # user's rules 1-5 stay on test and never feed FINAL 4
-    'rrr3_final4_rounds': 588, 'rrr3_final4_hits': 35, 'rrr3_master_rounds': 534, 'rrr3_master_hits': 3,
-    'rrr3_star1_rounds': 201, 'rrr3_star1_hits': 3,
-    'rrr3_rule1_rounds': 192, 'rrr3_rule1_hits': 9, 'rrr3_rule2_rounds': 86, 'rrr3_rule2_hits': 10,
-    'rrr3_rule3_rounds': 87, 'rrr3_rule3_hits': 6, 'rrr3_rule4_rounds': 70, 'rrr3_rule4_hits': 3,
-    'rrr3_rule5_rounds': 40, 'rrr3_rule5_hits': 20, 'rrr3_rule6_rounds': 7, 'rrr3_rule6_hits': 1,
-    'rrr3_rule7_rounds': 9, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 9, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 3, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 2, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 4, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 1, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 1, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 1, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 2, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 18, 'rrr3_rule18_hits': 2, 'rrr3_rule19_rounds': 1, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 3, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 4, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 6, 'rrr3_rule22_hits': 1, 'rrr3_rule23_rounds': 1, 'rrr3_rule23_hits': 0, 'rrr3_finder_rounds': 29, 'rrr3_finder_hits': 7, 'rrr3_prime4_rounds': 31, 'rrr3_prime4_hits': 1, 'rrr3_prime10_rounds': 31, 'rrr3_prime10_hits': 4, 'rrr3_prime8_rounds': 1, 'rrr3_prime8_hits': 1,
+    'rrr3_final4_rounds': 589, 'rrr3_final4_hits': 35, 'rrr3_master_rounds': 535, 'rrr3_master_hits': 3,
+    'rrr3_star1_rounds': 202, 'rrr3_star1_hits': 3,
+    'rrr3_rule1_rounds': 193, 'rrr3_rule1_hits': 9, 'rrr3_rule2_rounds': 87, 'rrr3_rule2_hits': 10,
+    'rrr3_rule3_rounds': 88, 'rrr3_rule3_hits': 6, 'rrr3_rule4_rounds': 71, 'rrr3_rule4_hits': 3,
+    'rrr3_rule5_rounds': 41, 'rrr3_rule5_hits': 20, 'rrr3_rule6_rounds': 7, 'rrr3_rule6_hits': 1,
+    'rrr3_rule7_rounds': 9, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 9, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 3, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 2, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 4, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 1, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 1, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 1, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 2, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 18, 'rrr3_rule18_hits': 2, 'rrr3_rule19_rounds': 1, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 3, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 4, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 6, 'rrr3_rule22_hits': 1, 'rrr3_rule23_rounds': 1, 'rrr3_rule23_hits': 0, 'rrr3_finder_rounds': 30, 'rrr3_finder_hits': 7, 'rrr3_prime4_rounds': 32, 'rrr3_prime4_hits': 1, 'rrr3_prime10_rounds': 32, 'rrr3_prime10_hits': 4, 'rrr3_prime8_rounds': 2, 'rrr3_prime8_hits': 1,
 }
 
 

@@ -669,5 +669,17 @@
    33
   ],
   "result": 33
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P3",
+  "after": 33,
+  "ep": 14,
+  "kind": "result_only",
+  "entry": "result 40 = c-2/c+1 on EP 14; rows only via 2-step changes; HOT 20, top 40, cell",
+  "numbers": [
+   40
+  ],
+  "result": 40
  }
 ]

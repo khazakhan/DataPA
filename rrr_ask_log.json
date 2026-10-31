@@ -1713,5 +1713,17 @@
    85
   ],
   "result": 85
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R11",
+  "after": 85,
+  "ep": 49,
+  "kind": "result_only",
+  "entry": "result 24 = -2/cut on EP 49 = Op18 new yx exact; FINAL 4 MASTER #1 + PRIME 4 #1 HIT; all ladder; crossed miss",
+  "numbers": [
+   24
+  ],
+  "result": 24
  }
 ]

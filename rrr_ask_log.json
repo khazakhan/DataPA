@@ -1173,5 +1173,17 @@
    43
   ],
   "result": 43
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q13",
+  "after": 43,
+  "ep": 25,
+  "kind": "result_only",
+  "entry": "result 19 = -1/c-1 on EP 25; Op31 LAST new xy 2 changes; no list",
+  "numbers": [
+   19
+  ],
+  "result": 19
  }
 ]

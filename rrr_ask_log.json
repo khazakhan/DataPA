@@ -1617,5 +1617,17 @@
    23
   ],
   "result": 23
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R3",
+  "after": 23,
+  "ep": 85,
+  "kind": "result_only",
+  "entry": "result 03 = +2/-2 on EP 85; Op10 new xy, y cut sw+flip (2 changes); crossed miss both; PRIME 4 FAMILY (both-cut of 58), strong, top40, rule5; FINAL 4 miss; LAST-OP 4 0 of 20",
+  "numbers": [
+   3
+  ],
+  "result": 3
  }
 ]

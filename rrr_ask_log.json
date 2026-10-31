@@ -1353,5 +1353,17 @@
    7
   ],
   "result": 7
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q28",
+  "after": 7,
+  "ep": 74,
+  "kind": "last_move",
+  "entry": "user: 'always updated x from new y, updated y from new x'; result 81 = +1/c+2 on EP 74; LAST Op25 new c+1/nc; x +1 from new y nc (step added), y c+2 from new x step switched -> RULE 28 CROSSED (x new y cut sw / y new x step sw + y variants); y step switched in 6 of 6 explained rounds",
+  "numbers": [
+   81
+  ],
+  "result": 81
  }
 ]

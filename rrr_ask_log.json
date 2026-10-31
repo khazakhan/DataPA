@@ -1221,5 +1221,17 @@
    47
   ],
   "result": 47
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q17",
+  "after": 47,
+  "ep": 13,
+  "kind": "result_only",
+  "entry": "result 59 = c-1/c+1 on EP 13; Op5 old xy/yx x flip (1 change); no list",
+  "numbers": [
+   59
+  ],
+  "result": 59
  }
 ]

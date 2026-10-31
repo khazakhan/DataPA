@@ -1,0 +1,12 @@
+P2: EP 04 after 14 -> 33 (c-2/-1); makers 3 (min changes 0); held by: finder, rec, rule1, rule2, rule4, rule5, strong, table, top10, top20, top4, top40, prime10
+P3: EP 14 after 33 -> 40 (c-2/c+1); makers 5 (min changes 2); held by: hot
+P4: EP 29 after 40 -> 30 (+1/+1); makers 2 (min changes 1); held by: none
+P5: EP 02 after 30 -> 30 (c-2/-2); makers 2 (min changes 1); held by: rule5, strong
+P6: EP 30 after 30 -> 07 (c+2/c+2); makers 8 (min changes 0); held by: rule5, table, top40, wide, prime10, one_row
+P7: EP 20 after 07 -> 46 (+2/c+1); makers 5 (min changes 1); held by: none
+P8: EP 31 after 46 -> 89 (cut/-2); makers 6 (min changes 2); held by: hot, rule5
+P9: EP 58 after 89 -> 78 (+2/nc); makers 2 (min changes 2); held by: rec, rule5, strong, top40
+P10: EP 26 after 78 -> 95 (c+2/-1); makers 5 (min changes 1); held by: none
+P11: EP 50 after 95 -> 84 (c-2/c-1); makers 4 (min changes 1); held by: rule24, rule5, one_row, user_pick
+P12: EP 61 after 84 -> 92 (c-2/+1); makers 6 (min changes 2); held by: wide, one_row
+P13: EP 89 after 92 -> 96 (+1/c+2); makers 7 (min changes 0); held by: charrow, finder, rec, rule2, rule3, rule5, table, top10, top20, top4, top40, prime10

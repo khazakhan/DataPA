@@ -813,5 +813,17 @@
    96
   ],
   "result": 96
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P14",
+  "after": 96,
+  "ep": 41,
+  "kind": "result_only",
+  "entry": "result 60 = +2/-1 on EP 41: FINAL 4 #2 + PRIME 4 #3 HIT; Op17 94->36 old yx y cut sw (1 change); REC, same op, 3RRR RESULT, rules 2/5",
+  "numbers": [
+   60
+  ],
+  "result": 60
  }
 ]

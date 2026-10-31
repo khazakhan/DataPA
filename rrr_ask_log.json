@@ -921,5 +921,17 @@
    25
   ],
   "result": 25
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P23",
+  "after": 25,
+  "ep": 19,
+  "kind": "result_only",
+  "entry": "result 86 = c+2/c+2 on EP 19; Op5 new xy y cut sw (1 change); 68 (PRIME 13 both cut) reversed; user asked reversed column -> added to PRIME 4 FAMILY (replay 36 vs 29.8)",
+  "numbers": [
+   86
+  ],
+  "result": 86
  }
 ]

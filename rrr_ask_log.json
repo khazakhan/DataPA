@@ -1425,5 +1425,17 @@
    23
   ],
   "result": 23
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q34",
+  "after": 23,
+  "ep": 96,
+  "kind": "result_only",
+  "entry": "result 35 = c-1/-1 on EP 96; crossed: x from new y c+2 flip+step sw, y from new x c-2 cut sw+step sw; no list; LAST-OP 4 0 of 4",
+  "numbers": [
+   35
+  ],
+  "result": 35
  }
 ]

@@ -1509,5 +1509,17 @@
    6
   ],
   "result": 6
+ },
+ {
+  "time": "2026-11-01",
+  "round": "Q41",
+  "after": 6,
+  "ep": 81,
+  "kind": "result_only",
+  "entry": "result 40 = c+1/-1 on EP 81; crossed x = new y c-1 sign flipped (1 change); Op19 new yx y flip (1 change); STRONG, top40; LAST-OP 4 0 of 11",
+  "numbers": [
+   40
+  ],
+  "result": 40
  }
 ]

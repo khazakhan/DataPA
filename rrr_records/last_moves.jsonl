@@ -16,3 +16,4 @@
 {"round": "Q38", "ep": 23, "result": 63, "x_op": "c-1", "y_op": "nc", "last": {"pos": 27, "src": "81->23", "old": ["c-1", "+2"], "new": ["c-2", "-2"]}, "x_from": ["new x step switched", "old x as is"], "y_from": [], "check": true}
 {"round": "Q39", "ep": 9, "result": 55, "x_op": "cut", "y_op": "c+1", "last": {"pos": 21, "src": "18->09", "old": ["-1", "+1"], "new": ["c-1", "c-2"]}, "x_from": [], "y_from": ["new x sign flipped", "old y cut switched"], "check": true}
 {"round": "Q40", "ep": 72, "result": 6, "x_op": "c-2", "y_op": "c-1", "last": {"pos": 26, "src": "67->72", "old": ["+1", "cut"], "new": ["nc", "cut"]}, "x_from": [], "y_from": [], "check": true}
+{"round": "Q41", "ep": 81, "result": 40, "x_op": "c+1", "y_op": "-1", "last": {"pos": 28, "src": "83->81", "old": ["nc", "-2"], "new": ["c+2", "c-1"]}, "x_from": ["new x step switched", "new y sign flipped"], "y_from": ["new y cut switched", "old y step switched"], "check": true}

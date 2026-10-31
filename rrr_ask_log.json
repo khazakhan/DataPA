@@ -1605,5 +1605,17 @@
    55
   ],
   "result": 55
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R2",
+  "after": 78,
+  "ep": 23,
+  "kind": "result_only",
+  "entry": "result 23 = nc/nc on EP 23 (the EP); Op7 old xy x cut sw (1 change); crossed y = new x cut sw, x miss; PRIME 4 #1, FINAL 4 #2, all ladder steps; LAST-OP 4 0 of 19",
+  "numbers": [
+   23
+  ],
+  "result": 23
  }
 ]

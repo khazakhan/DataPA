@@ -885,5 +885,17 @@
    49
   ],
   "result": 49
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P20",
+  "after": 49,
+  "ep": 42,
+  "kind": "result_only",
+  "entry": "result 63 = +2/+1 on EP 42; Op6/Op12 new xy y cut removed (1 change); WIDE only; 62 (PRIME 4 FAMILY) one step; live +-1 tally 1 of 19 vs 2.8",
+  "numbers": [
+   63
+  ],
+  "result": 63
  }
 ]

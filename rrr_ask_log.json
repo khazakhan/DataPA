@@ -1677,5 +1677,17 @@
    11
   ],
   "result": 11
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R8",
+  "after": 11,
+  "ep": 44,
+  "kind": "result_only",
+  "entry": "result 46 = nc/+2 on EP 44; no row within 2 changes; top10 #10, rec, strong; FINAL 4/PRIME miss; crossed miss",
+  "numbers": [
+   46
+  ],
+  "result": 46
  }
 ]

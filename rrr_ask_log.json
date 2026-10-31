@@ -609,5 +609,17 @@
    79
   ],
   "result": 79
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O28",
+  "after": 79,
+  "ep": 66,
+  "kind": "result_only_explained",
+  "entry": "result 52 = -1/c+1 on EP 66; Op20 LAST new c+1/c+1 with x cut switched + flipped; CharRow + cell",
+  "numbers": [
+   52
+  ],
+  "result": 52
  }
 ]

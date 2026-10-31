@@ -1629,5 +1629,17 @@
    3
   ],
   "result": 3
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R4",
+  "after": 3,
+  "ep": 1,
+  "kind": "result_only",
+  "entry": "result 00 = nc/-1 on EP 01 = Op17 new yx exact (table hit); top10 #5, rec, finder; FINAL 4/PRIME miss; crossed y step sw ok, x miss; LAST-OP 4 0 of 21",
+  "numbers": [
+   0
+  ],
+  "result": 0
  }
 ]

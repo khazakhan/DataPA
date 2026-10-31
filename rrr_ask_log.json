@@ -1137,5 +1137,17 @@
    28
   ],
   "result": 28
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q10",
+  "after": 28,
+  "ep": 25,
+  "kind": "result_only",
+  "entry": "result 01 = -2/c+1 on EP 25; no row can make it (only LAST row); HOT, top40",
+  "numbers": [
+   1
+  ],
+  "result": 1
  }
 ]

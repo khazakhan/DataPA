@@ -3497,7 +3497,7 @@ RRR_LIVE = {
     'rrr3_rule1_rounds': 251, 'rrr3_rule1_hits': 10, 'rrr3_rule2_rounds': 145, 'rrr3_rule2_hits': 12,
     'rrr3_rule3_rounds': 146, 'rrr3_rule3_hits': 10, 'rrr3_rule4_rounds': 129, 'rrr3_rule4_hits': 3,
     'rrr3_rule5_rounds': 99, 'rrr3_rule5_hits': 35, 'rrr3_rule6_rounds': 19, 'rrr3_rule6_hits': 1,
-    'rrr3_rule7_rounds': 44, 'rrr3_rule7_hits': 2, 'rrr3_rule8_rounds': 44, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 17, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 14, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 2, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 22, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 6, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 4, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 34, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 2, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 16, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 71, 'rrr3_rule18_hits': 2, 'rrr3_rule19_rounds': 13, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 13, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 16, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 54, 'rrr3_rule22_hits': 2, 'rrr3_rule23_rounds': 15, 'rrr3_rule23_hits': 0, 'rrr3_rule24_rounds': 3, 'rrr3_rule28_rounds': 2, 'rrr3_rule28_hits': 0, 'rrr3_rule27_rounds': 8, 'rrr3_rule27_hits': 0, 'rrr3_rule26_rounds': 3, 'rrr3_rule26_hits': 0, 'rrr3_rule25_rounds': 9, 'rrr3_rule25_hits': 0, 'rrr3_rule24_hits': 1, 'rrr3_onerow_rounds': 51, 'rrr3_onerow_hits': 1, 'rrr3_onerow5_rounds': 51, 'rrr3_prime4fam_rounds': 46, 'rrr3_prime4fam_hits': 7, 'rrr3_prime4rev_rounds': 38, 'rrr3_lad_prime4_rounds': 33, 'rrr3_lad_prime4_hits': 0, 'rrr3_lad_prime8_rounds': 33, 'rrr3_lad_prime8_hits': 2, 'rrr3_lad_prime10_rounds': 33, 'rrr3_lad_prime10_hits': 2, 'rrr3_lad_prime4family_rounds': 33, 'rrr3_lad_prime4family_hits': 6, 'rrr3_lad_reversed_rounds': 33, 'rrr3_lad_reversed_hits': 6, 'rrr3_lad_prime10family_rounds': 33, 'rrr3_lad_prime10family_hits': 7, 'rrr3_prime4rev_hits': 1, 'rrr3_onerow5_hits': 2, 'rrr3_finder_rounds': 88, 'rrr3_finder_hits': 17, 'rrr3_prime4_rounds': 90, 'rrr3_prime4_hits': 3, 'rrr3_prime10_rounds': 90, 'rrr3_prime10_hits': 10, 'rrr3_prime8_rounds': 60, 'rrr3_prime8_hits': 7,
+    'rrr3_rule7_rounds': 44, 'rrr3_rule7_hits': 2, 'rrr3_rule8_rounds': 44, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 17, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 14, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 2, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 22, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 6, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 4, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 34, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 2, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 16, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 71, 'rrr3_rule18_hits': 2, 'rrr3_rule19_rounds': 13, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 13, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 16, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 54, 'rrr3_rule22_hits': 2, 'rrr3_rule23_rounds': 15, 'rrr3_rule23_hits': 0, 'rrr3_rule24_rounds': 3, 'rrr3_lastop4_rounds': 0, 'rrr3_lastop4_hits': 0, 'rrr3_lastop8_rounds': 0, 'rrr3_lastop8_hits': 0, 'rrr3_rule28_rounds': 2, 'rrr3_rule28_hits': 0, 'rrr3_rule27_rounds': 8, 'rrr3_rule27_hits': 0, 'rrr3_rule26_rounds': 3, 'rrr3_rule26_hits': 0, 'rrr3_rule25_rounds': 9, 'rrr3_rule25_hits': 0, 'rrr3_rule24_hits': 1, 'rrr3_onerow_rounds': 51, 'rrr3_onerow_hits': 1, 'rrr3_onerow5_rounds': 51, 'rrr3_prime4fam_rounds': 46, 'rrr3_prime4fam_hits': 7, 'rrr3_prime4rev_rounds': 38, 'rrr3_lad_prime4_rounds': 33, 'rrr3_lad_prime4_hits': 0, 'rrr3_lad_prime8_rounds': 33, 'rrr3_lad_prime8_hits': 2, 'rrr3_lad_prime10_rounds': 33, 'rrr3_lad_prime10_hits': 2, 'rrr3_lad_prime4family_rounds': 33, 'rrr3_lad_prime4family_hits': 6, 'rrr3_lad_reversed_rounds': 33, 'rrr3_lad_reversed_hits': 6, 'rrr3_lad_prime10family_rounds': 33, 'rrr3_lad_prime10family_hits': 7, 'rrr3_prime4rev_hits': 1, 'rrr3_onerow5_hits': 2, 'rrr3_finder_rounds': 88, 'rrr3_finder_hits': 17, 'rrr3_prime4_rounds': 90, 'rrr3_prime4_hits': 3, 'rrr3_prime10_rounds': 90, 'rrr3_prime10_hits': 10, 'rrr3_prime8_rounds': 60, 'rrr3_prime8_hits': 7,
 }
 
 
@@ -4067,6 +4067,59 @@ def _rrr_one_row_pick(ep, after, rows):
     return (last[-1], "no other row fits: the LAST row") if last else (None, '')
 
 
+# LAST-OP 4 (user, 2026-10-31: "using last operation predict strong and
+# robust 4 results"): the LAST row's cells (new/old ops, xy/yx, each side as
+# is / sign flipped / cut switched / both) ranked by how often they made the
+# result over the 293 replay rounds of series F/N/M/K/O.  Tested by series
+# (cell order learned on 4 series, scored on the 5th): the first 4 numbers
+# held 19 (chance 11.7), the first 8 held 42 (chance 23.4)
+LASTOP_CELLS = ['new.xy.xC.yF', 'old.xy.xF.yFC', 'old.xy.xC.yFC', 'new.yx.xFC.yFC', 'old.xy.xC.y-',
+                'old.xy.x-.yFC', 'old.yx.xF.y-', 'old.yx.xFC.yC', 'new.xy.xC.y-', 'new.yx.xC.yFC',
+                'old.yx.x-.y-', 'old.yx.x-.yF', 'old.yx.x-.yFC', 'new.yx.xFC.y-', 'new.xy.xFC.yFC',
+                'new.xy.xFC.y-', 'new.xy.x-.yFC', 'old.yx.xC.yC', 'old.yx.xC.yF', 'old.yx.x-.yC']
+
+
+def _lastop_numbers(ep, rows):
+    """[(number, 'x/y op', cell label)] of the LAST row, in LASTOP_CELLS order, no repeats."""
+    last = [r for r in rows if r[7] == 'LAST']
+    if not last:
+        return [], None
+    pos, a, b, ox, oy, nx, ny, _ = last[-1]
+    def t(o, f):
+        if 'C' in f: o = KK_CUT_TOGGLE[o]
+        if 'F' in f: o = SIGN_FLIP[o]
+        return o
+    out, seen = [], set()
+    for lab in LASTOP_CELLS:
+        base, rd, fx, fy = lab.split('.')
+        xo, yo = (nx, ny) if base == 'new' else (ox, oy)
+        p, q = (xo, yo) if rd == 'xy' else (yo, xo)
+        x2, y2 = t(p, fx[1:]), t(q, fy[1:])
+        n = apply_op(ep // 10, x2) * 10 + apply_op(ep % 10, y2)
+        if n not in seen:
+            seen.add(n)
+            out.append((n, f"{OP_ABBREV[x2]}/{OP_ABBREV[y2]}", lab))
+    return out, last[-1]
+
+
+def _rrr_lastop4(ep, rows, pre):
+    nums, last = _lastop_numbers(ep, rows)
+    if not nums:
+        return []
+    names = {'-': 'as is', 'F': 'sign flipped', 'C': 'cut switched', 'FC': 'cut switched + flipped'}
+    def say(lab):
+        base, rd, fx, fy = lab.split('.')
+        return f"{base} {rd}, x {names[fx[1:] or '-']}, y {names[fy[1:] or '-']}"
+    _RRR3_PREV['lastop'] = [n for n, _, _ in nums[:8]]
+    out = ["", f"  LAST-OP 4  —  strongest 4 from the LAST row [{pre}{last[0]}] {last[1]:02d} → {last[2]:02d}, EP={ep:02d}"
+                f"   (replay by series: top 4 held 19, chance 11.7; top 8 held 42, chance 23.4)",
+           f"  live: top 4 {RRR_LIVE.get('rrr3_lastop4_hits', 0)} of {RRR_LIVE.get('rrr3_lastop4_rounds', 0)},"
+           f" top 8 {RRR_LIVE.get('rrr3_lastop8_hits', 0)} of {RRR_LIVE.get('rrr3_lastop8_rounds', 0)}"]
+    for i, (n, op, lab) in enumerate(nums[:8], 1):
+        out.append(f"     {'★' if i <= 4 else ' '} {i}. {n:02d} ({op})   {say(lab)}")
+    return out
+
+
 def _rrr_last_menu(ep, rows, pre):
     """LAST ROW DIGIT MENU (user, 2026-10-31, from Q23 on: results explained
     from the LAST operation only).  For each EP digit: every op of the LAST
@@ -4178,6 +4231,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              f"  Live record: table hit {RRR_LIVE['table_hits']} of {RRR_LIVE['table_rounds']} rounds (about {RRR_LIVE['table_chance']} expected by chance)."]
     if live:
         body += _rrr_one_row(ep, grid_ep, _RRR_ASK['rows'], pos_prefix)
+        body += _rrr_lastop4(ep, _RRR_ASK['rows'], pos_prefix)
         body += _rrr_last_menu(ep, _RRR_ASK['rows'], pos_prefix)
     # NC/CUT SPECIAL (user's screenshot, 2026-10-15, result 33 after 57):
     # a row whose xy or yx is nc/cut, cut/nc or nc/nc points to the row

@@ -54,3 +54,10 @@ The user explains each result from the LAST operation row only. `tools/last_move
 logs the move to `last_moves.jsonl`: the LAST row's old/new ops, and which LAST ROW DIGIT MENU cells give the user's x op and y op
 (new x / new y / old x / old y, as is / sign flipped / cut switched / step switched).
 Plan: after about 30 explained rounds, test whether the move choice follows a rule.
+
+## LAST-OP 4 (in the script since 2026-10-31)
+The LAST-row cells are ranked by replay hit count (`LASTOP_CELLS` in DataProcessing.py). The pick is the first 4 / 8 different numbers.
+Tested by series (order learned on 4 series, scored on the 5th): top 4 held 19 of 293 (chance 11.7), top 8 held 42 (chance 23.4).
+Back-scored on 60 recorded live rounds: top 4 held 4 (chance 2.4).
+Ranking by the user's crossed-move changes (`tools/lastop4.py`) held 0 of 8 in leave-one-out, so it was not used.
+Live counters: `rrr3_lastop4` and `rrr3_lastop8`. The numbers are stored in `live.jsonl` under `lastop`.

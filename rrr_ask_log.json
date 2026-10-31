@@ -1449,5 +1449,17 @@
    30
   ],
   "result": 30
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q36",
+  "after": 30,
+  "ep": 53,
+  "kind": "result_only",
+  "entry": "result 56 = nc/c-2 on EP 53; no row within 2 changes; no list; LAST-OP 4 0 of 6",
+  "numbers": [
+   56
+  ],
+  "result": 56
  }
 ]

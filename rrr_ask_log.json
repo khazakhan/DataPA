@@ -633,5 +633,17 @@
    74
   ],
   "result": 74
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O30",
+  "after": 74,
+  "ep": 91,
+  "kind": "result_only_explained",
+  "entry": "result 13 = +2/+2 on EP 91; only Op15 LAST 2-step changes; ADJ, HOT 20, top 30",
+  "numbers": [
+   13
+  ],
+  "result": 13
  }
 ]

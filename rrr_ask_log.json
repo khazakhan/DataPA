@@ -1641,5 +1641,17 @@
    0
   ],
   "result": 0
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R5",
+  "after": 0,
+  "ep": 81,
+  "kind": "result_only",
+  "entry": "result 32 = cut/+1 on EP 81; no row within 2 changes; only rule1; FINAL 4/PRIME/ladder/LAST-OP 4/crossed grid miss; crossed y step sw ok, x miss",
+  "numbers": [
+   32
+  ],
+  "result": 32
  }
 ]

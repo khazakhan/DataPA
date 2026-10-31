@@ -1725,5 +1725,17 @@
    24
   ],
   "result": 24
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R12",
+  "after": 24,
+  "ep": 78,
+  "kind": "result_only",
+  "entry": "result 02 = c-2/c-1 on EP 78 = Op19 old xy exact; outside top 40; finder only; crossed miss",
+  "numbers": [
+   2
+  ],
+  "result": 2
  }
 ]

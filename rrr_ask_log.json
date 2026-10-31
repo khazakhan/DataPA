@@ -729,5 +729,17 @@
    46
   ],
   "result": 46
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P8",
+  "after": 46,
+  "ep": 31,
+  "kind": "result_only",
+  "entry": "result 89 = cut/-2 on EP 31; 6 rows with 2 changes (Op7 new xy xC yC, Op13 old xy, Op19 new yx); HOT 20 + rule 5",
+  "numbers": [
+   89
+  ],
+  "result": 89
  }
 ]

@@ -1581,5 +1581,17 @@
    68
   ],
   "result": 68
+ },
+ {
+  "time": "2026-11-01",
+  "round": "Q47",
+  "after": 68,
+  "ep": 42,
+  "kind": "result_only",
+  "entry": "result 67 = +2/cut on EP 42: FINAL 4 #3 + PRIME 8 (#8) HIT, PRIME 4 FAMILY, REC, same op again, STRONG, top10, rules 3/5; Op19 LAST old yx y cut sw (1 change); LAST-OP 4 0 of 17",
+  "numbers": [
+   67
+  ],
+  "result": 67
  }
 ]

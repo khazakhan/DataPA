@@ -1689,5 +1689,17 @@
    46
   ],
   "result": 46
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R9",
+  "after": 46,
+  "ep": 74,
+  "kind": "result_only",
+  "entry": "result 42 = c+2/-2 on EP 74 = Op18 (prev row) new xy exact; table hit, rank 26; crossed y ok, x miss; table xy+yx numbers at chance (43 vs 43.0)",
+  "numbers": [
+   42
+  ],
+  "result": 42
  }
 ]

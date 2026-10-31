@@ -99,3 +99,12 @@ cost(v) = fewest changes (sign flip / cut switch / step switch) for LAST row new
 - Re-rank top 8/10/20/40 by LAST cost: 23 / 22 / 20 / 17. With prev row too: 20 / 21 / 17 / 13. LAST new only: 19 / 19 / 14 / 10.
 - Result inside cost<=0/1/2 sets: LAST 3.5/23.0/60.7% vs set size 3.8/21.7/57.5%; LAST+prev 7.8/39.3/79.9% vs 7.5/38.6/80.6% -> chance.
 Decision: shown as a "LAST op / previous op check" column in FINAL 4, ranking unchanged.
+
+## SCRIPT BOOSTER gap study (2026-11-01, tools/booster_study.py)
+User asked to fill the gap for every missed round of the 374 so future uploads do not miss.
+650 fixed recipes (LAST / prev / prev2 / first / second row x new/old ops x xy/yx x 9 changes per side, plus EP and EP reversed).
+- After the fact, some recipe makes the result in 366 of 374 rounds, but the recipes together give 97.3 different numbers per round, so this explains nothing.
+- Best single recipe: 10 of 374; with 650 tried, about 10 is what luck alone gives.
+- Recipes picked on the other series and tested on a held-out series: 4 recipes 8 hits (chance 14.7), 8 recipes 26 (chance 29.1), 10 recipes 37 (chance 35.8). At or below chance.
+- The script as it is: FINAL 4 25 (chance 15.0), top 8 43 (29.9), top 10 47 (37.4), top 20 81 (74.8), top 40 166 (149.6). 208 results fell outside the top 40.
+Decision: no per-round patches added (they lower held-out hits); FINAL 4 ranking unchanged. Re-run the study on new data: `python3 tools/lastprev_collect.py && python3 tools/booster_study.py`.

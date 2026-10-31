@@ -1305,5 +1305,17 @@
    33
   ],
   "result": 33
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q24",
+  "after": 33,
+  "ep": 93,
+  "kind": "last_move",
+  "entry": "user LAST-row move: result 29 = c-2/c+1 on EP 93; LAST Op35 old +2/c+2 new -2/c+1; x c-2 = new x cut sw; y c+1 = new y as is; PRIME 4 FAMILY, finder, rule 5",
+  "numbers": [
+   29
+  ],
+  "result": 29
  }
 ]

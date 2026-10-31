@@ -1077,5 +1077,17 @@
    25
   ],
   "result": 25
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q5",
+  "after": 25,
+  "ep": 38,
+  "kind": "result_only",
+  "entry": "result 98 = c+1/nc on EP 38; Op7/Op16 new yx 2 changes; STRONG, CharRow, WIDE",
+  "numbers": [
+   98
+  ],
+  "result": 98
  }
 ]

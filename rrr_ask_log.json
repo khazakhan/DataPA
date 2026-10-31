@@ -1413,5 +1413,17 @@
    7
   ],
   "result": 7
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q33",
+  "after": 7,
+  "ep": 81,
+  "kind": "result_only",
+  "entry": "result 23 = c-1/+2 on EP 81; crossed: x from new y cut (step added -1), y from new x -2 sign flipped; Op9 new xy x flip (1 change); no list",
+  "numbers": [
+   23
+  ],
+  "result": 23
  }
 ]

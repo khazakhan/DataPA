@@ -1233,5 +1233,17 @@
    59
   ],
   "result": 59
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q18",
+  "after": 59,
+  "ep": 2,
+  "kind": "result_only",
+  "entry": "result 92 = -1/nc on EP 02; Op24 old xy both cuts sw (2 changes); CharRow, WIDE",
+  "numbers": [
+   92
+  ],
+  "result": 92
  }
 ]

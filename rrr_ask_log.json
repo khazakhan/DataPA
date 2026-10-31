@@ -1461,5 +1461,17 @@
    56
   ],
   "result": 56
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q37",
+  "after": 56,
+  "ep": 76,
+  "kind": "result_only",
+  "entry": "result 07 = c-2/+1 on EP 76; crossed: x new y -2 cut sw (1 change), y from new x c-1 cut sw+flip; REC, top20; LAST-OP 4 0 of 7",
+  "numbers": [
+   7
+  ],
+  "result": 7
  }
 ]

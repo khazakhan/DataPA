@@ -837,5 +837,17 @@
    74
   ],
   "result": 74
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P16",
+  "after": 74,
+  "ep": 78,
+  "kind": "result_only",
+  "entry": "result 74 = nc/c+1 on EP 78; Op26 LAST new yx 2 changes; REC, top40; PRIME #7 73 one step away; near-miss study: one change from PRIME 4 = 104/293 vs chance 97.4",
+  "numbers": [
+   74
+  ],
+  "result": 74
  }
 ]

@@ -873,5 +873,17 @@
    60
   ],
   "result": 60
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P19",
+  "after": 60,
+  "ep": 74,
+  "kind": "result_only",
+  "entry": "result 49 = c+2/cut on EP 74; Op22 old yx x flip y cut sw (2 changes); WIDE only; FINAL 4 #2 09 = c-2/cut (x sign)",
+  "numbers": [
+   49
+  ],
+  "result": 49
  }
 ]

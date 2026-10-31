@@ -693,5 +693,17 @@
    30
   ],
   "result": 30
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P5",
+  "after": 30,
+  "ep": 2,
+  "kind": "result_only",
+  "entry": "result 30 again = c-2/-2 on EP 02; Op3 50->42 new c-2/c-2 with y cut switched; STRONG 20, top 30",
+  "numbers": [
+   30
+  ],
+  "result": 30
  }
 ]

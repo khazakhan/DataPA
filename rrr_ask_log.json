@@ -585,5 +585,17 @@
    69
   ],
   "result": 69
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O26",
+  "after": 69,
+  "ep": 73,
+  "kind": "result_only_explained",
+  "entry": "result 77 = nc/c-1 on EP 73; finder row 1 Op19 LAST old nc/-1 with y cut switched (old yC, not a finder change); WIDE, STRONG 20",
+  "numbers": [
+   77
+  ],
+  "result": 77
  }
 ]

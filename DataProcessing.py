@@ -1229,6 +1229,18 @@ def show_final_box():
             cy14, ky14 = _op_side(OP_ABBREV[ny14])
             n14 = _op_apply(a_ // 10, not cx14, -kx14) * 10 + _op_apply(a_ % 10, not cy14, ky14)
             r14.append(f"Op{pos14} {b14:02d}: {n14:02d} ({_op_label(not cx14, -kx14)}/{_op_label(not cy14, ky14)} on {a_:02d})")
+    # rule 24 (user, 2026-10-31, P11 after 95 EP 50): the row whose source
+    # ENDS at the after number (Op22 08->95); its OLD ops crossed straight
+    # onto the EP: x = old y with the sign flipped (c+2 -> c-2), y = old x
+    # with the cut switched (-1 -> c-1): c-2/c-1 on 50 = 84
+    r24 = []
+    for pos24, _, b24, ox24, oy24, _, _, _ in (_RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else []):
+        if b24 == a_:
+            cx24, kx24 = _op_side(OP_ABBREV[oy24])
+            cy24, ky24 = _op_side(OP_ABBREV[ox24])
+            n24 = _op_apply(ex, cx24, -kx24) * 10 + _op_apply(ey, not cy24, ky24)
+            r24.append(f"Op{pos24}: {n24:02d} ({_op_label(cx24, -kx24) if (cx24 or kx24) else 'nc'}/"
+                       f"{_op_label(not cy24, ky24) if ((not cy24) or ky24) else 'nc'})")
     rows13 = [r for r in (_RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else [])
               if fb['last_op'] and f"{OP_ABBREV[r[3]]}/{OP_ABBREV[r[4]]}" == fb['last_op']]
     if rows13:
@@ -1419,7 +1431,9 @@ def show_final_box():
                    [f"22. rows starting with EP tens {ex}: old ops crossed, y flipped",
                     ' · '.join(r22) or '- (no such row)', rec('rule22')],
                    ["23. row starting at the EP: yx, y cut switched",
-                    ' · '.join(r23) or '- (no row starts at the EP)', rec('rule23')]], 1)
+                    ' · '.join(r23) or '- (no row starts at the EP)', rec('rule23')],
+                   ["24. row ending at after: old ops crossed, x sign flipped, y cut switched",
+                    ' · '.join(r24) or '- (no row ends there)', rec('rule24')]], 1)
     body = [x for l_ in body for x in ([l_] if l_.startswith(('|', '+', '┌', '├', '│', '└')) else
                                        (textwrap.wrap(l_, _term_w() - 8, subsequent_indent='      ') or ['']))]
     g, rst = "\033[1;32m", "\033[0m"
@@ -3356,7 +3370,7 @@ RRR_LIVE = {
     'rrr3_rule1_rounds': 200, 'rrr3_rule1_hits': 9, 'rrr3_rule2_rounds': 94, 'rrr3_rule2_hits': 10,
     'rrr3_rule3_rounds': 95, 'rrr3_rule3_hits': 6, 'rrr3_rule4_rounds': 78, 'rrr3_rule4_hits': 3,
     'rrr3_rule5_rounds': 48, 'rrr3_rule5_hits': 23, 'rrr3_rule6_rounds': 7, 'rrr3_rule6_hits': 1,
-    'rrr3_rule7_rounds': 12, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 12, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 5, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 4, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 6, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 1, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 3, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 2, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 3, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 21, 'rrr3_rule18_hits': 2, 'rrr3_rule19_rounds': 1, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 3, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 5, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 9, 'rrr3_rule22_hits': 1, 'rrr3_rule23_rounds': 2, 'rrr3_rule23_hits': 0, 'rrr3_finder_rounds': 37, 'rrr3_finder_hits': 7, 'rrr3_prime4_rounds': 39, 'rrr3_prime4_hits': 1, 'rrr3_prime10_rounds': 39, 'rrr3_prime10_hits': 5, 'rrr3_prime8_rounds': 9, 'rrr3_prime8_hits': 2,
+    'rrr3_rule7_rounds': 12, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 12, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 5, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 4, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 6, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 1, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 3, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 2, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 3, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 21, 'rrr3_rule18_hits': 2, 'rrr3_rule19_rounds': 1, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 3, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 5, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 9, 'rrr3_rule22_hits': 1, 'rrr3_rule23_rounds': 2, 'rrr3_rule23_hits': 0, 'rrr3_rule24_rounds': 0, 'rrr3_rule24_hits': 0, 'rrr3_finder_rounds': 37, 'rrr3_finder_hits': 7, 'rrr3_prime4_rounds': 39, 'rrr3_prime4_hits': 1, 'rrr3_prime10_rounds': 39, 'rrr3_prime10_hits': 5, 'rrr3_prime8_rounds': 9, 'rrr3_prime8_hits': 2,
 }
 
 

@@ -765,5 +765,16 @@
    95
   ],
   "result": 95
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P11",
+  "after": 95,
+  "ep": 50,
+  "kind": "user_pick",
+  "entry": "user: Op22 08->95 (row ending at the after), old ops crossed: x = old y c+2 sign flipped -> c-2 (5->8), y = old x -1 cut switched -> c-1 (0->4) = 84 -> rule 24",
+  "numbers": [
+   84
+  ]
  }
 ]

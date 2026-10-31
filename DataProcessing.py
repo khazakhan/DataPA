@@ -1382,7 +1382,9 @@ def show_final_box():
             for k2 in range(max(len(c) for c in cells)):
                 out.append('│ ' + ' │ '.join((c[k2] if k2 < len(c) else '').ljust(x) for c, x in zip(cells, w_)) + ' │')
         return out + [rule('└', '┴', '┘')]
-    body += table(rows[0], rows[1:], 3)
+    _RRR3_PREV['sum_final4'] = table(rows[0], rows[1:], 3)
+    _RRR3_PREV['sum_head'] = (fb['after'], ep)
+    body += _RRR3_PREV['sum_final4']
     # every number with its operation on the EP (user, 2026-10-26: "i need
     # with operations"), five to a row in fixed columns
     wop = lambda n: f"{n:02d} ({lab(n)})"
@@ -1435,8 +1437,9 @@ def show_final_box():
     half = (len(prow) + 1) // 2
     prow5 = [prow[i] + ['║'] + (prow[i + half] if i + half < len(prow) else ['', '', '', ''])
              for i in range(half)]
-    body += table(["#", "PRIME number", "Votes", "From which Op (simplest change)", "║",
-                   "#", "PRIME number", "Votes", "From which Op (simplest change)"], prow5, 3)
+    _RRR3_PREV['sum_prime'] = table(["#", "PRIME number", "Votes", "From which Op (simplest change)", "║",
+                                     "#", "PRIME number", "Votes", "From which Op (simplest change)"], prow5, 3)
+    body += _RRR3_PREV['sum_prime']
     body.append("  Votes: R5 = family of a FINAL 4 number, R2 = one per step family, R18 = EP family gap")
     # PRIME 4 FAMILY (user, 2026-10-31, P15 = 74: PRIME 24 with its tens cut):
     # every PRIME 4 number with its digit-cut family (as is, tens cut, units
@@ -1488,7 +1491,8 @@ def show_final_box():
                     f"{RRR_LIVE.get(f'rrr3_lad_{key}_hits', 0)} of {RRR_LIVE.get(f'rrr3_lad_{key}_rounds', 0)}"])
         _RRR3_PREV.setdefault('ladder', {})[key] = sorted(have)
     body += ["", "PLAY LADDER — the only lists that beat chance on replay; each step adds numbers (total = numbers to play)"]
-    body += table(["Step", "Adds", "Total", "Replay: held / chance", "Live"], lad, 3)
+    _RRR3_PREV['sum_ladder'] = table(["Step", "Adds", "Total", "Replay: held / chance", "Live"], lad, 3)
+    body += _RRR3_PREV['sum_ladder']
     body += ["  Research 2026-10-31 (293 replay rounds): no single row / Op pick beats chance (ONE ROW PICK, finder,",
              "  trained row picker, doubled row, rules 6-25); table 4 holds the result exactly as often as the same",
              "  count of random numbers at 0/1/2/all changes (24/62/82/86%); 14% of results no row can make.",
@@ -4120,6 +4124,55 @@ def _rrr_lastop4(ep, rows, pre):
     return out
 
 
+def _rrr_crossed(ep, rows):
+    """CROSSED options (user, 2026-10-31): x digit from the LAST row's new y,
+    y digit from its new x; each as is / sign flipped / cut switched / step
+    switched (1<->2)."""
+    last = [r for r in rows if r[7] == 'LAST']
+    if not last:
+        return []
+    pos, a, b, ox, oy, nx, ny, _ = last[-1]
+    sw = {1: 2, 2: 1, -1: -2, -2: -1, 0: 0}
+    def row(name, op, d):
+        c, k = _op_side(OP_ABBREV[op])
+        return [name] + [f"{_op_apply(d, cc, kk)} ({_op_label(cc, kk)})"
+                         for cc, kk in ((c, k), (c, -k), (not c, k), (c, sw[k]))]
+    h = ["", "as is", "sign flipped", "cut switched", "step switched"]
+    rws = [row(f"x from new y {OP_ABBREV[ny]} (EP tens {ep // 10})", ny, ep // 10),
+           row(f"y from new x {OP_ABBREV[nx]} (EP units {ep % 10})", nx, ep % 10)]
+    w = [max(len(str(r[i])) for r in [h] + rws) for i in range(len(h))]
+    line = lambda r: "│ " + " │ ".join(str(v).ljust(w[i]) for i, v in enumerate(r)) + " │"
+    bar = lambda l, m, r: l + m.join("─" * (x + 2) for x in w) + r
+    return ([f"  Op{pos} LAST {a:02d} → {b:02d}, old {OP_ABBREV[ox]}/{OP_ABBREV[oy]}, new {OP_ABBREV[nx]}/{OP_ABBREV[ny]}",
+             bar('┌', '┬', '┐'), line(h), bar('├', '┼', '┤')] + [line(r) for r in rws] + [bar('└', '┴', '┘')])
+
+
+def show_round_summary():
+    """ROUND SUMMARY (user, 2026-10-31: show these tables when run locally):
+    CROSSED options, LAST-OP 4, PRIME, PLAY LADDER and OCJP FINAL 4, in the
+    chat order, printed last before the questions."""
+    P = _RRR3_PREV
+    if 'sum_final4' not in P:
+        return
+    a, ep = P.get('sum_head', (0, 0))
+    tag = f"(after {a:02d}, EP {ep:02d})"
+    body = []
+    for title, key in ((f"CROSSED options {tag}", 'sum_crossed'), (f"LAST-OP 4 {tag}", 'sum_lastop'),
+                       (f"PRIME {tag}", 'sum_prime'), (f"PLAY LADDER {tag}", 'sum_ladder'),
+                       (f"OCJP FINAL 4 with operations {tag}", 'sum_final4')):
+        lines = [l for l in P.get(key, []) if l.strip()]
+        if lines:
+            body += ["", f"■ {title}"] + lines
+    g, rst = "\033[1;36m", "\033[0m"
+    iw = max(len(l_) for l_ in body) + 2
+    print()
+    print(f"  {g}┏{'━' * iw}┓{rst}")
+    print(f"  {g}┃{rst} \033[1m{'ROUND SUMMARY ' + tag:<{iw - 2}}{rst} {g}┃{rst}")
+    for l_ in body:
+        print(f"  {g}┃{rst} {l_:<{iw - 2}} {g}┃{rst}")
+    print(f"  {g}┗{'━' * iw}┛{rst}")
+
+
 def _rrr_last_menu(ep, rows, pre):
     """LAST ROW DIGIT MENU (user, 2026-10-31, from Q23 on: results explained
     from the LAST operation only).  For each EP digit: every op of the LAST
@@ -4231,7 +4284,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              f"  Live record: table hit {RRR_LIVE['table_hits']} of {RRR_LIVE['table_rounds']} rounds (about {RRR_LIVE['table_chance']} expected by chance)."]
     if live:
         body += _rrr_one_row(ep, grid_ep, _RRR_ASK['rows'], pos_prefix)
-        body += _rrr_lastop4(ep, _RRR_ASK['rows'], pos_prefix)
+        _RRR3_PREV['sum_lastop'] = _rrr_lastop4(ep, _RRR_ASK['rows'], pos_prefix)
+        _RRR3_PREV['sum_crossed'] = _rrr_crossed(ep, _RRR_ASK['rows'])
+        body += _RRR3_PREV['sum_lastop']
         body += _rrr_last_menu(ep, _RRR_ASK['rows'], pos_prefix)
     # NC/CUT SPECIAL (user's screenshot, 2026-10-15, result 33 after 57):
     # a row whose xy or yx is nc/cut, cut/nc or nc/nc points to the row
@@ -8311,6 +8366,7 @@ def run(data_source, user_x_op=None, user_y_op=None):
         print("\n".join(_rrr_end))
     show_three_box()
     show_final_box()
+    show_round_summary()
     rrr_ask_ops()
     print()
     return root, ops_list, _last_top4, _last_scores

@@ -1437,5 +1437,17 @@
    35
   ],
   "result": 35
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q35",
+  "after": 35,
+  "ep": 96,
+  "kind": "result_only",
+  "entry": "result 30 = c-1/c-1 on EP 96: PRIME 4 FAMILY HIT (35 units cut), REC, CharRow, HOT, rule 5; crossed: x from new y +1 cut sw+flip, y from new x c+1 flip; LAST-OP 4 0 of 5",
+  "numbers": [
+   30
+  ],
+  "result": 30
  }
 ]

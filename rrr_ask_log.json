@@ -1521,5 +1521,17 @@
    40
   ],
   "result": 40
+ },
+ {
+  "time": "2026-11-01",
+  "round": "Q42",
+  "after": 40,
+  "ep": 69,
+  "kind": "result_only",
+  "entry": "result 23 = c+1/c-1 on EP 69: PRIME 4 FAMILY HIT (28 units cut), WIDE, HOT, rule 5; Op10 new xy x flip (1 change); LAST-OP 4 0 of 12",
+  "numbers": [
+   23
+  ],
+  "result": 23
  }
 ]

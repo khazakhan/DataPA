@@ -1372,7 +1372,13 @@ def show_final_box():
         why = ' '.join(t_ for t_, ss in (('R5', s5), ('R2', s2), ('R18', s18)) if n_ in ss) or '-'
         src = number_sources(ep, rows_p, n_)
         prow.append([f"{k_}", wop(n_), why, ' · '.join(src) if src else 'no row makes it'])
-    body += table(["#", "PRIME number", "Votes", "From which Op (simplest change)"], prow, 3)
+    # 5 rows, two PRIME numbers per row: #1-5 left, #6-10 right (user
+    # screenshot, 2026-10-31: "print this in 5 rows for easy identification")
+    half = (len(prow) + 1) // 2
+    prow5 = [prow[i] + ['║'] + (prow[i + half] if i + half < len(prow) else ['', '', '', ''])
+             for i in range(half)]
+    body += table(["#", "PRIME number", "Votes", "From which Op (simplest change)", "║",
+                   "#", "PRIME number", "Votes", "From which Op (simplest change)"], prow5, 3)
     body.append("  Votes: R5 = family of a FINAL 4 number, R2 = one per step family, R18 = EP family gap")
     finder = ep_row_finder(ep, _RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else [])
     body += ["", "EP ROW FINDER — display only: in replay over 293 rounds it held the result at chance (79 vs 76.5)",

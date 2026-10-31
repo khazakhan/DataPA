@@ -897,5 +897,17 @@
    63
   ],
   "result": 63
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P21",
+  "after": 63,
+  "ep": 54,
+  "kind": "result_only",
+  "entry": "result 05 = cut/+1 on EP 54; doubled row Op3/Op8 new yx y cut removed (1 change); no list; rule 25 added (doubled row, y cut switched; replay 0/54)",
+  "numbers": [
+   5
+  ],
+  "result": 5
  }
 ]

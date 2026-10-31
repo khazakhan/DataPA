@@ -753,5 +753,17 @@
    78
   ],
   "result": 78
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P10",
+  "after": 78,
+  "ep": 26,
+  "kind": "result_only",
+  "entry": "result 95 = c+2/-1 on EP 26; Op4 79->08 old xy x flipped (1 change); no list held it",
+  "numbers": [
+   95
+  ],
+  "result": 95
  }
 ]

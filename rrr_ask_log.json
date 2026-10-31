@@ -1113,5 +1113,17 @@
    22
   ],
   "result": 22
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q8",
+  "after": 22,
+  "ep": 20,
+  "kind": "result_only",
+  "entry": "result 67 = c-1/c+2 on EP 20: PRIME 4 FAMILY HIT (12 both cut); Op12 old xy x cut sw (1 change); STRONG, rule 5, top40",
+  "numbers": [
+   67
+  ],
+  "result": 67
  }
 ]

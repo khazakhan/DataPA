@@ -1149,5 +1149,17 @@
    1
   ],
   "result": 1
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q11",
+  "after": 1,
+  "ep": 87,
+  "kind": "result_only",
+  "entry": "result 45 = c+1/-2 on EP 87: PRIME 8 HIT (#6), PRIME 10, ladder 2-6, reversed, REC, top10, rule 5; no row can make it",
+  "numbers": [
+   45
+  ],
+  "result": 45
  }
 ]

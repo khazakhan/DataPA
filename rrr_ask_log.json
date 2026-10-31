@@ -1041,5 +1041,17 @@
    77
   ],
   "result": 77
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q2",
+  "after": 66,
+  "ep": 80,
+  "kind": "result_only",
+  "entry": "result 27 = c-1/c+2 on EP 80; ONE ROW PICK row Op20 old xy x flip y cut sw (2 changes); CharRow, rule 3",
+  "numbers": [
+   27
+  ],
+  "result": 27
  }
 ]

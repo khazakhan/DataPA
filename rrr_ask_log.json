@@ -1401,5 +1401,17 @@
    16
   ],
   "result": 16
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q32",
+  "after": 16,
+  "ep": 78,
+  "kind": "result_only",
+  "entry": "result 07 = c-2/-1 on EP 78; crossed: x new y as is, y new x cut sw (1 change, Op29 LAST new yx y cut sw); ladder +reversed, NC/CUT, STRONG, rules 3/5; LAST-OP 4 miss",
+  "numbers": [
+   7
+  ],
+  "result": 7
  }
 ]

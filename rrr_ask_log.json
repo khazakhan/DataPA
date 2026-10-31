@@ -645,5 +645,17 @@
    13
   ],
   "result": 13
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O31",
+  "after": 13,
+  "ep": 60,
+  "kind": "result_only_explained",
+  "entry": "result 54 = -1/c-1 on EP 60; EP ROW FINDER LIVE hit row 1 Op23 61 (EP+1) old as is",
+  "numbers": [
+   54
+  ],
+  "result": 54
  }
 ]

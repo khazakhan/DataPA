@@ -717,5 +717,17 @@
    7
   ],
   "result": 7
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P7",
+  "after": 7,
+  "ep": 20,
+  "kind": "result_only",
+  "entry": "result 46 = +2/c+1 on EP 20; Op13 72->11 yx with x flipped (1 change); ADJ + cell",
+  "numbers": [
+   46
+  ],
+  "result": 46
  }
 ]

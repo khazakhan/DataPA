@@ -1389,5 +1389,17 @@
    9
   ],
   "result": 9
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q31",
+  "after": 9,
+  "ep": 75,
+  "kind": "result_only",
+  "entry": "result 16 = c-1/+1 on EP 75; crossed: x from new y c+2 flip+step sw, y from new x -2 flip+step sw; LAST-OP 4 miss (0 of 1), rule 28 miss; REC, top40",
+  "numbers": [
+   16
+  ],
+  "result": 16
  }
 ]

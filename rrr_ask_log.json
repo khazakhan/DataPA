@@ -1665,5 +1665,17 @@
    44
   ],
   "result": 44
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R7",
+  "after": 44,
+  "ep": 75,
+  "kind": "result_only",
+  "entry": "result 11 = c-1/c+1 on EP 75 = Op24 (prev row) old yx exact; outside top 40; finder+hot only; crossed y ok, x miss; research pass 2 run",
+  "numbers": [
+   11
+  ],
+  "result": 11
  }
 ]

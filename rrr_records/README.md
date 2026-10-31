@@ -108,3 +108,11 @@ User asked to fill the gap for every missed round of the 374 so future uploads d
 - Recipes picked on the other series and tested on a held-out series: 4 recipes 8 hits (chance 14.7), 8 recipes 26 (chance 29.1), 10 recipes 37 (chance 35.8). At or below chance.
 - The script as it is: FINAL 4 25 (chance 15.0), top 8 43 (29.9), top 10 47 (37.4), top 20 81 (74.8), top 40 166 (149.6). 208 results fell outside the top 40.
 Decision: no per-round patches added (they lower held-out hits); FINAL 4 ranking unchanged. Re-run the study on new data: `python3 tools/lastprev_collect.py && python3 tools/booster_study.py`.
+
+## Research pass 2 (2026-11-01, tools/research2.py, 377 rounds incl. R5-R7)
+Prompted by R6 (44) and R7 (11), both made by the row before LAST from its old ops.
+- prev row old ops xy/yx exact: 9 (chance 7.1); with 1 change: 38 (44.5). prev new / both: at chance.
+- result repeats the last number: 9 (chance 3.8), spread K3 O2 P2 M1 Q1, never in the top 10. One of ~20 tests, p about 0.02: not trusted.
+- repeat of last 5/10/20 numbers, most common x/y ops (held-out), last round's op pair again, hot tens/units digits: all at or below chance.
+- the script's own ranking: top 4 25 (chance 15.1), top 8 44 (30.2), top 10 48 (37.7) above chance; top 20/40 at chance.
+Decision: nothing new beats FINAL 4's slots; no change to the ranking.

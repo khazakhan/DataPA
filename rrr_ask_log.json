@@ -1101,5 +1101,17 @@
    89
   ],
   "result": 89
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q7",
+  "after": 89,
+  "ep": 43,
+  "kind": "result_only",
+  "entry": "result 22 = -2/-1 on EP 43; Op8/Op9/Op13 new xy 2 changes; finder only",
+  "numbers": [
+   22
+  ],
+  "result": 22
  }
 ]

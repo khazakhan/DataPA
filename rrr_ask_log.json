@@ -1125,5 +1125,17 @@
    67
   ],
   "result": 67
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q9",
+  "after": 67,
+  "ep": 9,
+  "kind": "result_only",
+  "entry": "result 28 = +2/-1 on EP 09; no row can make it; CharRow only",
+  "numbers": [
+   28
+  ],
+  "result": 28
  }
 ]

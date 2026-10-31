@@ -1329,5 +1329,17 @@
    10
   ],
   "result": 10
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q26",
+  "after": 10,
+  "ep": 96,
+  "kind": "last_move",
+  "entry": "user LAST-row move: result 43 = cut/c+2 on EP 96; LAST Op32 old cut/c+1 new -1/-1; user says from new x/y; menu single-change match: x old x as is (cut), y old y step sw (c+1->c+2); HOT, REC yx",
+  "numbers": [
+   43
+  ],
+  "result": 43
  }
 ]

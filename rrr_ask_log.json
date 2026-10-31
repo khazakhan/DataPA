@@ -1185,5 +1185,17 @@
    19
   ],
   "result": 19
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q14",
+  "after": 19,
+  "ep": 45,
+  "kind": "result_only",
+  "entry": "result 86 = c-1/+1 on EP 45: PRIME 4 FAMILY HIT (36 tens cut); Op3 old yx y cut sw / Op13 old xy x flip (1 change); REC, top20, rules 3/5",
+  "numbers": [
+   86
+  ],
+  "result": 86
  }
 ]

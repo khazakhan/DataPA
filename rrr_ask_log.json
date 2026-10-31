@@ -597,5 +597,17 @@
    77
   ],
   "result": 77
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O27",
+  "after": 77,
+  "ep": 65,
+  "kind": "result_only_explained",
+  "entry": "result 79 = +1/c-1 on EP 65; EP ROW FINDER LIVE hit Op1 15->29 (tens cut) old as is; 3RRR RESULT, REC, CharRow, top 20",
+  "numbers": [
+   79
+  ],
+  "result": 79
  }
 ]

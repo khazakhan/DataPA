@@ -1377,5 +1377,17 @@
    81
   ],
   "result": 81
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q30",
+  "after": 81,
+  "ep": 81,
+  "kind": "last_move",
+  "entry": "user ops +2/-2, result 09 on EP 81 (ok); PRIME 4 FAMILY HIT (54 both cut), rule 5; crossed: x +2 from new y c+1 cut sw+step sw; y -2 from new x c+1 cut sw+flip+step sw; also = LAST old ops +2/-1 with y step sw; rule 28 miss",
+  "numbers": [
+   9
+  ],
+  "result": 9
  }
 ]

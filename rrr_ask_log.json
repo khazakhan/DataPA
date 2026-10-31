@@ -1065,5 +1065,17 @@
    53
   ],
   "result": 53
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q4",
+  "after": 53,
+  "ep": 87,
+  "kind": "result_only",
+  "entry": "result 25 = c-1/-2 on EP 87; Op5 old yx x flip (1 change); STRONG, CharRow, top40",
+  "numbers": [
+   25
+  ],
+  "result": 25
  }
 ]

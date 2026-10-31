@@ -52,9 +52,9 @@ rec = dict(round=rnd, dataset=ds, after=after, ep=ep, result=res,
            result_op=f"{D.OP_ABBREV[D.find_op(ex, res // 10)]}/{D.OP_ABBREV[D.find_op(ey, res % 10)]}",
            rows=rows, makers=sorted(makers, key=lambda m: m['changes']),
            lists={k: v for k, v in lists.items() if k != 'rk'}, ranked=lists.get('rk', []),
-           prime10=prime, one_row=one, user_pick=pick)
+           prime10=prime, prime4fam=list(D._RRR3_PREV.get('prime4fam', [])), one_row=one, user_pick=pick)
 rec['held_by'] = sorted(k for k, v in rec['lists'].items() if res in v) + \
-    (['prime10'] if res in prime else []) + (['one_row'] if res in one.get('lines', {}).values() else []) + \
+    (['prime10'] if res in prime else []) + (['prime4fam'] if res in rec['prime4fam'] else []) + (['one_row'] if res in one.get('lines', {}).values() else []) + \
     (['user_pick'] if res in pick else [])
 p = 'rrr_records/live.jsonl'
 old = [l for l in (open(p).read().splitlines() if os.path.exists(p) else []) if json.loads(l)['round'] != rnd]

@@ -825,5 +825,17 @@
    60
   ],
   "result": 60
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P15",
+  "after": 60,
+  "ep": 42,
+  "kind": "result_only",
+  "entry": "result 74 = c-2/+2 on EP 42; PRIME #4 24 with tens cut (family); Op27 old xy both flipped; STRONG, CharRow, finder, rule 5; user: go deeper -> PRIME 4 FAMILY box",
+  "numbers": [
+   74
+  ],
+  "result": 74
  }
 ]

@@ -933,5 +933,17 @@
    86
   ],
   "result": 86
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P24",
+  "after": 86,
+  "ep": 99,
+  "kind": "result_only",
+  "entry": "result 18 = +2/-1 on EP 99; Op22 new yx x flip / Op32 LAST old yx x cut sw (1 change); NC/CUT SPECIAL, REC yx",
+  "numbers": [
+   18
+  ],
+  "result": 18
  }
 ]

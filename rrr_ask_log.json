@@ -1473,5 +1473,17 @@
    7
   ],
   "result": 7
+ },
+ {
+  "time": "2026-11-01",
+  "round": "Q38",
+  "after": 7,
+  "ep": 23,
+  "kind": "result_only",
+  "entry": "result 63 = c-1/nc on EP 23: PRIME 4 FAMILY HIT (13 tens cut), REC, top40, rule 5; LAST-OP 4 0 of 8",
+  "numbers": [
+   63
+  ],
+  "result": 63
  }
 ]

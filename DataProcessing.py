@@ -3370,7 +3370,7 @@ RRR_LIVE = {
     'rrr3_rule1_rounds': 200, 'rrr3_rule1_hits': 9, 'rrr3_rule2_rounds': 94, 'rrr3_rule2_hits': 10,
     'rrr3_rule3_rounds': 95, 'rrr3_rule3_hits': 6, 'rrr3_rule4_rounds': 78, 'rrr3_rule4_hits': 3,
     'rrr3_rule5_rounds': 48, 'rrr3_rule5_hits': 23, 'rrr3_rule6_rounds': 7, 'rrr3_rule6_hits': 1,
-    'rrr3_rule7_rounds': 12, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 12, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 5, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 4, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 6, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 1, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 3, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 2, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 3, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 21, 'rrr3_rule18_hits': 2, 'rrr3_rule19_rounds': 1, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 3, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 5, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 9, 'rrr3_rule22_hits': 1, 'rrr3_rule23_rounds': 2, 'rrr3_rule23_hits': 0, 'rrr3_rule24_rounds': 0, 'rrr3_rule24_hits': 0, 'rrr3_finder_rounds': 37, 'rrr3_finder_hits': 7, 'rrr3_prime4_rounds': 39, 'rrr3_prime4_hits': 1, 'rrr3_prime10_rounds': 39, 'rrr3_prime10_hits': 5, 'rrr3_prime8_rounds': 9, 'rrr3_prime8_hits': 2,
+    'rrr3_rule7_rounds': 12, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 12, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 5, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 4, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 6, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 1, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 3, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 2, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 3, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 21, 'rrr3_rule18_hits': 2, 'rrr3_rule19_rounds': 1, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 3, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 5, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 9, 'rrr3_rule22_hits': 1, 'rrr3_rule23_rounds': 2, 'rrr3_rule23_hits': 0, 'rrr3_rule24_rounds': 0, 'rrr3_rule24_hits': 0, 'rrr3_onerow_rounds': 0, 'rrr3_onerow_hits': 0, 'rrr3_onerow5_rounds': 0, 'rrr3_onerow5_hits': 0, 'rrr3_finder_rounds': 37, 'rrr3_finder_hits': 7, 'rrr3_prime4_rounds': 39, 'rrr3_prime4_hits': 1, 'rrr3_prime10_rounds': 39, 'rrr3_prime10_hits': 5, 'rrr3_prime8_rounds': 9, 'rrr3_prime8_hits': 2,
 }
 
 
@@ -3919,6 +3919,54 @@ def _rrr3_rows(entries, ep):
 _RRR_ASK = {}      # the last RRR: NEXT OPERATION table: EP, Pos prefix and rows
 
 
+def _rrr_one_row_pick(ep, after, rows):
+    """ONE ROW PICK (user, 2026-10-31, P11): choose a single Pos/source row
+    of the RRR table, then apply the operations on the EP.  Order:
+    1) a row whose source ENDS at the after number (P11: Op22 08->95),
+    2) a row whose source STARTS at the EP, 3) a row ending in the after's
+    family (tens or units cut, or reversed), 4) the LAST row.  The last
+    such row wins inside each step.  Returns (row, why) or (None, '')."""
+    def fam(n):
+        t, u = n // 10, n % 10
+        return {n, cut(t) * 10 + u, t * 10 + cut(u), cut(t) * 10 + cut(u), u * 10 + t}
+    plain = [r for r in rows if r[7] != 'LAST']
+    for why, ok in (("ends at the after number", lambda r: r[2] == after),
+                    ("starts at the EP", lambda r: r[1] == ep),
+                    ("ends in the after's family", lambda r: r[2] in fam(after) and r[2] != after)):
+        hit = [r for r in plain if ok(r)]
+        if hit:
+            return hit[-1], why
+    last = [r for r in rows if r[7] == 'LAST']
+    return (last[-1], "no other row fits: the LAST row") if last else (None, '')
+
+
+def _rrr_one_row(ep, after, rows, pre):
+    """Display lines of the ONE ROW PICK: the chosen row only and the
+    operations applied to it on the EP; the first line is the pick."""
+    r, why = _rrr_one_row_pick(ep, after, rows)
+    if r is None:
+        return []
+    pos, a, b, ox, oy, nx, ny, mark = r
+    ex, ey = ep // 10, ep % 10
+    def num(xs, ys):
+        (cx, kx), (cy, ky) = xs, ys
+        return f"{_op_apply(ex, cx, kx) * 10 + _op_apply(ey, cy, ky):02d} ({_op_label(cx, kx)}/{_op_label(cy, ky)})"
+    sox, soy = _op_side(OP_ABBREV[ox]), _op_side(OP_ABBREV[oy])
+    snx, sny = _op_side(OP_ABBREV[nx]), _op_side(OP_ABBREV[ny])
+    ops = [("PICK: old ops crossed, x sign flipped, y cut switched",
+            num((soy[0], -soy[1]), (not sox[0], sox[1]))),
+           ("new ops xy", num(snx, sny)), ("new ops yx", num(sny, snx)),
+           ("old ops xy", num(sox, soy)), ("old ops yx", num(soy, sox))]
+    out = ["", f"  ONE ROW PICK  —  one Pos / source only, EP={ep:02d}, after {after:02d}",
+           f"  [{pre}{pos}]{mark}  {a:02d} → {b:02d}   old {OP_ABBREV[ox]}/{OP_ABBREV[oy]}   "
+           f"new {OP_ABBREV[nx]}/{OP_ABBREV[ny]}   (why: {why})"]
+    out += [f"     {lab_:<54} {n_}" for lab_, n_ in ops]
+    out.append("  Replay over 293 rounds (F/N/M/K/O): PICK line 1 hit (chance 2.9), all 5 lines 14 (chance 14.2) — at chance")
+    out.append(f"  On test — live {RRR_LIVE.get('rrr3_onerow_hits', 0)} of {RRR_LIVE.get('rrr3_onerow_rounds', 0)} (PICK line),"
+               f" {RRR_LIVE.get('rrr3_onerow5_hits', 0)} of {RRR_LIVE.get('rrr3_onerow5_rounds', 0)} (all 5 lines)")
+    return out
+
+
 def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     """RRR table — display only. Every WIN - WIN row (plus the chain's own
     last step, marked LAST) gives a next operation by the RRR rule, applied
@@ -3962,6 +4010,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              "  new x = old y, cut switched + sign flipped   |   new y = old x, cut switched, one step down",
              "  LAST = the chain's own last step.  Backtest (57,662 positions): table hit 6.42% vs 6.44% chance.",
              f"  Live record: table hit {RRR_LIVE['table_hits']} of {RRR_LIVE['table_rounds']} rounds (about {RRR_LIVE['table_chance']} expected by chance)."]
+    if live:
+        body += _rrr_one_row(ep, grid_ep, _RRR_ASK['rows'], pos_prefix)
     # NC/CUT SPECIAL (user's screenshot, 2026-10-15, result 33 after 57):
     # a row whose xy or yx is nc/cut, cut/nc or nc/nc points to the row
     # after it; that row's xy and yx are modified every way (each side as

@@ -48,3 +48,9 @@ Lift = hits / chance, for lists present in 10 or more rounds:
 
 The live order agrees with the replay: PRIME 4 and PRIME 8 are on top, and the wide lists are at or below chance.
 Caveat: P2-P13 were back-filled with the later script, so their ONE ROW PICK and family entries are not truly live.
+
+## LAST-row moves (from Q23 on)
+The user explains each result from the LAST operation row only. `tools/last_move.py <round> <dataset> <result> <x op> <y op>`
+logs the move to `last_moves.jsonl`: the LAST row's old/new ops, and which LAST ROW DIGIT MENU cells give the user's x op and y op
+(new x / new y / old x / old y, as is / sign flipped / cut switched / step switched).
+Plan: after about 30 explained rounds, test whether the move choice follows a rule.

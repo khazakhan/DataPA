@@ -1,0 +1,1 @@
+{"round": "Q23", "ep": 56, "result": 33, "x_op": "-2", "y_op": "c+2", "last": {"pos": 24, "src": "67->56", "old": ["-1", "-1"], "new": ["c+1", "c-2"]}, "x_from": ["new y cut switched", "old x step switched", "old y step switched"], "y_from": ["new x step switched", "new y sign flipped"], "check": true}

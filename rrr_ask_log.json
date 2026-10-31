@@ -1293,5 +1293,17 @@
    3
   ],
   "result": 3
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q23",
+  "after": 3,
+  "ep": 56,
+  "kind": "last_move",
+  "entry": "user LAST-row move: result 33 = -2/c+2 on EP 56; LAST Op24 old -1/-1 new c+1/c-2; x -2 = new y cut sw (or old x/y step sw), y c+2 = new x step sw (or new y sign flip); HOT only",
+  "numbers": [
+   33
+  ],
+  "result": 33
  }
 ]

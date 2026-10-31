@@ -969,5 +969,17 @@
    63
   ],
   "result": 63
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P27",
+  "after": 63,
+  "ep": 5,
+  "kind": "result_only",
+  "entry": "result 60 = c+1/cut on EP 05: PRIME 8 #8 + PRIME 4 FAMILY HIT; doubled row Op3/Op8 new xy as is; table, REC, HOT, top10 #9, finder, rules 5/7",
+  "numbers": [
+   60
+  ],
+  "result": 60
  }
 ]

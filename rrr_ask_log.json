@@ -1089,5 +1089,17 @@
    98
   ],
   "result": 98
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q6",
+  "after": 98,
+  "ep": 13,
+  "kind": "result_only",
+  "entry": "result 89 = c+2/c+1 on EP 13 (= after 98 reversed); Op9 new xy y cut sw (1 change); finder only",
+  "numbers": [
+   89
+  ],
+  "result": 89
  }
 ]

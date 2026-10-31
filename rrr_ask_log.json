@@ -1533,5 +1533,17 @@
    23
   ],
   "result": 23
+ },
+ {
+  "time": "2026-11-01",
+  "round": "Q43",
+  "after": 23,
+  "ep": 35,
+  "kind": "result_only",
+  "entry": "result 02 = c+2/c+2 on EP 35; Op28 new xy as is (RRR table), WIDE, HOT, finder, top20, rule 8; LAST-OP 4 0 of 13",
+  "numbers": [
+   2
+  ],
+  "result": 2
  }
 ]

@@ -573,5 +573,17 @@
    1
   ],
   "result": 1
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O25",
+  "after": 1,
+  "ep": 15,
+  "kind": "result_only_explained",
+  "entry": "result 69 = cut/c-1 on EP 15; NC/CUT SPECIAL LIVE hit (Op3 nc/cut -> Op8 yx y-flipped); nothing else",
+  "numbers": [
+   69
+  ],
+  "result": 69
  }
 ]

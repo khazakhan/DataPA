@@ -61,3 +61,33 @@ Tested by series (order learned on 4 series, scored on the 5th): top 4 held 19 o
 Back-scored on 60 recorded live rounds: top 4 held 4 (chance 2.4).
 Ranking by the user's crossed-move changes (`tools/lastop4.py`) held 0 of 8 in leave-one-out, so it was not used.
 Live counters: `rrr3_lastop4` and `rrr3_lastop8`. The numbers are stored in `live.jsonl` under `lastop`.
+
+## Series Q done (Q2-Q48), FINAL 4 miss study (2026-11-01, 78 live rounds P2-P32 + Q2-Q48)
+Live hits:
+- FINAL 4: 4 (chance 3.1)
+- PRIME 4: 3
+- PRIME 8: 8 (chance 6.2)
+- PRIME 4 FAMILY: 13
+- FINAL 4 FAMILY: 18 (about 15 numbers, chance 11.7)
+- LAST-OP 4: 0 of 18 live
+
+Where the 74 FINAL 4 misses landed in the ranked list:
+- outside the top 40: 52
+- top 21-40: 15
+- top 11-20: 5
+- top 5-10: 2
+
+So most misses are not just below the FINAL 4.
+14 of the 74 misses were a digit-cut family member of a FINAL 4 number, spread evenly over #1-#4 (3 3 4 4).
+
+Replay (293 rounds):
+
+| Pick | Held | Avg size | Chance |
+|---|---|---|---|
+| FINAL 4 | 20 | 4 | 11.7 |
+| PRIME 4 | 23 | 4 | 11.7 |
+| union of the two | 24 | 4.2 | — |
+| FINAL 4 family | 57 | 14.8 | 43.3 |
+| PRIME 4 family | 59 | 15.2 | 44.4 |
+
+No 4-number change beats PRIME 4. The misses can only be covered by playing more numbers (the PLAY LADDER family step), not by a sharper 4.

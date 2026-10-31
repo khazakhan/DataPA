@@ -909,5 +909,17 @@
    5
   ],
   "result": 5
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P22",
+  "after": 5,
+  "ep": 60,
+  "kind": "result_only",
+  "entry": "result 25 = c+1/cut on EP 60; doubled row Op8/Op21 old xy x cut sw (1 change); no list; doubled-row-within-1-change replay 7/54 vs 10.5 -> luck",
+  "numbers": [
+   25
+  ],
+  "result": 25
  }
 ]

@@ -621,5 +621,17 @@
    52
   ],
   "result": 52
+ },
+ {
+  "time": "2026-10-31",
+  "round": "O29",
+  "after": 52,
+  "ep": 34,
+  "kind": "result_only_explained",
+  "entry": "result 74 = c-1/nc on EP 34; Op10 81->41 old c+1/nc x flipped (not a finder row); only the cell",
+  "numbers": [
+   74
+  ],
+  "result": 74
  }
 ]

@@ -1197,5 +1197,17 @@
    86
   ],
   "result": 86
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q15",
+  "after": 86,
+  "ep": 13,
+  "kind": "result_only",
+  "entry": "result 71 = c+1/-2 on EP 13; Op20 new yx as is = ONE ROW PICK row 'new ops yx' line (any line 2 of 36); RRR table, finder, top40",
+  "numbers": [
+   71
+  ],
+  "result": 71
  }
 ]

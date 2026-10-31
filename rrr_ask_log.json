@@ -1701,5 +1701,17 @@
    42
   ],
   "result": 42
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R10",
+  "after": 42,
+  "ep": 32,
+  "kind": "result_only",
+  "entry": "result 85 = cut/c-2 on EP 32 = Op22 LAST new xy exact (table hit, rank 15); crossed miss both; FINAL 4 miss",
+  "numbers": [
+   85
+  ],
+  "result": 85
  }
 ]

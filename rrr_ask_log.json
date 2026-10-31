@@ -1161,5 +1161,17 @@
    45
   ],
   "result": 45
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q12",
+  "after": 45,
+  "ep": 20,
+  "kind": "result_only",
+  "entry": "result 43 = +2/c-2 on EP 20; no row can make it; CharRow, HOT",
+  "numbers": [
+   43
+  ],
+  "result": 43
  }
 ]

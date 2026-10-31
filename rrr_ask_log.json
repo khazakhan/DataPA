@@ -1497,5 +1497,17 @@
    55
   ],
   "result": 55
+ },
+ {
+  "time": "2026-11-01",
+  "round": "Q40",
+  "after": 55,
+  "ep": 72,
+  "kind": "result_only",
+  "entry": "result 06 = c-2/c-1 on EP 72; Op8 old xy x flip / Op20 new yx y cut sw (1 change); WIDE only; MASTER 12 (4 votes) missed; LAST-OP 4 0 of 10",
+  "numbers": [
+   6
+  ],
+  "result": 6
  }
 ]

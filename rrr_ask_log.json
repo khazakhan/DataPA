@@ -789,5 +789,17 @@
    84
   ],
   "result": 84
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P12",
+  "after": 84,
+  "ep": 61,
+  "kind": "result_only",
+  "entry": "result 92 = c-2/+1 on EP 61; ONE ROW PICK row Op24 61->58 old yx c+2/-1 both signs flipped; WIDE only; box line added",
+  "numbers": [
+   92
+  ],
+  "result": 92
  }
 ]

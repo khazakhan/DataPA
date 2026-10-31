@@ -3354,23 +3354,23 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 1180, 'tens_cut': 140, 'short_list': 198,
-    'table_rounds': 1170, 'table_hits': 142, 'table_chance': 33, 'declared': 1135, 'declared_hits': 19,
+    'results': 1181, 'tens_cut': 140, 'short_list': 198,
+    'table_rounds': 1171, 'table_hits': 142, 'table_chance': 33, 'declared': 1136, 'declared_hits': 19,
     'band_hits': 92, 'units_hits': 88, 'second_hits': 20,
     'same_tens': 26,
-    'rrr3_rounds': 866, 'rrr3_hits': 49, 'rrr3_rec_rounds': 867, 'rrr3_rec_hits': 306,
-    'rrr3_same_rounds': 839, 'rrr3_same_hits': 15, 'rrr3_wide_rounds': 826, 'rrr3_wide_hits': 89, 'rrr3_yx_rounds': 821, 'rrr3_yx_hits': 94,
-    'rrr3_strong_rounds': 817, 'rrr3_strong_hits': 167, 'rrr3_same2_rounds': 814, 'rrr3_same2_hits': 12,
-    'rrr3_turn_rounds': 821, 'rrr3_turn_hits': 14, 'rrr3_sameyx_rounds': 821, 'rrr3_sameyx_hits': 7,
-    'power_rounds': 756, 'power_hits': 489,
+    'rrr3_rounds': 867, 'rrr3_hits': 49, 'rrr3_rec_rounds': 868, 'rrr3_rec_hits': 306,
+    'rrr3_same_rounds': 840, 'rrr3_same_hits': 15, 'rrr3_wide_rounds': 827, 'rrr3_wide_hits': 90, 'rrr3_yx_rounds': 822, 'rrr3_yx_hits': 94,
+    'rrr3_strong_rounds': 818, 'rrr3_strong_hits': 167, 'rrr3_same2_rounds': 815, 'rrr3_same2_hits': 12,
+    'rrr3_turn_rounds': 822, 'rrr3_turn_hits': 14, 'rrr3_sameyx_rounds': 822, 'rrr3_sameyx_hits': 7,
+    'power_rounds': 757, 'power_hits': 490,
     # live records shown in the bottom FINAL 4 box (user, 2026-10-26); the
     # user's rules 1-5 stay on test and never feed FINAL 4
-    'rrr3_final4_rounds': 597, 'rrr3_final4_hits': 35, 'rrr3_master_rounds': 543, 'rrr3_master_hits': 3,
-    'rrr3_star1_rounds': 210, 'rrr3_star1_hits': 3,
-    'rrr3_rule1_rounds': 201, 'rrr3_rule1_hits': 9, 'rrr3_rule2_rounds': 95, 'rrr3_rule2_hits': 10,
-    'rrr3_rule3_rounds': 96, 'rrr3_rule3_hits': 6, 'rrr3_rule4_rounds': 79, 'rrr3_rule4_hits': 3,
-    'rrr3_rule5_rounds': 49, 'rrr3_rule5_hits': 24, 'rrr3_rule6_rounds': 8, 'rrr3_rule6_hits': 1,
-    'rrr3_rule7_rounds': 13, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 13, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 6, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 4, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 6, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 2, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 4, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 2, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 4, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 22, 'rrr3_rule18_hits': 2, 'rrr3_rule19_rounds': 1, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 3, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 5, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 10, 'rrr3_rule22_hits': 1, 'rrr3_rule23_rounds': 3, 'rrr3_rule23_hits': 0, 'rrr3_rule24_rounds': 1, 'rrr3_rule24_hits': 1, 'rrr3_onerow_rounds': 1, 'rrr3_onerow_hits': 1, 'rrr3_onerow5_rounds': 1, 'rrr3_onerow5_hits': 1, 'rrr3_finder_rounds': 38, 'rrr3_finder_hits': 7, 'rrr3_prime4_rounds': 40, 'rrr3_prime4_hits': 1, 'rrr3_prime10_rounds': 40, 'rrr3_prime10_hits': 5, 'rrr3_prime8_rounds': 10, 'rrr3_prime8_hits': 2,
+    'rrr3_final4_rounds': 598, 'rrr3_final4_hits': 35, 'rrr3_master_rounds': 544, 'rrr3_master_hits': 3,
+    'rrr3_star1_rounds': 211, 'rrr3_star1_hits': 3,
+    'rrr3_rule1_rounds': 202, 'rrr3_rule1_hits': 9, 'rrr3_rule2_rounds': 96, 'rrr3_rule2_hits': 10,
+    'rrr3_rule3_rounds': 97, 'rrr3_rule3_hits': 6, 'rrr3_rule4_rounds': 80, 'rrr3_rule4_hits': 3,
+    'rrr3_rule5_rounds': 50, 'rrr3_rule5_hits': 24, 'rrr3_rule6_rounds': 8, 'rrr3_rule6_hits': 1,
+    'rrr3_rule7_rounds': 13, 'rrr3_rule7_hits': 1, 'rrr3_rule8_rounds': 13, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 6, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 4, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 1, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 6, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 1, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 2, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 5, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 2, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 5, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 23, 'rrr3_rule18_hits': 2, 'rrr3_rule19_rounds': 1, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 4, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 6, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 11, 'rrr3_rule22_hits': 1, 'rrr3_rule23_rounds': 4, 'rrr3_rule23_hits': 0, 'rrr3_rule24_rounds': 1, 'rrr3_rule24_hits': 1, 'rrr3_onerow_rounds': 2, 'rrr3_onerow_hits': 1, 'rrr3_onerow5_rounds': 2, 'rrr3_onerow5_hits': 1, 'rrr3_finder_rounds': 39, 'rrr3_finder_hits': 7, 'rrr3_prime4_rounds': 41, 'rrr3_prime4_hits': 1, 'rrr3_prime10_rounds': 41, 'rrr3_prime10_hits': 5, 'rrr3_prime8_rounds': 11, 'rrr3_prime8_hits': 2,
 }
 
 
@@ -3956,14 +3956,17 @@ def _rrr_one_row(ep, after, rows, pre):
     ops = [("PICK: old ops crossed, x sign flipped, y cut switched",
             num((soy[0], -soy[1]), (not sox[0], sox[1]))),
            ("new ops xy", num(snx, sny)), ("new ops yx", num(sny, snx)),
-           ("old ops xy", num(sox, soy)), ("old ops yx", num(soy, sox))]
+           ("old ops xy", num(sox, soy)), ("old ops yx", num(soy, sox)),
+           # P12 = 92: the chosen row (Op24 61->58) old yx c+2/-1 with both
+           # signs flipped -> c-2/+1 on EP 61
+           ("old ops yx, both signs flipped", num((soy[0], -soy[1]), (sox[0], -sox[1])))]
     out = ["", f"  ONE ROW PICK  —  one Pos / source only, EP={ep:02d}, after {after:02d}",
            f"  [{pre}{pos}]{mark}  {a:02d} → {b:02d}   old {OP_ABBREV[ox]}/{OP_ABBREV[oy]}   "
            f"new {OP_ABBREV[nx]}/{OP_ABBREV[ny]}   (why: {why})"]
     out += [f"     {lab_:<54} {n_}" for lab_, n_ in ops]
-    out.append("  Replay over 293 rounds (F/N/M/K/O): PICK line 1 hit (chance 2.9), all 5 lines 14 (chance 14.2) — at chance")
+    out.append("  Replay over 293 rounds (F/N/M/K/O): PICK line 1 hit (chance 2.9), the first 5 lines 14 (chance 14.2) — at chance")
     out.append(f"  On test — live {RRR_LIVE.get('rrr3_onerow_hits', 0)} of {RRR_LIVE.get('rrr3_onerow_rounds', 0)} (PICK line),"
-               f" {RRR_LIVE.get('rrr3_onerow5_hits', 0)} of {RRR_LIVE.get('rrr3_onerow5_rounds', 0)} (all 5 lines)")
+               f" {RRR_LIVE.get('rrr3_onerow5_hits', 0)} of {RRR_LIVE.get('rrr3_onerow5_rounds', 0)} (any line)")
     return out
 
 

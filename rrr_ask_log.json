@@ -1545,5 +1545,17 @@
    2
   ],
   "result": 2
+ },
+ {
+  "time": "2026-11-01",
+  "round": "Q44",
+  "after": 2,
+  "ep": 67,
+  "kind": "result_only",
+  "entry": "result 96 = c-2/-1 on EP 67: PRIME 4 FAMILY HIT (46 tens cut), rule 5; crossed x = new y step sw, y = new x cut sw (1+1 changes, mirror of rule 28); LAST-OP 4 0 of 14",
+  "numbers": [
+   96
+  ],
+  "result": 96
  }
 ]

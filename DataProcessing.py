@@ -1034,9 +1034,14 @@ def show_final_box():
             else:
                 out.append(f"{name} stays {d}")
         return '; '.join(out)
-    rows = [["#", "Number", "Operation", "How it's made", "Votes (lists)"]]
+    # "From which Op" (user, 2026-10-31): the RRR: NEXT OPERATION row that
+    # makes each FINAL 4 number, simplest change first (number_sources)
+    rows_f = _RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else []
+    rows = [["#", "Number", "Operation", "How it's made", "From which Op", "Votes (lists)"]]
     for k_, (v, names) in enumerate(f4):
+        src_ = number_sources(ep, rows_f, v)
         rows.append(["MASTER = 1" if k_ == 0 else str(k_ + 1), f"{v:02d}", lab(v), made(v),
+                     ' · '.join(src_) if src_ else 'no row within 2 changes',
                      f"{len(names)} ({', '.join(names)})"])
     top4 = [v for v, _ in f4]
     # user rules on test (display only, never part of FINAL 4)

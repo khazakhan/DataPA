@@ -1005,5 +1005,17 @@
    50
   ],
   "result": 50
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P30",
+  "after": 50,
+  "ep": 58,
+  "kind": "result_only",
+  "entry": "result 57 = nc/-1 on EP 58; ONE ROW PICK row Op14 old xy y cut sw+flip (2 changes); no list",
+  "numbers": [
+   57
+  ],
+  "result": 57
  }
 ]

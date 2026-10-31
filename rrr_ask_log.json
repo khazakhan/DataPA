@@ -861,5 +861,17 @@
    5
   ],
   "result": 5
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P18",
+  "after": 5,
+  "ep": 35,
+  "kind": "result_only",
+  "entry": "result 60 = c-2/cut on EP 35; Op6 new xy x cut sw / Op11 old yx x flip (1 change); CharRow, WIDE; 61 (PRIME 4 FAMILY) one y step",
+  "numbers": [
+   60
+  ],
+  "result": 60
  }
 ]

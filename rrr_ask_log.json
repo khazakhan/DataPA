@@ -981,5 +981,17 @@
    60
   ],
   "result": 60
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P28",
+  "after": 60,
+  "ep": 49,
+  "kind": "result_only",
+  "entry": "result 38 = -1/-1 on EP 49; Op25 old xy y flipped (1 change); no list; user asked deep research on table 4 -> table_reach_study: reach = chance at every change level, 14% never reachable",
+  "numbers": [
+   38
+  ],
+  "result": 38
  }
 ]

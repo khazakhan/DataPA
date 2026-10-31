@@ -14,3 +14,14 @@
 - `tools/listvote_study.py` learns a weight per list. It got top4 20, top8 37, top10 42.
 - PRIME got top4 23, top8 43, top10 48, so **PRIME stays the best**. No change was made to the pick logic.
 - Rerun both studies with `live.jsonl` added once there are 30 or more recorded live rounds.
+
+## Table 4 reach study (`tools/table_reach_study.py`, 2026-10-31, 293 replay rounds, 6.6 rows per table)
+| Changes allowed | Numbers the table makes | Held the result | Chance |
+|---|---|---|---|
+| 0 (xy/yx as shown, old and new) | 21.9 | 70 (24%) | 64.1 |
+| 1 | 63.5 | 182 (62%) | 185.9 |
+| 2 | 81.4 | 241 (82%) | 238.6 |
+| 4 (every change) | 85.2 | 251 (86%) | 249.5 |
+
+At every level, the table holds the result as often as the same count of random numbers would. In 14% of rounds no row can make the result with any change.
+How many rows make the result within 1 change: 0 rows in 111 rounds, 1 row in 97, 2 rows in 49, 3 or more in 36.

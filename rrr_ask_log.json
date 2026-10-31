@@ -1209,5 +1209,17 @@
    71
   ],
   "result": 71
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q16",
+  "after": 71,
+  "ep": 8,
+  "kind": "result_only",
+  "entry": "result 47 = c-1/-1 on EP 08; Op5/Op24 new xy 1 change; NC/CUT SPECIAL, WIDE, rule 3; MASTER 49 y sign away",
+  "numbers": [
+   47
+  ],
+  "result": 47
  }
 ]

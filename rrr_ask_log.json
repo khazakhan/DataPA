@@ -1653,5 +1653,17 @@
    32
   ],
   "result": 32
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R6",
+  "after": 32,
+  "ep": 33,
+  "kind": "result_only",
+  "entry": "result 44 = +1/+1 on EP 33; Op19 (prev row) old xy, y cut sw (1 change); top10 #7, rec, finder; FINAL 4/PRIME miss; crossed x ok, y miss",
+  "numbers": [
+   44
+  ],
+  "result": 44
  }
 ]

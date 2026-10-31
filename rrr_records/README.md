@@ -30,3 +30,21 @@ How many rows make the result within 1 change: 0 rows in 111 rounds, 1 row in 97
 The nested lists that beat chance, in order: PRIME 4, then PRIME 8, PRIME 10, + PRIME 4 FAMILY, + reversed, + PRIME 10 FAMILY.
 Replay (avg size / held / chance): 4 / 23 / 11.7 · 8 / 43 / 23.4 · 10 / 48 / 29.3 · 18.3 / 76 / 53.5 · 26.4 / 101 / 77.3 · 29.1 / 114 / 85.2.
 Live counters: `rrr3_lad_<step>_rounds/_hits` in RRR_LIVE. Each step's numbers are stored in `live.jsonl` under `ladder`.
+
+## Live check at 30 rounds (P2-P31, 2026-10-31)
+Lift = hits / chance, for lists present in 10 or more rounds:
+- PRIME 4: 3 hits vs 1.2 (2.50)
+- PRIME 8: 5 vs 2.4 (2.08)
+- ONE ROW PICK: 3 vs 1.6 (1.94)
+- WIDE: 7 vs 3.9 (1.81)
+- PRIME 10: 5 vs 3.0 (1.67)
+- rule 5: 11 vs 7.7 (1.42)
+- PRIME 4 FAMILY: 3 vs 2.7 (1.12)
+- STRONG 20: 4 vs 6.0 (0.67)
+- RECOMMENDED: 6 vs 10.5 (0.57)
+- HOT 20: 3 vs 6.0 (0.50)
+- finder: 4 vs 8.0 (0.50)
+- RECOMMENDED yx: 1 vs 4.2 (0.24)
+
+The live order agrees with the replay: PRIME 4 and PRIME 8 are on top, and the wide lists are at or below chance.
+Caveat: P2-P13 were back-filled with the later script, so their ONE ROW PICK and family entries are not truly live.

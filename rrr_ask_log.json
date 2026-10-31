@@ -1017,5 +1017,17 @@
    57
   ],
   "result": 57
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P31",
+  "after": 57,
+  "ep": 99,
+  "kind": "result_only",
+  "entry": "result 53 = c+1/c-1 on EP 99; Op16 old xy x cut sw y flip (2 changes); no list; live 30-round check: PRIME 4 2.5x, PRIME 8 2.1x, wide lists <= chance",
+  "numbers": [
+   53
+  ],
+  "result": 53
  }
 ]

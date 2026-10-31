@@ -1317,5 +1317,17 @@
    29
   ],
   "result": 29
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q25",
+  "after": 29,
+  "ep": 58,
+  "kind": "last_move",
+  "entry": "user LAST-row move: result 10 = c+1/+2 on EP 58; LAST Op21 old cut/c-1 new +1/-1; x c+1 = new x cut sw; y +2 = new x step sw; HOT only",
+  "numbers": [
+   10
+  ],
+  "result": 10
  }
 ]

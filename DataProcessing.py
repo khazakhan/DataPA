@@ -946,7 +946,29 @@ EP_FINDER_NAMES = {'as': 'new ops as they are', 'yx': 'new ops crossed', 'xF': '
                    'oldF': 'old ops, both signs flipped'}
 
 
-def number_sources(ep, rows, n, limit=2):
+def lastprev_check(ep, rows, n):
+    """LAST / previous op check (user, 2026-11-01): how the number comes
+    from the LAST row's operation (new ops, or its old = previous ops) and
+    from the row before it, with the number of changes.  Display only:
+    re-ranking FINAL 4 by it lost on 374 rounds (25 -> 23 hits)."""
+    li = [i for i, r in enumerate(rows) if r[7] == 'LAST']
+    if not li:
+        return '-'
+    i = li[-1]
+    out = []
+    for tag, rr in (('LAST', rows[i]), ('prev', rows[i - 1] if i > 0 else None)):
+        if rr is None:
+            continue
+        lv, src = number_sources(ep, [rr], n, 1, True)
+        if src:
+            out.append(f"{tag} {src[0]} ({lv} change{'' if lv == 1 else 's'})")
+        else:
+            out.append(f"{tag} Op{rr[0]}: 3+ changes")
+        out[-1] = out[-1].replace(' LAST', '') if tag == 'LAST' and src else out[-1]
+    return ' · '.join(out)
+
+
+def number_sources(ep, rows, n, limit=2, level=False):
     """Which RRR: NEXT OPERATION rows make the number n on the EP, simplest
     change first (user, 2026-10-31: show 'from which Op' beside PRIME).
     Level 0 = new/old ops as they are, xy or yx; level 1 = one side sign
@@ -974,8 +996,8 @@ def number_sources(ep, rows, n, limit=2):
                             found[lvl].append(lbl)
     for lvl in (0, 1, 2):
         if found[lvl]:
-            return found[lvl][:limit]
-    return []
+            return (lvl, found[lvl][:limit]) if level else found[lvl][:limit]
+    return (None, []) if level else []
 
 
 def ep_row_finder(ep, rows):
@@ -1037,11 +1059,12 @@ def show_final_box():
     # "From which Op" (user, 2026-10-31): the RRR: NEXT OPERATION row that
     # makes each FINAL 4 number, simplest change first (number_sources)
     rows_f = _RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else []
-    rows = [["#", "Number", "Operation", "How it's made", "From which Op", "Votes (lists)"]]
+    rows = [["#", "Number", "Operation", "How it's made", "From which Op", "LAST op / previous op check", "Votes (lists)"]]
     for k_, (v, names) in enumerate(f4):
         src_ = number_sources(ep, rows_f, v)
         rows.append(["MASTER = 1" if k_ == 0 else str(k_ + 1), f"{v:02d}", lab(v), made(v),
                      ' · '.join(src_) if src_ else 'no row within 2 changes',
+                     lastprev_check(ep, rows_f, v),
                      f"{len(names)} ({', '.join(names)})"])
     top4 = [v for v, _ in f4]
     # user rules on test (display only, never part of FINAL 4)
@@ -1372,17 +1395,23 @@ def show_final_box():
         # box lines with a rule between rows, the same look as the chat tables
         room = _term_w() - 12
         w_ = [max(len(r_[i]) for r_ in [head] + rows_) for i in range(len(head))]
+        wcs = wrap_col if isinstance(wrap_col, tuple) else (wrap_col,)
+        for j in wcs[1:]:
+            w_[j] = min(w_[j], 44)
+        wrap_col = wcs[0]
         w_[wrap_col] = max(10, min(w_[wrap_col], room - sum(w_) + w_[wrap_col] - 3 * len(head)))
         rule = lambda l, m_, r: l + m_.join('─' * (x + 2) for x in w_) + r
         out = [rule('┌', '┬', '┐')]
         for i_, r_ in enumerate([head] + rows_):
             if i_:
                 out.append(rule('├', '┼', '┤'))
-            cells = [textwrap.wrap(c, w_[j]) or [''] if j == wrap_col else [c] for j, c in enumerate(r_)]
+            cells = [textwrap.wrap(c, w_[j]) or [''] if j in wcs else [c] for j, c in enumerate(r_)]
             for k2 in range(max(len(c) for c in cells)):
                 out.append('│ ' + ' │ '.join((c[k2] if k2 < len(c) else '').ljust(x) for c, x in zip(cells, w_)) + ' │')
         return out + [rule('└', '┴', '┘')]
-    _RRR3_PREV['sum_final4'] = table(rows[0], rows[1:], 3)
+    _RRR3_PREV['sum_final4'] = table(rows[0], rows[1:], (3, 5)) + [
+        "  LAST op / previous op check: LAST row (new ops or its old = previous ops) and the row before it; fewest changes.",
+        "  Tested on 374 rounds (F N M K O P Q R): ranking FINAL 4 by it held 23 vs 25 now, so it is a check, not the ranking."]
     _RRR3_PREV['sum_head'] = (fb['after'], ep)
     body += _RRR3_PREV['sum_final4']
     # every number with its operation on the EP (user, 2026-10-26: "i need
@@ -4297,6 +4326,11 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     _RRR_ASK.update(ep=ep, prefix=pos_prefix,
                     rows=[(p_, s_[1], s_[2], x_, y_, nx_, ny_, s_[5])
                           for (p_, nx_, ny_, x_, y_), s_ in zip(row_ops, src)])
+    if os.environ.get('RRR3_ROWS'):
+        import json
+        with open(os.environ['RRR3_ROWS'], 'w') as fh:
+            json.dump({'ep': ep, 'rows': [[p_, a_, b_, OP_ABBREV[x_], OP_ABBREV[y_], OP_ABBREV[nx_], OP_ABBREV[ny_], t_]
+                                          for p_, a_, b_, x_, y_, nx_, ny_, t_ in _RRR_ASK['rows']]}, fh)
     body += ['─' * len(head),
              "  new x = old y, cut switched + sign flipped   |   new y = old x, cut switched, one step down",
              "  LAST = the chain's own last step.  Backtest (57,662 positions): table hit 6.42% vs 6.44% chance.",

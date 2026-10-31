@@ -91,3 +91,11 @@ Replay (293 rounds):
 | PRIME 4 family | 59 | 15.2 | 44.4 |
 
 No 4-number change beats PRIME 4. The misses can only be covered by playing more numbers (the PLAY LADDER family step), not by a sharper 4.
+
+## LAST op / previous op study (2026-11-01, tools/lastprev_collect.py + lastprev_study.py)
+User asked to check FINAL 4 with the last operation and its previous operation. 374 rounds (F N M K O P Q R).
+cost(v) = fewest changes (sign flip / cut switch / step switch) for LAST row new or old ops (xy or yx), and the row before it.
+- FINAL 4 now: 25 of 374 (6.7%).
+- Re-rank top 8/10/20/40 by LAST cost: 23 / 22 / 20 / 17. With prev row too: 20 / 21 / 17 / 13. LAST new only: 19 / 19 / 14 / 10.
+- Result inside cost<=0/1/2 sets: LAST 3.5/23.0/60.7% vs set size 3.8/21.7/57.5%; LAST+prev 7.8/39.3/79.9% vs 7.5/38.6/80.6% -> chance.
+Decision: shown as a "LAST op / previous op check" column in FINAL 4, ranking unchanged.

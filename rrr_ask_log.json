@@ -1569,5 +1569,17 @@
    79
   ],
   "result": 79
+ },
+ {
+  "time": "2026-11-01",
+  "round": "Q46",
+  "after": 79,
+  "ep": 16,
+  "kind": "result_only",
+  "entry": "result 68 = cut/+2 on EP 16: ladder +PRIME 10 FAMILY HIT, REC, finder, top40; Op10 old yx as is; crossed x new y as is; LAST-OP 4 0 of 16",
+  "numbers": [
+   68
+  ],
+  "result": 68
  }
 ]

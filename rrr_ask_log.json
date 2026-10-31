@@ -1269,5 +1269,17 @@
    31
   ],
   "result": 31
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q21",
+  "after": 31,
+  "ep": 50,
+  "kind": "user_pick",
+  "entry": "user: 'Using Op26, result 89, make rule': Op26 55->96 starts at EP units cut (55); new yx -2/c-1 with both cuts switched -> c-2/-1 = 89 -> RULE 26; lists STRONG, WIDE",
+  "numbers": [
+   89
+  ],
+  "result": 89
  }
 ]

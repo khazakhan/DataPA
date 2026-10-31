@@ -32,7 +32,7 @@ def collect(ds):
     # rules on test
     for m in re.finditer(r'│ (\d+)\. [^│]*│ ([^│]*)│', blk):
         r = int(m.group(1)); txt = m.group(2)
-        if r <= 25 and txt.strip() and not txt.strip().startswith('-'):
+        if r <= 26 and txt.strip() and not txt.strip().startswith('-'):
             ns = [int(x) for x in re.findall(r'(\d\d) \(', txt)] or ([] if r != 5 else nums(txt))
             if r == 5: ns = nums(txt)
             src.setdefault(f'rule{r}', set()).update(ns)

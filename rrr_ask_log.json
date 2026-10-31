@@ -1557,5 +1557,17 @@
    96
   ],
   "result": 96
+ },
+ {
+  "time": "2026-11-01",
+  "round": "Q45",
+  "after": 96,
+  "ep": 76,
+  "kind": "result_only",
+  "entry": "result 79 = nc/c-2 on EP 76; Op25 LAST old xy y flip (1 change); = LAST row source 79 (1 of 75 live, chance); CharRow only; LAST-OP 4 0 of 15",
+  "numbers": [
+   79
+  ],
+  "result": 79
  }
 ]

@@ -1257,5 +1257,17 @@
    53
   ],
   "result": 53
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q20",
+  "after": 53,
+  "ep": 25,
+  "kind": "result_only",
+  "entry": "result 31 = +1/c+1 on EP 25: PRIME 8 HIT (#8) + PRIME 4 FAMILY (81 tens cut); Op3 new yx as is; table, REC, top20, finder, rules 1/5",
+  "numbers": [
+   31
+  ],
+  "result": 31
  }
 ]

@@ -705,5 +705,17 @@
    30
   ],
   "result": 30
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P6",
+  "after": 30,
+  "ep": 30,
+  "kind": "result_only",
+  "entry": "result 07 = c+2/c+2 on EP 30 = Op20 LAST xy as is; PRIME 8 #8 HIT (R5), WIDE, top 30, RRR table",
+  "numbers": [
+   7
+  ],
+  "result": 7
  }
 ]

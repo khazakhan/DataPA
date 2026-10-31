@@ -1593,5 +1593,17 @@
    67
   ],
   "result": 67
+ },
+ {
+  "time": "2026-11-01",
+  "round": "Q48",
+  "after": 67,
+  "ep": 28,
+  "kind": "result_only",
+  "entry": "result 55 = c-2/c+2 on EP 28; Op10 new xy y flip (1 change); crossed y = new x step sw (1 change); no list; LAST-OP 4 0 of 18",
+  "numbers": [
+   55
+  ],
+  "result": 55
  }
 ]

@@ -993,5 +993,17 @@
    38
   ],
   "result": 38
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P29",
+  "after": 38,
+  "ep": 87,
+  "kind": "result_only",
+  "entry": "result 50 = c+2/c-2 on EP 87; NO row can make it with any change (the 14% unreachable case); no list, every ladder step missed",
+  "numbers": [
+   50
+  ],
+  "result": 50
  }
 ]

@@ -25,3 +25,8 @@
 
 At every level, the table holds the result as often as the same count of random numbers would. In 14% of rounds no row can make the result with any change.
 How many rows make the result within 1 change: 0 rows in 111 rounds, 1 row in 97, 2 rows in 49, 3 or more in 36.
+
+## PLAY LADDER (in the script since 2026-10-31)
+The nested lists that beat chance, in order: PRIME 4, then PRIME 8, PRIME 10, + PRIME 4 FAMILY, + reversed, + PRIME 10 FAMILY.
+Replay (avg size / held / chance): 4 / 23 / 11.7 · 8 / 43 / 23.4 · 10 / 48 / 29.3 · 18.3 / 76 / 53.5 · 26.4 / 101 / 77.3 · 29.1 / 114 / 85.2.
+Live counters: `rrr3_lad_<step>_rounds/_hits` in RRR_LIVE. Each step's numbers are stored in `live.jsonl` under `ladder`.

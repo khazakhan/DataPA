@@ -1423,6 +1423,32 @@ def show_final_box():
     body += table(["#", "PRIME number", "tens cut", "units cut", "both cut", "reversed (new ones)"], frow, 3)
     _RRR3_PREV['prime4fam'] = sorted(fseen)
     _RRR3_PREV['prime4rev'] = sorted(rseen)
+    # PLAY LADDER (2026-10-31, from the research the user asked for): the
+    # lists that beat chance on replay, nested, with what each step adds.
+    # Replay 293 rounds of series F/N/M/K/O (size / held / chance):
+    #   PRIME 4 4 / 23 / 11.7; PRIME 8 8 / 43 / 23.4; PRIME 10 10 / 48 / 29.3;
+    #   + PRIME 4 FAMILY 18.3 / 76 / 53.5; + reversed 26.4 / 101 / 77.3;
+    #   + PRIME 10 FAMILY 29.1 / 114 / 85.2
+    lad, have = [], set()
+    f10 = {cf(n_, t, u) for n_ in prime for t in (0, 1) for u in (0, 1)}
+    for nm, ns, rp in (("PRIME 4", prime[:4], "23 of 293 (7.8%), chance 11.7"),
+                       ("PRIME 8", prime[:8], "43 (14.7%), chance 23.4"),
+                       ("PRIME 10", prime, "48 (16.4%), chance 29.3"),
+                       ("+ PRIME 4 FAMILY", sorted(fseen), "76 (25.9%), chance 53.5"),
+                       ("+ reversed", sorted(rseen), "101 (34.5%), chance 77.3"),
+                       ("+ PRIME 10 FAMILY", sorted(f10), "114 (38.9%), chance 85.2")):
+        add = [v for v in dict.fromkeys(ns) if v not in have]
+        have |= set(add)
+        key = nm.strip('+ ').lower().replace(' ', '')
+        lad.append([nm, ' '.join(f"{v:02d}" for v in add) or '-', f"{len(have)}", rp,
+                    f"{RRR_LIVE.get(f'rrr3_lad_{key}_hits', 0)} of {RRR_LIVE.get(f'rrr3_lad_{key}_rounds', 0)}"])
+        _RRR3_PREV.setdefault('ladder', {})[key] = sorted(have)
+    body += ["", "PLAY LADDER — the only lists that beat chance on replay; each step adds numbers (total = numbers to play)"]
+    body += table(["Step", "Adds", "Total", "Replay: held / chance", "Live"], lad, 3)
+    body += ["  Research 2026-10-31 (293 replay rounds): no single row / Op pick beats chance (ONE ROW PICK, finder,",
+             "  trained row picker, doubled row, rules 6-25); table 4 holds the result exactly as often as the same",
+             "  count of random numbers at 0/1/2/all changes (24/62/82/86%); 14% of results no row can make.",
+             "  So no list can promise a hit: pick a ladder step by how many numbers you want to play."]
     finder = ep_row_finder(ep, _RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else [])
     body += ["", "EP ROW FINDER — display only: in replay over 293 rounds it held the result at chance (79 vs 76.5)",
              f"EP ROW FINDER (EP {ep:02d}): rows starting at the EP or its cut forms first, then one step away;"
@@ -3421,7 +3447,7 @@ RRR_LIVE = {
     'rrr3_rule1_rounds': 218, 'rrr3_rule1_hits': 9, 'rrr3_rule2_rounds': 112, 'rrr3_rule2_hits': 12,
     'rrr3_rule3_rounds': 113, 'rrr3_rule3_hits': 7, 'rrr3_rule4_rounds': 96, 'rrr3_rule4_hits': 3,
     'rrr3_rule5_rounds': 66, 'rrr3_rule5_hits': 29, 'rrr3_rule6_rounds': 15, 'rrr3_rule6_hits': 1,
-    'rrr3_rule7_rounds': 25, 'rrr3_rule7_hits': 2, 'rrr3_rule8_rounds': 25, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 11, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 8, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 2, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 10, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 2, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 3, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 16, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 2, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 11, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 39, 'rrr3_rule18_hits': 2, 'rrr3_rule19_rounds': 8, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 5, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 11, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 26, 'rrr3_rule22_hits': 1, 'rrr3_rule23_rounds': 10, 'rrr3_rule23_hits': 0, 'rrr3_rule24_rounds': 2, 'rrr3_rule25_rounds': 2, 'rrr3_rule25_hits': 0, 'rrr3_rule24_hits': 1, 'rrr3_onerow_rounds': 18, 'rrr3_onerow_hits': 1, 'rrr3_onerow5_rounds': 18, 'rrr3_prime4fam_rounds': 13, 'rrr3_prime4fam_hits': 2, 'rrr3_prime4rev_rounds': 5, 'rrr3_prime4rev_hits': 0, 'rrr3_onerow5_hits': 1, 'rrr3_finder_rounds': 55, 'rrr3_finder_hits': 10, 'rrr3_prime4_rounds': 57, 'rrr3_prime4_hits': 3, 'rrr3_prime10_rounds': 57, 'rrr3_prime10_hits': 8, 'rrr3_prime8_rounds': 27, 'rrr3_prime8_hits': 5,
+    'rrr3_rule7_rounds': 25, 'rrr3_rule7_hits': 2, 'rrr3_rule8_rounds': 25, 'rrr3_rule8_hits': 2, 'rrr3_rule9_rounds': 11, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 8, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 2, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 10, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 2, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 3, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 16, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 2, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 11, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 39, 'rrr3_rule18_hits': 2, 'rrr3_rule19_rounds': 8, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 5, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 11, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 26, 'rrr3_rule22_hits': 1, 'rrr3_rule23_rounds': 10, 'rrr3_rule23_hits': 0, 'rrr3_rule24_rounds': 2, 'rrr3_rule25_rounds': 2, 'rrr3_rule25_hits': 0, 'rrr3_rule24_hits': 1, 'rrr3_onerow_rounds': 18, 'rrr3_onerow_hits': 1, 'rrr3_onerow5_rounds': 18, 'rrr3_prime4fam_rounds': 13, 'rrr3_prime4fam_hits': 2, 'rrr3_prime4rev_rounds': 5, 'rrr3_lad_prime4_rounds': 0, 'rrr3_lad_prime4_hits': 0, 'rrr3_lad_prime8_rounds': 0, 'rrr3_lad_prime8_hits': 0, 'rrr3_lad_prime10_rounds': 0, 'rrr3_lad_prime10_hits': 0, 'rrr3_lad_prime4family_rounds': 0, 'rrr3_lad_prime4family_hits': 0, 'rrr3_lad_reversed_rounds': 0, 'rrr3_lad_reversed_hits': 0, 'rrr3_lad_prime10family_rounds': 0, 'rrr3_lad_prime10family_hits': 0, 'rrr3_prime4rev_hits': 0, 'rrr3_onerow5_hits': 1, 'rrr3_finder_rounds': 55, 'rrr3_finder_hits': 10, 'rrr3_prime4_rounds': 57, 'rrr3_prime4_hits': 3, 'rrr3_prime10_rounds': 57, 'rrr3_prime10_hits': 8, 'rrr3_prime8_rounds': 27, 'rrr3_prime8_hits': 5,
 }
 
 

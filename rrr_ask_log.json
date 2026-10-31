@@ -1281,5 +1281,17 @@
    89
   ],
   "result": 89
+ },
+ {
+  "time": "2026-10-31",
+  "round": "Q22",
+  "after": 89,
+  "ep": 22,
+  "kind": "user_pick",
+  "entry": "user: 'result 03, Op15 LAST, from new y -2 and from new x +1': LAST row new ops crossed, x = new y +2 sign flipped, y = new x c+1 cut switched -> -2/+1 = 03 -> RULE 27",
+  "numbers": [
+   3
+  ],
+  "result": 3
  }
 ]

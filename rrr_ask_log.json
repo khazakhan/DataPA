@@ -1737,5 +1737,17 @@
    2
   ],
   "result": 2
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R13",
+  "after": 2,
+  "ep": 21,
+  "kind": "result_only",
+  "entry": "result 27 = nc/c+1 on EP 21; Op16 old yx x cut sw (1); NC/CUT SPECIAL held; rank 16; FINAL 4 miss; crossed miss",
+  "numbers": [
+   27
+  ],
+  "result": 27
  }
 ]

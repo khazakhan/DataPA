@@ -957,5 +957,17 @@
    71
   ],
   "result": 71
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P26",
+  "after": 71,
+  "ep": 61,
+  "kind": "result_only",
+  "entry": "result 63 = nc/+2 on EP 61; Op11 old xy / Op18 old yx both cuts sw (2 changes); WIDE only",
+  "numbers": [
+   63
+  ],
+  "result": 63
  }
 ]

@@ -741,5 +741,17 @@
    89
   ],
   "result": 89
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P9",
+  "after": 89,
+  "ep": 58,
+  "kind": "result_only",
+  "entry": "result 78 = +2/nc on EP 58; Op8 50->07 old yx both cuts switched (2 changes); STRONG 20, REC, top40 #23, rule 5; FINAL 4 #4 28 = c+2/nc (x cut away)",
+  "numbers": [
+   78
+  ],
+  "result": 78
  }
 ]

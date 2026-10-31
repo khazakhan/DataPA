@@ -657,5 +657,17 @@
    54
   ],
   "result": 54
+ },
+ {
+  "time": "2026-10-31",
+  "round": "P2",
+  "after": 14,
+  "ep": 4,
+  "kind": "result_only",
+  "entry": "result 33 = c-2/-1 on EP 04 = OCJP MASTER = FINAL 4 #1 = PRIME 4 #1; also Op8 yx in RRR table, same op again, REC, finder Op8",
+  "numbers": [
+   33
+  ],
+  "result": 33
  }
 ]

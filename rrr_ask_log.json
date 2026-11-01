@@ -1941,5 +1941,17 @@
    76
   ],
   "result": 76
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R30",
+  "after": 76,
+  "ep": 78,
+  "kind": "result_only",
+  "entry": "result 03 = c-2/cut on EP 78; PRIME 4 FAMILY (tens cut of 53), rule5, charrow; no row; crossed x ok, y miss",
+  "numbers": [
+   3
+  ],
+  "result": 3
  }
 ]

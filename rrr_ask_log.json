@@ -1857,5 +1857,17 @@
    41
   ],
   "result": 41
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R23",
+  "after": 41,
+  "ep": 11,
+  "kind": "result_only",
+  "entry": "result 48 = c-2/c+2 on EP 11; LAST old x on both digits (x flipped); no row, no list; crossed miss",
+  "numbers": [
+   48
+  ],
+  "result": 48
  }
 ]

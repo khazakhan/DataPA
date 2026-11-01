@@ -2119,5 +2119,17 @@
    51
   ],
   "result": 51
+ },
+ {
+  "time": "2026-11-02",
+  "round": "S3",
+  "after": 51,
+  "ep": 43,
+  "kind": "result_only",
+  "entry": "result 00 = c+1/c+2 on EP 43; LAST new x on both digits; outside top 40; wide only; crossed y ok, x miss",
+  "numbers": [
+   0
+  ],
+  "result": 0
  }
 ]

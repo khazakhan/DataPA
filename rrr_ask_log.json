@@ -2025,5 +2025,17 @@
    45
   ],
   "result": 45
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R37",
+  "after": 45,
+  "ep": 87,
+  "kind": "result_only",
+  "entry": "result 04 = +2/c+2 on EP 87 = Op1 old xy exact; outside top 40; finder only; crossed miss",
+  "numbers": [
+   4
+  ],
+  "result": 4
  }
 ]

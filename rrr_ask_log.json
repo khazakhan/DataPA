@@ -1869,5 +1869,17 @@
    48
   ],
   "result": 48
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R24",
+  "after": 48,
+  "ep": 1,
+  "kind": "result_only",
+  "entry": "result 30 = c-2/-1 on EP 01 = Op6 new xy / Op10 old xy exact; FINAL 4 #2 + PRIME 4 #2 HIT; series R FINAL 4 3/24",
+  "numbers": [
+   30
+  ],
+  "result": 30
  }
 ]

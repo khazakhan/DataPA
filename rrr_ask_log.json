@@ -1797,5 +1797,17 @@
    8
   ],
   "result": 8
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R18",
+  "after": 8,
+  "ep": 77,
+  "kind": "result_only",
+  "entry": "result 45 = c+2/-2 on EP 77; only rule 28 (crossed, y+flip variant) held, 2 of 34; outside top 40; grid miss on y",
+  "numbers": [
+   45
+  ],
+  "result": 45
  }
 ]

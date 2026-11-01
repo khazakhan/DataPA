@@ -1220,6 +1220,7 @@ def show_final_box():
                                 (" y+flip", (cx0, -sw28[kx0])), (" y+cut+flip", (not cx0, -sw28[kx0]))):
             n28 = _op_apply(ex, xc, xk) * 10 + _op_apply(ey, yc, yk)
             r28.append(f"{n28:02d} ({_op_label(xc, xk)}/{_op_label(yc, yk)}){lab28}")
+    _RRR3_PREV['r28'] = r28
     # rule 19 "gun shot 2" (user, 2026-10-31, F65 after 58 EP 73): the EP
     # with both digits cut (73 -> 28); the row whose FIRST source number is
     # that (Op33 28->61), its OLD ops as they are, on the EP: c-1/c-2 -> 16
@@ -4144,6 +4145,7 @@ def _rrr_lastop4(ep, rows, pre):
         base, rd, fx, fy = lab.split('.')
         return f"{base} {rd}, x {names[fx[1:] or '-']}, y {names[fy[1:] or '-']}"
     _RRR3_PREV['lastop'] = [n for n, _, _ in nums[:8]]
+    _RRR3_PREV['lastop_full'] = [(n, op, say(lab)) for n, op, lab in nums[:8]]
     out = ["", f"  LAST-OP 4  —  strongest 4 from the LAST row [{pre}{last[0]}] {last[1]:02d} → {last[2]:02d}, EP={ep:02d}"
                 f"   (replay by series: top 4 held 19, chance 11.7; top 8 held 42, chance 23.4)",
            f"  live: top 4 {RRR_LIVE.get('rrr3_lastop4_hits', 0)} of {RRR_LIVE.get('rrr3_lastop4_rounds', 0)},"
@@ -4187,6 +4189,8 @@ def _rrr_crossed(ep, rows):
     both = [(left[i] if i < len(left) else "").ljust(lw) + "   " + (right[i] if i < len(right) else "")
             for i in range(max(len(left), len(right)))]
     _RRR3_PREV['crossgrid'] = nums
+    _RRR3_PREV['crossed_view'] = (f"Op{pos} LAST {a:02d} → {b:02d}, new {OP_ABBREV[nx]}/{OP_ABBREV[ny]}",
+                                  h, rws, xo, yo)
     return ([f"  Op{pos} LAST {a:02d} → {b:02d}, old {OP_ABBREV[ox]}/{OP_ABBREV[oy]}, new {OP_ABBREV[nx]}/{OP_ABBREV[ny]}"
              + " " * max(1, lw + 1 - len(f"  Op{pos} LAST {a:02d} → {b:02d}, old {OP_ABBREV[ox]}/{OP_ABBREV[oy]}, new {OP_ABBREV[nx]}/{OP_ABBREV[ny]}"))
              + "  NUMBERS FORMED (x option × y option)"] + both +
@@ -4204,6 +4208,43 @@ def _after_tag(a):
     p = fl[-2]
     return (f"after {a:02d} ({p:02d}→{a:02d} "
             f"{OP_ABBREV[find_op(p // 10, a // 10)]}/{OP_ABBREV[find_op(p % 10, a % 10)]})")
+
+
+_CHAT_REAL_OUT = None
+
+
+def _chat_mute():
+    """--chat / RRR_CHAT=1 (user, 2026-11-02: "same to same" as the chat):
+    hold back the long page and print only the chat view at the end."""
+    global _CHAT_REAL_OUT
+    if _CHAT_REAL_OUT is None and os.environ.get('RRR_CHAT'):
+        import io
+        _CHAT_REAL_OUT = sys.stdout
+        sys.stdout = io.StringIO()
+
+
+def _chat_unmute():
+    global _CHAT_REAL_OUT
+    if _CHAT_REAL_OUT is not None:
+        sys.stdout = _CHAT_REAL_OUT
+        _CHAT_REAL_OUT = None
+
+
+def _box(head, rows, wrap=None, cap=46):
+    """Box table in the chat layout; columns in `wrap` are wrapped at `cap`."""
+    rows = [[str(c) for c in r] for r in rows]
+    w = [max(len(r[i]) for r in [head] + rows) for i in range(len(head))]
+    for j in (wrap or ()):
+        w[j] = min(w[j], cap)
+    rule = lambda l, m, r: l + m.join('─' * (x + 2) for x in w) + r
+    out = [rule('┌', '┬', '┐')]
+    for k, r in enumerate([head] + rows):
+        if k:
+            out.append(rule('├', '┼', '┤'))
+        cells = [textwrap.wrap(c, w[j]) or [''] if j in (wrap or ()) else [c] for j, c in enumerate(r)]
+        for t in range(max(len(c) for c in cells)):
+            out.append('│ ' + ' │ '.join((c[t] if t < len(c) else '').ljust(x) for c, x in zip(cells, w)) + ' │')
+    return out + [rule('└', '┴', '┘')]
 
 
 def show_round_summary():
@@ -4230,6 +4271,68 @@ def show_round_summary():
     for l_ in body:
         print(f"  {g}┃{rst} {l_:<{iw - 2}} {g}┃{rst}")
     print(f"  {g}┗{'━' * iw}┛{rst}")
+
+
+def show_chat_view():
+    """CHAT VIEW: the same layout as the chat round notes (user,
+    2026-10-31 / 2026-11-02 "same to same"): table 4, CROSSED options and
+    NUMBERS FORMED, LAST-OP 4, the question, PRIME, PLAY LADDER and OCJP
+    FINAL 4 with operations, each under an "after NN (op), EP" heading."""
+    _chat_unmute()
+    P = _RRR3_PREV
+    if 'sum_final4' not in P:
+        return
+    a, ep = P.get('sum_head', (0, 0))
+    tag = f"{_after_tag(a)}, EP {ep:02d}"
+    ex, ey = ep // 10, ep % 10
+    B, R = "\033[1;36m", "\033[0m"
+    def head(t):
+        print(f"\n  {B}■ {t}{R}\n")
+    def show(lines):
+        for l_ in lines:
+            print("  " + l_)
+    print(f"\n  {B}{'━' * 70}{R}\n  {B}CHAT VIEW (same as the chat notes) — {tag}{R}\n  {B}{'━' * 70}{R}")
+    rows = _RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else []
+    if rows:
+        head(f"4. RRR: NEXT OPERATION: {tag}")
+        t4 = []
+        for pos, s_a, s_b, ox, oy, nx, ny, mark in rows:
+            xy = apply_op(ex, nx) * 10 + apply_op(ey, ny)
+            yx = apply_op(ex, ny) * 10 + apply_op(ey, nx)
+            t4.append([f"Op{pos}{' LAST' if mark == 'LAST' else ''}", f"{s_a:02d} → {s_b:02d}",
+                       OP_ABBREV[ox], OP_ABBREV[oy], OP_ABBREV[nx], OP_ABBREV[ny],
+                       f"{xy:02d} ({OP_ABBREV[nx]}/{OP_ABBREV[ny]})", f"{yx:02d} ({OP_ABBREV[ny]}/{OP_ABBREV[nx]})"])
+        show(_box(["Pos", "Source", "old x", "old y", "new x", "new y", "xy (op)", "yx (op)"], t4))
+    cv = P.get('crossed_view')
+    if cv:
+        title, h, rws, xo, yo = cv
+        head(f"CROSSED options + NUMBERS FORMED: {title}, {tag}")
+        show(_box(h, rws))
+        xs = list(dict.fromkeys(xo)); ys = list(dict.fromkeys(yo))
+        grid = [[x_] + [f"{x_.split()[0]}{y_.split()[0]}" for y_ in ys] for x_ in xs]
+        print()
+        show(_box(["x \\ y"] + ys, grid))
+        nums = P.get('crossgrid', [])
+        print(f"\n  {len(nums)} different numbers. Live {RRR_LIVE['rrr3_crossgrid_hits']} of "
+              f"{RRR_LIVE['rrr3_crossgrid_rounds']} (chance about {RRR_LIVE['rrr3_crossgrid_rounds'] * len(nums) / 100:.1f}).")
+        if P.get('r28'):
+            print(f"  Rule 28 (crossed) picks: {' · '.join(P['r28'])}"
+                  f"   ({RRR_LIVE.get('rrr3_rule28_hits', 0)} of {RRR_LIVE.get('rrr3_rule28_rounds', 0)})")
+    lo = P.get('lastop_full')
+    if lo:
+        head(f"LAST-OP 4: {tag}   (live top 4 {RRR_LIVE.get('rrr3_lastop4_hits', 0)} of "
+             f"{RRR_LIVE.get('rrr3_lastop4_rounds', 0)}, top 8 {RRR_LIVE.get('rrr3_lastop8_hits', 0)} of "
+             f"{RRR_LIVE.get('rrr3_lastop8_rounds', 0)})")
+        show(_box(["#", "Number", "Op", "Cell"],
+                  [[f"{'★ ' if i < 4 else ''}{i + 1}", f"{n:02d}", op, c] for i, (n, op, c) in enumerate(lo)]))
+        print(f"\n  \033[1mWhich ops (x and y) do you pick?\033[0m")
+    for title, key in ((f"PRIME: {tag}", 'sum_prime'), (f"PLAY LADDER: {tag}", 'sum_ladder'),
+                       (f"OCJP FINAL 4 with operations: {tag}", 'sum_final4')):
+        lines = [l for l in P.get(key, []) if l.strip()]
+        if lines:
+            head(title)
+            show(lines)
+    print()
 
 
 def _rrr_last_menu(ep, rows, pre):
@@ -7806,6 +7909,7 @@ def header(title):
 
 def run(data_source, user_x_op=None, user_y_op=None):
     _SUPER_SRC.clear()
+    _chat_mute()
     # Accept pre-parsed list[list[int]] or raw iterable of strings
     if data_source and isinstance(data_source, list) and isinstance(data_source[0], list):
         rows = data_source
@@ -8431,6 +8535,7 @@ def run(data_source, user_x_op=None, user_y_op=None):
     show_three_box()
     show_final_box()
     show_round_summary()
+    show_chat_view()
     rrr_ask_ops()
     print()
     return root, ops_list, _last_top4, _last_scores
@@ -8690,13 +8795,20 @@ def main():
         '--result', metavar='NUM', type=int,
         help='Result number (00-99) to reverse-find the operation for'
     )
+    parser.add_argument(
+        '--chat', action='store_true',
+        help='Show only the round summary in the chat layout (same tables as the chat notes)'
+    )
     args = parser.parse_args()
+    if args.chat:
+        os.environ['RRR_CHAT'] = '1'
 
     # ── File mode ─────────────────────────────────────────────────────────────
     if args.datafile:
         try:
             with open(args.datafile, 'r') as f:
                 root, ops_list, last_top4, last_scores = run(f, args.x_op, args.y_op)
+            _chat_unmute()
             if args.result is not None:
                 show_result_analysis(root, args.result, ops_list, last_scores, last_top4)
         except FileNotFoundError:
@@ -8718,6 +8830,7 @@ def main():
             continue
 
         root, ops_list, last_top4, last_scores = run(rows, args.x_op, args.y_op)
+        _chat_unmute()
 
         if root is None:
             continue

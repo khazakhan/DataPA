@@ -131,3 +131,6 @@ Decision: nothing new beats FINAL 4's slots; no change to the ranking.
 | Script FINAL 4 | 29 | 16.5 | keeps its edge (series R 5 of 41) |
 | Script top 8 | 50 | 33.0 | keeps its edge |
 LAST/prev re-rank: 28 vs 29 (lost). Booster recipes held-out: 4 → 13 (chance 16.2), 8 → 33 (32.0). Decision: no new rule; FINAL 4 ranking unchanged; notes updated to 412 rounds.
+
+## Chat view for local runs (2026-11-02)
+User asked that a local run shows the same tables as the chat. The page keeps everything it had (ROUND SUMMARY box included) and now ends with a CHAT VIEW: table 4, CROSSED options + NUMBERS FORMED, rule 28 picks, LAST-OP 4 table, the question, PRIME, PLAY LADDER, OCJP FINAL 4 — each headed "after NN (prev→NN op), EP". `python3 DataProcessing.py --chat` (or RRR_CHAT=1) prints only the chat view.

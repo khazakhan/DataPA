@@ -2001,5 +2001,17 @@
    51
   ],
   "result": 51
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R35",
+  "after": 51,
+  "ep": 74,
+  "kind": "result_only",
+  "entry": "result 89 = +1/cut on EP 74; no row, no list; crossed y ok, x miss",
+  "numbers": [
+   89
+  ],
+  "result": 89
  }
 ]

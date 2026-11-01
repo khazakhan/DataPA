@@ -2061,5 +2061,17 @@
    47
   ],
   "result": 47
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R40",
+  "after": 47,
+  "ep": 1,
+  "kind": "result_only",
+  "entry": "result 10 = +1/-1 on EP 01 (EP reversed); no row; rank 15; FINAL 4 miss; crossed miss",
+  "numbers": [
+   10
+  ],
+  "result": 10
  }
 ]

@@ -116,3 +116,7 @@ Prompted by R6 (44) and R7 (11), both made by the row before LAST from its old o
 - repeat of last 5/10/20 numbers, most common x/y ops (held-out), last round's op pair again, hot tens/units digits: all at or below chance.
 - the script's own ranking: top 4 25 (chance 15.1), top 8 44 (30.2), top 10 48 (37.7) above chance; top 20/40 at chance.
 Decision: nothing new beats FINAL 4's slots; no change to the ranking.
+
+## EP-row follower check (2026-11-01, after R41 = 97 via Op29 04 → 97)
+- A table-4 row that starts at the EP → its second number: 101 numbers offered in 89 of 377 rounds, 3 hits (chance about 1.0). Too few to trust; watch it.
+- Whole data, every number that followed the EP: 89 hits vs 101.8 chance → nothing.

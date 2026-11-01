@@ -2073,5 +2073,17 @@
    10
   ],
   "result": 10
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R41",
+  "after": 10,
+  "ep": 4,
+  "kind": "result_only",
+  "entry": "result 97 = -1/c-2 on EP 04 = Op29 04->97 old xy exact (row starting at EP, 2nd number); outside top 40; EP-row follower check 3/101 offered (chance 1.0)",
+  "numbers": [
+   97
+  ],
+  "result": 97
  }
 ]

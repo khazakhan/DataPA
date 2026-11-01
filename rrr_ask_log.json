@@ -1809,5 +1809,17 @@
    45
   ],
   "result": 45
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R19",
+  "after": 45,
+  "ep": 33,
+  "kind": "result_only",
+  "entry": "result 87 = cut/c-1 on EP 33; LAST old y as is; Op14 old yx 2 changes; rank 34; all lists miss; FINAL 4 From-which-Op column wraps",
+  "numbers": [
+   87
+  ],
+  "result": 87
  }
 ]

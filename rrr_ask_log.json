@@ -1845,5 +1845,17 @@
    91
   ],
   "result": 91
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R22",
+  "after": 91,
+  "ep": 95,
+  "kind": "result_only",
+  "entry": "result 41 = cut/c+1 on EP 95; Op26 old xy x cut sw (1); no list held it; crossed miss",
+  "numbers": [
+   41
+  ],
+  "result": 41
  }
 ]

@@ -2143,5 +2143,17 @@
    25
   ],
   "result": 25
+ },
+ {
+  "time": "2026-11-02",
+  "round": "S5",
+  "after": 25,
+  "ep": 60,
+  "kind": "result_only",
+  "entry": "result 72 = +1/+2 on EP 60; rule28 y+flip (4/60) + PRIME 4 FAMILY (both-cut of 27) + rule5; outside top 40; grid miss on y",
+  "numbers": [
+   72
+  ],
+  "result": 72
  }
 ]

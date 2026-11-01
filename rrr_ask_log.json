@@ -1881,5 +1881,17 @@
    30
   ],
   "result": 30
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R25",
+  "after": 30,
+  "ep": 7,
+  "kind": "result_only",
+  "entry": "result 81 = -2/c-1 on EP 07; PRIME 4 FAMILY (both-cut of 36) + rule5; Op4 old yx x flip / Op25 prev old xy y flip (1); crossed x ok, y miss",
+  "numbers": [
+   81
+  ],
+  "result": 81
  }
 ]

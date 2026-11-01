@@ -1965,5 +1965,17 @@
    38
   ],
   "result": 38
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R32",
+  "after": 38,
+  "ep": 83,
+  "kind": "result_only",
+  "entry": "result 54 = c+2/+1 on EP 83; LAST-OP 4 #1 hit (2/49) + rule8; outside top 40; crossed y ok, x miss",
+  "numbers": [
+   54
+  ],
+  "result": 54
  }
 ]

@@ -1893,5 +1893,17 @@
    81
   ],
   "result": 81
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R26",
+  "after": 81,
+  "ep": 63,
+  "kind": "result_only",
+  "entry": "result 39 = c+2/c+1 on EP 63; CROSSED grid + rule 28 main pick hit (3/41); Op10 old xy y cut sw (1); strong, wide, top40; FINAL 4 miss",
+  "numbers": [
+   39
+  ],
+  "result": 39
  }
 ]

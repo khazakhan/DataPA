@@ -2107,5 +2107,17 @@
   "entry": "series S uploaded (544x5); S2 declared after 81, EP 84; FINAL 4 76 14 42 48",
   "numbers": [],
   "result": null
+ },
+ {
+  "time": "2026-11-02",
+  "round": "S2",
+  "after": 81,
+  "ep": 84,
+  "kind": "result_only",
+  "entry": "result 51 = c+2/c+2 on EP 84 = Op26 LAST old xy exact (previous op again); rank 12; one_row old xy line; FINAL 4 miss; crossed miss",
+  "numbers": [
+   51
+  ],
+  "result": 51
  }
 ]

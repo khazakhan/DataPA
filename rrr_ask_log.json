@@ -1749,5 +1749,17 @@
    27
   ],
   "result": 27
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R14",
+  "after": 27,
+  "ep": 67,
+  "kind": "result_only",
+  "entry": "result 70 = +1/c-2 on EP 67; Op20 old yx x flip (1); rank 26; FINAL 4 miss; crossed x ok, y miss",
+  "numbers": [
+   70
+  ],
+  "result": 70
  }
 ]

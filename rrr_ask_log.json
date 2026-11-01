@@ -1905,5 +1905,17 @@
    39
   ],
   "result": 39
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R27",
+  "after": 39,
+  "ep": 43,
+  "kind": "result_only",
+  "entry": "result 93 = cut/nc on EP 43; LAST old x both digits; Op14 y cut sw (1); rank 16; PRIME 10 FAMILY; FINAL 4 miss; crossed miss",
+  "numbers": [
+   93
+  ],
+  "result": 93
  }
 ]

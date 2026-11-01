@@ -120,3 +120,14 @@ Decision: nothing new beats FINAL 4's slots; no change to the ranking.
 ## EP-row follower check (2026-11-01, after R41 = 97 via Op29 04 → 97)
 - A table-4 row that starts at the EP → its second number: 101 numbers offered in 89 of 377 rounds, 3 hits (chance about 1.0). Too few to trust; watch it.
 - Whole data, every number that followed the EP: 89 hits vs 101.8 chance → nothing.
+
+## Series R review (2026-11-02, series R ended at R42; tools/series_r_review.py, 412 rounds)
+| Idea from series R | Held | Chance | Note |
+|---|---|---|---|
+| LAST-OP ★1 cell (new xy, x cut sw, y flip) | 11 | 4.1 | picked on the same data; leave-one-series-out best LAST cell: 3 vs 4.1 → no edge |
+| Rule 28 first pick (crossed) | 6 | 4.1 | small, not trusted |
+| Crossed grid 4×4 | 54 | 53.6 | chance |
+| Row starting at EP → its 2nd number | 4 | 1.1 | 4 hits only; watch |
+| Script FINAL 4 | 29 | 16.5 | keeps its edge (series R 5 of 41) |
+| Script top 8 | 50 | 33.0 | keeps its edge |
+LAST/prev re-rank: 28 vs 29 (lost). Booster recipes held-out: 4 → 13 (chance 16.2), 8 → 33 (32.0). Decision: no new rule; FINAL 4 ranking unchanged; notes updated to 412 rounds.

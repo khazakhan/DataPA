@@ -950,7 +950,7 @@ def lastprev_check(ep, rows, n):
     """LAST / previous op check (user, 2026-11-01): how the number comes
     from the LAST row's operation (new ops, or its old = previous ops) and
     from the row before it, with the number of changes.  Display only:
-    re-ranking FINAL 4 by it lost on 374 rounds (25 -> 23 hits)."""
+    re-ranking FINAL 4 by it lost on 412 rounds (29 -> 28 hits)."""
     li = [i for i, r in enumerate(rows) if r[7] == 'LAST']
     if not li:
         return '-'
@@ -1411,7 +1411,7 @@ def show_final_box():
         return out + [rule('└', '┴', '┘')]
     _RRR3_PREV['sum_final4'] = table(rows[0], rows[1:], (3, 5, 4)) + [
         "  LAST op / previous op check: LAST row (new ops or its old = previous ops) and the row before it; fewest changes.",
-        "  Tested on 374 rounds (F N M K O P Q R): ranking FINAL 4 by it held 23 vs 25 now, so it is a check, not the ranking."]
+        "  Tested on 412 rounds (F N M K O P Q R): ranking FINAL 4 by it held 28 vs 29 now, so it is a check, not the ranking."]
     _RRR3_PREV['sum_head'] = (fb['after'], ep)
     body += _RRR3_PREV['sum_final4']
     # every number with its operation on the EP (user, 2026-10-26: "i need

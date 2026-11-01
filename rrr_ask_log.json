@@ -2013,5 +2013,17 @@
    89
   ],
   "result": 89
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R36",
+  "after": 89,
+  "ep": 10,
+  "kind": "result_only",
+  "entry": "result 45 = c-2/cut on EP 10; CROSSED grid hit (8/61) + LAST-OP 4 #5 (top8 3/53); rank 30; FINAL 4 miss",
+  "numbers": [
+   45
+  ],
+  "result": 45
  }
 ]

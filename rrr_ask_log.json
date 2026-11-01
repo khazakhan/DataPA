@@ -2085,5 +2085,17 @@
    97
   ],
   "result": 97
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R42",
+  "after": 97,
+  "ep": 5,
+  "kind": "result_only",
+  "entry": "result 07 = nc/+2 on EP 05; LAST-OP 4 #1 hit (3/59); rank 6; FINAL 4 miss; crossed miss",
+  "numbers": [
+   7
+  ],
+  "result": 7
  }
 ]

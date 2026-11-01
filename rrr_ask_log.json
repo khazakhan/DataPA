@@ -1761,5 +1761,17 @@
    70
   ],
   "result": 70
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R15",
+  "after": 70,
+  "ep": 69,
+  "kind": "result_only",
+  "entry": "result 82 = +2/c-2 on EP 69; CROSSED grid hit (x cut sw, y step sw), rule28 first hit; outside top 40; user asked 'after NN (prev->NN op)' headings, added _after_tag",
+  "numbers": [
+   82
+  ],
+  "result": 82
  }
 ]

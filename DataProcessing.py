@@ -1390,7 +1390,7 @@ def show_final_box():
         r8 = f"Op{pos7}: {n8:02d} ({_op_label(not cx7, kx7)}/{_op_label(cy7, -ky7)})"
     two = lambda ns: ' '.join(f"{n:02d}" for n in ns)
     star = _RRR3_PREV.get('star_picks') or []
-    body = [f"★  OCJP FINAL 4 with operations (the prediction)  —  after {fb['after']:02d}, EP={ep:02d}  ★", ""]
+    body = [f"★  OCJP FINAL 4 with operations (the prediction)  —  {_after_tag(fb['after'])}, EP={ep:02d}  ★", ""]
     def table(head, rows_, wrap_col):
         # box lines with a rule between rows, the same look as the chat tables
         room = _term_w() - 12
@@ -3514,23 +3514,23 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 1261, 'tens_cut': 140, 'short_list': 198,
-    'table_rounds': 1251, 'table_hits': 152, 'table_chance': 33, 'declared': 1216, 'declared_hits': 19,
+    'results': 1262, 'tens_cut': 140, 'short_list': 198,
+    'table_rounds': 1252, 'table_hits': 152, 'table_chance': 33, 'declared': 1217, 'declared_hits': 19,
     'band_hits': 92, 'units_hits': 88, 'second_hits': 20,
     'same_tens': 26,
-    'rrr3_rounds': 947, 'rrr3_hits': 52, 'rrr3_rec_rounds': 948, 'rrr3_rec_hits': 330,
-    'rrr3_same_rounds': 920, 'rrr3_same_hits': 19, 'rrr3_wide_rounds': 907, 'rrr3_wide_hits': 102, 'rrr3_yx_rounds': 902, 'rrr3_yx_hits': 99,
-    'rrr3_strong_rounds': 898, 'rrr3_strong_hits': 182, 'rrr3_same2_rounds': 895, 'rrr3_same2_hits': 12,
-    'rrr3_turn_rounds': 902, 'rrr3_turn_hits': 14, 'rrr3_sameyx_rounds': 902, 'rrr3_sameyx_hits': 7,
-    'power_rounds': 837, 'power_hits': 559,
+    'rrr3_rounds': 948, 'rrr3_hits': 52, 'rrr3_rec_rounds': 949, 'rrr3_rec_hits': 330,
+    'rrr3_same_rounds': 921, 'rrr3_same_hits': 19, 'rrr3_wide_rounds': 908, 'rrr3_wide_hits': 103, 'rrr3_yx_rounds': 903, 'rrr3_yx_hits': 99,
+    'rrr3_strong_rounds': 899, 'rrr3_strong_hits': 182, 'rrr3_same2_rounds': 896, 'rrr3_same2_hits': 12,
+    'rrr3_turn_rounds': 903, 'rrr3_turn_hits': 14, 'rrr3_sameyx_rounds': 903, 'rrr3_sameyx_hits': 7,
+    'power_rounds': 838, 'power_hits': 559,
     # live records shown in the bottom FINAL 4 box (user, 2026-10-26); the
     # user's rules 1-5 stay on test and never feed FINAL 4
-    'rrr3_final4_rounds': 678, 'rrr3_final4_hits': 40, 'rrr3_master_rounds': 624, 'rrr3_master_hits': 5,
-    'rrr3_star1_rounds': 291, 'rrr3_star1_hits': 3,
-    'rrr3_rule1_rounds': 282, 'rrr3_rule1_hits': 11, 'rrr3_rule2_rounds': 176, 'rrr3_rule2_hits': 14,
-    'rrr3_rule3_rounds': 177, 'rrr3_rule3_hits': 13, 'rrr3_rule4_rounds': 160, 'rrr3_rule4_hits': 3,
-    'rrr3_rule5_rounds': 130, 'rrr3_rule5_hits': 44, 'rrr3_rule6_rounds': 27, 'rrr3_rule6_hits': 1,
-    'rrr3_rule7_rounds': 63, 'rrr3_rule7_hits': 2, 'rrr3_rule8_rounds': 63, 'rrr3_rule8_hits': 3, 'rrr3_rule9_rounds': 23, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 18, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 4, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 33, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 9, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 7, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 56, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 6, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 26, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 102, 'rrr3_rule18_hits': 3, 'rrr3_rule19_rounds': 19, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 18, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 21, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 84, 'rrr3_rule22_hits': 2, 'rrr3_rule23_rounds': 25, 'rrr3_rule23_hits': 0, 'rrr3_rule24_rounds': 6, 'rrr3_lastop4_rounds': 31, 'rrr3_lastop4_hits': 0, 'rrr3_lastop8_rounds': 31, 'rrr3_lastop8_hits': 0, 'rrr3_rule28_rounds': 30, 'rrr3_rule28_hits': 0, 'rrr3_rule27_rounds': 37, 'rrr3_rule27_hits': 0, 'rrr3_rule26_rounds': 8, 'rrr3_rule26_hits': 0, 'rrr3_rule25_rounds': 15, 'rrr3_rule25_hits': 0, 'rrr3_rule24_hits': 1, 'rrr3_onerow_rounds': 82, 'rrr3_onerow_hits': 1, 'rrr3_onerow5_rounds': 82, 'rrr3_prime4fam_rounds': 77, 'rrr3_prime4fam_hits': 15, 'rrr3_prime4rev_rounds': 69, 'rrr3_crossgrid_rounds': 39, 'rrr3_crossgrid_hits': 3, 'rrr3_lad_prime4_rounds': 64, 'rrr3_lad_prime4_hits': 2, 'rrr3_lad_prime8_rounds': 64, 'rrr3_lad_prime8_hits': 5, 'rrr3_lad_prime10_rounds': 64, 'rrr3_lad_prime10_hits': 5, 'rrr3_lad_prime4family_rounds': 64, 'rrr3_lad_prime4family_hits': 14, 'rrr3_lad_reversed_rounds': 64, 'rrr3_lad_reversed_hits': 15, 'rrr3_lad_prime10family_rounds': 64, 'rrr3_lad_prime10family_hits': 17, 'rrr3_prime4rev_hits': 2, 'rrr3_onerow5_hits': 2, 'rrr3_finder_rounds': 119, 'rrr3_finder_hits': 25, 'rrr3_prime4_rounds': 121, 'rrr3_prime4_hits': 5, 'rrr3_prime10_rounds': 121, 'rrr3_prime10_hits': 13, 'rrr3_prime8_rounds': 91, 'rrr3_prime8_hits': 10,
+    'rrr3_final4_rounds': 679, 'rrr3_final4_hits': 40, 'rrr3_master_rounds': 625, 'rrr3_master_hits': 5,
+    'rrr3_star1_rounds': 292, 'rrr3_star1_hits': 3,
+    'rrr3_rule1_rounds': 283, 'rrr3_rule1_hits': 11, 'rrr3_rule2_rounds': 177, 'rrr3_rule2_hits': 14,
+    'rrr3_rule3_rounds': 178, 'rrr3_rule3_hits': 13, 'rrr3_rule4_rounds': 161, 'rrr3_rule4_hits': 3,
+    'rrr3_rule5_rounds': 131, 'rrr3_rule5_hits': 44, 'rrr3_rule6_rounds': 27, 'rrr3_rule6_hits': 1,
+    'rrr3_rule7_rounds': 64, 'rrr3_rule7_hits': 2, 'rrr3_rule8_rounds': 64, 'rrr3_rule8_hits': 3, 'rrr3_rule9_rounds': 23, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 18, 'rrr3_rule10_hits': 1, 'rrr3_rule11_rounds': 4, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 34, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 9, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 7, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 57, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 6, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 26, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 102, 'rrr3_rule18_hits': 3, 'rrr3_rule19_rounds': 19, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 19, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 21, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 85, 'rrr3_rule22_hits': 2, 'rrr3_rule23_rounds': 25, 'rrr3_rule23_hits': 0, 'rrr3_rule24_rounds': 6, 'rrr3_lastop4_rounds': 32, 'rrr3_lastop4_hits': 0, 'rrr3_lastop8_rounds': 32, 'rrr3_lastop8_hits': 0, 'rrr3_rule28_rounds': 31, 'rrr3_rule28_hits': 1, 'rrr3_rule27_rounds': 38, 'rrr3_rule27_hits': 0, 'rrr3_rule26_rounds': 9, 'rrr3_rule26_hits': 0, 'rrr3_rule25_rounds': 15, 'rrr3_rule25_hits': 0, 'rrr3_rule24_hits': 1, 'rrr3_onerow_rounds': 83, 'rrr3_onerow_hits': 1, 'rrr3_onerow5_rounds': 83, 'rrr3_prime4fam_rounds': 78, 'rrr3_prime4fam_hits': 15, 'rrr3_prime4rev_rounds': 70, 'rrr3_crossgrid_rounds': 40, 'rrr3_crossgrid_hits': 4, 'rrr3_lad_prime4_rounds': 65, 'rrr3_lad_prime4_hits': 2, 'rrr3_lad_prime8_rounds': 65, 'rrr3_lad_prime8_hits': 5, 'rrr3_lad_prime10_rounds': 65, 'rrr3_lad_prime10_hits': 5, 'rrr3_lad_prime4family_rounds': 65, 'rrr3_lad_prime4family_hits': 14, 'rrr3_lad_reversed_rounds': 65, 'rrr3_lad_reversed_hits': 15, 'rrr3_lad_prime10family_rounds': 65, 'rrr3_lad_prime10family_hits': 17, 'rrr3_prime4rev_hits': 2, 'rrr3_onerow5_hits': 2, 'rrr3_finder_rounds': 120, 'rrr3_finder_hits': 25, 'rrr3_prime4_rounds': 122, 'rrr3_prime4_hits': 5, 'rrr3_prime10_rounds': 122, 'rrr3_prime10_hits': 13, 'rrr3_prime8_rounds': 92, 'rrr3_prime8_hits': 10,
 }
 
 
@@ -4195,6 +4195,17 @@ def _rrr_crossed(ep, rows):
              f" (chance about {RRR_LIVE['rrr3_crossgrid_rounds'] * len(nums) / 100:.1f})"])
 
 
+def _after_tag(a):
+    """'after 70 (27→70 cut/c-2)' (user, 2026-11-01): the after number with
+    the operation that took the number before it to it."""
+    fl = _RRR3_PREV.get('flat') or []
+    if len(fl) < 2 or fl[-1] != a:
+        return f"after {a:02d}"
+    p = fl[-2]
+    return (f"after {a:02d} ({p:02d}→{a:02d} "
+            f"{OP_ABBREV[find_op(p // 10, a // 10)]}/{OP_ABBREV[find_op(p % 10, a % 10)]})")
+
+
 def show_round_summary():
     """ROUND SUMMARY (user, 2026-10-31: show these tables when run locally):
     CROSSED options, LAST-OP 4, PRIME, PLAY LADDER and OCJP FINAL 4, in the
@@ -4203,7 +4214,7 @@ def show_round_summary():
     if 'sum_final4' not in P:
         return
     a, ep = P.get('sum_head', (0, 0))
-    tag = f"(after {a:02d}, EP {ep:02d})"
+    tag = f"({_after_tag(a)}, EP {ep:02d})"
     body = []
     for title, key in ((f"CROSSED options {tag}", 'sum_crossed'), (f"LAST-OP 4 {tag}", 'sum_lastop'),
                        (f"PRIME {tag}", 'sum_prime'), (f"PLAY LADDER {tag}", 'sum_ladder'),

@@ -1833,5 +1833,17 @@
    71
   ],
   "result": 71
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R21",
+  "after": 71,
+  "ep": 30,
+  "kind": "result_only",
+  "entry": "result 91 = c+1/+1 on EP 30; Op18 (prev row) new yx y flip (1); outside top 40; hot + yx only; crossed x ok, y miss",
+  "numbers": [
+   91
+  ],
+  "result": 91
  }
 ]

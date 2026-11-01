@@ -2131,5 +2131,17 @@
    0
   ],
   "result": 0
+ },
+ {
+  "time": "2026-11-02",
+  "round": "S4",
+  "after": 0,
+  "ep": 98,
+  "kind": "result_only",
+  "entry": "result 25 = c-2/c+2 on EP 98 (user asked the op); no row; hot only; crossed x ok, y miss",
+  "numbers": [
+   25
+  ],
+  "result": 25
  }
 ]

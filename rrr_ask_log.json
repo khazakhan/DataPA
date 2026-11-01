@@ -2155,5 +2155,17 @@
    72
   ],
   "result": 72
+ },
+ {
+  "time": "2026-11-02",
+  "round": "S6",
+  "after": 72,
+  "ep": 11,
+  "kind": "result_only",
+  "entry": "result 04 = -1/c-2 on EP 11; four rows at 1 change; rank 24; FINAL 4 miss; crossed x ok, y miss",
+  "numbers": [
+   4
+  ],
+  "result": 4
  }
 ]

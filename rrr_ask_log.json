@@ -1929,5 +1929,17 @@
    15
   ],
   "result": 15
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R29",
+  "after": 15,
+  "ep": 28,
+  "kind": "result_only",
+  "entry": "result 76 = cut/-2 on EP 28; LAST old y as is; Op14 old yx 2 changes; outside top 40; yx only; crossed miss",
+  "numbers": [
+   76
+  ],
+  "result": 76
  }
 ]

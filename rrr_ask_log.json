@@ -1917,5 +1917,17 @@
    93
   ],
   "result": 93
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R28",
+  "after": 93,
+  "ep": 32,
+  "kind": "result_only",
+  "entry": "result 15 = -2/c-2 on EP 32; Op23 (prev row) new xy x flip (1); outside top 40; wide only; crossed miss",
+  "numbers": [
+   15
+  ],
+  "result": 15
  }
 ]

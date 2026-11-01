@@ -1773,5 +1773,29 @@
    82
   ],
   "result": 82
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R16",
+  "after": 82,
+  "ep": 4,
+  "kind": "result_only",
+  "entry": "result 82 = -2/-2 on EP 04; LAST-OP 4 #3 first hit; rank 15; FINAL 4 miss",
+  "numbers": [
+   82
+  ],
+  "result": 82
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R17",
+  "after": 82,
+  "ep": 82,
+  "kind": "result_only",
+  "entry": "result 08 = +2/c+1 on EP 82; CROSSED grid hit (5/42); PRIME4 reversed + ladder step 5; outside top 40",
+  "numbers": [
+   8
+  ],
+  "result": 8
  }
 ]

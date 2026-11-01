@@ -2037,5 +2037,17 @@
    4
   ],
   "result": 4
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R38",
+  "after": 4,
+  "ep": 83,
+  "kind": "result_only",
+  "entry": "result 09 = +2/c+1 on EP 83; rule22 + charrow; Op4 xy y flip / Op26 prev old yx y flip (1); outside top 40; crossed y ok, x miss",
+  "numbers": [
+   9
+  ],
+  "result": 9
  }
 ]

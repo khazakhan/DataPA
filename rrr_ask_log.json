@@ -1821,5 +1821,17 @@
    87
   ],
   "result": 87
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R20",
+  "after": 87,
+  "ep": 11,
+  "kind": "result_only",
+  "entry": "result 71 = c+1/nc on EP 11; only ladder step 6 (PRIME 10 FAMILY) held; outside top 40; crossed y ok, x miss",
+  "numbers": [
+   71
+  ],
+  "result": 71
  }
 ]

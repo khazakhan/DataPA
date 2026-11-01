@@ -1953,5 +1953,17 @@
    3
   ],
   "result": 3
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R31",
+  "after": 3,
+  "ep": 0,
+  "kind": "result_only",
+  "entry": "result 38 = c-2/-2 on EP 00 = Op2 old xy exact; FINAL 4 #3 + PRIME 4 #3 HIT; series R FINAL 4 4/31",
+  "numbers": [
+   38
+  ],
+  "result": 38
  }
 ]

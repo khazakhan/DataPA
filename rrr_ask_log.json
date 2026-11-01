@@ -2097,5 +2097,15 @@
    7
   ],
   "result": 7
+ },
+ {
+  "time": "2026-11-02",
+  "round": "S2",
+  "after": 81,
+  "ep": 84,
+  "kind": "new_series",
+  "entry": "series S uploaded (544x5); S2 declared after 81, EP 84; FINAL 4 76 14 42 48",
+  "numbers": [],
+  "result": null
  }
 ]

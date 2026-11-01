@@ -2049,5 +2049,17 @@
    9
   ],
   "result": 9
+ },
+ {
+  "time": "2026-11-01",
+  "round": "R39",
+  "after": 9,
+  "ep": 86,
+  "kind": "result_only",
+  "entry": "result 47 = c+1/+1 on EP 86; rank 7 = PRIME 8 hit; Op16 prev old xy y cut sw (1); FINAL 4 miss; crossed y ok, x miss",
+  "numbers": [
+   47
+  ],
+  "result": 47
  }
 ]

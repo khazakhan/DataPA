@@ -2203,5 +2203,17 @@
    71
   ],
   "result": 71
+ },
+ {
+  "time": "2026-11-02",
+  "round": "S10",
+  "after": 71,
+  "ep": 56,
+  "kind": "result_only",
+  "entry": "result 13 = c+1/c+2 on EP 56; nearest Op25 new yx both flipped (2); rank 30; REC + HOT only; FINAL 4 miss",
+  "numbers": [
+   13
+  ],
+  "result": 13
  }
 ]

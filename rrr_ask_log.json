@@ -2287,5 +2287,17 @@
    82
   ],
   "result": 82
+ },
+ {
+  "time": "2026-11-02",
+  "round": "S17",
+  "after": 82,
+  "ep": 32,
+  "kind": "result_only",
+  "entry": "result 24 = -1/+2 on EP 32 = Op19 new xy x cut sw (1 change); WIDE + HOT only; near miss 74 (rule 27 + grid); FINAL 4 miss",
+  "numbers": [
+   24
+  ],
+  "result": 24
  }
 ]

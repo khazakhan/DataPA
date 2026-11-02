@@ -2251,5 +2251,17 @@
    6
   ],
   "result": 6
+ },
+ {
+  "time": "2026-11-02",
+  "round": "S14",
+  "after": 6,
+  "ep": 67,
+  "kind": "result_only",
+  "entry": "result 42 = -2/cut on EP 67 = Op15 LAST old yx with y cut switched (1 change); PRIME 4 FAMILY + rule 5 + RECOMMENDED, rank 19; FINAL 4 miss",
+  "numbers": [
+   42
+  ],
+  "result": 42
  }
 ]

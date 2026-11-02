@@ -2215,5 +2215,17 @@
    13
   ],
   "result": 13
+ },
+ {
+  "time": "2026-11-02",
+  "round": "S11",
+  "after": 13,
+  "ep": 26,
+  "kind": "result_only",
+  "entry": "result 24 = nc/-2 on EP 26; LAST Op32 old xy both cuts switched (2); rule 5 + yx + PRIME 4 reversed; FINAL 4 miss",
+  "numbers": [
+   24
+  ],
+  "result": 24
  }
 ]

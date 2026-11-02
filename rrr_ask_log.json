@@ -2323,5 +2323,30 @@
    69
   ],
   "result": 69
+ },
+ {
+  "time": "2026-11-02T20:17:16",
+  "ep": 29,
+  "kind": "op_number",
+  "entry": "Op17 -1/c-2",
+  "numbers": [
+   12,
+   58,
+   36,
+   90
+  ],
+  "result": null
+ },
+ {
+  "time": "2026-11-02",
+  "round": "S20",
+  "after": 69,
+  "ep": 13,
+  "kind": "result_only",
+  "entry": "result 69 (repeat) = cut/c+1 on EP 13 = Op23 LAST old xy exact; finder + one-row line 4 + PRIME 4 FAMILY + rule 5 + rec, rank 27; LAST plain readings 5/138 vs 5.5 chance; FINAL 4 miss",
+  "numbers": [
+   69
+  ],
+  "result": 69
  }
 ]

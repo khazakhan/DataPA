@@ -2275,5 +2275,17 @@
    35
   ],
   "result": 35
+ },
+ {
+  "time": "2026-11-02",
+  "round": "S16",
+  "after": 35,
+  "ep": 59,
+  "kind": "result_only",
+  "entry": "result 82 = c-2/c-2 on EP 59 = Op17 LAST old ops both cut sw+flip (4 changes) = LAST new x op on both digits (2 of 82 logged); held by none; FINAL 4 miss",
+  "numbers": [
+   82
+  ],
+  "result": 82
  }
 ]

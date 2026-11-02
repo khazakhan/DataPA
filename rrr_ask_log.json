@@ -2191,5 +2191,17 @@
    72
   ],
   "result": 72
+ },
+ {
+  "time": "2026-11-02",
+  "round": "S9",
+  "after": 72,
+  "ep": 4,
+  "kind": "result_only",
+  "entry": "result 71 = c+2/c+2 on EP 04; LAST-OP 4 #1 hit (4/67) + crossed grid hit (9/75) + rule 27 first hit; FINAL 4 miss",
+  "numbers": [
+   71
+  ],
+  "result": 71
  }
 ]

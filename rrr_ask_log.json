@@ -2179,5 +2179,17 @@
    42
   ],
   "result": 42
+ },
+ {
+  "time": "2026-11-02",
+  "round": "S8",
+  "after": 42,
+  "ep": 86,
+  "kind": "result_only",
+  "entry": "result 72 = -1/c+1 on EP 86; no row within 2 changes; rule 28 3rd pick hit (5/63) + HOT; FINAL 4 miss",
+  "numbers": [
+   72
+  ],
+  "result": 72
  }
 ]

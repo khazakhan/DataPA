@@ -2239,5 +2239,17 @@
    72
   ],
   "result": 72
+ },
+ {
+  "time": "2026-11-02",
+  "round": "S13",
+  "after": 72,
+  "ep": 71,
+  "kind": "result_only",
+  "entry": "result 06 = c-2/cut on EP 71 = Op17 old yx exact; finder + rule 26 first hit + WIDE; outside top 40; watch 69 missed; old/new-exact check at chance (11/14 of 131 vs 15)",
+  "numbers": [
+   6
+  ],
+  "result": 6
  }
 ]

@@ -2299,5 +2299,17 @@
    24
   ],
   "result": 24
+ },
+ {
+  "time": "2026-11-02",
+  "round": "S18",
+  "after": 24,
+  "ep": 72,
+  "kind": "result_only",
+  "entry": "result 19 = c-1/c+2 on EP 72 = Op28 LAST old yx x flip (1 change); PRIME 8 (#8) + LAST-OP 8 (#7) + PRIME 4 FAMILY + rule 5 + rec, rank 29; FINAL 4 miss",
+  "numbers": [
+   19
+  ],
+  "result": 19
  }
 ]

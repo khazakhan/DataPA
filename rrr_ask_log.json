@@ -2167,5 +2167,17 @@
    4
   ],
   "result": 4
+ },
+ {
+  "time": "2026-11-02",
+  "round": "S7",
+  "after": 4,
+  "ep": 21,
+  "kind": "result_only",
+  "entry": "result 42 = +2/+1 on EP 21; no row under 2 changes; outside top 40; FINAL 4 miss; held rule 5, yx, PRIME 4 reversed",
+  "numbers": [
+   42
+  ],
+  "result": 42
  }
 ]

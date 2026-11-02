@@ -2263,5 +2263,17 @@
    42
   ],
   "result": 42
+ },
+ {
+  "time": "2026-11-02",
+  "round": "S15",
+  "after": 42,
+  "ep": 72,
+  "kind": "result_only",
+  "entry": "result 35 = c+1/c-2 on EP 72 = Op9 old yx y flip / Op3 old xy x flip (1 change); rule 22 hit only (4 of 121); outside top 40; FINAL 4 miss",
+  "numbers": [
+   35
+  ],
+  "result": 35
  }
 ]

@@ -34,6 +34,23 @@ if res in rec['prime10'][:4]: hits.append('rrr3_prime4_hits')
 if res in rec['prime10'][:8]: hits.append('rrr3_prime8_hits')
 if res in rec['lastop'][:4]: hits.append('rrr3_lastop4_hits')
 if res in rec['lastop'][:8]: hits.append('rrr3_lastop8_hits')
+# *xy / *yx columns + outer-op move (on test from S27, 2026-11-04)
+import io, contextlib, sys
+sys.path.insert(0, '.')
+with contextlib.redirect_stdout(io.StringIO()):
+    import DataProcessing as D
+AB = {v: k for k, v in D.OP_ABBREV.items()}
+ep = rec['ep']; star = set()
+for row in rec['rows']:
+    sx, sy = D._star_ops(AB[row['old'][0]], AB[row['old'][1]])
+    star |= {D.apply_op(ep // 10, sx) * 10 + D.apply_op(ep % 10, sy), D.apply_op(ep // 10, sy) * 10 + D.apply_op(ep % 10, sx)}
+up['rrr3_starcol_rounds'] = 1
+if res in star: hits.append('rrr3_starcol_hits')
+tok = [int(x) for x in open(rec['dataset']).read().split() if x.isdigit()]
+om = D._outer_move(ep, tok[-2], tok[-1])
+if om:
+    up['rrr3_outer_rounds'] = 1
+    if om[0] == res: hits.append('rrr3_outer_hits')
 for k in hits + extra:
     up[k] = up.get(k, 0) + 1
 src = open('DataProcessing.py').read()

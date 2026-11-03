@@ -3515,23 +3515,23 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 1313, 'tens_cut': 140, 'short_list': 198,
-    'table_rounds': 1303, 'table_hits': 154, 'table_chance': 33, 'declared': 1268, 'declared_hits': 19,
+    'results': 1314, 'tens_cut': 140, 'short_list': 198,
+    'table_rounds': 1304, 'table_hits': 154, 'table_chance': 33, 'declared': 1269, 'declared_hits': 19,
     'band_hits': 92, 'units_hits': 88, 'second_hits': 20,
     'same_tens': 26,
-    'rrr3_rounds': 999, 'rrr3_hits': 55, 'rrr3_rec_rounds': 1000, 'rrr3_rec_hits': 350,
-    'rrr3_same_rounds': 972, 'rrr3_same_hits': 19, 'rrr3_wide_rounds': 959, 'rrr3_wide_hits': 109, 'rrr3_yx_rounds': 954, 'rrr3_yx_hits': 107,
-    'rrr3_strong_rounds': 950, 'rrr3_strong_hits': 192, 'rrr3_same2_rounds': 947, 'rrr3_same2_hits': 12,
-    'rrr3_turn_rounds': 954, 'rrr3_turn_hits': 14, 'rrr3_sameyx_rounds': 954, 'rrr3_sameyx_hits': 7,
-    'power_rounds': 889, 'power_hits': 562,
+    'rrr3_rounds': 1000, 'rrr3_hits': 55, 'rrr3_rec_rounds': 1001, 'rrr3_rec_hits': 350,
+    'rrr3_same_rounds': 973, 'rrr3_same_hits': 19, 'rrr3_wide_rounds': 960, 'rrr3_wide_hits': 110, 'rrr3_yx_rounds': 955, 'rrr3_yx_hits': 107,
+    'rrr3_strong_rounds': 951, 'rrr3_strong_hits': 192, 'rrr3_same2_rounds': 948, 'rrr3_same2_hits': 12,
+    'rrr3_turn_rounds': 955, 'rrr3_turn_hits': 14, 'rrr3_sameyx_rounds': 955, 'rrr3_sameyx_hits': 7,
+    'power_rounds': 890, 'power_hits': 562,
     # live records shown in the bottom FINAL 4 box (user, 2026-10-26); the
     # user's rules 1-5 stay on test and never feed FINAL 4
-    'rrr3_final4_rounds': 730, 'rrr3_final4_hits': 43, 'rrr3_master_rounds': 676, 'rrr3_master_hits': 6,
-    'rrr3_star1_rounds': 343, 'rrr3_star1_hits': 4,
-    'rrr3_rule1_rounds': 334, 'rrr3_rule1_hits': 12, 'rrr3_rule2_rounds': 228, 'rrr3_rule2_hits': 17,
-    'rrr3_rule3_rounds': 229, 'rrr3_rule3_hits': 13, 'rrr3_rule4_rounds': 212, 'rrr3_rule4_hits': 3,
-    'rrr3_rule5_rounds': 182, 'rrr3_rule5_hits': 58, 'rrr3_rule6_rounds': 40, 'rrr3_rule6_hits': 1,
-    'rrr3_rule7_rounds': 98, 'rrr3_rule7_hits': 2, 'rrr3_rule8_rounds': 98, 'rrr3_rule8_hits': 4, 'rrr3_rule9_rounds': 48, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 34, 'rrr3_rule10_hits': 2, 'rrr3_rule11_rounds': 5, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 54, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 16, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 12, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 95, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 11, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 37, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 150, 'rrr3_rule18_hits': 3, 'rrr3_rule19_rounds': 31, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 37, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 31, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 131, 'rrr3_rule22_hits': 4, 'rrr3_rule23_rounds': 36, 'rrr3_rule23_hits': 0, 'rrr3_rule24_rounds': 11, 'rrr3_lastop4_rounds': 83, 'rrr3_lastop4_hits': 4, 'rrr3_lastop8_rounds': 83, 'rrr3_lastop8_hits': 6, 'rrr3_rule28_rounds': 79, 'rrr3_rule28_hits': 7, 'rrr3_rule27_rounds': 87, 'rrr3_rule27_hits': 1, 'rrr3_rule26_rounds': 27, 'rrr3_rule26_hits': 1, 'rrr3_rule25_rounds': 21, 'rrr3_rule25_hits': 0, 'rrr3_rule24_hits': 1, 'rrr3_onerow_rounds': 134, 'rrr3_onerow_hits': 1, 'rrr3_onerow5_rounds': 134, 'rrr3_prime4fam_rounds': 129, 'rrr3_prime4fam_hits': 25, 'rrr3_prime4rev_rounds': 121, 'rrr3_crossgrid_rounds': 91, 'rrr3_crossgrid_hits': 11, 'rrr3_lad_prime4_rounds': 116, 'rrr3_lad_prime4_hits': 5, 'rrr3_lad_prime8_rounds': 116, 'rrr3_lad_prime8_hits': 10, 'rrr3_lad_prime10_rounds': 116, 'rrr3_lad_prime10_hits': 11, 'rrr3_lad_prime4family_rounds': 116, 'rrr3_lad_prime4family_hits': 25, 'rrr3_lad_reversed_rounds': 116, 'rrr3_lad_reversed_hits': 29, 'rrr3_lad_prime10family_rounds': 116, 'rrr3_lad_prime10family_hits': 35, 'rrr3_prime4rev_hits': 6, 'rrr3_onerow5_hits': 4, 'rrr3_finder_rounds': 171, 'rrr3_finder_hits': 33, 'rrr3_prime4_rounds': 173, 'rrr3_prime4_hits': 8, 'rrr3_prime10_rounds': 173, 'rrr3_prime10_hits': 19, 'rrr3_prime8_rounds': 143, 'rrr3_prime8_hits': 15,
+    'rrr3_final4_rounds': 731, 'rrr3_final4_hits': 43, 'rrr3_master_rounds': 677, 'rrr3_master_hits': 6,
+    'rrr3_star1_rounds': 344, 'rrr3_star1_hits': 4,
+    'rrr3_rule1_rounds': 335, 'rrr3_rule1_hits': 12, 'rrr3_rule2_rounds': 229, 'rrr3_rule2_hits': 17,
+    'rrr3_rule3_rounds': 230, 'rrr3_rule3_hits': 13, 'rrr3_rule4_rounds': 213, 'rrr3_rule4_hits': 3,
+    'rrr3_rule5_rounds': 183, 'rrr3_rule5_hits': 58, 'rrr3_rule6_rounds': 41, 'rrr3_rule6_hits': 1,
+    'rrr3_rule7_rounds': 98, 'rrr3_rule7_hits': 2, 'rrr3_rule8_rounds': 98, 'rrr3_rule8_hits': 4, 'rrr3_rule9_rounds': 48, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 34, 'rrr3_rule10_hits': 2, 'rrr3_rule11_rounds': 6, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 54, 'rrr3_rule12_hits': 1, 'rrr3_rule13_rounds': 16, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 12, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 96, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 11, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 37, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 151, 'rrr3_rule18_hits': 3, 'rrr3_rule19_rounds': 31, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 38, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 31, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 132, 'rrr3_rule22_hits': 5, 'rrr3_rule23_rounds': 36, 'rrr3_rule23_hits': 0, 'rrr3_rule24_rounds': 11, 'rrr3_lastop4_rounds': 84, 'rrr3_lastop4_hits': 4, 'rrr3_lastop8_rounds': 84, 'rrr3_lastop8_hits': 6, 'rrr3_rule28_rounds': 80, 'rrr3_rule28_hits': 7, 'rrr3_rule27_rounds': 88, 'rrr3_rule27_hits': 1, 'rrr3_rule26_rounds': 28, 'rrr3_rule26_hits': 1, 'rrr3_rule25_rounds': 21, 'rrr3_rule25_hits': 0, 'rrr3_rule24_hits': 1, 'rrr3_onerow_rounds': 135, 'rrr3_onerow_hits': 1, 'rrr3_onerow5_rounds': 135, 'rrr3_prime4fam_rounds': 130, 'rrr3_prime4fam_hits': 25, 'rrr3_prime4rev_rounds': 122, 'rrr3_crossgrid_rounds': 92, 'rrr3_crossgrid_hits': 11, 'rrr3_lad_prime4_rounds': 117, 'rrr3_lad_prime4_hits': 5, 'rrr3_lad_prime8_rounds': 117, 'rrr3_lad_prime8_hits': 10, 'rrr3_lad_prime10_rounds': 117, 'rrr3_lad_prime10_hits': 11, 'rrr3_lad_prime4family_rounds': 117, 'rrr3_lad_prime4family_hits': 25, 'rrr3_lad_reversed_rounds': 117, 'rrr3_lad_reversed_hits': 29, 'rrr3_lad_prime10family_rounds': 117, 'rrr3_lad_prime10family_hits': 35, 'rrr3_prime4rev_hits': 6, 'rrr3_onerow5_hits': 4, 'rrr3_finder_rounds': 172, 'rrr3_finder_hits': 34, 'rrr3_prime4_rounds': 174, 'rrr3_prime4_hits': 8, 'rrr3_prime10_rounds': 174, 'rrr3_prime10_hits': 19, 'rrr3_prime8_rounds': 144, 'rrr3_starcol_rounds': 0, 'rrr3_starcol_hits': 0, 'rrr3_outer_rounds': 0, 'rrr3_outer_hits': 0, 'rrr3_prime8_hits': 15,
 }
 
 
@@ -4199,6 +4199,32 @@ def _rrr_crossed(ep, rows):
              f" (chance about {RRR_LIVE['rrr3_crossgrid_rounds'] * len(nums) / 100:.1f})"])
 
 
+def _star_ops(ox, oy):
+    """*xy / *yx columns (user 2026-11-04, S26 screenshot): star x = old y as
+    is, star y = old x with cut switched + sign flipped.  Picked from 2,700
+    forms on 144 live rounds (18 hits vs chance 8.1; held-out 8 vs 6.3) —
+    on test, never fed into FINAL 4."""
+    return oy, SIGN_FLIP[KK_CUT_TOGGLE[ox]]
+
+
+def _outer_move(ep, a, b):
+    """User's S26 move on the outer op (a -> b): x op as is, y op cut
+    switched + sign flipped.  None if the op cannot be read."""
+    lx, ly = find_op(a // 10, b // 10), find_op(a % 10, b % 10)
+    if '?' in (lx, ly) or a < 0 or b < 0:
+        return None
+    sy = SIGN_FLIP[KK_CUT_TOGGLE[ly]]
+    return apply_op(ep // 10, lx) * 10 + apply_op(ep % 10, sy), f"{OP_ABBREV[lx]}/{OP_ABBREV[sy]}"
+
+
+def _star_cells(ep, ox, oy, kw):
+    sx, sy = _star_ops(ox, oy)
+    a_, b_ = OP_ABBREV[sx], OP_ABBREV[sy]
+    v1 = apply_op(ep // 10, sx) * 10 + apply_op(ep % 10, sy)
+    v2 = apply_op(ep // 10, sy) * 10 + apply_op(ep % 10, sx)
+    return f"{v1:02d} ({a_}/{b_})".ljust(kw) + f"{v2:02d} ({b_}/{a_})".ljust(kw)
+
+
 def _after_tag(a):
     """'after 70 (27→70 cut/c-2)' (user, 2026-11-01): the after number with
     the operation that took the number before it to it."""
@@ -4301,8 +4327,18 @@ def show_chat_view():
             yx = apply_op(ex, ny) * 10 + apply_op(ey, nx)
             t4.append([f"Op{pos}{' LAST' if mark == 'LAST' else ''}", f"{s_a:02d} → {s_b:02d}",
                        OP_ABBREV[ox], OP_ABBREV[oy], OP_ABBREV[nx], OP_ABBREV[ny],
-                       f"{xy:02d} ({OP_ABBREV[nx]}/{OP_ABBREV[ny]})", f"{yx:02d} ({OP_ABBREV[ny]}/{OP_ABBREV[nx]})"])
-        show(_box(["Pos", "Source", "old x", "old y", "new x", "new y", "xy (op)", "yx (op)"], t4))
+                       f"{xy:02d} ({OP_ABBREV[nx]}/{OP_ABBREV[ny]})", f"{yx:02d} ({OP_ABBREV[ny]}/{OP_ABBREV[nx]})",
+                       _star_cells(ep, ox, oy, 15)[:15].strip(), _star_cells(ep, ox, oy, 15)[15:].strip()])
+        show(_box(["Pos", "Source", "old x", "old y", "new x", "new y", "xy (op)", "yx (op)", "*xy (op)", "*yx (op)"], t4))
+        stars = sorted({int(c_[:2]) for r_ in t4 for c_ in r_[8:10]})
+        fl_ = P.get('flat') or []
+        om = _outer_move(ep, fl_[-2], fl_[-1]) if len(fl_) >= 2 and fl_[-1] == a else None
+        print(f"  *xy = old y as is on x, old x cut switched + sign flipped on y (*yx reads it the other way).  ON TEST, not in FINAL 4."
+              f"\n  * numbers: {' '.join(f'{v:02d}' for v in stars)}   live {RRR_LIVE.get('rrr3_starcol_hits', 0)} of {RRR_LIVE.get('rrr3_starcol_rounds', 0)}"
+              f" (replay 144 rounds: 18 vs chance 8.1, held-out 8 vs 6.3)")
+        if om:
+            print(f"  Outer op move (x as is, y cut switched + flipped): {om[0]:02d} ({om[1]})   live {RRR_LIVE.get('rrr3_outer_hits', 0)} of {RRR_LIVE.get('rrr3_outer_rounds', 0)}"
+                  f" (replay 3 of 144 vs chance 1.4)")
     cv = P.get('crossed_view')
     if cv:
         title, h, rws, xo, yo = cv
@@ -4418,7 +4454,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 src.append((last, a, b, lx, ly, 'LAST'))
     KW   = 15
     head = (f"  {'Pos':<12} {'Source':<9} {'old x':<6} {'old y':<6}    "
-            f"{'new x':<6} {'new y':<6}  {'xy (op)':<{KW}}{'yx (op)':<{KW}}")
+            f"{'new x':<6} {'new y':<6}  {'xy (op)':<{KW}}{'yx (op)':<{KW}}{'*xy (op)':<{KW}}{'*yx (op)':<{KW}}")
     body = [f"RRR:  NEXT OPERATION → EP={ep:02d}".center(len(head)), "", head, '─' * len(head)]
     live = grid_ep is not None and grid_ep >= 0
     star = (lambda v: '★' if v // 10 == cut(grid_ep // 10) else ' ') if live else (lambda v: ' ')
@@ -4434,7 +4470,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         tag      = f"[{pos_prefix}{pos}]{mark}"
         body.append(f"  {tag:<12} {a:02d} → {b:02d}   {OP_ABBREV[x_op]:<6} {OP_ABBREV[y_op]:<6} →  "
                     f"{nxa:<6} {nya:<6}  " + f"{xy:02d}{star(xy)}({nxa}/{nya})".ljust(KW)
-                    + f"{yx:02d}{star(yx)}({nya}/{nxa})".ljust(KW))
+                    + f"{yx:02d}{star(yx)}({nya}/{nxa})".ljust(KW)
+                    + _star_cells(ep, x_op, y_op, KW))
     _RRR_OCJP_OLD[:] = [(x_, y_) for _, _, _, x_, y_ in row_ops]
     # kept for the questions at the end of the page (rrr_ask_ops)
     _RRR_ASK.update(ep=ep, prefix=pos_prefix,

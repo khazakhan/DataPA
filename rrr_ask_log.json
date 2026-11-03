@@ -2395,5 +2395,17 @@
    64
   ],
   "result": 64
+ },
+ {
+  "time": "2026-11-04",
+  "round": "S26",
+  "after": 64,
+  "ep": 44,
+  "kind": "user_screenshot",
+  "entry": "result 93 = cut/-1 on EP 44; user: outer op 18->64 cut/c+1 in Op9 old x/y, result = outer x as is, outer y cut sw+flip; asked *xy/*yx columns. Study 2700 forms x 144 rounds: user move 3 vs 1.4, best per-row (x=old y, y=old x cut sw+flip) 18 vs 8.1 in-sample, held-out 8 vs 6.3; added columns + outer move line on test, FINAL 4 unchanged",
+  "numbers": [
+   93
+  ],
+  "result": 93
  }
 ]

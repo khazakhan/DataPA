@@ -46,6 +46,14 @@ for row in rec['rows']:
     star |= {D.apply_op(ep // 10, sx) * 10 + D.apply_op(ep % 10, sy), D.apply_op(ep // 10, sy) * 10 + D.apply_op(ep % 10, sx)}
 up['rrr3_starcol_rounds'] = 1
 if res in star: hits.append('rrr3_starcol_hits')
+ep_rows = [row for row in rec['rows'] if row['a'] == ep]
+if ep_rows:
+    up['rrr3_eprow_rounds'] = 1
+    ep_set = set()
+    for row in ep_rows:
+        nx, ox = AB[row['new'][0]], AB[row['old'][0]]
+        ep_set |= {D.apply_op(ep // 10, nx) * 10 + D.apply_op(ep % 10, ox), D.apply_op(ep // 10, ox) * 10 + D.apply_op(ep % 10, nx)}
+    if res in ep_set: hits.append('rrr3_eprow_hits')
 tok = [int(x) for x in open(rec['dataset']).read().split() if x.isdigit()]
 om = D._outer_move(ep, tok[-2], tok[-1])
 if om:

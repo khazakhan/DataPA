@@ -2407,5 +2407,17 @@
    93
   ],
   "result": 93
+ },
+ {
+  "time": "2026-11-04",
+  "round": "S27",
+  "after": 93,
+  "ep": 81,
+  "kind": "user_screenshot",
+  "entry": "result 67 = -2/c+1 on EP 81; user: Op14 81->42 starts at EP, y = c+1 -> change * y. y = Op14 old x ok; x c-1 gives 2 not 6. Test 145 rounds: y=old x as is 11 vs 15.2 (worse than current 23 vs 15.1) -> * kept; EP-row x=new x,y=old x 3/38 vs 0.8 -> EP row line on test",
+  "numbers": [
+   67
+  ],
+  "result": 67
  }
 ]

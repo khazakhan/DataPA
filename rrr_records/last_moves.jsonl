@@ -92,3 +92,4 @@
 {"round": "S26", "ep": 44, "result": 93, "x_op": "cut", "y_op": "-1", "last": {"pos": 24, "src": "76->44", "old": ["c+2", "-2"], "new": ["c+2", "+1"]}, "x_from": [], "y_from": ["new y sign flipped", "old y step switched"], "check": true}
 {"round": "S27", "ep": 81, "result": 67, "x_op": "-2", "y_op": "c+1", "last": {"pos": 28, "src": "03->81", "old": ["-2", "-2"], "new": ["c+2", "+2"]}, "x_from": ["new y sign flipped", "old x as is", "old y as is"], "y_from": ["new x step switched"], "check": true}
 {"round": "S28", "ep": 57, "result": 6, "x_op": "cut", "y_op": "-1", "last": {"pos": 34, "src": "80->57", "old": ["c+2", "c+2"], "new": ["-2", "+1"]}, "x_from": [], "y_from": ["new x step switched", "new y sign flipped"], "check": true}
+{"round": "S29", "ep": 42, "result": 0, "x_op": "c+1", "y_op": "-2", "last": {"pos": 16, "src": "67->42", "old": ["-2", "cut"], "new": ["nc", "+2"]}, "x_from": [], "y_from": ["new y sign flipped", "old x as is"], "check": true}

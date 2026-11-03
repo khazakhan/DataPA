@@ -56,6 +56,11 @@ if ep_rows:
     if res in ep_set: hits.append('rrr3_eprow_hits')
 tok = [int(x) for x in open(rec['dataset']).read().split() if x.isdigit()]
 om = D._outer_move(ep, tok[-2], tok[-1])
+lr = [row for row in rec['rows'] if row['last']]
+if lr:
+    up['rrr3_oflip_rounds'] = 1
+    ofx = D.SIGN_FLIP[D.find_op(tok[-2] // 10, tok[-1] // 10)]; ofy = D.SIGN_FLIP[AB[lr[-1]['new'][1]]]
+    if D.apply_op(ep // 10, ofx) * 10 + D.apply_op(ep % 10, ofy) == res: hits.append('rrr3_oflip_hits')
 if om:
     up['rrr3_outer_rounds'] = 1
     if om[0] == res: hits.append('rrr3_outer_hits')

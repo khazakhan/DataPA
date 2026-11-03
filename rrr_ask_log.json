@@ -2431,5 +2431,17 @@
    6
   ],
   "result": 6
+ },
+ {
+  "time": "2026-11-04",
+  "round": "S29",
+  "after": 6,
+  "ep": 42,
+  "kind": "result_only",
+  "entry": "result 00 = c+1/-2 on EP 42; only Op16 LAST row, no maker; held CharRow/yx/top40 rank 34; user: fix so it does not happen. 24 forms make 00; best before S29: x = outer x flip, y = LAST new y flip 5/146 vs 1.5 -> Outer flip move line on test",
+  "numbers": [
+   0
+  ],
+  "result": 0
  }
 ]

@@ -1059,10 +1059,14 @@ def show_final_box():
     # "From which Op" (user, 2026-10-31): the RRR: NEXT OPERATION row that
     # makes each FINAL 4 number, simplest change first (number_sources)
     rows_f = _RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else []
-    rows = [["#", "Number", "Operation", "How it's made", "From which Op", "LAST op / previous op check", "Votes (lists)"]]
+    rows = [["#", "Number", "Operation", "yx (op)", "How it's made", "From which Op", "LAST op / previous op check", "Votes (lists)"]]
+    def yx_(v):
+        # yx column (user 2026-11-04): y op on x, x op on y, as in table 4
+        xo, yo = find_op(ex, v // 10), find_op(ey, v % 10)
+        return f"{apply_op(ex, yo) * 10 + apply_op(ey, xo):02d} ({OP_ABBREV[yo]}/{OP_ABBREV[xo]})"
     for k_, (v, names) in enumerate(f4):
         src_ = number_sources(ep, rows_f, v)
-        rows.append(["MASTER = 1" if k_ == 0 else str(k_ + 1), f"{v:02d}", lab(v), made(v),
+        rows.append(["MASTER = 1" if k_ == 0 else str(k_ + 1), f"{v:02d}", lab(v), yx_(v), made(v),
                      ' · '.join(src_) if src_ else 'no row within 2 changes',
                      lastprev_check(ep, rows_f, v),
                      f"{len(names)} ({', '.join(names)})"])
@@ -1410,7 +1414,7 @@ def show_final_box():
             for k2 in range(max(len(c) for c in cells)):
                 out.append('│ ' + ' │ '.join((c[k2] if k2 < len(c) else '').ljust(x) for c, x in zip(cells, w_)) + ' │')
         return out + [rule('└', '┴', '┘')]
-    _RRR3_PREV['sum_final4'] = table(rows[0], rows[1:], (3, 5, 4)) + [
+    _RRR3_PREV['sum_final4'] = table(rows[0], rows[1:], (4, 6, 5)) + [
         "  LAST op / previous op check: LAST row (new ops or its old = previous ops) and the row before it; fewest changes.",
         "  Tested on 412 rounds (F N M K O P Q R): ranking FINAL 4 by it held 28 vs 29 now, so it is a check, not the ranking."]
     _RRR3_PREV['sum_head'] = (fb['after'], ep)

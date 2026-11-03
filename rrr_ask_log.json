@@ -2419,5 +2419,17 @@
    67
   ],
   "result": 67
+ },
+ {
+  "time": "2026-11-04",
+  "round": "S28",
+  "after": 67,
+  "ep": 57,
+  "kind": "result_only",
+  "entry": "result 06 = cut/-1 on EP 57; FINAL 4 #3 HIT (44/733); Op2 new xy exact; * columns hit (1/2), table, REC, PRIME 4, rules 2/5/12; same op as S26",
+  "numbers": [
+   6
+  ],
+  "result": 6
  }
 ]

@@ -28,6 +28,8 @@ HIT = {'rec': 'rrr3_rec_hits', 'strong': 'rrr3_strong_hits', 'yx': 'rrr3_yx_hits
 hits = [HIT[h] for h in rec['held_by'] if h in HIT]
 hits += [f'rrr3_{h}_hits' for h in rec['held_by'] if re.fullmatch(r'rule\d+', h)]
 hits += [f'rrr3_lad_{k}_hits' for k, v in rec['ladder'].items() if res in v]
+up['rrr3_twostar_rounds'] = 1
+if res in rec['ranked'][:2]: hits.append('rrr3_twostar_hits')
 if res in rec['ranked'][:4]: hits.append('rrr3_final4_hits')
 if rec['ranked'][:1] == [res]: hits.append('rrr3_master_hits')
 if res in rec['prime10'][:4]: hits.append('rrr3_prime4_hits')

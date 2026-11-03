@@ -2371,5 +2371,17 @@
    75
   ],
   "result": 75
+ },
+ {
+  "time": "2026-11-04",
+  "round": "S24",
+  "after": 75,
+  "ep": 9,
+  "kind": "result_only",
+  "entry": "result 18 = +1/-1 on EP 09; Op12 51->57 new ops xy, x sign flipped, y cut switched (2 changes) = MASTER 93 row; held by STRONG 20, REC, HOT, PRIME 10 #9, PRIME 4 FAMILY, rule 1, rule 5, rank 14; FINAL 4 miss; form check 7/142 vs chance 8.0 -> no rule",
+  "numbers": [
+   18
+  ],
+  "result": 18
  }
 ]

@@ -2443,5 +2443,17 @@
    0
   ],
   "result": 0
+ },
+ {
+  "time": "2026-11-04",
+  "round": "S30",
+  "after": 0,
+  "ep": 25,
+  "kind": "result_only",
+  "entry": "result 24 = nc/-1 on EP 25; PRIME 8 #6, STRONG, HOT, PRIME 4 FAMILY, rules 5/18, rank 34; FINAL 4 miss; outer flip 28 miss",
+  "numbers": [
+   24
+  ],
+  "result": 24
  }
 ]

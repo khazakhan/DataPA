@@ -15,6 +15,10 @@ UNDO = '--undo' in args
 SKIPK = set(next((a.split('=', 1)[1].split(',') for a in args if a.startswith('--skip=')), []))
 args = [a for a in args if not a.startswith('--')]
 rnd, extra = args[0], args[1:]
+import io, contextlib
+sys.path.insert(0, '.')
+with contextlib.redirect_stdout(io.StringIO()):
+    import DataProcessing as D
 rec = [json.loads(l) for l in open('rrr_records/live.jsonl') if json.loads(l)['round'] == rnd][-1]
 res, lists = rec['result'], rec['lists']
 ALWAYS = ['results', 'table_rounds', 'declared', 'rrr3_rounds', 'rrr3_rec_rounds', 'rrr3_same_rounds',
@@ -35,6 +39,12 @@ hits = [HIT[h] for h in rec['held_by'] if h in HIT]
 hits += [f'rrr3_{h}_hits' for h in rec['held_by'] if re.fullmatch(r'rule\d+', h)]
 hits += [f'rrr3_lad_{k}_hits' for k, v in rec['ladder'].items() if res in v]
 up['rrr3_twostar_rounds'] = 1
+up['rrr3_f4yx_rounds'] = 1
+_e = rec['ep']; _f4yx = set()
+for v in rec['ranked'][:4]:
+    _xo, _yo = D.find_op(_e // 10, v // 10), D.find_op(_e % 10, v % 10)
+    _f4yx.add(D.apply_op(_e // 10, _yo) * 10 + D.apply_op(_e % 10, _xo))
+if res in _f4yx: hits.append('rrr3_f4yx_hits')
 if res in rec['ranked'][:2]: hits.append('rrr3_twostar_hits')
 if res in rec['ranked'][:4]: hits.append('rrr3_final4_hits')
 if rec['ranked'][:1] == [res]: hits.append('rrr3_master_hits')

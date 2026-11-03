@@ -2491,5 +2491,17 @@
    2
   ],
   "result": 2
+ },
+ {
+  "time": "2026-11-04",
+  "round": "S34",
+  "after": 2,
+  "ep": 81,
+  "kind": "result_only",
+  "entry": "result 98 = +1/c+2 on EP 81 = yx of FINAL 4 #2 (52); else REC only, >40; FINAL 4 yx replay 10/152 vs 6.1 -> live counter rrr3_f4yx from S35",
+  "numbers": [
+   98
+  ],
+  "result": 98
  }
 ]

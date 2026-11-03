@@ -2383,5 +2383,17 @@
    18
   ],
   "result": 18
+ },
+ {
+  "time": "2026-11-04",
+  "round": "S25",
+  "after": 18,
+  "ep": 62,
+  "kind": "result_only",
+  "entry": "result 64 = nc/+2 on EP 62; LAST Op29 old xy y cut sw (1 change), Op11 new xy y cut sw, Op19 new yx x cut sw; STRONG+REC only, rank 25; FINAL 4 miss. User asked deep FINAL 4 look: 143 live rounds, current 9 vs chance 5.8, LOSO logistic 7-9, lift-weighted 5, +wide/+rule28 10 (noise) -> no change",
+  "numbers": [
+   64
+  ],
+  "result": 64
  }
 ]

@@ -2335,5 +2335,17 @@
    61
   ],
   "result": 61
+ },
+ {
+  "time": "2026-11-03",
+  "round": "S21",
+  "after": 61,
+  "ep": 29,
+  "kind": "result_only",
+  "entry": "result 73 = cut/c-1 on EP 29 = rule 28 first pick (crossed LAST Op23: x = new y nc cut sw, y = new x c-2 step sw); also CROSSED grid + yx list; Op1/Op6 old yx both cuts sw (2 changes); FINAL 4 miss",
+  "numbers": [
+   73
+  ],
+  "result": 73
  }
 ]

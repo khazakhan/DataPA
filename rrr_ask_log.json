@@ -2455,5 +2455,17 @@
    24
   ],
   "result": 24
+ },
+ {
+  "time": "2026-11-04",
+  "round": "S31",
+  "after": 24,
+  "ep": 19,
+  "kind": "result_only",
+  "entry": "result 20 = +1/+1 on EP 19; HOT only, >40; closest Op20 old xy x flip + y cut sw (2 changes), form already below chance (5/142 vs 8.0) -> no rule",
+  "numbers": [
+   20
+  ],
+  "result": 20
  }
 ]

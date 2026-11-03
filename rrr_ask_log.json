@@ -2479,5 +2479,17 @@
    63
   ],
   "result": 63
+ },
+ {
+  "time": "2026-11-04",
+  "round": "S33",
+  "after": 63,
+  "ep": 37,
+  "kind": "result_only",
+  "entry": "result 02 = c+2/cut on EP 37; Op5 old ops yx exact (0 changes); yx + finder only, >40; FINAL 4, MegaStar 37/PowerStar 05, *, ~, outer flip miss; old-exact at chance -> no change",
+  "numbers": [
+   2
+  ],
+  "result": 2
  }
 ]

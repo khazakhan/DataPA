@@ -2347,5 +2347,17 @@
    73
   ],
   "result": 73
+ },
+ {
+  "time": "2026-11-03",
+  "round": "S22",
+  "after": 73,
+  "ep": 25,
+  "kind": "result_only",
+  "entry": "result 78 = cut/c-2 on EP 25 = rule 28 first pick again (crossed LAST Op20 64->25 new c-1/nc: x = new y nc cut sw, y = new x c-1 step sw); crossed grid + rec + charrow + top20 rank 12; Op15 old yx y cut sw+flip (2); FINAL 4 miss",
+  "numbers": [
+   78
+  ],
+  "result": 78
  }
 ]

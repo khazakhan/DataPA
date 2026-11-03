@@ -45,6 +45,12 @@ for row in rec['rows']:
     sx, sy = D._star_ops(AB[row['old'][0]], AB[row['old'][1]])
     star |= {D.apply_op(ep // 10, sx) * 10 + D.apply_op(ep % 10, sy), D.apply_op(ep // 10, sy) * 10 + D.apply_op(ep % 10, sx)}
 up['rrr3_starcol_rounds'] = 1
+tilde = set()
+for row in rec['rows']:
+    tx, ty = D._tilde_ops(AB[row['old'][0]], AB[row['old'][1]])
+    tilde |= {D.apply_op(ep // 10, tx) * 10 + D.apply_op(ep % 10, ty), D.apply_op(ep // 10, ty) * 10 + D.apply_op(ep % 10, tx)}
+up['rrr3_tilde_rounds'] = 1
+if res in tilde: hits.append('rrr3_tilde_hits')
 if res in star: hits.append('rrr3_starcol_hits')
 ep_rows = [row for row in rec['rows'] if row['a'] == ep]
 if ep_rows:

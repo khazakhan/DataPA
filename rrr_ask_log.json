@@ -2474,10 +2474,10 @@
   "after": 20,
   "ep": 23,
   "kind": "user_screenshot",
-  "entry": "result 68 = c-1/cut on EP 23; CharRow only; user asked ~xy/~yx reverse columns with strongest form. 902 forms x 150 rounds, none above luck (best z 2.9, held-out 9 vs 11.1); chose ~x = old y cut sw+flip, ~y = old x cut sw (25 vs 15.7), on test",
+  "entry": "CORRECTED by user: result 63 (not 68) = c-1/nc on EP 23; Op27 new xy x flip (1 change); STRONG, REC, CharRow, finder, rank 15; FINAL 4 miss. (~xy/~yx columns were added this round on user request; 902 forms, none above luck; ~x = old y cut sw+flip, ~y = old x cut sw)",
   "numbers": [
-   68
+   63
   ],
-  "result": 68
+  "result": 63
  }
 ]

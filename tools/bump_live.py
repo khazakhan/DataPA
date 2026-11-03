@@ -8,7 +8,13 @@ a number this round; '_hits' keys go up for every list that held the result
 (held_by + ladder).  Extra keys (e.g. rrr3_hits) can be passed by hand."""
 import sys, os, re, json
 os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
-rnd, extra = sys.argv[1], sys.argv[2:]
+# --undo: take back a round's bump (e.g. a corrected result); --skip=k1,k2 leaves
+# keys alone (keys that did not exist when the round was first bumped)
+args = sys.argv[1:]
+UNDO = '--undo' in args
+SKIPK = set(next((a.split('=', 1)[1].split(',') for a in args if a.startswith('--skip=')), []))
+args = [a for a in args if not a.startswith('--')]
+rnd, extra = args[0], args[1:]
 rec = [json.loads(l) for l in open('rrr_records/live.jsonl') if json.loads(l)['round'] == rnd][-1]
 res, lists = rec['result'], rec['lists']
 ALWAYS = ['results', 'table_rounds', 'declared', 'rrr3_rounds', 'rrr3_rec_rounds', 'rrr3_same_rounds',
@@ -78,6 +84,8 @@ src = open('DataProcessing.py').read()
 a = src.index('RRR_LIVE = {'); b = src.index('\n}', a)
 block = src[a:b]
 for k, n in up.items():
+    if k in SKIPK: continue
+    if UNDO: n = -n
     m = re.search(rf"'{k}': (\d+)", block)
     if not m:
         print('missing key', k); continue

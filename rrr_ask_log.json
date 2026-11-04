@@ -2659,5 +2659,17 @@
    61
   ],
   "result": 61
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S48",
+  "after": 61,
+  "ep": 73,
+  "kind": "result_only",
+  "entry": "result 83 = +1/nc on EP 73; ~xy Op24 LAST (first ~ hit 1/16) + LAST-OP 8; >40. USER asked FINAL 4 update: 166 rounds FINAL 4 10 vs 6.6; rebuilt list-lift score walk-forward 7 vs 7; top3+rule28#1 8 vs 7 (noise) -> no change",
+  "numbers": [
+   83
+  ],
+  "result": 83
  }
 ]

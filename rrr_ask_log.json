@@ -2515,5 +2515,17 @@
    88
   ],
   "result": 88
+ },
+ {
+  "time": "2026-11-04",
+  "round": "S36",
+  "after": 88,
+  "ep": 96,
+  "kind": "result_only",
+  "entry": "result 69 = c+2/c-2 on EP 96 = Op7 49->12 old xy exact; REC + top20 rank 15; FINAL 4/MegaStar 08/PowerStar 66 miss; old-exact 13/154 vs 17.5 -> no rule",
+  "numbers": [
+   69
+  ],
+  "result": 69
  }
 ]

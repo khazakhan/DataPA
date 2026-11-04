@@ -2683,5 +2683,17 @@
    62
   ],
   "result": 62
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S50",
+  "after": 62,
+  "ep": 43,
+  "kind": "result_only",
+  "entry": "result 00 = c+1/c+2 on EP 43; ~yx Op12 only (~ 2/18); all other lists miss",
+  "numbers": [
+   0
+  ],
+  "result": 0
  }
 ]

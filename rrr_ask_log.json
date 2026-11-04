@@ -2539,5 +2539,17 @@
    83
   ],
   "result": 83
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S38",
+  "after": 83,
+  "ep": 31,
+  "kind": "result_only",
+  "entry": "result 68 = c-2/c+2 on EP 31; no row makes it; yx + CharRow only, >40; FINAL 4/MegaStar 33/PowerStar 39/oldcols miss; no rule",
+  "numbers": [
+   68
+  ],
+  "result": 68
  }
 ]

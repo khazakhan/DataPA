@@ -2527,5 +2527,17 @@
    69
   ],
   "result": 69
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S37",
+  "after": 69,
+  "ep": 61,
+  "kind": "result_only",
+  "entry": "result 83 = +2/+2 on EP 61; Op17 old both cuts sw (2 changes); WIDE only, >40; FINAL 4/MegaStar 21/PowerStar 34 miss. USER: add old xy, old yx, newold xy, oldnew yx columns to table 4 -> added (replay 19/155 vs 25.3), key rrr3_oldcols from S38",
+  "numbers": [
+   83
+  ],
+  "result": 83
  }
 ]

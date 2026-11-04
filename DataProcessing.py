@@ -3523,23 +3523,23 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 1324, 'tens_cut': 140, 'short_list': 198,
-    'table_rounds': 1314, 'table_hits': 155, 'table_chance': 33, 'declared': 1279, 'declared_hits': 19,
+    'results': 1325, 'tens_cut': 140, 'short_list': 198,
+    'table_rounds': 1315, 'table_hits': 155, 'table_chance': 33, 'declared': 1280, 'declared_hits': 19,
     'band_hits': 92, 'units_hits': 88, 'second_hits': 20,
     'same_tens': 26,
-    'rrr3_rounds': 1010, 'rrr3_hits': 55, 'rrr3_rec_rounds': 1011, 'rrr3_rec_hits': 354,
-    'rrr3_same_rounds': 983, 'rrr3_same_hits': 19, 'rrr3_wide_rounds': 970, 'rrr3_wide_hits': 110, 'rrr3_yx_rounds': 965, 'rrr3_yx_hits': 109,
-    'rrr3_strong_rounds': 961, 'rrr3_strong_hits': 194, 'rrr3_same2_rounds': 958, 'rrr3_same2_hits': 12,
-    'rrr3_turn_rounds': 965, 'rrr3_turn_hits': 14, 'rrr3_sameyx_rounds': 965, 'rrr3_sameyx_hits': 7,
-    'power_rounds': 900, 'power_hits': 562,
+    'rrr3_rounds': 1011, 'rrr3_hits': 55, 'rrr3_rec_rounds': 1012, 'rrr3_rec_hits': 354,
+    'rrr3_same_rounds': 984, 'rrr3_same_hits': 19, 'rrr3_wide_rounds': 971, 'rrr3_wide_hits': 111, 'rrr3_yx_rounds': 966, 'rrr3_yx_hits': 109,
+    'rrr3_strong_rounds': 962, 'rrr3_strong_hits': 194, 'rrr3_same2_rounds': 959, 'rrr3_same2_hits': 12,
+    'rrr3_turn_rounds': 966, 'rrr3_turn_hits': 14, 'rrr3_sameyx_rounds': 966, 'rrr3_sameyx_hits': 7,
+    'power_rounds': 901, 'power_hits': 562,
     # live records shown in the bottom FINAL 4 box (user, 2026-10-26); the
     # user's rules 1-5 stay on test and never feed FINAL 4
-    'rrr3_final4_rounds': 741, 'rrr3_final4_hits': 44, 'rrr3_master_rounds': 687, 'rrr3_master_hits': 6,
-    'rrr3_star1_rounds': 354, 'rrr3_star1_hits': 4,
-    'rrr3_rule1_rounds': 345, 'rrr3_rule1_hits': 12, 'rrr3_rule2_rounds': 239, 'rrr3_rule2_hits': 18,
-    'rrr3_rule3_rounds': 240, 'rrr3_rule3_hits': 13, 'rrr3_rule4_rounds': 223, 'rrr3_rule4_hits': 3,
-    'rrr3_rule5_rounds': 193, 'rrr3_rule5_hits': 61, 'rrr3_rule6_rounds': 41, 'rrr3_rule6_hits': 1,
-    'rrr3_rule7_rounds': 104, 'rrr3_rule7_hits': 2, 'rrr3_rule8_rounds': 104, 'rrr3_rule8_hits': 4, 'rrr3_rule9_rounds': 51, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 36, 'rrr3_rule10_hits': 2, 'rrr3_rule11_rounds': 6, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 57, 'rrr3_rule12_hits': 2, 'rrr3_rule13_rounds': 16, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 12, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 103, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 13, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 39, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 160, 'rrr3_rule18_hits': 4, 'rrr3_rule19_rounds': 34, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 39, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 33, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 141, 'rrr3_rule22_hits': 5, 'rrr3_rule23_rounds': 38, 'rrr3_rule23_hits': 0, 'rrr3_rule24_rounds': 11, 'rrr3_lastop4_rounds': 94, 'rrr3_lastop4_hits': 4, 'rrr3_lastop8_rounds': 94, 'rrr3_lastop8_hits': 6, 'rrr3_rule28_rounds': 90, 'rrr3_rule28_hits': 7, 'rrr3_rule27_rounds': 98, 'rrr3_rule27_hits': 1, 'rrr3_rule26_rounds': 29, 'rrr3_rule26_hits': 1, 'rrr3_rule25_rounds': 21, 'rrr3_rule25_hits': 0, 'rrr3_rule24_hits': 1, 'rrr3_onerow_rounds': 145, 'rrr3_onerow_hits': 1, 'rrr3_onerow5_rounds': 145, 'rrr3_prime4fam_rounds': 140, 'rrr3_prime4fam_hits': 27, 'rrr3_prime4rev_rounds': 132, 'rrr3_crossgrid_rounds': 102, 'rrr3_crossgrid_hits': 11, 'rrr3_lad_prime4_rounds': 127, 'rrr3_lad_prime4_hits': 6, 'rrr3_lad_prime8_rounds': 127, 'rrr3_lad_prime8_hits': 12, 'rrr3_lad_prime10_rounds': 127, 'rrr3_lad_prime10_hits': 13, 'rrr3_lad_prime4family_rounds': 127, 'rrr3_lad_prime4family_hits': 27, 'rrr3_lad_reversed_rounds': 127, 'rrr3_lad_reversed_hits': 32, 'rrr3_lad_prime10family_rounds': 127, 'rrr3_lad_prime10family_hits': 38, 'rrr3_prime4rev_hits': 7, 'rrr3_onerow5_hits': 4, 'rrr3_finder_rounds': 182, 'rrr3_finder_hits': 36, 'rrr3_prime4_rounds': 184, 'rrr3_prime4_hits': 9, 'rrr3_prime10_rounds': 184, 'rrr3_prime10_hits': 21, 'rrr3_prime8_rounds': 154, 'rrr3_starcol_rounds': 10, 'rrr3_starcol_hits': 1, 'rrr3_f4yx_rounds': 2, 'rrr3_f4yx_hits': 0, 'rrr3_twostar_rounds': 4, 'rrr3_twostar_hits': 0, 'rrr3_tilde_rounds': 4, 'rrr3_tilde_hits': 0, 'rrr3_oflip_rounds': 7, 'rrr3_oflip_hits': 0, 'rrr3_eprow_rounds': 2, 'rrr3_eprow_hits': 0, 'rrr3_outer_rounds': 10, 'rrr3_outer_hits': 0, 'rrr3_prime8_hits': 17,
+    'rrr3_final4_rounds': 742, 'rrr3_final4_hits': 44, 'rrr3_master_rounds': 688, 'rrr3_master_hits': 6,
+    'rrr3_star1_rounds': 355, 'rrr3_star1_hits': 4,
+    'rrr3_rule1_rounds': 346, 'rrr3_rule1_hits': 12, 'rrr3_rule2_rounds': 240, 'rrr3_rule2_hits': 18,
+    'rrr3_rule3_rounds': 241, 'rrr3_rule3_hits': 13, 'rrr3_rule4_rounds': 224, 'rrr3_rule4_hits': 3,
+    'rrr3_rule5_rounds': 194, 'rrr3_rule5_hits': 61, 'rrr3_rule6_rounds': 41, 'rrr3_rule6_hits': 1,
+    'rrr3_rule7_rounds': 105, 'rrr3_rule7_hits': 2, 'rrr3_rule8_rounds': 105, 'rrr3_rule8_hits': 4, 'rrr3_rule9_rounds': 52, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 37, 'rrr3_rule10_hits': 2, 'rrr3_rule11_rounds': 6, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 57, 'rrr3_rule12_hits': 2, 'rrr3_rule13_rounds': 16, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 12, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 103, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 13, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 39, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 161, 'rrr3_rule18_hits': 4, 'rrr3_rule19_rounds': 34, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 39, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 33, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 142, 'rrr3_rule22_hits': 5, 'rrr3_rule23_rounds': 38, 'rrr3_rule23_hits': 0, 'rrr3_rule24_rounds': 11, 'rrr3_lastop4_rounds': 95, 'rrr3_lastop4_hits': 4, 'rrr3_lastop8_rounds': 95, 'rrr3_lastop8_hits': 6, 'rrr3_rule28_rounds': 91, 'rrr3_rule28_hits': 7, 'rrr3_rule27_rounds': 99, 'rrr3_rule27_hits': 1, 'rrr3_rule26_rounds': 29, 'rrr3_rule26_hits': 1, 'rrr3_rule25_rounds': 21, 'rrr3_rule25_hits': 0, 'rrr3_rule24_hits': 1, 'rrr3_onerow_rounds': 146, 'rrr3_onerow_hits': 1, 'rrr3_onerow5_rounds': 146, 'rrr3_prime4fam_rounds': 141, 'rrr3_prime4fam_hits': 27, 'rrr3_prime4rev_rounds': 133, 'rrr3_crossgrid_rounds': 103, 'rrr3_crossgrid_hits': 11, 'rrr3_lad_prime4_rounds': 128, 'rrr3_lad_prime4_hits': 6, 'rrr3_lad_prime8_rounds': 128, 'rrr3_lad_prime8_hits': 12, 'rrr3_lad_prime10_rounds': 128, 'rrr3_lad_prime10_hits': 13, 'rrr3_lad_prime4family_rounds': 128, 'rrr3_lad_prime4family_hits': 27, 'rrr3_lad_reversed_rounds': 128, 'rrr3_lad_reversed_hits': 32, 'rrr3_lad_prime10family_rounds': 128, 'rrr3_lad_prime10family_hits': 38, 'rrr3_prime4rev_hits': 7, 'rrr3_onerow5_hits': 4, 'rrr3_finder_rounds': 183, 'rrr3_finder_hits': 36, 'rrr3_prime4_rounds': 185, 'rrr3_prime4_hits': 9, 'rrr3_prime10_rounds': 185, 'rrr3_prime10_hits': 21, 'rrr3_prime8_rounds': 155, 'rrr3_starcol_rounds': 11, 'rrr3_starcol_hits': 1, 'rrr3_f4yx_rounds': 3, 'rrr3_f4yx_hits': 0, 'rrr3_twostar_rounds': 5, 'rrr3_twostar_hits': 0, 'rrr3_tilde_rounds': 5, 'rrr3_tilde_hits': 0, 'rrr3_oflip_rounds': 8, 'rrr3_oflip_hits': 0, 'rrr3_eprow_rounds': 2, 'rrr3_eprow_hits': 0, 'rrr3_outer_rounds': 11, 'rrr3_outer_hits': 0, 'rrr3_oldcols_rounds': 0, 'rrr3_oldcols_hits': 0, 'rrr3_prime8_hits': 17,
 }
 
 
@@ -4249,6 +4249,22 @@ def _star_cells(ep, ox, oy, kw):
     return f"{v1:02d} ({a_}/{b_})".ljust(kw) + f"{v2:02d} ({b_}/{a_})".ljust(kw)
 
 
+def _pair_cells(ep, xo, yo, kw):
+    """xy and yx cells for one (x op, y op) pair on the EP."""
+    a_, b_ = OP_ABBREV[xo], OP_ABBREV[yo]
+    v1 = apply_op(ep // 10, xo) * 10 + apply_op(ep % 10, yo)
+    v2 = apply_op(ep // 10, yo) * 10 + apply_op(ep % 10, xo)
+    return f"{v1:02d} ({a_}/{b_})".ljust(kw) + f"{v2:02d} ({b_}/{a_})".ljust(kw)
+
+
+def _oldcols_cells(ep, ox, oy, nx, kw):
+    """old xy / old yx / newold xy / oldnew yx columns (user 2026-11-05, S37):
+    old ops as they are; new x with old y (xy) and the same pair read yx
+    (old y on x, new x on y).  Replay 155 rounds: old 13 vs 16.2, newold
+    6 vs 10.8 (at/below luck) -- display only, never in FINAL 4."""
+    return _pair_cells(ep, ox, oy, kw) + _pair_cells(ep, nx, oy, kw)
+
+
 def _after_tag(a):
     """'after 70 (27→70 cut/c-2)' (user, 2026-11-01): the after number with
     the operation that took the number before it to it."""
@@ -4353,8 +4369,10 @@ def show_chat_view():
                        OP_ABBREV[ox], OP_ABBREV[oy], OP_ABBREV[nx], OP_ABBREV[ny],
                        f"{xy:02d} ({OP_ABBREV[nx]}/{OP_ABBREV[ny]})", f"{yx:02d} ({OP_ABBREV[ny]}/{OP_ABBREV[nx]})",
                        _star_cells(ep, ox, oy, 15)[:15].strip(), _star_cells(ep, ox, oy, 15)[15:].strip(),
-                       _tilde_cells(ep, ox, oy, 15)[:15].strip(), _tilde_cells(ep, ox, oy, 15)[15:].strip()])
-        tb4 = _box(["Pos", "Source", "old x", "old y", "new x", "new y", "xy (op)", "yx (op)", "*xy (op)", "*yx (op)", "~xy (op)", "~yx (op)"], t4)
+                       _tilde_cells(ep, ox, oy, 15)[:15].strip(), _tilde_cells(ep, ox, oy, 15)[15:].strip()]
+                      + [_oldcols_cells(ep, ox, oy, nx, 15)[i:i + 15].strip() for i in (0, 15, 30, 45)])
+        tb4 = _box(["Pos", "Source", "old x", "old y", "new x", "new y", "xy (op)", "yx (op)", "*xy (op)", "*yx (op)", "~xy (op)", "~yx (op)",
+                    "old xy (op)", "old yx (op)", "newold xy", "oldnew yx"], t4)
         ts = P.get('two_star') or []
         if len(ts) == 2:
             # MegaStar / PowerStar box beside table 4 (user 2026-11-04, S33 screenshot)
@@ -4362,9 +4380,16 @@ def show_chat_view():
             sb += [f"live {RRR_LIVE.get('rrr3_twostar_hits', 0)} of {RRR_LIVE.get('rrr3_twostar_rounds', 0)}",
                    "replay 7 of 150, chance 3", "= FINAL 4 #1 and #2"]
             wl = max(len(l_) for l_ in tb4)
-            tb4 = [(tb4[i] if i < len(tb4) else '').ljust(wl) + '   ' + (sb[i] if i < len(sb) else '')
-                   for i in range(max(len(tb4), len(sb)))]
+            if wl + 3 + max(len(l_) for l_ in sb) + 2 <= _term_w():
+                tb4 = [(tb4[i] if i < len(tb4) else '').ljust(wl) + '   ' + (sb[i] if i < len(sb) else '')
+                       for i in range(max(len(tb4), len(sb)))]
+            else:          # too wide with the 4 old/newold columns: box goes under table 4
+                tb4 = tb4 + [''] + sb
         show(tb4)
+        oldn = sorted({int(c_[:2]) for r_ in t4 for c_ in r_[12:16]})
+        print(f"  old xy/yx = old ops as they are; newold xy = new x on x + old y on y, oldnew yx = old y on x + new x on y.  ON TEST, not in FINAL 4."
+              f"\n  old/newold numbers: {' '.join(f'{v:02d}' for v in oldn)}   live {RRR_LIVE.get('rrr3_oldcols_hits', 0)} of {RRR_LIVE.get('rrr3_oldcols_rounds', 0)}"
+              f" (replay 155 rounds: 19 vs chance 25.3)")
         stars = sorted({int(c_[:2]) for r_ in t4 for c_ in r_[8:10]})
         tild = sorted({int(c_[:2]) for r_ in t4 for c_ in r_[10:12]})
         print(f"  ~xy = old y cut switched + sign flipped on x, old x cut switched on y (reverse of *; ~yx the other way).  ON TEST, not in FINAL 4."
@@ -4507,7 +4532,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 src.append((last, a, b, lx, ly, 'LAST'))
     KW   = 15
     head = (f"  {'Pos':<12} {'Source':<9} {'old x':<6} {'old y':<6}    "
-            f"{'new x':<6} {'new y':<6}  {'xy (op)':<{KW}}{'yx (op)':<{KW}}{'*xy (op)':<{KW}}{'*yx (op)':<{KW}}{'~xy (op)':<{KW}}{'~yx (op)':<{KW}}")
+            f"{'new x':<6} {'new y':<6}  {'xy (op)':<{KW}}{'yx (op)':<{KW}}{'*xy (op)':<{KW}}{'*yx (op)':<{KW}}{'~xy (op)':<{KW}}{'~yx (op)':<{KW}}"
+            f"{'old xy':<{KW}}{'old yx':<{KW}}{'newold xy':<{KW}}{'oldnew yx':<{KW}}")
     body = [f"RRR:  NEXT OPERATION → EP={ep:02d}".center(len(head)), "", head, '─' * len(head)]
     live = grid_ep is not None and grid_ep >= 0
     star = (lambda v: '★' if v // 10 == cut(grid_ep // 10) else ' ') if live else (lambda v: ' ')
@@ -4524,7 +4550,8 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         body.append(f"  {tag:<12} {a:02d} → {b:02d}   {OP_ABBREV[x_op]:<6} {OP_ABBREV[y_op]:<6} →  "
                     f"{nxa:<6} {nya:<6}  " + f"{xy:02d}{star(xy)}({nxa}/{nya})".ljust(KW)
                     + f"{yx:02d}{star(yx)}({nya}/{nxa})".ljust(KW)
-                    + _star_cells(ep, x_op, y_op, KW) + _tilde_cells(ep, x_op, y_op, KW))
+                    + _star_cells(ep, x_op, y_op, KW) + _tilde_cells(ep, x_op, y_op, KW)
+                    + _oldcols_cells(ep, x_op, y_op, nx, KW))
     _RRR_OCJP_OLD[:] = [(x_, y_) for _, _, _, x_, y_ in row_ops]
     # kept for the questions at the end of the page (rrr_ask_ops)
     _RRR_ASK.update(ep=ep, prefix=pos_prefix,

@@ -69,6 +69,14 @@ for row in rec['rows']:
     tilde |= {D.apply_op(ep // 10, tx) * 10 + D.apply_op(ep % 10, ty), D.apply_op(ep // 10, ty) * 10 + D.apply_op(ep % 10, tx)}
 up['rrr3_tilde_rounds'] = 1
 if res in tilde: hits.append('rrr3_tilde_hits')
+# old xy/yx + newold xy / oldnew yx columns (user 2026-11-05, live from S38)
+oldc = set()
+for row in rec['rows']:
+    _ox, _oy, _nx = AB[row['old'][0]], AB[row['old'][1]], AB[row['new'][0]]
+    for _p, _q in ((_ox, _oy), (_nx, _oy)):
+        oldc |= {D.apply_op(ep // 10, _p) * 10 + D.apply_op(ep % 10, _q), D.apply_op(ep // 10, _q) * 10 + D.apply_op(ep % 10, _p)}
+up['rrr3_oldcols_rounds'] = 1
+if res in oldc: hits.append('rrr3_oldcols_hits')
 if res in star: hits.append('rrr3_starcol_hits')
 ep_rows = [row for row in rec['rows'] if row['a'] == ep]
 if ep_rows:

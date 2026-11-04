@@ -2719,5 +2719,17 @@
    43
   ],
   "result": 43
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S53",
+  "after": 43,
+  "ep": 39,
+  "kind": "result_only",
+  "entry": "result 70 = c-1/+1 on EP 39; oldx·newx± Op2 + ~xy Op33 + newold xy Op33 + LAST-OP 8 + WIDE; ± 3/12, ~ 3/21; FINAL 4 miss",
+  "numbers": [
+   70
+  ],
+  "result": 70
  }
 ]

@@ -2587,5 +2587,17 @@
    15
   ],
   "result": 15
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S42",
+  "after": 15,
+  "ep": 39,
+  "kind": "result_only",
+  "entry": "result 65 = c-2/c+1 on EP 39 = new oldy·newy± column Op11 (first live hit 1/1, replay at chance); WIDE otherwise, >40; FINAL 4/MegaStar 20/PowerStar 30 miss",
+  "numbers": [
+   65
+  ],
+  "result": 65
  }
 ]

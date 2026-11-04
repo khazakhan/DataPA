@@ -3539,7 +3539,7 @@ RRR_LIVE = {
     'rrr3_rule1_rounds': 350, 'rrr3_rule1_hits': 12, 'rrr3_rule2_rounds': 244, 'rrr3_rule2_hits': 18,
     'rrr3_rule3_rounds': 245, 'rrr3_rule3_hits': 13, 'rrr3_rule4_rounds': 228, 'rrr3_rule4_hits': 3,
     'rrr3_rule5_rounds': 198, 'rrr3_rule5_hits': 61, 'rrr3_rule6_rounds': 41, 'rrr3_rule6_hits': 1,
-    'rrr3_rule7_rounds': 109, 'rrr3_rule7_hits': 2, 'rrr3_rule8_rounds': 109, 'rrr3_rule8_hits': 4, 'rrr3_rule9_rounds': 54, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 38, 'rrr3_rule10_hits': 2, 'rrr3_rule11_rounds': 6, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 58, 'rrr3_rule12_hits': 2, 'rrr3_rule13_rounds': 16, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 12, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 106, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 14, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 39, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 165, 'rrr3_rule18_hits': 5, 'rrr3_rule19_rounds': 35, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 39, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 33, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 144, 'rrr3_rule22_hits': 5, 'rrr3_rule23_rounds': 38, 'rrr3_rule23_hits': 0, 'rrr3_rule24_rounds': 11, 'rrr3_lastop4_rounds': 99, 'rrr3_lastop4_hits': 4, 'rrr3_lastop8_rounds': 99, 'rrr3_lastop8_hits': 6, 'rrr3_rule28_rounds': 95, 'rrr3_rule28_hits': 7, 'rrr3_rule27_rounds': 103, 'rrr3_rule27_hits': 1, 'rrr3_rule26_rounds': 29, 'rrr3_rule26_hits': 1, 'rrr3_rule25_rounds': 21, 'rrr3_rule25_hits': 0, 'rrr3_rule24_hits': 1, 'rrr3_onerow_rounds': 150, 'rrr3_onerow_hits': 1, 'rrr3_onerow5_rounds': 150, 'rrr3_prime4fam_rounds': 145, 'rrr3_prime4fam_hits': 27, 'rrr3_prime4rev_rounds': 137, 'rrr3_crossgrid_rounds': 107, 'rrr3_crossgrid_hits': 11, 'rrr3_lad_prime4_rounds': 132, 'rrr3_lad_prime4_hits': 6, 'rrr3_lad_prime8_rounds': 132, 'rrr3_lad_prime8_hits': 12, 'rrr3_lad_prime10_rounds': 132, 'rrr3_lad_prime10_hits': 13, 'rrr3_lad_prime4family_rounds': 132, 'rrr3_lad_prime4family_hits': 27, 'rrr3_lad_reversed_rounds': 132, 'rrr3_lad_reversed_hits': 32, 'rrr3_lad_prime10family_rounds': 132, 'rrr3_lad_prime10family_hits': 39, 'rrr3_prime4rev_hits': 7, 'rrr3_onerow5_hits': 4, 'rrr3_finder_rounds': 187, 'rrr3_finder_hits': 36, 'rrr3_prime4_rounds': 189, 'rrr3_prime4_hits': 9, 'rrr3_prime10_rounds': 189, 'rrr3_prime10_hits': 21, 'rrr3_prime8_rounds': 159, 'rrr3_starcol_rounds': 15, 'rrr3_starcol_hits': 1, 'rrr3_f4yx_rounds': 7, 'rrr3_f4yx_hits': 0, 'rrr3_twostar_rounds': 9, 'rrr3_twostar_hits': 0, 'rrr3_tilde_rounds': 9, 'rrr3_tilde_hits': 0, 'rrr3_oflip_rounds': 12, 'rrr3_oflip_hits': 0, 'rrr3_eprow_rounds': 2, 'rrr3_eprow_hits': 0, 'rrr3_outer_rounds': 15, 'rrr3_outer_hits': 0, 'rrr3_oldcols_rounds': 4, 'rrr3_oldcols_hits': 0, 'rrr3_prime8_hits': 17,
+    'rrr3_rule7_rounds': 109, 'rrr3_rule7_hits': 2, 'rrr3_rule8_rounds': 109, 'rrr3_rule8_hits': 4, 'rrr3_rule9_rounds': 54, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 38, 'rrr3_rule10_hits': 2, 'rrr3_rule11_rounds': 6, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 58, 'rrr3_rule12_hits': 2, 'rrr3_rule13_rounds': 16, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 12, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 106, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 14, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 39, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 165, 'rrr3_rule18_hits': 5, 'rrr3_rule19_rounds': 35, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 39, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 33, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 144, 'rrr3_rule22_hits': 5, 'rrr3_rule23_rounds': 38, 'rrr3_rule23_hits': 0, 'rrr3_rule24_rounds': 11, 'rrr3_lastop4_rounds': 99, 'rrr3_lastop4_hits': 4, 'rrr3_lastop8_rounds': 99, 'rrr3_lastop8_hits': 6, 'rrr3_rule28_rounds': 95, 'rrr3_rule28_hits': 7, 'rrr3_rule27_rounds': 103, 'rrr3_rule27_hits': 1, 'rrr3_rule26_rounds': 29, 'rrr3_rule26_hits': 1, 'rrr3_rule25_rounds': 21, 'rrr3_rule25_hits': 0, 'rrr3_rule24_hits': 1, 'rrr3_onerow_rounds': 150, 'rrr3_onerow_hits': 1, 'rrr3_onerow5_rounds': 150, 'rrr3_prime4fam_rounds': 145, 'rrr3_prime4fam_hits': 27, 'rrr3_prime4rev_rounds': 137, 'rrr3_crossgrid_rounds': 107, 'rrr3_crossgrid_hits': 11, 'rrr3_lad_prime4_rounds': 132, 'rrr3_lad_prime4_hits': 6, 'rrr3_lad_prime8_rounds': 132, 'rrr3_lad_prime8_hits': 12, 'rrr3_lad_prime10_rounds': 132, 'rrr3_lad_prime10_hits': 13, 'rrr3_lad_prime4family_rounds': 132, 'rrr3_lad_prime4family_hits': 27, 'rrr3_lad_reversed_rounds': 132, 'rrr3_lad_reversed_hits': 32, 'rrr3_lad_prime10family_rounds': 132, 'rrr3_lad_prime10family_hits': 39, 'rrr3_prime4rev_hits': 7, 'rrr3_onerow5_hits': 4, 'rrr3_finder_rounds': 187, 'rrr3_finder_hits': 36, 'rrr3_prime4_rounds': 189, 'rrr3_prime4_hits': 9, 'rrr3_prime10_rounds': 189, 'rrr3_prime10_hits': 21, 'rrr3_prime8_rounds': 159, 'rrr3_starcol_rounds': 15, 'rrr3_starcol_hits': 1, 'rrr3_f4yx_rounds': 7, 'rrr3_f4yx_hits': 0, 'rrr3_twostar_rounds': 9, 'rrr3_twostar_hits': 0, 'rrr3_tilde_rounds': 9, 'rrr3_tilde_hits': 0, 'rrr3_oflip_rounds': 12, 'rrr3_oflip_hits': 0, 'rrr3_eprow_rounds': 2, 'rrr3_eprow_hits': 0, 'rrr3_outer_rounds': 15, 'rrr3_outer_hits': 0, 'rrr3_sflip_rounds': 0, 'rrr3_sflip_hits': 0, 'rrr3_oldcols_rounds': 4, 'rrr3_oldcols_hits': 0, 'rrr3_prime8_hits': 17,
 }
 
 
@@ -4265,6 +4265,14 @@ def _oldcols_cells(ep, ox, oy, nx, kw):
     return _pair_cells(ep, ox, oy, kw) + _pair_cells(ep, nx, oy, kw)
 
 
+def _sflip_cells(ep, ox, oy, nx, ny, kw):
+    """oldy·newy± / oldx·newx± columns (user 2026-11-05, S42): old y op on
+    x with new y sign flipped on y; old x op on x with new x sign flipped
+    on y (xy only).  Replay 159 rounds: 8 vs 8.9 and 10 vs 8.9 (chance) --
+    display only, never in FINAL 4."""
+    return _pair_cells(ep, oy, SIGN_FLIP[ny], kw)[:kw] + _pair_cells(ep, ox, SIGN_FLIP[nx], kw)[:kw]
+
+
 def _after_tag(a):
     """'after 70 (27→70 cut/c-2)' (user, 2026-11-01): the after number with
     the operation that took the number before it to it."""
@@ -4370,9 +4378,15 @@ def show_chat_view():
                        f"{xy:02d} ({OP_ABBREV[nx]}/{OP_ABBREV[ny]})", f"{yx:02d} ({OP_ABBREV[ny]}/{OP_ABBREV[nx]})",
                        _star_cells(ep, ox, oy, 15)[:15].strip(), _star_cells(ep, ox, oy, 15)[15:].strip(),
                        _tilde_cells(ep, ox, oy, 15)[:15].strip(), _tilde_cells(ep, ox, oy, 15)[15:].strip()]
-                      + [_oldcols_cells(ep, ox, oy, nx, 15)[i:i + 15].strip() for i in (0, 15, 30, 45)])
-        tb4 = _box(["Pos", "Source", "old x", "old y", "new x", "new y", "xy (op)", "yx (op)", "*xy (op)", "*yx (op)", "~xy (op)", "~yx (op)",
-                    "old xy (op)", "old yx (op)", "newold xy", "oldnew yx"], t4)
+                      + [_oldcols_cells(ep, ox, oy, nx, 15)[i:i + 15].strip() for i in (0, 15, 30, 45)]
+                      + [_sflip_cells(ep, ox, oy, nx, ny, 15)[i:i + 15].strip() for i in (0, 15)])
+        H4 = ["Pos", "Source", "old x", "old y", "new x", "new y", "xy (op)", "yx (op)", "*xy (op)", "*yx (op)", "~xy (op)", "~yx (op)",
+              "old xy (op)", "old yx (op)", "newold xy", "oldnew yx", "oldy·newy±", "oldx·newx±"]
+        tb4 = _box(H4, t4)
+        if max(len(l_) for l_ in tb4) + 2 > _term_w() + 12:
+            # too wide for the terminal: old/newold/± columns go in a 2nd box under it (same rows)
+            tb4 = (_box(H4[:12], [r_[:12] for r_ in t4]) + ['']
+                   + _box(H4[:2] + H4[12:], [r_[:2] + r_[12:] for r_ in t4]))
         ts = P.get('two_star') or []
         if len(ts) == 2:
             # MegaStar / PowerStar box beside table 4 (user 2026-11-04, S33 screenshot)
@@ -4390,6 +4404,10 @@ def show_chat_view():
         print(f"  old xy/yx = old ops as they are; newold xy = new x on x + old y on y, oldnew yx = old y on x + new x on y.  ON TEST, not in FINAL 4."
               f"\n  old/newold numbers: {' '.join(f'{v:02d}' for v in oldn)}   live {RRR_LIVE.get('rrr3_oldcols_hits', 0)} of {RRR_LIVE.get('rrr3_oldcols_rounds', 0)}"
               f" (replay 155 rounds: 19 vs chance 25.3)")
+        sfl = sorted({int(c_[:2]) for r_ in t4 for c_ in r_[16:18]})
+        print(f"  oldy·newy± = old y op on x, new y sign flipped on y; oldx·newx± = old x op on x, new x sign flipped on y.  ON TEST, not in FINAL 4."
+              f"\n  ± numbers: {' '.join(f'{v:02d}' for v in sfl)}   live {RRR_LIVE.get('rrr3_sflip_hits', 0)} of {RRR_LIVE.get('rrr3_sflip_rounds', 0)}"
+              f" (replay 159 rounds: 17 vs chance 17.4)")
         stars = sorted({int(c_[:2]) for r_ in t4 for c_ in r_[8:10]})
         tild = sorted({int(c_[:2]) for r_ in t4 for c_ in r_[10:12]})
         print(f"  ~xy = old y cut switched + sign flipped on x, old x cut switched on y (reverse of *; ~yx the other way).  ON TEST, not in FINAL 4."
@@ -4530,10 +4548,10 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 src[-1] = src[-1][:5] + ('LAST',)
             else:
                 src.append((last, a, b, lx, ly, 'LAST'))
-    KW   = 15
+    KW   = 13          # 13 (was 15) so 18 columns fit a ~230-col terminal
     head = (f"  {'Pos':<12} {'Source':<9} {'old x':<6} {'old y':<6}    "
             f"{'new x':<6} {'new y':<6}  {'xy (op)':<{KW}}{'yx (op)':<{KW}}{'*xy (op)':<{KW}}{'*yx (op)':<{KW}}{'~xy (op)':<{KW}}{'~yx (op)':<{KW}}"
-            f"{'old xy':<{KW}}{'old yx':<{KW}}{'newold xy':<{KW}}{'oldnew yx':<{KW}}")
+            f"{'old xy':<{KW}}{'old yx':<{KW}}{'newold xy':<{KW}}{'oldnew yx':<{KW}}{'oldy·newy±':<{KW}}{'oldx·newx±':<{KW}}")
     body = [f"RRR:  NEXT OPERATION → EP={ep:02d}".center(len(head)), "", head, '─' * len(head)]
     live = grid_ep is not None and grid_ep >= 0
     star = (lambda v: '★' if v // 10 == cut(grid_ep // 10) else ' ') if live else (lambda v: ' ')
@@ -4551,7 +4569,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                     f"{nxa:<6} {nya:<6}  " + f"{xy:02d}{star(xy)}({nxa}/{nya})".ljust(KW)
                     + f"{yx:02d}{star(yx)}({nya}/{nxa})".ljust(KW)
                     + _star_cells(ep, x_op, y_op, KW) + _tilde_cells(ep, x_op, y_op, KW)
-                    + _oldcols_cells(ep, x_op, y_op, nx, KW))
+                    + _oldcols_cells(ep, x_op, y_op, nx, KW) + _sflip_cells(ep, x_op, y_op, nx, ny, KW))
     _RRR_OCJP_OLD[:] = [(x_, y_) for _, _, _, x_, y_ in row_ops]
     # kept for the questions at the end of the page (rrr_ask_ops)
     _RRR_ASK.update(ep=ep, prefix=pos_prefix,
@@ -8832,13 +8850,13 @@ def rrr_ask_ops():
     print()
     sep('═')
     print(f"  RRR: NEXT OPERATION  →  EP={ep:02d}  (x = {ep // 10}, y = {ep % 10})")
-    print(f"  {'Pos':<12} {'Source':<9} {'old x':<6} {'old y':<6}    {'new x':<6} {'new y':<6}  {'xy (op)':<15}{'yx (op)':<15}"
-          f"{'*xy (op)':<15}{'*yx (op)':<15}{'~xy (op)':<15}{'~yx (op)':<15}{'old xy':<15}{'old yx':<15}{'newold xy':<15}{'oldnew yx':<15}")
+    print(f"  {'Pos':<12} {'Source':<9} {'old x':<6} {'old y':<6}    {'new x':<6} {'new y':<6}  {'xy (op)':<13}{'yx (op)':<13}"
+          f"{'*xy (op)':<13}{'*yx (op)':<13}{'~xy (op)':<13}{'~yx (op)':<13}{'old xy':<13}{'old yx':<13}{'newold xy':<13}{'oldnew yx':<13}{'oldy·newy±':<13}{'oldx·newx±':<13}")
     for pos, s_a, s_b, x_op, y_op, nx, ny, mark in rows:
         xy, yx = compute_variants(ep, nx, ny)[:2]
         print(f"  {'[' + pre + str(pos) + '] ' + mark:<12} {s_a:02d} → {s_b:02d}   {a(x_op):<6} {a(y_op):<6} →  "
-              f"{a(nx):<6} {a(ny):<6}  " + f"{xy:02d} ({a(nx)}/{a(ny)})".ljust(15) + f"{yx:02d} ({a(ny)}/{a(nx)})".ljust(15)
-              + _star_cells(ep, x_op, y_op, 15) + _tilde_cells(ep, x_op, y_op, 15) + _oldcols_cells(ep, x_op, y_op, nx, 15))
+              f"{a(nx):<6} {a(ny):<6}  " + f"{xy:02d} ({a(nx)}/{a(ny)})".ljust(13) + f"{yx:02d} ({a(ny)}/{a(nx)})".ljust(13)
+              + _star_cells(ep, x_op, y_op, 13) + _tilde_cells(ep, x_op, y_op, 13) + _oldcols_cells(ep, x_op, y_op, nx, 13) + _sflip_cells(ep, x_op, y_op, nx, ny, 13))
     sep('═')
     try:
         open('/dev/tty').close()
@@ -8861,8 +8879,9 @@ def rrr_ask_ops():
         for lab, (v, o) in zip(('xy', 'yx', 'sign+xy', 'sign+yx'), cells):
             print(f"     {lab:<10} {v:02d} ({o})")
         # the extra table-4 columns of this row (*, ~, old, newold/oldnew)
-        ext = _star_cells(ep, x_op, y_op, 15) + _tilde_cells(ep, x_op, y_op, 15) + _oldcols_cells(ep, x_op, y_op, nx, 15)
-        for i, lab in enumerate(('*xy', '*yx', '~xy', '~yx', 'old xy', 'old yx', 'newold xy', 'oldnew yx')):
+        ext = (_star_cells(ep, x_op, y_op, 15) + _tilde_cells(ep, x_op, y_op, 15) + _oldcols_cells(ep, x_op, y_op, nx, 15)
+               + _sflip_cells(ep, x_op, y_op, nx, ny, 15))
+        for i, lab in enumerate(('*xy', '*yx', '~xy', '~yx', 'old xy', 'old yx', 'newold xy', 'oldnew yx', 'oldy·newy±', 'oldx·newx±')):
             c_ = ext[i * 15:(i + 1) * 15].strip()
             print(f"     {lab:<10} {c_}")
             cells.append((int(c_[:2]), c_[4:-1]))

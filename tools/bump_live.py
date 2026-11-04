@@ -77,6 +77,14 @@ for row in rec['rows']:
         oldc |= {D.apply_op(ep // 10, _p) * 10 + D.apply_op(ep % 10, _q), D.apply_op(ep // 10, _q) * 10 + D.apply_op(ep % 10, _p)}
 up['rrr3_oldcols_rounds'] = 1
 if res in oldc: hits.append('rrr3_oldcols_hits')
+# oldy·newy± / oldx·newx± columns (user 2026-11-05, live from S42)
+sfl = set()
+for row in rec['rows']:
+    _ox, _oy, _nx, _ny = AB[row['old'][0]], AB[row['old'][1]], AB[row['new'][0]], AB[row['new'][1]]
+    sfl |= {D.apply_op(ep // 10, _oy) * 10 + D.apply_op(ep % 10, D.SIGN_FLIP[_ny]),
+            D.apply_op(ep // 10, _ox) * 10 + D.apply_op(ep % 10, D.SIGN_FLIP[_nx])}
+up['rrr3_sflip_rounds'] = 1
+if res in sfl: hits.append('rrr3_sflip_hits')
 if res in star: hits.append('rrr3_starcol_hits')
 ep_rows = [row for row in rec['rows'] if row['a'] == ep]
 if ep_rows:

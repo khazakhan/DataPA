@@ -2695,5 +2695,17 @@
    0
   ],
   "result": 0
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S51",
+  "after": 0,
+  "ep": 24,
+  "kind": "result_only",
+  "entry": "result 45 = +2/+1 on EP 24 = yx of FINAL 4 #1 (f4yx 2/17, replay 10/152 -> watch); Op12 old xy x cut sw; STRONG + yx + CharRow, rank 31",
+  "numbers": [
+   45
+  ],
+  "result": 45
  }
 ]

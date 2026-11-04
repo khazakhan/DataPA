@@ -2635,5 +2635,17 @@
    54
   ],
   "result": 54
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S46",
+  "after": 54,
+  "ep": 35,
+  "kind": "result_only",
+  "entry": "result 32 = nc/c+2 on EP 35 = Op12 new xy exact (table hit); also FINAL 4 #1 yx (f4yx 1/12) and *yx (2/20); rank 26; FINAL 4 numbers/MegaStar/PowerStar miss",
+  "numbers": [
+   32
+  ],
+  "result": 32
  }
 ]

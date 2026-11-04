@@ -2551,5 +2551,17 @@
    68
   ],
   "result": 68
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S39",
+  "after": 68,
+  "ep": 11,
+  "kind": "result_only",
+  "entry": "result 16 = nc/cut on EP 11; no row makes it; rule 18 + STRONG + CharRow, rank 35; FINAL 4/MegaStar 29/PowerStar 33 miss; no rule",
+  "numbers": [
+   16
+  ],
+  "result": 16
  }
 ]

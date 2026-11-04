@@ -2647,5 +2647,17 @@
    32
   ],
   "result": 32
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S47",
+  "after": 32,
+  "ep": 62,
+  "kind": "result_only",
+  "entry": "result 61 = nc/-1 on EP 62; Op23 old yx x cut sw (1 change); rule 18 + yx, >40; FINAL 4/MegaStar 69/PowerStar 82/± miss",
+  "numbers": [
+   61
+  ],
+  "result": 61
  }
 ]

@@ -2503,5 +2503,17 @@
    98
   ],
   "result": 98
+ },
+ {
+  "time": "2026-11-04",
+  "round": "S35",
+  "after": 98,
+  "ep": 2,
+  "kind": "result_only",
+  "entry": "result 18 = +1/c+1 on EP 02; Op23 LAST old xy y cut sw (1 change, like S25; 3/153 = noise); REC+HOT+CharRow+rule3, rank 23; FINAL 4, MegaStar 12/PowerStar 19, f4yx, *, ~, outer flip miss -> no change",
+  "numbers": [
+   18
+  ],
+  "result": 18
  }
 ]

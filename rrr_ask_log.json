@@ -2707,5 +2707,17 @@
    45
   ],
   "result": 45
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S52",
+  "after": 45,
+  "ep": 30,
+  "kind": "result_only",
+  "entry": "result 43 = +1/c-2 on EP 30; no row; HOT only, >40; all lists miss",
+  "numbers": [
+   43
+  ],
+  "result": 43
  }
 ]

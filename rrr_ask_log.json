@@ -2599,5 +2599,17 @@
    65
   ],
   "result": 65
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S43",
+  "after": 65,
+  "ep": 38,
+  "kind": "result_only",
+  "entry": "result 19 = -2/+1 on EP 38; Op8 new yx y cut sw (1 change); = FINAL 4 #4 91 reversed (PRIME 4 FAMILY + rule 5) + STRONG + yx; FINAL 4/MegaStar 48/PowerStar 01 miss",
+  "numbers": [
+   19
+  ],
+  "result": 19
  }
 ]

@@ -2671,5 +2671,17 @@
    83
   ],
   "result": 83
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S49",
+  "after": 83,
+  "ep": 68,
+  "kind": "result_only",
+  "entry": "result 62 = nc/c-1 on EP 68; Op20 old yx 2 changes; WIDE only, >40; all lists miss; no change",
+  "numbers": [
+   62
+  ],
+  "result": 62
  }
 ]

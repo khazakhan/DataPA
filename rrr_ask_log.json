@@ -2611,5 +2611,17 @@
    19
   ],
   "result": 19
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S44",
+  "after": 19,
+  "ep": 69,
+  "kind": "result_only",
+  "entry": "result 85 = +2/c+1 on EP 69 = oldx·newx± Op9/Op12 (± columns 2 of 3 live, replay at chance -> watch); finder + WIDE; FINAL 4/MegaStar 29/PowerStar 49 miss",
+  "numbers": [
+   85
+  ],
+  "result": 85
  }
 ]

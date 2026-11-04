@@ -2563,5 +2563,17 @@
    16
   ],
   "result": 16
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S40",
+  "after": 16,
+  "ep": 27,
+  "kind": "result_only",
+  "entry": "result 06 = -2/-1 on EP 27; Op4 new yx y cut sw (1 change); STRONG + PRIME 10 FAMILY, rank 39; FINAL 4/MegaStar 95/PowerStar 22 miss; no rule",
+  "numbers": [
+   6
+  ],
+  "result": 6
  }
 ]

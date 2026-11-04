@@ -2575,5 +2575,17 @@
    6
   ],
   "result": 6
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S41",
+  "after": 6,
+  "ep": 0,
+  "kind": "result_only",
+  "entry": "result 15 = +1/cut on EP 00; no row makes it; HOT only, >40; FINAL 4/MegaStar 05/PowerStar 62 miss; no rule",
+  "numbers": [
+   15
+  ],
+  "result": 15
  }
 ]

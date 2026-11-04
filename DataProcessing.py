@@ -8832,11 +8832,13 @@ def rrr_ask_ops():
     print()
     sep('═')
     print(f"  RRR: NEXT OPERATION  →  EP={ep:02d}  (x = {ep // 10}, y = {ep % 10})")
-    print(f"  {'Pos':<12} {'Source':<9} {'old x':<6} {'old y':<6}    {'new x':<6} {'new y':<6}  {'xy (op)':<15}{'yx (op)':<15}")
+    print(f"  {'Pos':<12} {'Source':<9} {'old x':<6} {'old y':<6}    {'new x':<6} {'new y':<6}  {'xy (op)':<15}{'yx (op)':<15}"
+          f"{'*xy (op)':<15}{'*yx (op)':<15}{'~xy (op)':<15}{'~yx (op)':<15}{'old xy':<15}{'old yx':<15}{'newold xy':<15}{'oldnew yx':<15}")
     for pos, s_a, s_b, x_op, y_op, nx, ny, mark in rows:
         xy, yx = compute_variants(ep, nx, ny)[:2]
         print(f"  {'[' + pre + str(pos) + '] ' + mark:<12} {s_a:02d} → {s_b:02d}   {a(x_op):<6} {a(y_op):<6} →  "
-              f"{a(nx):<6} {a(ny):<6}  " + f"{xy:02d} ({a(nx)}/{a(ny)})".ljust(15) + f"{yx:02d} ({a(ny)}/{a(nx)})")
+              f"{a(nx):<6} {a(ny):<6}  " + f"{xy:02d} ({a(nx)}/{a(ny)})".ljust(15) + f"{yx:02d} ({a(ny)}/{a(nx)})".ljust(15)
+              + _star_cells(ep, x_op, y_op, 15) + _tilde_cells(ep, x_op, y_op, 15) + _oldcols_cells(ep, x_op, y_op, nx, 15))
     sep('═')
     try:
         open('/dev/tty').close()
@@ -8857,7 +8859,13 @@ def rrr_ask_ops():
         print(f"\n  Op{pos}{(' ' + mark) if mark else ''}: source {s_a:02d} → {s_b:02d}, old {a(x_op)}/{a(y_op)} → new {a(nx)}/{a(ny)}")
         print(f"  on EP {ep:02d}:  x {ep // 10} → {apply_op(ep // 10, nx)} ({a(nx)}),  y {ep % 10} → {apply_op(ep % 10, ny)} ({a(ny)})")
         for lab, (v, o) in zip(('xy', 'yx', 'sign+xy', 'sign+yx'), cells):
-            print(f"     {lab:<8} {v:02d} ({o})")
+            print(f"     {lab:<10} {v:02d} ({o})")
+        # the extra table-4 columns of this row (*, ~, old, newold/oldnew)
+        ext = _star_cells(ep, x_op, y_op, 15) + _tilde_cells(ep, x_op, y_op, 15) + _oldcols_cells(ep, x_op, y_op, nx, 15)
+        for i, lab in enumerate(('*xy', '*yx', '~xy', '~yx', 'old xy', 'old yx', 'newold xy', 'oldnew yx')):
+            c_ = ext[i * 15:(i + 1) * 15].strip()
+            print(f"     {lab:<10} {c_}")
+            cells.append((int(c_[:2]), c_[4:-1]))
         print(f"  Number series: {'  '.join(dict.fromkeys(f'{v:02d}' for v, _ in cells))}")
         _ask_log('op_number', f"Op{pos} {a(nx)}/{a(ny)}", list(dict.fromkeys(v for v, _ in cells)))
     # 2. the user's own operations on EP

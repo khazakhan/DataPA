@@ -96,6 +96,9 @@ if _cb.get(res, 0) >= 2: hits.append('rrr3_comb2_hits')
 # ALL + booster of booster (user 2026-11-05, live from S61)
 up['rrr3_allbb_rounds'] = 1
 if res in D._f4_all_bb(ep, rec['ranked'][:4]): hits.append('rrr3_allbb_hits')
+# 80-NUMBER NET (user 2026-11-05, live from S61)
+up['rrr3_net80_rounds'] = 1
+if res in D._f4_net80(ep, rec['ranked'][:4], rec['ranked']): hits.append('rrr3_net80_hits')
 # after·LAST old xy (user origin-op idea 2026-11-05, live from S54)
 _tk = [int(x) for x in open(rec['dataset']).read().split() if x.isdigit()]
 _lr = [row for row in rec['rows'] if row['last']]

@@ -2791,5 +2791,17 @@
    32
   ],
   "result": 32
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S59",
+  "after": 32,
+  "ep": 61,
+  "kind": "result_only",
+  "entry": "result 72 = +1/+1 on ROOT 61 (EP 32); no row within 2 changes; RECOMMENDED #21 + HOT + top40 rank 30; FINAL 4/booster/combined miss",
+  "numbers": [
+   72
+  ],
+  "result": 72
  }
 ]

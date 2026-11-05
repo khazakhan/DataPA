@@ -2755,5 +2755,17 @@
    20
   ],
   "result": 20
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S56",
+  "after": 20,
+  "ep": 63,
+  "kind": "result_only",
+  "entry": "result 24 = c+1/+1 on ROOT 63 (EP 20); no cell; 2 changes from Op30 xy 72 (FINAL 4 #4) and Op25 yx; CharRow + HOT only, >40; FINAL 4 miss; EP·LAST old 60 miss (0/3)",
+  "numbers": [
+   24
+  ],
+  "result": 24
  }
 ]

@@ -2594,7 +2594,7 @@
   "after": 15,
   "ep": 39,
   "kind": "result_only",
-  "entry": "result 65 = c-2/c+1 on EP 39 = new oldy·newy± column Op11 (first live hit 1/1, replay at chance); WIDE otherwise, >40; FINAL 4/MegaStar 20/PowerStar 30 miss",
+  "entry": "result 65 = c-2/c+1 on EP 39 = new oldy\u00b7newy\u00b1 column Op11 (first live hit 1/1, replay at chance); WIDE otherwise, >40; FINAL 4/MegaStar 20/PowerStar 30 miss",
   "numbers": [
    65
   ],
@@ -2618,7 +2618,7 @@
   "after": 19,
   "ep": 69,
   "kind": "result_only",
-  "entry": "result 85 = +2/c+1 on EP 69 = oldx·newx± Op9/Op12 (± columns 2 of 3 live, replay at chance -> watch); finder + WIDE; FINAL 4/MegaStar 29/PowerStar 49 miss",
+  "entry": "result 85 = +2/c+1 on EP 69 = oldx\u00b7newx\u00b1 Op9/Op12 (\u00b1 columns 2 of 3 live, replay at chance -> watch); finder + WIDE; FINAL 4/MegaStar 29/PowerStar 49 miss",
   "numbers": [
    85
   ],
@@ -2630,7 +2630,7 @@
   "after": 85,
   "ep": 54,
   "kind": "result_only",
-  "entry": "result 54 = nc/nc on EP 54 (result = EP, 2/163 vs 1.6); REC + rule 7, rank 32; FINAL 4/MegaStar 62/PowerStar 70/± miss; no rule",
+  "entry": "result 54 = nc/nc on EP 54 (result = EP, 2/163 vs 1.6); REC + rule 7, rank 32; FINAL 4/MegaStar 62/PowerStar 70/\u00b1 miss; no rule",
   "numbers": [
    54
   ],
@@ -2654,7 +2654,7 @@
   "after": 32,
   "ep": 62,
   "kind": "result_only",
-  "entry": "result 61 = nc/-1 on EP 62; Op23 old yx x cut sw (1 change); rule 18 + yx, >40; FINAL 4/MegaStar 69/PowerStar 82/± miss",
+  "entry": "result 61 = nc/-1 on EP 62; Op23 old yx x cut sw (1 change); rule 18 + yx, >40; FINAL 4/MegaStar 69/PowerStar 82/\u00b1 miss",
   "numbers": [
    61
   ],
@@ -2726,7 +2726,7 @@
   "after": 43,
   "ep": 39,
   "kind": "result_only",
-  "entry": "result 70 = c-1/+1 on EP 39; oldx·newx± Op2 + ~xy Op33 + newold xy Op33 + LAST-OP 8 + WIDE; ± 3/12, ~ 3/21; FINAL 4 miss",
+  "entry": "result 70 = c-1/+1 on EP 39; oldx\u00b7newx\u00b1 Op2 + ~xy Op33 + newold xy Op33 + LAST-OP 8 + WIDE; \u00b1 3/12, ~ 3/21; FINAL 4 miss",
   "numbers": [
    70
   ],
@@ -2738,7 +2738,7 @@
   "after": 70,
   "ep": 59,
   "kind": "result_only",
-  "entry": "result 69 = +1/nc on EP 59; Op27 LAST old yx 49 (FINAL 4 #4) with x sign flipped (1 change); RECOMMENDED + LAST-OP 8 #6, rank 23; after·LAST old xy test 79 miss (0/1); FINAL 4 miss",
+  "entry": "result 69 = +1/nc on EP 59; Op27 LAST old yx 49 (FINAL 4 #4) with x sign flipped (1 change); RECOMMENDED + LAST-OP 8 #6, rank 23; after\u00b7LAST old xy test 79 miss (0/1); FINAL 4 miss",
   "numbers": [
    69
   ],
@@ -2750,7 +2750,7 @@
   "after": 69,
   "ep": 83,
   "kind": "result_only",
-  "entry": "result 20 = c-1/c+2 on ROOT 83 (EP 69); ~xy Op6 (~ 4/23) + CharRow + HOT; >40; FINAL 4 miss; EP·LAST old 81 miss (0/2)",
+  "entry": "result 20 = c-1/c+2 on ROOT 83 (EP 69); ~xy Op6 (~ 4/23) + CharRow + HOT; >40; FINAL 4 miss; EP\u00b7LAST old 81 miss (0/2)",
   "numbers": [
    20
   ],
@@ -2762,7 +2762,7 @@
   "after": 20,
   "ep": 63,
   "kind": "result_only",
-  "entry": "result 24 = c+1/+1 on ROOT 63 (EP 20); no cell; 2 changes from Op30 xy 72 (FINAL 4 #4) and Op25 yx; CharRow + HOT only, >40; FINAL 4 miss; EP·LAST old 60 miss (0/3)",
+  "entry": "result 24 = c+1/+1 on ROOT 63 (EP 20); no cell; 2 changes from Op30 xy 72 (FINAL 4 #4) and Op25 yx; CharRow + HOT only, >40; FINAL 4 miss; EP\u00b7LAST old 60 miss (0/3)",
   "numbers": [
    24
   ],
@@ -2774,7 +2774,7 @@
   "after": 24,
   "ep": 20,
   "kind": "result_only",
-  "entry": "result 41 = +2/+1 on ROOT 20 (EP 24); oldx·newx± Op7 (± 4/16); 1 change from Op7 old xy, Op16 xy, Op17 yx; >40; FINAL 4 miss; EP·LAST old 35 miss (0/4)",
+  "entry": "result 41 = +2/+1 on ROOT 20 (EP 24); oldx\u00b7newx\u00b1 Op7 (\u00b1 4/16); 1 change from Op7 old xy, Op16 xy, Op17 yx; >40; FINAL 4 miss; EP\u00b7LAST old 35 miss (0/4)",
   "numbers": [
    41
   ],
@@ -2815,5 +2815,17 @@
    88
   ],
   "result": 88
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S61",
+  "after": 88,
+  "ep": 69,
+  "kind": "result_only",
+  "entry": "result 37 = c+2/-2 on ROOT 69 (EP 88); \u00b1 Op24 LAST oldx\u00b7newx\u00b1 (5/20) + old/newold Op8 oldnew yx (2/24); RECOMMENDED, top 20 #18; All+bb and 80-net hold (1/1); FINAL 4/booster/combined miss",
+  "numbers": [
+   37
+  ],
+  "result": 37
  }
 ]

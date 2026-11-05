@@ -2827,5 +2827,17 @@
    37
   ],
   "result": 37
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S62",
+  "after": 37,
+  "ep": 20,
+  "kind": "result_only",
+  "entry": "result 53 = c-2/c-2 on ROOT 20 (EP 37); held by no list (also outside All+bb and the 80-net); closest Op28 LAST new y c-2 on both sides (history 14/1293 vs 12.9, at chance, not added)",
+  "numbers": [
+   53
+  ],
+  "result": 53
  }
 ]

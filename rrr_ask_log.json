@@ -2875,5 +2875,17 @@
    4
   ],
   "result": 4
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S66",
+  "after": 4,
+  "ep": 42,
+  "kind": "result_only",
+  "entry": "result 76 = c-2/c-1 on ROOT 42 (EP 04); exact Op21 *yx (* 4/40); first BOOSTER hit (32 b5, 13 b4; combined x3, count2+ 2/9); RECOMMENDED, top 40 #27, All+bb 4/6, 80-net 5/6; FINAL 4 miss",
+  "numbers": [
+   76
+  ],
+  "result": 76
  }
 ]

@@ -85,6 +85,13 @@ for row in rec['rows']:
             D.apply_op(ep // 10, _ox) * 10 + D.apply_op(ep % 10, D.SIGN_FLIP[_nx])}
 up['rrr3_sflip_rounds'] = 1
 if res in sfl: hits.append('rrr3_sflip_hits')
+# after·LAST old xy (user origin-op idea 2026-11-05, live from S54)
+_tk = [int(x) for x in open(rec['dataset']).read().split() if x.isdigit()]
+_lr = [row for row in rec['rows'] if row['last']]
+if _lr:
+    _lox, _loy = AB[_lr[-1]['old'][0]], AB[_lr[-1]['old'][1]]
+    up['rrr3_afterold_rounds'] = 1
+    if res == D.apply_op(_tk[-1] // 10, _lox) * 10 + D.apply_op(_tk[-1] % 10, _loy): hits.append('rrr3_afterold_hits')
 if res in star: hits.append('rrr3_starcol_hits')
 ep_rows = [row for row in rec['rows'] if row['a'] == ep]
 if ep_rows:

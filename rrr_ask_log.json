@@ -2743,5 +2743,17 @@
    69
   ],
   "result": 69
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S55",
+  "after": 69,
+  "ep": 83,
+  "kind": "result_only",
+  "entry": "result 20 = c-1/c+2 on ROOT 83 (EP 69); ~xy Op6 (~ 4/23) + CharRow + HOT; >40; FINAL 4 miss; EP·LAST old 81 miss (0/2)",
+  "numbers": [
+   20
+  ],
+  "result": 20
  }
 ]

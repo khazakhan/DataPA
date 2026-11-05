@@ -2863,5 +2863,17 @@
    95
   ],
   "result": 95
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S65",
+  "after": 95,
+  "ep": 33,
+  "kind": "result_only",
+  "entry": "result 04 = c+2/+1 on ROOT 33 (EP 95); OCJP FINAL 4 HIT #2 = PowerStar (FINAL 4 45/770, stars 1/33); exact Op8/Op12 new xy; RECOMMENDED, STRONG, top 4, PRIME 4, combined/count2+, All+bb, 80-net",
+  "numbers": [
+   4
+  ],
+  "result": 4
  }
 ]

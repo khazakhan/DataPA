@@ -959,6 +959,17 @@ def _f4_booster(ep, v):
     return out
 
 
+def _nop(ep, n):
+    """'62 (c+1/c+1)': a number with the x/y operations that make it from the ROOT."""
+    return f"{n:02d} ({OP_ABBREV[find_op(ep // 10, n // 10)]}/{OP_ABBREV[find_op(ep % 10, n % 10)]})"
+
+
+def _nops_wrap(ep, nums, per=10, ind='      '):
+    """Numbers with their ROOT operations, `per` on a line (user 2026-11-05: show the ops in every list)."""
+    it = [_nop(ep, n) for n in nums]
+    return ('\n' + ind).join('  '.join(it[i:i + per]) for i in range(0, len(it), per)) or '-'
+
+
 def _f4_combined_counts(ep, f4):
     """ALL FINAL 4 numbers combined (user 2026-11-05): FINAL 4 + yx column +
     every Booster xy / yx cell, deduplicated, with how many times each came.
@@ -1116,7 +1127,8 @@ def show_final_box():
     def bst_(v, rd):
         # BOOSTER cells (user 2026-11-05): 2) cut removed 3) cut added 4) their signs flipped 5) their steps +1/-1
         b = _f4_booster(ep, v)[rd]
-        return ' '.join(f"{k})" + ','.join(f"{n:02d}" for n in b[k]) for k in (2, 3, 4, 5) if b[k])
+        # no-break spaces keep "3) 92 (c-2/c-2)" on one line when the cell wraps
+        return ' '.join(f"{k})\u00a0" + ', '.join(_nop(ep, n).replace(' ', '\u00a0') for n in b[k]) for k in (2, 3, 4, 5) if b[k])
     def yx_(v):
         # yx column (user 2026-11-04): y op on x, x op on y, as in table 4
         xo, yo = find_op(ex, v // 10), find_op(ey, v % 10)
@@ -1459,7 +1471,9 @@ def show_final_box():
         w_ = [max(len(r_[i]) for r_ in [head] + rows_) for i in range(len(head))]
         wcs = wrap_col if isinstance(wrap_col, tuple) else (wrap_col,)
         for j in wcs[1:]:
-            w_[j] = min(w_[j], 17 if head[j].startswith('Booster') else 30 if j == 8 and len(head) > 8 else 44)
+            w_[j] = min(w_[j], (20 if head[j].startswith('Booster') else 24 if head[j].startswith('LAST op')
+                                else 26 if head[j].startswith('From') else 22 if head[j].startswith('Votes') else 44)
+                        if len(head) > 8 else 44)
         wrap_col = wcs[0]
         w_[wrap_col] = max(10, min(w_[wrap_col], room - sum(w_) + w_[wrap_col] - 3 * len(head)))
         rule = lambda l, m_, r: l + m_.join('─' * (x + 2) for x in w_) + r
@@ -1467,7 +1481,8 @@ def show_final_box():
         for i_, r_ in enumerate([head] + rows_):
             if i_:
                 out.append(rule('├', '┼', '┤'))
-            cells = [textwrap.wrap(c, w_[j]) or [''] if j in wcs else [c] for j, c in enumerate(r_)]
+            cells = [[x.replace('\u00a0', ' ') for x in textwrap.wrap(c, w_[j], break_on_hyphens=False)] or [''] if j in wcs else [c]
+                     for j, c in enumerate(r_)]
             for k2 in range(max(len(c) for c in cells)):
                 out.append('│ ' + ' │ '.join((c[k2] if k2 < len(c) else '').ljust(x) for c, x in zip(cells, w_)) + ' │')
         return out + [rule('└', '┴', '┘')]
@@ -1480,12 +1495,13 @@ def show_final_box():
         "  Tested on 412 rounds (F N M K O P Q R): ranking FINAL 4 by it held 28 vs 29 now, so it is a check, not the ranking.",
         f"  yx column: {' '.join(r_[3][:2] for r_ in rows[1:])}   live {RRR_LIVE.get('rrr3_f4yx_hits', 0)} of {RRR_LIVE.get('rrr3_f4yx_rounds', 0)}"
         f"  (replay 10 of 152 vs chance 6.1; display only, not in FINAL 4)",
-        f"  BOOSTER ({len(_bset)}, FINAL 4 left out): {' '.join(f'{n:02d}' for n in sorted(_bset))}",
+        f"  BOOSTER ({len(_bset)}, FINAL 4 left out, ops on ROOT {ep:02d}):"] + [
+        "      " + l_ for l_ in _nops_wrap(ep, sorted(_bset), ind='').split('\n')] + [
         f"    live {RRR_LIVE.get('rrr3_booster_hits', 0)} of {RRR_LIVE.get('rrr3_booster_rounds', 0)}; history 1293 rounds: held 331 vs chance 342 (x0.97);"
         f" as FINAL 4 vote/tie-break 91/78 vs 97 now -> display only, not in FINAL 4",
-        f"  ALL COMBINED (FINAL 4 + yx + Booster xy/yx, deduplicated, {len(_comb)} numbers) — number(count):"]
-    _cl = [f"{n:02d}({c})" for n, c in _comb]
-    _RRR3_PREV['sum_final4'] += ['    ' + ' '.join(_cl[i:i + 20]) for i in range(0, len(_cl), 20)]
+        f"  ALL COMBINED (FINAL 4 + yx + Booster xy/yx, deduplicated, {len(_comb)} numbers) — number (op) x count:"]
+    _cl = [f"{_nop(ep, n)} x{c}" for n, c in _comb]
+    _RRR3_PREV['sum_final4'] += ['      ' + '  '.join(_cl[i:i + 8]) for i in range(0, len(_cl), 8)]
     _RRR3_PREV['sum_final4'] += [
         f"    count 2+: {' '.join(f'{n:02d}' for n, c in _comb if c >= 2)}   live all {RRR_LIVE.get('rrr3_comb_hits', 0)} of {RRR_LIVE.get('rrr3_comb_rounds', 0)},"
         f" count 2+ {RRR_LIVE.get('rrr3_comb2_hits', 0)} of {RRR_LIVE.get('rrr3_comb2_rounds', 0)}",
@@ -4473,11 +4489,11 @@ def show_chat_view():
         show(tb4)
         oldn = sorted({int(c_[:2]) for r_ in t4 for c_ in r_[12:16]})
         print(f"  old xy/yx = old ops as they are; newold xy = new x on x + old y on y, oldnew yx = old y on x + new x on y.  ON TEST, not in FINAL 4."
-              f"\n  old/newold numbers: {' '.join(f'{v:02d}' for v in oldn)}   live {RRR_LIVE.get('rrr3_oldcols_hits', 0)} of {RRR_LIVE.get('rrr3_oldcols_rounds', 0)}"
+              f"\n  old/newold numbers: {_nops_wrap(ep, oldn)}\n      live {RRR_LIVE.get('rrr3_oldcols_hits', 0)} of {RRR_LIVE.get('rrr3_oldcols_rounds', 0)}"
               f" (replay 155 rounds: 19 vs chance 25.3)")
         sfl = sorted({int(c_[:2]) for r_ in t4 for c_ in r_[16:18]})
         print(f"  oldy·newy± = old y op on x, new y sign flipped on y; oldx·newx± = old x op on x, new x sign flipped on y.  ON TEST, not in FINAL 4."
-              f"\n  ± numbers: {' '.join(f'{v:02d}' for v in sfl)}   live {RRR_LIVE.get('rrr3_sflip_hits', 0)} of {RRR_LIVE.get('rrr3_sflip_rounds', 0)}"
+              f"\n  ± numbers: {_nops_wrap(ep, sfl)}\n      live {RRR_LIVE.get('rrr3_sflip_hits', 0)} of {RRR_LIVE.get('rrr3_sflip_rounds', 0)}"
               f" (replay 159 rounds: 17 vs chance 17.4)")
         _lr = [r_ for r_ in rows if r_[7] == 'LAST']
         _fl = P.get('flat') or []
@@ -4490,12 +4506,12 @@ def show_chat_view():
         stars = sorted({int(c_[:2]) for r_ in t4 for c_ in r_[8:10]})
         tild = sorted({int(c_[:2]) for r_ in t4 for c_ in r_[10:12]})
         print(f"  ~xy = old y cut switched + sign flipped on x, old x cut switched on y (reverse of *; ~yx the other way).  ON TEST, not in FINAL 4."
-              f"\n  ~ numbers: {' '.join(f'{v:02d}' for v in tild)}   live {RRR_LIVE.get('rrr3_tilde_hits', 0)} of {RRR_LIVE.get('rrr3_tilde_rounds', 0)}"
+              f"\n  ~ numbers: {_nops_wrap(ep, tild)}\n      live {RRR_LIVE.get('rrr3_tilde_hits', 0)} of {RRR_LIVE.get('rrr3_tilde_rounds', 0)}"
               f" (replay 150 rounds: 25 vs chance 15.7; held-out of all forms 9 vs 11.1)")
         fl_ = P.get('flat') or []
         om = _outer_move(ep, fl_[-2], fl_[-1]) if len(fl_) >= 2 and fl_[-1] == a else None
         print(f"  *xy = old y as is on x, old x cut switched + sign flipped on y (*yx reads it the other way).  ON TEST, not in FINAL 4."
-              f"\n  * numbers: {' '.join(f'{v:02d}' for v in stars)}   live {RRR_LIVE.get('rrr3_starcol_hits', 0)} of {RRR_LIVE.get('rrr3_starcol_rounds', 0)}"
+              f"\n  * numbers: {_nops_wrap(ep, stars)}\n      live {RRR_LIVE.get('rrr3_starcol_hits', 0)} of {RRR_LIVE.get('rrr3_starcol_rounds', 0)}"
               f" (replay 144 rounds: 18 vs chance 8.1, held-out 8 vs 6.3)")
         if not any(r_[1] == ep for r_ in rows):
             print(f"  ROOT row: no row starts at ROOT {ep:02d} this round   live {RRR_LIVE.get('rrr3_eprow_hits', 0)} of {RRR_LIVE.get('rrr3_eprow_rounds', 0)}")

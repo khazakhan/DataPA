@@ -2779,5 +2779,17 @@
    41
   ],
   "result": 41
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S58",
+  "after": 41,
+  "ep": 56,
+  "kind": "result_only",
+  "entry": "result 32 = -2/c+1 on ROOT 56 (EP 41); Op21 LAST old yx x sign flipped (1 change, same move as S54); LAST-OP 8 #7 + CharRow + HOT; FINAL 4/booster/combined miss; gap study: no one-change LAST form beats chance -> no rule added",
+  "numbers": [
+   32
+  ],
+  "result": 32
  }
 ]

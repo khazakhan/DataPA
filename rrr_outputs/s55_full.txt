@@ -1274,7 +1274,7 @@
 ┃ ╔════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗ ┃
 ┃ ║                                                        ★  WIN - WIN  ★                                                         ║ ┃
 ┃ ║                                                                                                                                ║ ┃
-┃ ║   KK CHAIN FAMILY RESULT   (EP=83, bracket starts with 3 or 8)                                                                 ║ ┃    ╔════════════════════════════════════════╗
+┃ ║   KK CHAIN FAMILY RESULT   (ROOT=83, bracket starts with 3 or 8)                                                               ║ ┃    ╔════════════════════════════════════════╗
 ┃ ║                                                                                                                                ║ ┃    ║     NON-EXISTING x/y COMBINATIONS      ║
 ┃ ║                                                                                                                                ║ ┃    ║ 10 x ops × 10 y ops − 6 existing = 94  ║
 ┃ ║   Pos     Source    x op    y op    xy (op)        yx (op)        sign+xy (op)   sign+yx (op)   cut xy (op)    cut sign (op)   ║ ┃    ╠════════════════════════════════════════╣
@@ -1380,7 +1380,7 @@
                                                                                                                                           ╚════════════════════════════════════════╝
 
   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-  ┃                                                                                              RRR:  NEXT OPERATION → EP=83                                                                                                   ┃
+  ┃                                                                                             RRR:  NEXT OPERATION → ROOT=83                                                                                                  ┃
   ┃                                                                                                                                                                                                                             ┃
   ┃   Pos          Source    old x  old y     new x  new y   xy (op)      yx (op)      *xy (op)     *yx (op)     ~xy (op)     ~yx (op)     old xy       old yx       newold xy    oldnew yx    oldy·newy±   oldx·newx±          ┃
   ┃ ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────       ┃
@@ -1398,7 +1398,7 @@
   ┃   LAST = the chain's own last step.  Backtest (57,662 positions): table hit 6.42% vs 6.44% chance.                                                                                                                          ┃
   ┃   Live record: table hit 156 of 1332 rounds (about 33 expected by chance).                                                                                                                                                  ┃
   ┃                                                                                                                                                                                                                             ┃
-  ┃   ONE ROW PICK  —  one Pos / source only, EP=83, after 69                                                                                                                                                                   ┃
+  ┃   ONE ROW PICK  —  one Pos / source only, ROOT=83, EP 69                                                                                                                                                                    ┃
   ┃   [Op10]  32 → 19   old -2/c+2   new -2/+2   (why: ends in the after's family)                                                                                                                                              ┃
   ┃      PICK: old ops crossed, x sign flipped, y cut switched  16 (c-2/c-2)                                                                                                                                                    ┃
   ┃      new ops xy                                             65 (-2/+2)                                                                                                                                                      ┃
@@ -1409,7 +1409,7 @@
   ┃   Replay over 293 rounds (F/N/M/K/O): PICK line 1 hit (chance 2.9), the first 5 lines 14 (chance 14.2) — at chance                                                                                                          ┃
   ┃   On test — live 1 of 163 (PICK line), 4 of 163 (any line)                                                                                                                                                                  ┃
   ┃                                                                                                                                                                                                                             ┃
-  ┃   LAST-OP 4  —  strongest 4 from the LAST row [Op25] 61 → 83, EP=83   (replay by series: top 4 held 19, chance 11.7; top 8 held 42, chance 23.4)                                                                            ┃
+  ┃   LAST-OP 4  —  strongest 4 from the LAST row [Op25] 61 → 83, ROOT=83   (replay by series: top 4 held 19, chance 11.7; top 8 held 42, chance 23.4)                                                                          ┃
   ┃   live: top 4 4 of 112, top 8 9 of 112                                                                                                                                                                                      ┃
   ┃      ★ 1. 67 (-2/c-1)   new xy, x cut switched, y sign flipped                                                                                                                                                              ┃
   ┃      ★ 2. 66 (-2/c-2)   old xy, x sign flipped, y cut switched + flipped                                                                                                                                                    ┃
@@ -1420,8 +1420,8 @@
   ┃        7. 65 (-2/+2)   old yx, x sign flipped, y as is                                                                                                                                                                      ┃
   ┃        8. 10 (c-2/c+2)   old yx, x cut switched + flipped, y cut switched                                                                                                                                                   ┃
   ┃                                                                                                                                                                                                                             ┃
-  ┃   LAST ROW DIGIT MENU  —  [Op25]LAST 61 → 83   old +2/+2   new c-2/c+1   EP=83                                                                                                                                              ┃
-  ┃   x digit (EP tens 8):                                                                                                                                                                                                      ┃
+  ┃   LAST ROW DIGIT MENU  —  [Op25]LAST 61 → 83   old +2/+2   new c-2/c+1   ROOT=83                                                                                                                                            ┃
+  ┃   x digit (ROOT tens 8):                                                                                                                                                                                                    ┃
   ┃   ──────────────────────────────────────────────────────────────────────────────                                                                                                                                            ┃
   ┃   │ op of the LAST row │ as is   │ sign flipped │ cut switched │ step switched │                                                                                                                                            ┃
   ┃   ──────────────────────────────────────────────────────────────────────────────                                                                                                                                            ┃
@@ -1430,7 +1430,7 @@
   ┃   │ old x              │ 0 (+2)  │ 6 (-2)       │ 5 (c+2)      │ 9 (+1)        │                                                                                                                                            ┃
   ┃   │ old y              │ 0 (+2)  │ 6 (-2)       │ 5 (c+2)      │ 9 (+1)        │                                                                                                                                            ┃
   ┃   ──────────────────────────────────────────────────────────────────────────────                                                                                                                                            ┃
-  ┃   y digit (EP units 3):                                                                                                                                                                                                     ┃
+  ┃   y digit (ROOT units 3):                                                                                                                                                                                                   ┃
   ┃   ──────────────────────────────────────────────────────────────────────────────                                                                                                                                            ┃
   ┃   │ op of the LAST row │ as is   │ sign flipped │ cut switched │ step switched │                                                                                                                                            ┃
   ┃   ──────────────────────────────────────────────────────────────────────────────                                                                                                                                            ┃
@@ -1440,7 +1440,7 @@
   ┃   │ old y              │ 5 (+2)  │ 1 (-2)       │ 0 (c+2)      │ 4 (+1)        │                                                                                                                                            ┃
   ┃   ──────────────────────────────────────────────────────────────────────────────                                                                                                                                            ┃
   ┃                                                                                                                                                                                                                             ┃
-  ┃   NC/CUT SPECIAL  —  after an nc/cut, cut/nc or nc/nc row: next row modified, EP=83                                                                                                                                         ┃
+  ┃   NC/CUT SPECIAL  —  after an nc/cut, cut/nc or nc/nc row: next row modified, ROOT=83                                                                                                                                       ┃
   ┃   [Op3] cut/nc  →  [Op6] xy c-1/c+1, yx c+1/c-1:                                                                                                                                                                            ┃
   ┃      29 (c-1/c+1)   27 (c-1/c-1)   24 (c-1/+1)   22 (c-1/-1)   49 (c+1/c+1)                                                                                                                                                 ┃
   ┃      47 (c+1/c-1)   44 (c+1/+1)   42 (c+1/-1)   79 (-1/c+1)   77 (-1/c-1)                                                                                                                                                   ┃
@@ -1456,7 +1456,7 @@
   ┃                                                                                                          3RRR                                                                                                               ┃
   ┃                                                                                                                                                                                                                             ┃
   ┃   ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐                                                                                 ┃
-  ┃   │★  CharRow  —  20 numbers, x only: cut toggled, then sign changed; repeats replaced; last-op steps for x cut; y cut again; cut/nc turned, on EP=83  ★│                                                                   ┃
+  ┃   │★  CharRow  —  20 numbers, x only: cut toggled, then sign changed; repeats replaced; last-op steps for x cut; y cut again; cut/nc turned, on ROOT=83  ★│                                                                 ┃
   ┃   ├─────────────────────────────────┬─────────────────────────────────┬─────────────────────────────────┬─────────────────────────────────┤                                                                                 ┃
   ┃   │ 63 (-2/nc)                      │ 73 (-1/nc)                      │ 62 (-2/-1)                      │ 64 (-2/+1)                      │                                                                                 ┃
   ┃   │ x cut toggled                   │ x cut toggled                   │ x cut toggled                   │ x cut toggled                   │                                                                                 ┃
@@ -1477,7 +1477,7 @@
   ┃   │ from 39: x cut -> +1            │ from 39: x cut -> -1            │ from 39: x cut -> +2            │ from 39: x cut -> -2            │                                                                                 ┃
   ┃   └─────────────────────────────────┴─────────────────────────────────┴─────────────────────────────────┴─────────────────────────────────┘                                                                                 ┃
   ┃   ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐  ┌───────────────────────────────┐                                              ┃
-  ┃   │                                      ★  POWER BASE  —  4 numbers, operations applied on EP=83  ★                                      │  │★ ALL 100 NUMBERS, NO REPEATS ★│                                              ┃
+  ┃   │                                     ★  POWER BASE  —  4 numbers, operations applied on ROOT=83  ★                                     │  │★ ALL 100 NUMBERS, NO REPEATS ★│                                              ┃
   ┃   ├─────────────────────────────────┬─────────────────────────────────┬─────────────────────────────────┬─────────────────────────────────┤  ├───────────────────────────────┤                                              ┃
   ┃   │ 13 (c-2/nc)★,                   │ 23 (c-1/nc)*☆                   │ 12 (c-2/-1)★☆, 17 (c-2/c-1)★☆,  │ 14 (c-2/+1)★☆, 19 (c-2/c+1)*☆,  │  │  00*  01   02   03★  04★  05  │                                              ┃
   ┃   │ 31 (cut/-2)★☆, 32 (cut/-1)★☆,   │                                 │ 11 (c-2/-2)★☆, 16 (c-2/c-2)☆,   │ 15 (c-2/+2)★☆, 10 (c-2/c+2)☆    │  │  06*  07   08   09★  10   11★ │                                              ┃
@@ -1607,16 +1607,16 @@
   ┃      declared cell: declared y a +1/+2 step — the cut steps of the other sign too (-1/+1 -> -1/c-1, -1/c-2)                                                                                                                 ┃
   ┃      declared cell: the first rule's two numbers also with the cut step on x switched (c+2/-1 -> c+1/-1)                                                                                                                    ┃
   ┃      declared cell: x = declared x step without cut, other sign and number, y a cut step — also only the cut on y (-1/c-2 -> -1/cut)                                                                                        ┃
-  ┃      declared cell: the last round's operation again, on the running value instead of the EP (-1/cut on 27 -> 12)                                                                                                           ┃
+  ┃      declared cell: the last round's operation again, on the running value instead of the ROOT (-1/cut on 27 -> 12)                                                                                                         ┃
   ┃      declared cell: declared operations crossed, y without its cut and step switched on x, x without its cut on y (nc/c-1 -> -2/nc)                                                                                         ┃
   ┃      declared cell: the last round's operation again on the running value with its x step switched (+2/nc on 06 -> +1/nc on 06 = 16)                                                                                        ┃
-  ┃      declared cell: the last round's operation again on the EP with nc on y (c+1/+2 -> c+1/nc)                                                                                                                              ┃
+  ┃      declared cell: the last round's operation again on the ROOT with nc on y (c+1/+2 -> c+1/nc)                                                                                                                            ┃
   ┃      declared cell: declared x without its cut + sign flipped, with the cut steps of the other sign on a +1/+2 declared y (c-2/+2 -> +2/c-1, +2/c-2)                                                                        ┃
-  ┃      declared cell: the crossed declared operations (nc/-1 -> -2/nc) applied on the running value instead of the EP (-2/nc on 28 = 08)                                                                                      ┃
+  ┃      declared cell: the crossed declared operations (nc/-1 -> -2/nc) applied on the running value instead of the ROOT (-2/nc on 28 = 08)                                                                                    ┃
   ┃      declared cell: a STRONG 20 number and a 3RRR RESULT number of the same family (53 and 85) bring that STRONG 20 number with both digits cut (53 -> 08)                                                                  ┃
   ┃      declared cell: the whole NUMBER BAND (declared number ± 1, ± 2) is in the cell (50, 52, 54 -> also 51, 53)                                                                                                             ┃
-  ┃      declared cell: the SAME OPERATION AGAIN number (the last round's operation on this EP) is in the cell (cut/c-2 again -> 26)                                                                                            ┃
-  ┃      declared cell: the EP and a 3RRR RESULT number of the same family (02 and 70) bring the EP with both digits cut (02 -> 57)                                                                                             ┃
+  ┃      declared cell: the SAME OPERATION AGAIN number (the last round's operation on this ROOT) is in the cell (cut/c-2 again -> 26)                                                                                          ┃
+  ┃      declared cell: the ROOT and a 3RRR RESULT number of the same family (02 and 70) bring the ROOT with both digits cut (02 -> 57)                                                                                         ┃
   ┃      declared cell: the first 3RRR RESULT number itself is in the cell (08)                                                                                                                                                 ┃
   ┃      declared cell: every RRR: NEXT OPERATION table number, xy and yx (89 (+1/-1))                                                                                                                                          ┃
   ┃      declared cell: the SAME OPERATION AGAIN crossed, yx and yx turned (old y cut removed, old x sign flipped) (+1/-1 -> 45 (-1/-1))                                                                                        ┃
@@ -1632,7 +1632,7 @@
   ┃      declared cell: the STRONG 20 seats below the band with y cut toggled (67 (-1/-1) -> 62 (-1/c-1))                                                                                                                       ┃
   ┃      declared cell: RECOMMENDED F, the last row not crossed with one side dropped to nc (55 (-2/nc))                                                                                                                        ┃
   ┃      declared cell: RECOMMENDED F, the last row not crossed with both sides one step down / up (24 (-1/-2))                                                                                                                 ┃
-  ┃      declared cell: the RRR table row that gave the star pick, its old operation again on this EP, xy and yx (-1/+1 -> 28, 46)                                                                                              ┃
+  ┃      declared cell: the RRR table row that gave the star pick, its old operation again on this ROOT, xy and yx (-1/+1 -> 28, 46)                                                                                            ┃
   ┃      declared cell: the LAST row of the next-operation table, its number with a cut on y comes with y one step down (22 (c+1/cut) -> 21 (c+1/c-1))                                                                          ┃
   ┃      declared cell: the first STRONG 20 number above the band with a cut and step on x and a plain step on y, the cut taken off x (23 (c-2/+1) -> 73 (-2/+1))                                                               ┃
   ┃      declared cell: a star pick turn with a cut on y comes with its y one step down (46 (cut/cut) -> 45 (cut/c-1))                                                                                                          ┃
@@ -1655,21 +1655,21 @@
   ┃      declared cell: the band number one under the declared number with the cut toggled on its x, nc / c-2 on the running value (09 -> 02)                                                                                   ┃
   ┃      declared cell: a STRONG 20 number under the band with a plain step of one on y brings the same with nc on y (00 (c+2/-1) -> 01 (c+2/nc))                                                                               ┃
   ┃      declared cell: a STRONG 20 number above the band with nc on x brings the same with its y cut toggled (25 (nc/+1) -> 20 (nc/c+1))                                                                                       ┃
-  ┃      declared cell: the EP itself, nc/nc, is in the cell (EP 68 -> 68)                                                                                                                                                      ┃
-  ┃      declared cell: the c+2 / c-2 number of the running value read on the EP and mirrored, both signs flipped (09 (-2/-2) -> 43 (+2/+2))                                                                                    ┃
+  ┃      declared cell: the ROOT itself, nc/nc, is in the cell (ROOT 68 -> 68)                                                                                                                                                  ┃
+  ┃      declared cell: the c+2 / c-2 number of the running value read on the ROOT and mirrored, both signs flipped (09 (-2/-2) -> 43 (+2/+2))                                                                                  ┃
   ┃      declared cell: the 2nd NUMBER one above, c+1 / cut on the running value (71 -> 36)                                                                                                                                     ┃
   ┃      declared cell: the last round's operation with its x sign flipped and its y without the cut (c+1/c-2 -> c-1/-2 = 71)                                                                                                   ┃
   ┃      declared cell: the SAME OPERATION AGAIN number mirrored, the last round's operation with both signs flipped (c-1/c+2 -> c+1/c-2 = 31)                                                                                  ┃
   ┃      declared cell: the declared operations crossed, both signs flipped and both steps switched (90 (c-1/-1) -> +2/c+2 = 78)                                                                                                ┃
   ┃      declared cell: the 3RRR RESULT C number with its x step switched, the nearest x (56 (-1/nc) -> 46 (-2/nc))                                                                                                             ┃
   ┃      declared cell: the SAME OPERATION AGAIN number mirrored with its x step switched (c-2/c-1 -> c+1/c+1 = 76) also with its units digit cut (-> 71)                                                                       ┃
-  ┃      declared cell: the operation of two rounds back again on this EP is in the cell (c+1/-2 again -> 30)                                                                                                                   ┃
+  ┃      declared cell: the operation of two rounds back again on this ROOT is in the cell (c+1/-2 again -> 30)                                                                                                                 ┃
   ┃      declared cell: the 2nd NUMBER with its x sign flipped (73 (-1/+1) -> 93 (+1/+1)) also with both digits cut (-> 48)                                                                                                     ┃
-  ┃      declared cell: the 2nd NUMBER's operation applied on the running value instead of the EP (62 = +1/+1 on EP 51; +1/+1 on 08 -> 19)                                                                                      ┃
+  ┃      declared cell: the 2nd NUMBER's operation applied on the running value instead of the ROOT (62 = +1/+1 on ROOT 51; +1/+1 on 08 -> 19)                                                                                  ┃
   ┃      declared cell: the 2nd NUMBER with its x sign flipped and its y step switched, c-1 / c-2 on the running value (65 -> 08)                                                                                               ┃
   ┃      declared cell: two STRONG 20 numbers above the band, -1 and +1 on x with the same y (13 and 33), bring the number between them, nc on x (-> 23)                                                                        ┃
   ┃      declared cell: a 3RRR RESULT number that is a STRONG 20 number above the band with both digits cut (88 -> 33) is in the cell                                                                                           ┃
-  ┃      declared cell: the declared operation applied on the running value instead of the EP (30 = +2/nc on EP 10; +2/nc on 86 -> 06)                                                                                          ┃
+  ┃      declared cell: the declared operation applied on the running value instead of the ROOT (30 = +2/nc on ROOT 10; +2/nc on 86 -> 06)                                                                                      ┃
   ┃      declared cell: the SAME OPERATION AGAIN number mirrored (both signs flipped) with its x step switched (c+1/-1 -> c-2/+1 = 68)                                                                                          ┃
   ┃      declared cell: two STRONG 20 numbers that are each other with both digits cut (24 and 79) bring the number between them, the lower one with its tens cut (74)                                                          ┃
   ┃      declared cell: the declared number with its digits reversed (60 -> 06)                                                                                                                                                 ┃
@@ -1690,7 +1690,7 @@
   ┃      in advance 562 of 918; all 423 recorded rounds: 36 = 8.5% (4% by chance), latest series 7 of 170                                                                                                                       ┃
   ┃                                                                                                                                                                                                                             ┃
   ┃   ┌───────────────────────────────────────────────────────────────────────────┐                                                                                                                                             ┃
-  ┃   │          ★  3RRR STRONG 20   —   operations applied on EP=83  ★           │                                                                                                                                             ┃
+  ┃   │         ★  3RRR STRONG 20   —   operations applied on ROOT=83  ★          │                                                                                                                                             ┃
   ┃   ├──────────────────┬──────────────────┬──────────────────┬──────────────────┤                                                                                                                                             ┃
   ┃   │ #1  33 (cut/nc)  │ #2  44 (c+1/+1)  │ #3  83 (nc/nc)   │ #4  93 (+1/nc)   │                                                                                                                                             ┃
   ┃   ├──────────────────┼──────────────────┼──────────────────┼──────────────────┤                                                                                                                                             ┃
@@ -1715,7 +1715,7 @@
   ┃   │ + = last-op steps, y cut again, or cut/nc turned│                                                                                                                                                                       ┃
   ┃   └─────────────────────────────────────────────────┘                                                                                                                                                                       ┃
   ┃   ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ ┃
-  ┃   │                                                                                             RRR:  NEXT OPERATION → EP=83                                                                                              │ ┃
+  ┃   │                                                                                            RRR:  NEXT OPERATION → ROOT=83                                                                                             │ ┃
   ┃   │                                                                                                                                                                                                                       │ ┃
   ┃   │  Pos          Source    old x  old y     new x  new y   xy (op)      yx (op)      *xy (op)     *yx (op)     ~xy (op)     ~yx (op)     old xy       old yx       newold xy    oldnew yx    oldy·newy±   oldx·newx±     │ ┃
   ┃   │─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  │ ┃
@@ -1733,7 +1733,7 @@
   ┃   │  LAST = the chain's own last step.  Backtest (57,662 positions): table hit 6.42% vs 6.44% chance.                                                                                                                     │ ┃
   ┃   │  Live record: table hit 156 of 1332 rounds (about 33 expected by chance).                                                                                                                                             │ ┃
   ┃   │                                                                                                                                                                                                                       │ ┃
-  ┃   │  ONE ROW PICK  —  one Pos / source only, EP=83, after 69                                                                                                                                                              │ ┃
+  ┃   │  ONE ROW PICK  —  one Pos / source only, ROOT=83, EP 69                                                                                                                                                               │ ┃
   ┃   │  [Op10]  32 → 19   old -2/c+2   new -2/+2   (why: ends in the after's family)                                                                                                                                         │ ┃
   ┃   │     PICK: old ops crossed, x sign flipped, y cut switched  16 (c-2/c-2)                                                                                                                                               │ ┃
   ┃   │     new ops xy                                             65 (-2/+2)                                                                                                                                                 │ ┃
@@ -1744,7 +1744,7 @@
   ┃   │  Replay over 293 rounds (F/N/M/K/O): PICK line 1 hit (chance 2.9), the first 5 lines 14 (chance 14.2) — at chance                                                                                                     │ ┃
   ┃   │  On test — live 1 of 163 (PICK line), 4 of 163 (any line)                                                                                                                                                             │ ┃
   ┃   │                                                                                                                                                                                                                       │ ┃
-  ┃   │  LAST-OP 4  —  strongest 4 from the LAST row [Op25] 61 → 83, EP=83   (replay by series: top 4 held 19, chance 11.7; top 8 held 42, chance 23.4)                                                                       │ ┃
+  ┃   │  LAST-OP 4  —  strongest 4 from the LAST row [Op25] 61 → 83, ROOT=83   (replay by series: top 4 held 19, chance 11.7; top 8 held 42, chance 23.4)                                                                     │ ┃
   ┃   │  live: top 4 4 of 112, top 8 9 of 112                                                                                                                                                                                 │ ┃
   ┃   │     ★ 1. 67 (-2/c-1)   new xy, x cut switched, y sign flipped                                                                                                                                                         │ ┃
   ┃   │     ★ 2. 66 (-2/c-2)   old xy, x sign flipped, y cut switched + flipped                                                                                                                                               │ ┃
@@ -1755,8 +1755,8 @@
   ┃   │       7. 65 (-2/+2)   old yx, x sign flipped, y as is                                                                                                                                                                 │ ┃
   ┃   │       8. 10 (c-2/c+2)   old yx, x cut switched + flipped, y cut switched                                                                                                                                              │ ┃
   ┃   │                                                                                                                                                                                                                       │ ┃
-  ┃   │  LAST ROW DIGIT MENU  —  [Op25]LAST 61 → 83   old +2/+2   new c-2/c+1   EP=83                                                                                                                                         │ ┃
-  ┃   │  x digit (EP tens 8):                                                                                                                                                                                                 │ ┃
+  ┃   │  LAST ROW DIGIT MENU  —  [Op25]LAST 61 → 83   old +2/+2   new c-2/c+1   ROOT=83                                                                                                                                       │ ┃
+  ┃   │  x digit (ROOT tens 8):                                                                                                                                                                                               │ ┃
   ┃   │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │ ┃
   ┃   │  │ op of the LAST row │ as is   │ sign flipped │ cut switched │ step switched │                                                                                                                                       │ ┃
   ┃   │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │ ┃
@@ -1765,7 +1765,7 @@
   ┃   │  │ old x              │ 0 (+2)  │ 6 (-2)       │ 5 (c+2)      │ 9 (+1)        │                                                                                                                                       │ ┃
   ┃   │  │ old y              │ 0 (+2)  │ 6 (-2)       │ 5 (c+2)      │ 9 (+1)        │                                                                                                                                       │ ┃
   ┃   │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │ ┃
-  ┃   │  y digit (EP units 3):                                                                                                                                                                                                │ ┃
+  ┃   │  y digit (ROOT units 3):                                                                                                                                                                                              │ ┃
   ┃   │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │ ┃
   ┃   │  │ op of the LAST row │ as is   │ sign flipped │ cut switched │ step switched │                                                                                                                                       │ ┃
   ┃   │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │ ┃
@@ -1775,7 +1775,7 @@
   ┃   │  │ old y              │ 5 (+2)  │ 1 (-2)       │ 0 (c+2)      │ 4 (+1)        │                                                                                                                                       │ ┃
   ┃   │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │ ┃
   ┃   │                                                                                                                                                                                                                       │ ┃
-  ┃   │  NC/CUT SPECIAL  —  after an nc/cut, cut/nc or nc/nc row: next row modified, EP=83                                                                                                                                    │ ┃
+  ┃   │  NC/CUT SPECIAL  —  after an nc/cut, cut/nc or nc/nc row: next row modified, ROOT=83                                                                                                                                  │ ┃
   ┃   │  [Op3] cut/nc  →  [Op6] xy c-1/c+1, yx c+1/c-1:                                                                                                                                                                       │ ┃
   ┃   │     29 (c-1/c+1)   27 (c-1/c-1)   24 (c-1/+1)   22 (c-1/-1)   49 (c+1/c+1)                                                                                                                                            │ ┃
   ┃   │     47 (c+1/c-1)   44 (c+1/+1)   42 (c+1/-1)   79 (-1/c+1)   77 (-1/c-1)                                                                                                                                              │ ┃
@@ -1789,7 +1789,7 @@
   ┃   │  each side as is, sign flipped, cut switched, or both; then the trigger row's old operation again, xy and yx (all in the declared cell)                                                                               │ ┃
   ┃   └───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ ┃
   ┃   ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐                                                                                                   ┃
-  ┃   │  ★  STRONG 20 ADJUSTMENTS  —  after 69, on EP=83  —  y cut toggled, x sign flipped  —  20 + 24 new = 44 numbers  ★  │                                                                                                   ┃
+  ┃   │  ★  STRONG 20 ADJUSTMENTS  —  EP 69, on ROOT=83  —  y cut toggled, x sign flipped  —  20 + 24 new = 44 numbers  ★   │                                                                                                   ┃
   ┃   ├──────────────────────────────────────────────────────────┬──────────────────────────────────────────────────────────┤                                                                                                   ┃
   ┃   │ #1  33 (cut/nc) → 38 (cut/cut)                           │ #2  44 (c+1/+1) → 49 (c+1/c+1), 24 (c-1/+1)              │                                                                                                   ┃
   ┃   │ #3  83 (nc/nc) → 88 (nc/cut)                             │ #4  93 (+1/nc) → 98 (+1/cut), 73 (-1/nc)                 │                                                                                                   ┃
@@ -1810,7 +1810,7 @@
   ┃   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓                                ┃
   ┃   ┃┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓┃                                ┃
   ┃   ┃┃┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓┃┃                                ┃
-  ┃   ┃┃┃ ★  NEXT OPERATION-OCJP  —  from the LAST row 19 (c-2/c+1), 46 (c+1/c-2)  on EP=83  ★                                                                                               ┃┃┃                                ┃
+  ┃   ┃┃┃ ★  NEXT OPERATION-OCJP  —  from the LAST row 19 (c-2/c+1), 46 (c+1/c-2)  on ROOT=83  ★                                                                                             ┃┃┃                                ┃
   ┃   ┃┃┃                                                                                                                                                                                    ┃┃┃                                ┃
   ┃   ┃┃┃ ┌──────────────────────────────────────────────────────────┬──────────────────────────────────────────────────────────┬──────────────────────────────────────────────────────────┐ ┃┃┃                                ┃
   ┃   ┃┃┃ │  1. 07 (+2/c-1), 97+ (+1/c-1), 06* (+2/c-2),             │  2. 70 (-1/c+2), 60+ (-2/c+2), 79* (-1/c+1),             │  3. 04 (+2/+1), 94+ (+1/+1), 05* (+2/+2), 95* (+1/+2),   │ ┃┃┃                                ┃
@@ -1867,7 +1867,7 @@
   ┃   ┃┃┃                                                                                                                                                                                    ┃┃┃                                ┃
   ┃   ┃┃┃ ALL (100): 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 ┃┃┃                                ┃
   ┃   ┃┃┃     56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99                                            ┃┃┃                                ┃
-  ┃   ┃┃┃ 1-20 = the user's operations;  21-30 ^ = mirror forms;  31-38 ° = one operation, sign flipped on one side;  39 = EP cut/cut;  40 = EP itself nc/nc                                 ┃┃┃                                ┃
+  ┃   ┃┃┃ 1-20 = the user's operations;  21-30 ^ = mirror forms;  31-38 ° = one operation, sign flipped on one side;  39 = ROOT cut/cut;  40 = ROOT itself nc/nc                             ┃┃┃                                ┃
   ┃   ┃┃┃ after the comma, + = the same place with its x step switched (1 <-> 2), y kept (-1/c+1 -> -2/c+1);                                                                                 ┃┃┃                                ┃
   ┃   ┃┃┃   when x is nc or cut, the y step switched instead (nc/+2 -> nc/+1)                                                                                                                ┃┃┃                                ┃
   ┃   ┃┃┃ after the next commas, * = the y step switched, and both steps switched (-2/-2 -> -2/-1, -1/-1)                                                                                    ┃┃┃                                ┃
@@ -1882,7 +1882,7 @@
   ┃   ┃┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛┃                                ┃
   ┃   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛                                ┃
   ┃   ┌──────────────────────────────────────────────────────────────────────────────────────┐                                                                                                                                  ┃
-  ┃   │ ★  OCJP FINAL 4  —  after 69, EP=83  ★                                               │                                                                                                                                  ┃
+  ┃   │ ★  OCJP FINAL 4  —  EP 69, ROOT=83  ★                                                │                                                                                                                                  ┃
   ┃   │                                                                                      │                                                                                                                                  ┃
   ┃   │ 1. 84 (nc/+1)   in 3 lists: RECOMMENDED, same op again, 3RRR RESULT                  │                                                                                                                                  ┃
   ┃   │ 2. 03 (+2/nc)   in 2 lists: RECOMMENDED, 3RRR RESULT                                 │                                                                                                                                  ┃
@@ -1902,7 +1902,7 @@
   ┃      and rule numbers as fill — about one round in five by size; most rounds still miss.                                                                                                                                    ┃
   ┃                                                                                                                                                                                                                             ┃
   ┃   ┌───────────────────────────────────────────────────────────────────────────────┐                                                                                                                                         ┃
-  ┃   │    ★  40RRR FINAL-RESULT-TABLE  —  all 100 recommended numbers on EP=83  ★    │                                                                                                                                         ┃
+  ┃   │   ★  40RRR FINAL-RESULT-TABLE  —  all 100 recommended numbers on ROOT=83  ★   │                                                                                                                                         ┃
   ┃   ├───────────────────┬───────────────────┬───────────────────┬───────────────────┤                                                                                                                                         ┃
   ┃   │  1. 33 (cut/nc)   │  2. 44 (c+1/+1)   │  3. 83 (nc/nc)    │  4. 93 (+1/nc)    │                                                                                                                                         ┃
   ┃   │  5. 17 (c-2/c-1)  │  6. 98 (+1/cut)   │  7. 03 (+2/nc)    │  8. 04 (+2/+1)    │                                                                                                                                         ┃
@@ -1933,18 +1933,18 @@
   ┃      numbers 1-20 are the STRONG 20; the rest follow in the order of the lists below                                                                                                                                        ┃
   ┃                                                                                                                                                                                                                             ┃
   ┃   ★ 3RRR RESULT  →  03  (C +2/nc)   84  (E nc/+1)   23  (E c-1/nc)                                                                                                                                                          ┃
-  ┃   ★ 3RRR RECOMMENDED on EP=83  →  03 (+2/nc)   89 (nc/c+1)   28 (c-1/cut)   51 (c+2/-2)   84 (nc/+1)                                                                                                                        ┃
+  ┃   ★ 3RRR RECOMMENDED on ROOT=83  →  03 (+2/nc)   89 (nc/c+1)   28 (c-1/cut)   51 (c+2/-2)   84 (nc/+1)                                                                                                                      ┃
   ┃        34 (cut/+1)   23 (c-1/nc)   62 (-2/-1)   12★ (c-2/-1)   52 (c+2/-1)   41 (c+1/-2)   63 (-2/nc)                                                                                                                       ┃
   ┃        80 (nc/c+2)   85 (nc/+2)   65 (-2/+2)   56 (c+2/c-2)   00 (+2/c+2)   50 (c+2/c+2)   06 (+2/c-2)                                                                                                                      ┃
   ┃        94 (+1/+1)   81 (nc/-2)   61 (-2/-2)   15★ (c-2/+2)   33 (cut/nc)   88 (nc/cut)   83 (nc/nc)                                                                                                                         ┃
   ┃        47 (c+1/c-1)   29 (c-1/c+1)   38 (cut/cut)   19★ (c-2/c+1)   46 (c+1/c-2)   93 (+1/nc)   82 (nc/-1)                                                                                                                  ┃
   ┃        24 (c-1/+1)                                                                                                                                                                                                          ┃
-  ┃     3RRR RECOMMENDED yx on EP=83  →  43 (c+1/nc)   37 (cut/c-1)   60 (-2/c+2)   98 (+1/cut)   87 (nc/c-1)                                                                                                                   ┃
+  ┃     3RRR RECOMMENDED yx on ROOT=83  →  43 (c+1/nc)   37 (cut/c-1)   60 (-2/c+2)   98 (+1/cut)   87 (nc/c-1)                                                                                                                 ┃
   ┃        71 (-1/-2)   76 (-1/c-2)   70 (-1/c+2)   69 (-2/c+1)   53 (c+2/nc)   01 (+2/-2)   10★ (c-2/c+2)                                                                                                                      ┃
   ┃        55 (c+2/+2)   73 (-1/nc)   97 (+1/c-1)                                                                                                                                                                               ┃
-  ┃     3RRR WIDE on EP=83  →  42 (c+1/-1)   99 (+1/c+1)   39 (cut/c+1)   59 (c+2/c+1)   05 (+2/+2)   45 (c+1/+2)                                                                                                               ┃
+  ┃     3RRR WIDE on ROOT=83  →  42 (c+1/-1)   99 (+1/c+1)   39 (cut/c+1)   59 (c+2/c+1)   05 (+2/+2)   45 (c+1/+2)                                                                                                             ┃
   ┃        36 (cut/c-2)   27 (c-1/c-1)   48 (c+1/cut)   92 (+1/-1)   44 (c+1/+1)   32 (cut/-1)                                                                                                                                  ┃
-  ┃      recommended = 3RRR numbers + rules E and F + same operation again + EP itself, EP cut + unused RRR pairs                                                                                                               ┃
+  ┃      recommended = 3RRR numbers + rules E and F + same operation again + ROOT itself, ROOT cut + unused RRR pairs                                                                                                           ┃
   ┃      recommended yx = each recommended value's two operations crossed (numbers not already recommended)                                                                                                                     ┃
   ┃      wide = rule G: the single moves seen on middle rows, tried on every row (numbers not already above)                                                                                                                    ┃
   ┃                                                                                                                                                                                                                             ┃
@@ -1993,7 +1993,7 @@
   ┃      or rule B with the numbers stepped down/up, up/down, up/up:                                                                                                                                                            ┃
   ┃        47 (c+1/c-1)                                                                                                                                                                                                         ┃
   ┃                                                                                                                                                                                                                             ┃
-  ┃   SAME OPERATION AGAIN  (the previous round's operation on this EP):  93 (+1/nc)                                                                                                                                            ┃
+  ┃   SAME OPERATION AGAIN  (the previous round's operation on this ROOT):  93 (+1/nc)                                                                                                                                          ┃
   ┃      yx (crossed):  84 (nc/+1)     yx, cut removed from old y, old x sign flipped:  82 (nc/-1)                                                                                                                              ┃
   ┃        (in advance: yx 7 of 983, yx with cut removed + sign flipped 14 of 983)                                                                                                                                              ┃
   ┃      operation of the round before last, again:  24 (c-1/+1)   (in advance 12 of 976; all 4 of 350)                                                                                                                         ┃
@@ -2021,7 +2021,7 @@
   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
   ╔════════════════════════════════════════════════════════════╗
-  ║    KK CHAIN FAMILY RESULT  (EP=83)  UNIQUE VALUES (26)     ║
+  ║   KK CHAIN FAMILY RESULT  (ROOT=83)  UNIQUE VALUES (26)    ║
   ╠════════════════════════════════════════════════════════════╣
   ║ #   Num   Count     #   Num   Count     #   Num   Count    ║
   ╟────────────────────────────────────────────────────────────╢
@@ -2449,7 +2449,7 @@
   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
   ┃┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓┃
   ┃┃┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓┃┃
-  ┃┃┃ ★  POWER BASE — ALL 100 NUMBERS, NO REPEATS  (EP=83)  ★                  ┃┃┃
+  ┃┃┃ ★  POWER BASE — ALL 100 NUMBERS, NO REPEATS  (ROOT=83)  ★                ┃┃┃
   ┃┃┃                                                                          ┃┃┃
   ┃┃┃   00*  01   02   03★  04★  05   06*  07   08   09★                       ┃┃┃
   ┃┃┃   10   11★  12★  13★  14★  15★  16   17★  18   19*                       ┃┃┃
@@ -2470,7 +2470,7 @@
   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-  ┃                                                                                              RRR:  NEXT OPERATION → EP=83                                                                                                   ┃
+  ┃                                                                                             RRR:  NEXT OPERATION → ROOT=83                                                                                                  ┃
   ┃                                                                                                                                                                                                                             ┃
   ┃   Pos          Source    old x  old y     new x  new y   xy (op)      yx (op)      *xy (op)     *yx (op)     ~xy (op)     ~yx (op)     old xy       old yx       newold xy    oldnew yx    oldy·newy±   oldx·newx±          ┃
   ┃ ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────       ┃
@@ -2488,7 +2488,7 @@
   ┃   LAST = the chain's own last step.  Backtest (57,662 positions): table hit 6.42% vs 6.44% chance.                                                                                                                          ┃
   ┃   Live record: table hit 156 of 1332 rounds (about 33 expected by chance).                                                                                                                                                  ┃
   ┃                                                                                                                                                                                                                             ┃
-  ┃   ONE ROW PICK  —  one Pos / source only, EP=83, after 69                                                                                                                                                                   ┃
+  ┃   ONE ROW PICK  —  one Pos / source only, ROOT=83, EP 69                                                                                                                                                                    ┃
   ┃   [Op10]  32 → 19   old -2/c+2   new -2/+2   (why: ends in the after's family)                                                                                                                                              ┃
   ┃      PICK: old ops crossed, x sign flipped, y cut switched  16 (c-2/c-2)                                                                                                                                                    ┃
   ┃      new ops xy                                             65 (-2/+2)                                                                                                                                                      ┃
@@ -2499,7 +2499,7 @@
   ┃   Replay over 293 rounds (F/N/M/K/O): PICK line 1 hit (chance 2.9), the first 5 lines 14 (chance 14.2) — at chance                                                                                                          ┃
   ┃   On test — live 1 of 163 (PICK line), 4 of 163 (any line)                                                                                                                                                                  ┃
   ┃                                                                                                                                                                                                                             ┃
-  ┃   LAST-OP 4  —  strongest 4 from the LAST row [Op25] 61 → 83, EP=83   (replay by series: top 4 held 19, chance 11.7; top 8 held 42, chance 23.4)                                                                            ┃
+  ┃   LAST-OP 4  —  strongest 4 from the LAST row [Op25] 61 → 83, ROOT=83   (replay by series: top 4 held 19, chance 11.7; top 8 held 42, chance 23.4)                                                                          ┃
   ┃   live: top 4 4 of 112, top 8 9 of 112                                                                                                                                                                                      ┃
   ┃      ★ 1. 67 (-2/c-1)   new xy, x cut switched, y sign flipped                                                                                                                                                              ┃
   ┃      ★ 2. 66 (-2/c-2)   old xy, x sign flipped, y cut switched + flipped                                                                                                                                                    ┃
@@ -2510,8 +2510,8 @@
   ┃        7. 65 (-2/+2)   old yx, x sign flipped, y as is                                                                                                                                                                      ┃
   ┃        8. 10 (c-2/c+2)   old yx, x cut switched + flipped, y cut switched                                                                                                                                                   ┃
   ┃                                                                                                                                                                                                                             ┃
-  ┃   LAST ROW DIGIT MENU  —  [Op25]LAST 61 → 83   old +2/+2   new c-2/c+1   EP=83                                                                                                                                              ┃
-  ┃   x digit (EP tens 8):                                                                                                                                                                                                      ┃
+  ┃   LAST ROW DIGIT MENU  —  [Op25]LAST 61 → 83   old +2/+2   new c-2/c+1   ROOT=83                                                                                                                                            ┃
+  ┃   x digit (ROOT tens 8):                                                                                                                                                                                                    ┃
   ┃   ──────────────────────────────────────────────────────────────────────────────                                                                                                                                            ┃
   ┃   │ op of the LAST row │ as is   │ sign flipped │ cut switched │ step switched │                                                                                                                                            ┃
   ┃   ──────────────────────────────────────────────────────────────────────────────                                                                                                                                            ┃
@@ -2520,7 +2520,7 @@
   ┃   │ old x              │ 0 (+2)  │ 6 (-2)       │ 5 (c+2)      │ 9 (+1)        │                                                                                                                                            ┃
   ┃   │ old y              │ 0 (+2)  │ 6 (-2)       │ 5 (c+2)      │ 9 (+1)        │                                                                                                                                            ┃
   ┃   ──────────────────────────────────────────────────────────────────────────────                                                                                                                                            ┃
-  ┃   y digit (EP units 3):                                                                                                                                                                                                     ┃
+  ┃   y digit (ROOT units 3):                                                                                                                                                                                                   ┃
   ┃   ──────────────────────────────────────────────────────────────────────────────                                                                                                                                            ┃
   ┃   │ op of the LAST row │ as is   │ sign flipped │ cut switched │ step switched │                                                                                                                                            ┃
   ┃   ──────────────────────────────────────────────────────────────────────────────                                                                                                                                            ┃
@@ -2530,7 +2530,7 @@
   ┃   │ old y              │ 5 (+2)  │ 1 (-2)       │ 0 (c+2)      │ 4 (+1)        │                                                                                                                                            ┃
   ┃   ──────────────────────────────────────────────────────────────────────────────                                                                                                                                            ┃
   ┃                                                                                                                                                                                                                             ┃
-  ┃   NC/CUT SPECIAL  —  after an nc/cut, cut/nc or nc/nc row: next row modified, EP=83                                                                                                                                         ┃
+  ┃   NC/CUT SPECIAL  —  after an nc/cut, cut/nc or nc/nc row: next row modified, ROOT=83                                                                                                                                       ┃
   ┃   [Op3] cut/nc  →  [Op6] xy c-1/c+1, yx c+1/c-1:                                                                                                                                                                            ┃
   ┃      29 (c-1/c+1)   27 (c-1/c-1)   24 (c-1/+1)   22 (c-1/-1)   49 (c+1/c+1)                                                                                                                                                 ┃
   ┃      47 (c+1/c-1)   44 (c+1/+1)   42 (c+1/-1)   79 (-1/c+1)   77 (-1/c-1)                                                                                                                                                   ┃
@@ -2546,7 +2546,7 @@
   ┃                                                                                                          3RRR                                                                                                               ┃
   ┃                                                                                                                                                                                                                             ┃
   ┃   ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐                                                                                 ┃
-  ┃   │★  CharRow  —  20 numbers, x only: cut toggled, then sign changed; repeats replaced; last-op steps for x cut; y cut again; cut/nc turned, on EP=83  ★│                                                                   ┃
+  ┃   │★  CharRow  —  20 numbers, x only: cut toggled, then sign changed; repeats replaced; last-op steps for x cut; y cut again; cut/nc turned, on ROOT=83  ★│                                                                 ┃
   ┃   ├─────────────────────────────────┬─────────────────────────────────┬─────────────────────────────────┬─────────────────────────────────┤                                                                                 ┃
   ┃   │ 63 (-2/nc)                      │ 73 (-1/nc)                      │ 62 (-2/-1)                      │ 64 (-2/+1)                      │                                                                                 ┃
   ┃   │ x cut toggled                   │ x cut toggled                   │ x cut toggled                   │ x cut toggled                   │                                                                                 ┃
@@ -2567,7 +2567,7 @@
   ┃   │ from 39: x cut -> +1            │ from 39: x cut -> -1            │ from 39: x cut -> +2            │ from 39: x cut -> -2            │                                                                                 ┃
   ┃   └─────────────────────────────────┴─────────────────────────────────┴─────────────────────────────────┴─────────────────────────────────┘                                                                                 ┃
   ┃   ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐  ┌───────────────────────────────┐                                              ┃
-  ┃   │                                      ★  POWER BASE  —  4 numbers, operations applied on EP=83  ★                                      │  │★ ALL 100 NUMBERS, NO REPEATS ★│                                              ┃
+  ┃   │                                     ★  POWER BASE  —  4 numbers, operations applied on ROOT=83  ★                                     │  │★ ALL 100 NUMBERS, NO REPEATS ★│                                              ┃
   ┃   ├─────────────────────────────────┬─────────────────────────────────┬─────────────────────────────────┬─────────────────────────────────┤  ├───────────────────────────────┤                                              ┃
   ┃   │ 13 (c-2/nc)★,                   │ 23 (c-1/nc)*☆                   │ 12 (c-2/-1)★☆, 17 (c-2/c-1)★☆,  │ 14 (c-2/+1)★☆, 19 (c-2/c+1)*☆,  │  │  00*  01   02   03★  04★  05  │                                              ┃
   ┃   │ 31 (cut/-2)★☆, 32 (cut/-1)★☆,   │                                 │ 11 (c-2/-2)★☆, 16 (c-2/c-2)☆,   │ 15 (c-2/+2)★☆, 10 (c-2/c+2)☆    │  │  06*  07   08   09★  10   11★ │                                              ┃
@@ -2697,16 +2697,16 @@
   ┃      declared cell: declared y a +1/+2 step — the cut steps of the other sign too (-1/+1 -> -1/c-1, -1/c-2)                                                                                                                 ┃
   ┃      declared cell: the first rule's two numbers also with the cut step on x switched (c+2/-1 -> c+1/-1)                                                                                                                    ┃
   ┃      declared cell: x = declared x step without cut, other sign and number, y a cut step — also only the cut on y (-1/c-2 -> -1/cut)                                                                                        ┃
-  ┃      declared cell: the last round's operation again, on the running value instead of the EP (-1/cut on 27 -> 12)                                                                                                           ┃
+  ┃      declared cell: the last round's operation again, on the running value instead of the ROOT (-1/cut on 27 -> 12)                                                                                                         ┃
   ┃      declared cell: declared operations crossed, y without its cut and step switched on x, x without its cut on y (nc/c-1 -> -2/nc)                                                                                         ┃
   ┃      declared cell: the last round's operation again on the running value with its x step switched (+2/nc on 06 -> +1/nc on 06 = 16)                                                                                        ┃
-  ┃      declared cell: the last round's operation again on the EP with nc on y (c+1/+2 -> c+1/nc)                                                                                                                              ┃
+  ┃      declared cell: the last round's operation again on the ROOT with nc on y (c+1/+2 -> c+1/nc)                                                                                                                            ┃
   ┃      declared cell: declared x without its cut + sign flipped, with the cut steps of the other sign on a +1/+2 declared y (c-2/+2 -> +2/c-1, +2/c-2)                                                                        ┃
-  ┃      declared cell: the crossed declared operations (nc/-1 -> -2/nc) applied on the running value instead of the EP (-2/nc on 28 = 08)                                                                                      ┃
+  ┃      declared cell: the crossed declared operations (nc/-1 -> -2/nc) applied on the running value instead of the ROOT (-2/nc on 28 = 08)                                                                                    ┃
   ┃      declared cell: a STRONG 20 number and a 3RRR RESULT number of the same family (53 and 85) bring that STRONG 20 number with both digits cut (53 -> 08)                                                                  ┃
   ┃      declared cell: the whole NUMBER BAND (declared number ± 1, ± 2) is in the cell (50, 52, 54 -> also 51, 53)                                                                                                             ┃
-  ┃      declared cell: the SAME OPERATION AGAIN number (the last round's operation on this EP) is in the cell (cut/c-2 again -> 26)                                                                                            ┃
-  ┃      declared cell: the EP and a 3RRR RESULT number of the same family (02 and 70) bring the EP with both digits cut (02 -> 57)                                                                                             ┃
+  ┃      declared cell: the SAME OPERATION AGAIN number (the last round's operation on this ROOT) is in the cell (cut/c-2 again -> 26)                                                                                          ┃
+  ┃      declared cell: the ROOT and a 3RRR RESULT number of the same family (02 and 70) bring the ROOT with both digits cut (02 -> 57)                                                                                         ┃
   ┃      declared cell: the first 3RRR RESULT number itself is in the cell (08)                                                                                                                                                 ┃
   ┃      declared cell: every RRR: NEXT OPERATION table number, xy and yx (89 (+1/-1))                                                                                                                                          ┃
   ┃      declared cell: the SAME OPERATION AGAIN crossed, yx and yx turned (old y cut removed, old x sign flipped) (+1/-1 -> 45 (-1/-1))                                                                                        ┃
@@ -2722,7 +2722,7 @@
   ┃      declared cell: the STRONG 20 seats below the band with y cut toggled (67 (-1/-1) -> 62 (-1/c-1))                                                                                                                       ┃
   ┃      declared cell: RECOMMENDED F, the last row not crossed with one side dropped to nc (55 (-2/nc))                                                                                                                        ┃
   ┃      declared cell: RECOMMENDED F, the last row not crossed with both sides one step down / up (24 (-1/-2))                                                                                                                 ┃
-  ┃      declared cell: the RRR table row that gave the star pick, its old operation again on this EP, xy and yx (-1/+1 -> 28, 46)                                                                                              ┃
+  ┃      declared cell: the RRR table row that gave the star pick, its old operation again on this ROOT, xy and yx (-1/+1 -> 28, 46)                                                                                            ┃
   ┃      declared cell: the LAST row of the next-operation table, its number with a cut on y comes with y one step down (22 (c+1/cut) -> 21 (c+1/c-1))                                                                          ┃
   ┃      declared cell: the first STRONG 20 number above the band with a cut and step on x and a plain step on y, the cut taken off x (23 (c-2/+1) -> 73 (-2/+1))                                                               ┃
   ┃      declared cell: a star pick turn with a cut on y comes with its y one step down (46 (cut/cut) -> 45 (cut/c-1))                                                                                                          ┃
@@ -2745,21 +2745,21 @@
   ┃      declared cell: the band number one under the declared number with the cut toggled on its x, nc / c-2 on the running value (09 -> 02)                                                                                   ┃
   ┃      declared cell: a STRONG 20 number under the band with a plain step of one on y brings the same with nc on y (00 (c+2/-1) -> 01 (c+2/nc))                                                                               ┃
   ┃      declared cell: a STRONG 20 number above the band with nc on x brings the same with its y cut toggled (25 (nc/+1) -> 20 (nc/c+1))                                                                                       ┃
-  ┃      declared cell: the EP itself, nc/nc, is in the cell (EP 68 -> 68)                                                                                                                                                      ┃
-  ┃      declared cell: the c+2 / c-2 number of the running value read on the EP and mirrored, both signs flipped (09 (-2/-2) -> 43 (+2/+2))                                                                                    ┃
+  ┃      declared cell: the ROOT itself, nc/nc, is in the cell (ROOT 68 -> 68)                                                                                                                                                  ┃
+  ┃      declared cell: the c+2 / c-2 number of the running value read on the ROOT and mirrored, both signs flipped (09 (-2/-2) -> 43 (+2/+2))                                                                                  ┃
   ┃      declared cell: the 2nd NUMBER one above, c+1 / cut on the running value (71 -> 36)                                                                                                                                     ┃
   ┃      declared cell: the last round's operation with its x sign flipped and its y without the cut (c+1/c-2 -> c-1/-2 = 71)                                                                                                   ┃
   ┃      declared cell: the SAME OPERATION AGAIN number mirrored, the last round's operation with both signs flipped (c-1/c+2 -> c+1/c-2 = 31)                                                                                  ┃
   ┃      declared cell: the declared operations crossed, both signs flipped and both steps switched (90 (c-1/-1) -> +2/c+2 = 78)                                                                                                ┃
   ┃      declared cell: the 3RRR RESULT C number with its x step switched, the nearest x (56 (-1/nc) -> 46 (-2/nc))                                                                                                             ┃
   ┃      declared cell: the SAME OPERATION AGAIN number mirrored with its x step switched (c-2/c-1 -> c+1/c+1 = 76) also with its units digit cut (-> 71)                                                                       ┃
-  ┃      declared cell: the operation of two rounds back again on this EP is in the cell (c+1/-2 again -> 30)                                                                                                                   ┃
+  ┃      declared cell: the operation of two rounds back again on this ROOT is in the cell (c+1/-2 again -> 30)                                                                                                                 ┃
   ┃      declared cell: the 2nd NUMBER with its x sign flipped (73 (-1/+1) -> 93 (+1/+1)) also with both digits cut (-> 48)                                                                                                     ┃
-  ┃      declared cell: the 2nd NUMBER's operation applied on the running value instead of the EP (62 = +1/+1 on EP 51; +1/+1 on 08 -> 19)                                                                                      ┃
+  ┃      declared cell: the 2nd NUMBER's operation applied on the running value instead of the ROOT (62 = +1/+1 on ROOT 51; +1/+1 on 08 -> 19)                                                                                  ┃
   ┃      declared cell: the 2nd NUMBER with its x sign flipped and its y step switched, c-1 / c-2 on the running value (65 -> 08)                                                                                               ┃
   ┃      declared cell: two STRONG 20 numbers above the band, -1 and +1 on x with the same y (13 and 33), bring the number between them, nc on x (-> 23)                                                                        ┃
   ┃      declared cell: a 3RRR RESULT number that is a STRONG 20 number above the band with both digits cut (88 -> 33) is in the cell                                                                                           ┃
-  ┃      declared cell: the declared operation applied on the running value instead of the EP (30 = +2/nc on EP 10; +2/nc on 86 -> 06)                                                                                          ┃
+  ┃      declared cell: the declared operation applied on the running value instead of the ROOT (30 = +2/nc on ROOT 10; +2/nc on 86 -> 06)                                                                                      ┃
   ┃      declared cell: the SAME OPERATION AGAIN number mirrored (both signs flipped) with its x step switched (c+1/-1 -> c-2/+1 = 68)                                                                                          ┃
   ┃      declared cell: two STRONG 20 numbers that are each other with both digits cut (24 and 79) bring the number between them, the lower one with its tens cut (74)                                                          ┃
   ┃      declared cell: the declared number with its digits reversed (60 -> 06)                                                                                                                                                 ┃
@@ -2780,7 +2780,7 @@
   ┃      in advance 562 of 918; all 423 recorded rounds: 36 = 8.5% (4% by chance), latest series 7 of 170                                                                                                                       ┃
   ┃                                                                                                                                                                                                                             ┃
   ┃   ┌───────────────────────────────────────────────────────────────────────────┐                                                                                                                                             ┃
-  ┃   │          ★  3RRR STRONG 20   —   operations applied on EP=83  ★           │                                                                                                                                             ┃
+  ┃   │         ★  3RRR STRONG 20   —   operations applied on ROOT=83  ★          │                                                                                                                                             ┃
   ┃   ├──────────────────┬──────────────────┬──────────────────┬──────────────────┤                                                                                                                                             ┃
   ┃   │ #1  33 (cut/nc)  │ #2  44 (c+1/+1)  │ #3  83 (nc/nc)   │ #4  93 (+1/nc)   │                                                                                                                                             ┃
   ┃   ├──────────────────┼──────────────────┼──────────────────┼──────────────────┤                                                                                                                                             ┃
@@ -2805,7 +2805,7 @@
   ┃   │ + = last-op steps, y cut again, or cut/nc turned│                                                                                                                                                                       ┃
   ┃   └─────────────────────────────────────────────────┘                                                                                                                                                                       ┃
   ┃   ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐ ┃
-  ┃   │                                                                                             RRR:  NEXT OPERATION → EP=83                                                                                              │ ┃
+  ┃   │                                                                                            RRR:  NEXT OPERATION → ROOT=83                                                                                             │ ┃
   ┃   │                                                                                                                                                                                                                       │ ┃
   ┃   │  Pos          Source    old x  old y     new x  new y   xy (op)      yx (op)      *xy (op)     *yx (op)     ~xy (op)     ~yx (op)     old xy       old yx       newold xy    oldnew yx    oldy·newy±   oldx·newx±     │ ┃
   ┃   │─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  │ ┃
@@ -2823,7 +2823,7 @@
   ┃   │  LAST = the chain's own last step.  Backtest (57,662 positions): table hit 6.42% vs 6.44% chance.                                                                                                                     │ ┃
   ┃   │  Live record: table hit 156 of 1332 rounds (about 33 expected by chance).                                                                                                                                             │ ┃
   ┃   │                                                                                                                                                                                                                       │ ┃
-  ┃   │  ONE ROW PICK  —  one Pos / source only, EP=83, after 69                                                                                                                                                              │ ┃
+  ┃   │  ONE ROW PICK  —  one Pos / source only, ROOT=83, EP 69                                                                                                                                                               │ ┃
   ┃   │  [Op10]  32 → 19   old -2/c+2   new -2/+2   (why: ends in the after's family)                                                                                                                                         │ ┃
   ┃   │     PICK: old ops crossed, x sign flipped, y cut switched  16 (c-2/c-2)                                                                                                                                               │ ┃
   ┃   │     new ops xy                                             65 (-2/+2)                                                                                                                                                 │ ┃
@@ -2834,7 +2834,7 @@
   ┃   │  Replay over 293 rounds (F/N/M/K/O): PICK line 1 hit (chance 2.9), the first 5 lines 14 (chance 14.2) — at chance                                                                                                     │ ┃
   ┃   │  On test — live 1 of 163 (PICK line), 4 of 163 (any line)                                                                                                                                                             │ ┃
   ┃   │                                                                                                                                                                                                                       │ ┃
-  ┃   │  LAST-OP 4  —  strongest 4 from the LAST row [Op25] 61 → 83, EP=83   (replay by series: top 4 held 19, chance 11.7; top 8 held 42, chance 23.4)                                                                       │ ┃
+  ┃   │  LAST-OP 4  —  strongest 4 from the LAST row [Op25] 61 → 83, ROOT=83   (replay by series: top 4 held 19, chance 11.7; top 8 held 42, chance 23.4)                                                                     │ ┃
   ┃   │  live: top 4 4 of 112, top 8 9 of 112                                                                                                                                                                                 │ ┃
   ┃   │     ★ 1. 67 (-2/c-1)   new xy, x cut switched, y sign flipped                                                                                                                                                         │ ┃
   ┃   │     ★ 2. 66 (-2/c-2)   old xy, x sign flipped, y cut switched + flipped                                                                                                                                               │ ┃
@@ -2845,8 +2845,8 @@
   ┃   │       7. 65 (-2/+2)   old yx, x sign flipped, y as is                                                                                                                                                                 │ ┃
   ┃   │       8. 10 (c-2/c+2)   old yx, x cut switched + flipped, y cut switched                                                                                                                                              │ ┃
   ┃   │                                                                                                                                                                                                                       │ ┃
-  ┃   │  LAST ROW DIGIT MENU  —  [Op25]LAST 61 → 83   old +2/+2   new c-2/c+1   EP=83                                                                                                                                         │ ┃
-  ┃   │  x digit (EP tens 8):                                                                                                                                                                                                 │ ┃
+  ┃   │  LAST ROW DIGIT MENU  —  [Op25]LAST 61 → 83   old +2/+2   new c-2/c+1   ROOT=83                                                                                                                                       │ ┃
+  ┃   │  x digit (ROOT tens 8):                                                                                                                                                                                               │ ┃
   ┃   │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │ ┃
   ┃   │  │ op of the LAST row │ as is   │ sign flipped │ cut switched │ step switched │                                                                                                                                       │ ┃
   ┃   │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │ ┃
@@ -2855,7 +2855,7 @@
   ┃   │  │ old x              │ 0 (+2)  │ 6 (-2)       │ 5 (c+2)      │ 9 (+1)        │                                                                                                                                       │ ┃
   ┃   │  │ old y              │ 0 (+2)  │ 6 (-2)       │ 5 (c+2)      │ 9 (+1)        │                                                                                                                                       │ ┃
   ┃   │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │ ┃
-  ┃   │  y digit (EP units 3):                                                                                                                                                                                                │ ┃
+  ┃   │  y digit (ROOT units 3):                                                                                                                                                                                              │ ┃
   ┃   │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │ ┃
   ┃   │  │ op of the LAST row │ as is   │ sign flipped │ cut switched │ step switched │                                                                                                                                       │ ┃
   ┃   │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │ ┃
@@ -2865,7 +2865,7 @@
   ┃   │  │ old y              │ 5 (+2)  │ 1 (-2)       │ 0 (c+2)      │ 4 (+1)        │                                                                                                                                       │ ┃
   ┃   │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │ ┃
   ┃   │                                                                                                                                                                                                                       │ ┃
-  ┃   │  NC/CUT SPECIAL  —  after an nc/cut, cut/nc or nc/nc row: next row modified, EP=83                                                                                                                                    │ ┃
+  ┃   │  NC/CUT SPECIAL  —  after an nc/cut, cut/nc or nc/nc row: next row modified, ROOT=83                                                                                                                                  │ ┃
   ┃   │  [Op3] cut/nc  →  [Op6] xy c-1/c+1, yx c+1/c-1:                                                                                                                                                                       │ ┃
   ┃   │     29 (c-1/c+1)   27 (c-1/c-1)   24 (c-1/+1)   22 (c-1/-1)   49 (c+1/c+1)                                                                                                                                            │ ┃
   ┃   │     47 (c+1/c-1)   44 (c+1/+1)   42 (c+1/-1)   79 (-1/c+1)   77 (-1/c-1)                                                                                                                                              │ ┃
@@ -2879,7 +2879,7 @@
   ┃   │  each side as is, sign flipped, cut switched, or both; then the trigger row's old operation again, xy and yx (all in the declared cell)                                                                               │ ┃
   ┃   └───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘ ┃
   ┃   ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐                                                                                                   ┃
-  ┃   │  ★  STRONG 20 ADJUSTMENTS  —  after 69, on EP=83  —  y cut toggled, x sign flipped  —  20 + 24 new = 44 numbers  ★  │                                                                                                   ┃
+  ┃   │  ★  STRONG 20 ADJUSTMENTS  —  EP 69, on ROOT=83  —  y cut toggled, x sign flipped  —  20 + 24 new = 44 numbers  ★   │                                                                                                   ┃
   ┃   ├──────────────────────────────────────────────────────────┬──────────────────────────────────────────────────────────┤                                                                                                   ┃
   ┃   │ #1  33 (cut/nc) → 38 (cut/cut)                           │ #2  44 (c+1/+1) → 49 (c+1/c+1), 24 (c-1/+1)              │                                                                                                   ┃
   ┃   │ #3  83 (nc/nc) → 88 (nc/cut)                             │ #4  93 (+1/nc) → 98 (+1/cut), 73 (-1/nc)                 │                                                                                                   ┃
@@ -2900,7 +2900,7 @@
   ┃   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓                                ┃
   ┃   ┃┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓┃                                ┃
   ┃   ┃┃┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓┃┃                                ┃
-  ┃   ┃┃┃ ★  NEXT OPERATION-OCJP  —  from the LAST row 19 (c-2/c+1), 46 (c+1/c-2)  on EP=83  ★                                                                                               ┃┃┃                                ┃
+  ┃   ┃┃┃ ★  NEXT OPERATION-OCJP  —  from the LAST row 19 (c-2/c+1), 46 (c+1/c-2)  on ROOT=83  ★                                                                                             ┃┃┃                                ┃
   ┃   ┃┃┃                                                                                                                                                                                    ┃┃┃                                ┃
   ┃   ┃┃┃ ┌──────────────────────────────────────────────────────────┬──────────────────────────────────────────────────────────┬──────────────────────────────────────────────────────────┐ ┃┃┃                                ┃
   ┃   ┃┃┃ │  1. 07 (+2/c-1), 97+ (+1/c-1), 06* (+2/c-2),             │  2. 70 (-1/c+2), 60+ (-2/c+2), 79* (-1/c+1),             │  3. 04 (+2/+1), 94+ (+1/+1), 05* (+2/+2), 95* (+1/+2),   │ ┃┃┃                                ┃
@@ -2957,7 +2957,7 @@
   ┃   ┃┃┃                                                                                                                                                                                    ┃┃┃                                ┃
   ┃   ┃┃┃ ALL (100): 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 ┃┃┃                                ┃
   ┃   ┃┃┃     56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99                                            ┃┃┃                                ┃
-  ┃   ┃┃┃ 1-20 = the user's operations;  21-30 ^ = mirror forms;  31-38 ° = one operation, sign flipped on one side;  39 = EP cut/cut;  40 = EP itself nc/nc                                 ┃┃┃                                ┃
+  ┃   ┃┃┃ 1-20 = the user's operations;  21-30 ^ = mirror forms;  31-38 ° = one operation, sign flipped on one side;  39 = ROOT cut/cut;  40 = ROOT itself nc/nc                             ┃┃┃                                ┃
   ┃   ┃┃┃ after the comma, + = the same place with its x step switched (1 <-> 2), y kept (-1/c+1 -> -2/c+1);                                                                                 ┃┃┃                                ┃
   ┃   ┃┃┃   when x is nc or cut, the y step switched instead (nc/+2 -> nc/+1)                                                                                                                ┃┃┃                                ┃
   ┃   ┃┃┃ after the next commas, * = the y step switched, and both steps switched (-2/-2 -> -2/-1, -1/-1)                                                                                    ┃┃┃                                ┃
@@ -2972,7 +2972,7 @@
   ┃   ┃┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛┃                                ┃
   ┃   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛                                ┃
   ┃   ┌──────────────────────────────────────────────────────────────────────────────────────┐                                                                                                                                  ┃
-  ┃   │ ★  OCJP FINAL 4  —  after 69, EP=83  ★                                               │                                                                                                                                  ┃
+  ┃   │ ★  OCJP FINAL 4  —  EP 69, ROOT=83  ★                                                │                                                                                                                                  ┃
   ┃   │                                                                                      │                                                                                                                                  ┃
   ┃   │ 1. 84 (nc/+1)   in 3 lists: RECOMMENDED, same op again, 3RRR RESULT                  │                                                                                                                                  ┃
   ┃   │ 2. 03 (+2/nc)   in 2 lists: RECOMMENDED, 3RRR RESULT                                 │                                                                                                                                  ┃
@@ -2992,7 +2992,7 @@
   ┃      and rule numbers as fill — about one round in five by size; most rounds still miss.                                                                                                                                    ┃
   ┃                                                                                                                                                                                                                             ┃
   ┃   ┌───────────────────────────────────────────────────────────────────────────────┐                                                                                                                                         ┃
-  ┃   │    ★  40RRR FINAL-RESULT-TABLE  —  all 100 recommended numbers on EP=83  ★    │                                                                                                                                         ┃
+  ┃   │   ★  40RRR FINAL-RESULT-TABLE  —  all 100 recommended numbers on ROOT=83  ★   │                                                                                                                                         ┃
   ┃   ├───────────────────┬───────────────────┬───────────────────┬───────────────────┤                                                                                                                                         ┃
   ┃   │  1. 33 (cut/nc)   │  2. 44 (c+1/+1)   │  3. 83 (nc/nc)    │  4. 93 (+1/nc)    │                                                                                                                                         ┃
   ┃   │  5. 17 (c-2/c-1)  │  6. 98 (+1/cut)   │  7. 03 (+2/nc)    │  8. 04 (+2/+1)    │                                                                                                                                         ┃
@@ -3023,18 +3023,18 @@
   ┃      numbers 1-20 are the STRONG 20; the rest follow in the order of the lists below                                                                                                                                        ┃
   ┃                                                                                                                                                                                                                             ┃
   ┃   ★ 3RRR RESULT  →  03  (C +2/nc)   84  (E nc/+1)   23  (E c-1/nc)                                                                                                                                                          ┃
-  ┃   ★ 3RRR RECOMMENDED on EP=83  →  03 (+2/nc)   89 (nc/c+1)   28 (c-1/cut)   51 (c+2/-2)   84 (nc/+1)                                                                                                                        ┃
+  ┃   ★ 3RRR RECOMMENDED on ROOT=83  →  03 (+2/nc)   89 (nc/c+1)   28 (c-1/cut)   51 (c+2/-2)   84 (nc/+1)                                                                                                                      ┃
   ┃        34 (cut/+1)   23 (c-1/nc)   62 (-2/-1)   12★ (c-2/-1)   52 (c+2/-1)   41 (c+1/-2)   63 (-2/nc)                                                                                                                       ┃
   ┃        80 (nc/c+2)   85 (nc/+2)   65 (-2/+2)   56 (c+2/c-2)   00 (+2/c+2)   50 (c+2/c+2)   06 (+2/c-2)                                                                                                                      ┃
   ┃        94 (+1/+1)   81 (nc/-2)   61 (-2/-2)   15★ (c-2/+2)   33 (cut/nc)   88 (nc/cut)   83 (nc/nc)                                                                                                                         ┃
   ┃        47 (c+1/c-1)   29 (c-1/c+1)   38 (cut/cut)   19★ (c-2/c+1)   46 (c+1/c-2)   93 (+1/nc)   82 (nc/-1)                                                                                                                  ┃
   ┃        24 (c-1/+1)                                                                                                                                                                                                          ┃
-  ┃     3RRR RECOMMENDED yx on EP=83  →  43 (c+1/nc)   37 (cut/c-1)   60 (-2/c+2)   98 (+1/cut)   87 (nc/c-1)                                                                                                                   ┃
+  ┃     3RRR RECOMMENDED yx on ROOT=83  →  43 (c+1/nc)   37 (cut/c-1)   60 (-2/c+2)   98 (+1/cut)   87 (nc/c-1)                                                                                                                 ┃
   ┃        71 (-1/-2)   76 (-1/c-2)   70 (-1/c+2)   69 (-2/c+1)   53 (c+2/nc)   01 (+2/-2)   10★ (c-2/c+2)                                                                                                                      ┃
   ┃        55 (c+2/+2)   73 (-1/nc)   97 (+1/c-1)                                                                                                                                                                               ┃
-  ┃     3RRR WIDE on EP=83  →  42 (c+1/-1)   99 (+1/c+1)   39 (cut/c+1)   59 (c+2/c+1)   05 (+2/+2)   45 (c+1/+2)                                                                                                               ┃
+  ┃     3RRR WIDE on ROOT=83  →  42 (c+1/-1)   99 (+1/c+1)   39 (cut/c+1)   59 (c+2/c+1)   05 (+2/+2)   45 (c+1/+2)                                                                                                             ┃
   ┃        36 (cut/c-2)   27 (c-1/c-1)   48 (c+1/cut)   92 (+1/-1)   44 (c+1/+1)   32 (cut/-1)                                                                                                                                  ┃
-  ┃      recommended = 3RRR numbers + rules E and F + same operation again + EP itself, EP cut + unused RRR pairs                                                                                                               ┃
+  ┃      recommended = 3RRR numbers + rules E and F + same operation again + ROOT itself, ROOT cut + unused RRR pairs                                                                                                           ┃
   ┃      recommended yx = each recommended value's two operations crossed (numbers not already recommended)                                                                                                                     ┃
   ┃      wide = rule G: the single moves seen on middle rows, tried on every row (numbers not already above)                                                                                                                    ┃
   ┃                                                                                                                                                                                                                             ┃
@@ -3083,7 +3083,7 @@
   ┃      or rule B with the numbers stepped down/up, up/down, up/up:                                                                                                                                                            ┃
   ┃        47 (c+1/c-1)                                                                                                                                                                                                         ┃
   ┃                                                                                                                                                                                                                             ┃
-  ┃   SAME OPERATION AGAIN  (the previous round's operation on this EP):  93 (+1/nc)                                                                                                                                            ┃
+  ┃   SAME OPERATION AGAIN  (the previous round's operation on this ROOT):  93 (+1/nc)                                                                                                                                          ┃
   ┃      yx (crossed):  84 (nc/+1)     yx, cut removed from old y, old x sign flipped:  82 (nc/-1)                                                                                                                              ┃
   ┃        (in advance: yx 7 of 983, yx with cut removed + sign flipped 14 of 983)                                                                                                                                              ┃
   ┃      operation of the round before last, again:  24 (c-1/+1)   (in advance 12 of 976; all 4 of 350)                                                                                                                         ┃
@@ -3114,15 +3114,15 @@
   ┃┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓┃
   ┃┃┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓┃┃
   ┃┃┃  ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐                                                                          ┃┃┃
-  ┃┃┃  │                                             ★  ROUND SUMMARY  —  after 69, operations on EP=83  ★                                             │                                                                          ┃┃┃
+  ┃┃┃  │                                             ★  ROUND SUMMARY  —  EP 69, operations on ROOT=83  ★                                              │                                                                          ┃┃┃
   ┃┃┃  ├──────────────────────┬─────────────────────────────────────────────────────────────┬──────────────────────────────────────────────────────────┤                                                                          ┃┃┃
   ┃┃┃  │ After number         │ 69                                                          │ the last result; the round comes after it                │                                                                          ┃┃┃
-  ┃┃┃  │ Operations on EP     │ 83                                                          │ the number every operation is applied on                 │                                                                          ┃┃┃
+  ┃┃┃  │ Operations on ROOT   │ 83                                                          │ the number every operation is applied on                 │                                                                          ┃┃┃
   ┃┃┃  │ Declared number      │ 13 (c-2/nc)                                                 │ cut / c-1 on the after number 69                         │                                                                          ┃┃┃
   ┃┃┃  │ Decade               │ 10-19                                                       │ the after number's tens digit cut                        │                                                                          ┃┃┃
   ┃┃┃  │ Band                 │ 11 12 13 14 15                                              │ the declared number and 1, 2 either side                 │                                                                          ┃┃┃
   ┃┃┃  │ 2nd number           │ 23 (c-1/nc)                                                 │ c+1 / c-1 on the after number 69                         │                                                                          ┃┃┃
-  ┃┃┃  │ Same operation again │ 93 (+1/nc)                                                  │ the last round's operation applied again on this EP      │                                                                          ┃┃┃
+  ┃┃┃  │ Same operation again │ 93 (+1/nc)                                                  │ the last round's operation applied again on this ROOT    │                                                                          ┃┃┃
   ┃┃┃  │ 3RRR result line     │ 03 84 23                                                    │ the 3RRR RESULT numbers                                  │                                                                          ┃┃┃
   ┃┃┃  │ POWER BASE           │ 13 (c-2/nc), 23 (c-1/nc), 12 (c-2/-1), 14 (c-2/+1)          │ declared, decade up, one below, one above                │                                                                          ┃┃┃
   ┃┃┃  │ Star picks           │ ★ 84 (nc/+1) [4],  03 (+2/nc) [3],  12 (c-2/-1) [3]         │ most lists agree on these; [n] = lists; ★ = first pick   │                                                                          ┃┃┃
@@ -3131,22 +3131,22 @@
   ┃┃┃  │ OCJP FINAL 4         │ 84 (nc/+1)  03 (+2/nc)  24 (c-1/+1)  29 (c-1/c+1)           │ OCJP numbers most never-repaired lists hold (8.3% vs 4%) │                                                                          ┃┃┃
   ┃┃┃  │ OCJP MASTER          │ 84 (nc/+1)                                                  │ FINAL 4's #1: one exact pick (2.5% vs 1%)                │                                                                          ┃┃┃
   ┃┃┃  └──────────────────────┴─────────────────────────────────────────────────────────────┴──────────────────────────────────────────────────────────┘                                                                          ┃┃┃
-  ┃┃┃  ┌───────────────────────────────────────────────────────────┐                                                                                                                                                              ┃┃┃
-  ┃┃┃  │ ★  SUMMARY NUMBERS  —  32, no repeats, after 69, EP=83  ★ │                                                                                                                                                              ┃┃┃
-  ┃┃┃  ├───────┬───────────────────────────────────────────────────┤                                                                                                                                                              ┃┃┃
-  ┃┃┃  │ 00-09 │          03                                       │                                                                                                                                                              ┃┃┃
-  ┃┃┃  │ 10-19 │ 10 11 12 13 14 15       18 19                     │                                                                                                                                                              ┃┃┃
-  ┃┃┃  │ 20-29 │ 20       23 24 25       28 29                     │                                                                                                                                                              ┃┃┃
-  ┃┃┃  │ 30-39 │ 30    32                   39                     │                                                                                                                                                              ┃┃┃
-  ┃┃┃  │ 40-49 │ 40       43 44                                    │                                                                                                                                                              ┃┃┃
-  ┃┃┃  │ 50-59 │    51                      59                     │                                                                                                                                                              ┃┃┃
-  ┃┃┃  │ 60-69 │ 60                66 67                           │                                                                                                                                                              ┃┃┃
-  ┃┃┃  │ 70-79 │    71 72                                          │                                                                                                                                                              ┃┃┃
-  ┃┃┃  │ 80-89 │          83 84          88                        │                                                                                                                                                              ┃┃┃
-  ┃┃┃  │ 90-99 │          93                                       │                                                                                                                                                              ┃┃┃
-  ┃┃┃  └───────┴───────────────────────────────────────────────────┘                                                                                                                                                              ┃┃┃
+  ┃┃┃  ┌──────────────────────────────────────────────────────────┐                                                                                                                                                               ┃┃┃
+  ┃┃┃  │ ★  SUMMARY NUMBERS  —  32, no repeats, EP 69, ROOT=83  ★ │                                                                                                                                                               ┃┃┃
+  ┃┃┃  ├───────┬──────────────────────────────────────────────────┤                                                                                                                                                               ┃┃┃
+  ┃┃┃  │ 00-09 │          03                                      │                                                                                                                                                               ┃┃┃
+  ┃┃┃  │ 10-19 │ 10 11 12 13 14 15       18 19                    │                                                                                                                                                               ┃┃┃
+  ┃┃┃  │ 20-29 │ 20       23 24 25       28 29                    │                                                                                                                                                               ┃┃┃
+  ┃┃┃  │ 30-39 │ 30    32                   39                    │                                                                                                                                                               ┃┃┃
+  ┃┃┃  │ 40-49 │ 40       43 44                                   │                                                                                                                                                               ┃┃┃
+  ┃┃┃  │ 50-59 │    51                      59                    │                                                                                                                                                               ┃┃┃
+  ┃┃┃  │ 60-69 │ 60                66 67                          │                                                                                                                                                               ┃┃┃
+  ┃┃┃  │ 70-79 │    71 72                                         │                                                                                                                                                               ┃┃┃
+  ┃┃┃  │ 80-89 │          83 84          88                       │                                                                                                                                                               ┃┃┃
+  ┃┃┃  │ 90-99 │          93                                      │                                                                                                                                                               ┃┃┃
+  ┃┃┃  └───────┴──────────────────────────────────────────────────┘                                                                                                                                                               ┃┃┃
   ┃┃┃  ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐  ┃┃┃
-  ┃┃┃  │                                                                                             RRR:  NEXT OPERATION → EP=83                                                                                              │  ┃┃┃
+  ┃┃┃  │                                                                                            RRR:  NEXT OPERATION → ROOT=83                                                                                             │  ┃┃┃
   ┃┃┃  │                                                                                                                                                                                                                       │  ┃┃┃
   ┃┃┃  │  Pos          Source    old x  old y     new x  new y   xy (op)      yx (op)      *xy (op)     *yx (op)     ~xy (op)     ~yx (op)     old xy       old yx       newold xy    oldnew yx    oldy·newy±   oldx·newx±     │  ┃┃┃
   ┃┃┃  │─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  │  ┃┃┃
@@ -3164,7 +3164,7 @@
   ┃┃┃  │  LAST = the chain's own last step.  Backtest (57,662 positions): table hit 6.42% vs 6.44% chance.                                                                                                                     │  ┃┃┃
   ┃┃┃  │  Live record: table hit 156 of 1332 rounds (about 33 expected by chance).                                                                                                                                             │  ┃┃┃
   ┃┃┃  │                                                                                                                                                                                                                       │  ┃┃┃
-  ┃┃┃  │  ONE ROW PICK  —  one Pos / source only, EP=83, after 69                                                                                                                                                              │  ┃┃┃
+  ┃┃┃  │  ONE ROW PICK  —  one Pos / source only, ROOT=83, EP 69                                                                                                                                                               │  ┃┃┃
   ┃┃┃  │  [Op10]  32 → 19   old -2/c+2   new -2/+2   (why: ends in the after's family)                                                                                                                                         │  ┃┃┃
   ┃┃┃  │     PICK: old ops crossed, x sign flipped, y cut switched  16 (c-2/c-2)                                                                                                                                               │  ┃┃┃
   ┃┃┃  │     new ops xy                                             65 (-2/+2)                                                                                                                                                 │  ┃┃┃
@@ -3175,7 +3175,7 @@
   ┃┃┃  │  Replay over 293 rounds (F/N/M/K/O): PICK line 1 hit (chance 2.9), the first 5 lines 14 (chance 14.2) — at chance                                                                                                     │  ┃┃┃
   ┃┃┃  │  On test — live 1 of 163 (PICK line), 4 of 163 (any line)                                                                                                                                                             │  ┃┃┃
   ┃┃┃  │                                                                                                                                                                                                                       │  ┃┃┃
-  ┃┃┃  │  LAST-OP 4  —  strongest 4 from the LAST row [Op25] 61 → 83, EP=83   (replay by series: top 4 held 19, chance 11.7; top 8 held 42, chance 23.4)                                                                       │  ┃┃┃
+  ┃┃┃  │  LAST-OP 4  —  strongest 4 from the LAST row [Op25] 61 → 83, ROOT=83   (replay by series: top 4 held 19, chance 11.7; top 8 held 42, chance 23.4)                                                                     │  ┃┃┃
   ┃┃┃  │  live: top 4 4 of 112, top 8 9 of 112                                                                                                                                                                                 │  ┃┃┃
   ┃┃┃  │     ★ 1. 67 (-2/c-1)   new xy, x cut switched, y sign flipped                                                                                                                                                         │  ┃┃┃
   ┃┃┃  │     ★ 2. 66 (-2/c-2)   old xy, x sign flipped, y cut switched + flipped                                                                                                                                               │  ┃┃┃
@@ -3186,8 +3186,8 @@
   ┃┃┃  │       7. 65 (-2/+2)   old yx, x sign flipped, y as is                                                                                                                                                                 │  ┃┃┃
   ┃┃┃  │       8. 10 (c-2/c+2)   old yx, x cut switched + flipped, y cut switched                                                                                                                                              │  ┃┃┃
   ┃┃┃  │                                                                                                                                                                                                                       │  ┃┃┃
-  ┃┃┃  │  LAST ROW DIGIT MENU  —  [Op25]LAST 61 → 83   old +2/+2   new c-2/c+1   EP=83                                                                                                                                         │  ┃┃┃
-  ┃┃┃  │  x digit (EP tens 8):                                                                                                                                                                                                 │  ┃┃┃
+  ┃┃┃  │  LAST ROW DIGIT MENU  —  [Op25]LAST 61 → 83   old +2/+2   new c-2/c+1   ROOT=83                                                                                                                                       │  ┃┃┃
+  ┃┃┃  │  x digit (ROOT tens 8):                                                                                                                                                                                               │  ┃┃┃
   ┃┃┃  │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │  ┃┃┃
   ┃┃┃  │  │ op of the LAST row │ as is   │ sign flipped │ cut switched │ step switched │                                                                                                                                       │  ┃┃┃
   ┃┃┃  │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │  ┃┃┃
@@ -3196,7 +3196,7 @@
   ┃┃┃  │  │ old x              │ 0 (+2)  │ 6 (-2)       │ 5 (c+2)      │ 9 (+1)        │                                                                                                                                       │  ┃┃┃
   ┃┃┃  │  │ old y              │ 0 (+2)  │ 6 (-2)       │ 5 (c+2)      │ 9 (+1)        │                                                                                                                                       │  ┃┃┃
   ┃┃┃  │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │  ┃┃┃
-  ┃┃┃  │  y digit (EP units 3):                                                                                                                                                                                                │  ┃┃┃
+  ┃┃┃  │  y digit (ROOT units 3):                                                                                                                                                                                              │  ┃┃┃
   ┃┃┃  │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │  ┃┃┃
   ┃┃┃  │  │ op of the LAST row │ as is   │ sign flipped │ cut switched │ step switched │                                                                                                                                       │  ┃┃┃
   ┃┃┃  │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │  ┃┃┃
@@ -3206,7 +3206,7 @@
   ┃┃┃  │  │ old y              │ 5 (+2)  │ 1 (-2)       │ 0 (c+2)      │ 4 (+1)        │                                                                                                                                       │  ┃┃┃
   ┃┃┃  │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │  ┃┃┃
   ┃┃┃  │                                                                                                                                                                                                                       │  ┃┃┃
-  ┃┃┃  │  NC/CUT SPECIAL  —  after an nc/cut, cut/nc or nc/nc row: next row modified, EP=83                                                                                                                                    │  ┃┃┃
+  ┃┃┃  │  NC/CUT SPECIAL  —  after an nc/cut, cut/nc or nc/nc row: next row modified, ROOT=83                                                                                                                                  │  ┃┃┃
   ┃┃┃  │  [Op3] cut/nc  →  [Op6] xy c-1/c+1, yx c+1/c-1:                                                                                                                                                                       │  ┃┃┃
   ┃┃┃  │     29 (c-1/c+1)   27 (c-1/c-1)   24 (c-1/+1)   22 (c-1/-1)   49 (c+1/c+1)                                                                                                                                            │  ┃┃┃
   ┃┃┃  │     47 (c+1/c-1)   44 (c+1/+1)   42 (c+1/-1)   79 (-1/c+1)   77 (-1/c-1)                                                                                                                                              │  ┃┃┃
@@ -3220,7 +3220,7 @@
   ┃┃┃  │  each side as is, sign flipped, cut switched, or both; then the trigger row's old operation again, xy and yx (all in the declared cell)                                                                               │  ┃┃┃
   ┃┃┃  └───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘  ┃┃┃
   ┃┃┃  ┌───────────────────────────────────────────────────────────────────────────┐                                                                                                                                              ┃┃┃
-  ┃┃┃  │          ★  3RRR STRONG 20   —   operations applied on EP=83  ★           │                                                                                                                                              ┃┃┃
+  ┃┃┃  │         ★  3RRR STRONG 20   —   operations applied on ROOT=83  ★          │                                                                                                                                              ┃┃┃
   ┃┃┃  ├──────────────────┬──────────────────┬──────────────────┬──────────────────┤                                                                                                                                              ┃┃┃
   ┃┃┃  │ #1  33 (cut/nc)  │ #2  44 (c+1/+1)  │ #3  83 (nc/nc)   │ #4  93 (+1/nc)   │                                                                                                                                              ┃┃┃
   ┃┃┃  ├──────────────────┼──────────────────┼──────────────────┼──────────────────┤                                                                                                                                              ┃┃┃
@@ -3245,7 +3245,7 @@
   ┃┃┃  │ + = last-op steps, y cut again, or cut/nc turned│                                                                                                                                                                        ┃┃┃
   ┃┃┃  └─────────────────────────────────────────────────┘                                                                                                                                                                        ┃┃┃
   ┃┃┃  ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐  ┃┃┃
-  ┃┃┃  │                                                                                             RRR:  NEXT OPERATION → EP=83                                                                                              │  ┃┃┃
+  ┃┃┃  │                                                                                            RRR:  NEXT OPERATION → ROOT=83                                                                                             │  ┃┃┃
   ┃┃┃  │                                                                                                                                                                                                                       │  ┃┃┃
   ┃┃┃  │  Pos          Source    old x  old y     new x  new y   xy (op)      yx (op)      *xy (op)     *yx (op)     ~xy (op)     ~yx (op)     old xy       old yx       newold xy    oldnew yx    oldy·newy±   oldx·newx±     │  ┃┃┃
   ┃┃┃  │─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────  │  ┃┃┃
@@ -3263,7 +3263,7 @@
   ┃┃┃  │  LAST = the chain's own last step.  Backtest (57,662 positions): table hit 6.42% vs 6.44% chance.                                                                                                                     │  ┃┃┃
   ┃┃┃  │  Live record: table hit 156 of 1332 rounds (about 33 expected by chance).                                                                                                                                             │  ┃┃┃
   ┃┃┃  │                                                                                                                                                                                                                       │  ┃┃┃
-  ┃┃┃  │  ONE ROW PICK  —  one Pos / source only, EP=83, after 69                                                                                                                                                              │  ┃┃┃
+  ┃┃┃  │  ONE ROW PICK  —  one Pos / source only, ROOT=83, EP 69                                                                                                                                                               │  ┃┃┃
   ┃┃┃  │  [Op10]  32 → 19   old -2/c+2   new -2/+2   (why: ends in the after's family)                                                                                                                                         │  ┃┃┃
   ┃┃┃  │     PICK: old ops crossed, x sign flipped, y cut switched  16 (c-2/c-2)                                                                                                                                               │  ┃┃┃
   ┃┃┃  │     new ops xy                                             65 (-2/+2)                                                                                                                                                 │  ┃┃┃
@@ -3274,7 +3274,7 @@
   ┃┃┃  │  Replay over 293 rounds (F/N/M/K/O): PICK line 1 hit (chance 2.9), the first 5 lines 14 (chance 14.2) — at chance                                                                                                     │  ┃┃┃
   ┃┃┃  │  On test — live 1 of 163 (PICK line), 4 of 163 (any line)                                                                                                                                                             │  ┃┃┃
   ┃┃┃  │                                                                                                                                                                                                                       │  ┃┃┃
-  ┃┃┃  │  LAST-OP 4  —  strongest 4 from the LAST row [Op25] 61 → 83, EP=83   (replay by series: top 4 held 19, chance 11.7; top 8 held 42, chance 23.4)                                                                       │  ┃┃┃
+  ┃┃┃  │  LAST-OP 4  —  strongest 4 from the LAST row [Op25] 61 → 83, ROOT=83   (replay by series: top 4 held 19, chance 11.7; top 8 held 42, chance 23.4)                                                                     │  ┃┃┃
   ┃┃┃  │  live: top 4 4 of 112, top 8 9 of 112                                                                                                                                                                                 │  ┃┃┃
   ┃┃┃  │     ★ 1. 67 (-2/c-1)   new xy, x cut switched, y sign flipped                                                                                                                                                         │  ┃┃┃
   ┃┃┃  │     ★ 2. 66 (-2/c-2)   old xy, x sign flipped, y cut switched + flipped                                                                                                                                               │  ┃┃┃
@@ -3285,8 +3285,8 @@
   ┃┃┃  │       7. 65 (-2/+2)   old yx, x sign flipped, y as is                                                                                                                                                                 │  ┃┃┃
   ┃┃┃  │       8. 10 (c-2/c+2)   old yx, x cut switched + flipped, y cut switched                                                                                                                                              │  ┃┃┃
   ┃┃┃  │                                                                                                                                                                                                                       │  ┃┃┃
-  ┃┃┃  │  LAST ROW DIGIT MENU  —  [Op25]LAST 61 → 83   old +2/+2   new c-2/c+1   EP=83                                                                                                                                         │  ┃┃┃
-  ┃┃┃  │  x digit (EP tens 8):                                                                                                                                                                                                 │  ┃┃┃
+  ┃┃┃  │  LAST ROW DIGIT MENU  —  [Op25]LAST 61 → 83   old +2/+2   new c-2/c+1   ROOT=83                                                                                                                                       │  ┃┃┃
+  ┃┃┃  │  x digit (ROOT tens 8):                                                                                                                                                                                               │  ┃┃┃
   ┃┃┃  │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │  ┃┃┃
   ┃┃┃  │  │ op of the LAST row │ as is   │ sign flipped │ cut switched │ step switched │                                                                                                                                       │  ┃┃┃
   ┃┃┃  │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │  ┃┃┃
@@ -3295,7 +3295,7 @@
   ┃┃┃  │  │ old x              │ 0 (+2)  │ 6 (-2)       │ 5 (c+2)      │ 9 (+1)        │                                                                                                                                       │  ┃┃┃
   ┃┃┃  │  │ old y              │ 0 (+2)  │ 6 (-2)       │ 5 (c+2)      │ 9 (+1)        │                                                                                                                                       │  ┃┃┃
   ┃┃┃  │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │  ┃┃┃
-  ┃┃┃  │  y digit (EP units 3):                                                                                                                                                                                                │  ┃┃┃
+  ┃┃┃  │  y digit (ROOT units 3):                                                                                                                                                                                              │  ┃┃┃
   ┃┃┃  │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │  ┃┃┃
   ┃┃┃  │  │ op of the LAST row │ as is   │ sign flipped │ cut switched │ step switched │                                                                                                                                       │  ┃┃┃
   ┃┃┃  │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │  ┃┃┃
@@ -3305,7 +3305,7 @@
   ┃┃┃  │  │ old y              │ 5 (+2)  │ 1 (-2)       │ 0 (c+2)      │ 4 (+1)        │                                                                                                                                       │  ┃┃┃
   ┃┃┃  │  ──────────────────────────────────────────────────────────────────────────────                                                                                                                                       │  ┃┃┃
   ┃┃┃  │                                                                                                                                                                                                                       │  ┃┃┃
-  ┃┃┃  │  NC/CUT SPECIAL  —  after an nc/cut, cut/nc or nc/nc row: next row modified, EP=83                                                                                                                                    │  ┃┃┃
+  ┃┃┃  │  NC/CUT SPECIAL  —  after an nc/cut, cut/nc or nc/nc row: next row modified, ROOT=83                                                                                                                                  │  ┃┃┃
   ┃┃┃  │  [Op3] cut/nc  →  [Op6] xy c-1/c+1, yx c+1/c-1:                                                                                                                                                                       │  ┃┃┃
   ┃┃┃  │     29 (c-1/c+1)   27 (c-1/c-1)   24 (c-1/+1)   22 (c-1/-1)   49 (c+1/c+1)                                                                                                                                            │  ┃┃┃
   ┃┃┃  │     47 (c+1/c-1)   44 (c+1/+1)   42 (c+1/-1)   79 (-1/c+1)   77 (-1/c-1)                                                                                                                                              │  ┃┃┃
@@ -3319,7 +3319,7 @@
   ┃┃┃  │  each side as is, sign flipped, cut switched, or both; then the trigger row's old operation again, xy and yx (all in the declared cell)                                                                               │  ┃┃┃
   ┃┃┃  └───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘  ┃┃┃
   ┃┃┃  ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐                                                                                                    ┃┃┃
-  ┃┃┃  │  ★  STRONG 20 ADJUSTMENTS  —  after 69, on EP=83  —  y cut toggled, x sign flipped  —  20 + 24 new = 44 numbers  ★  │                                                                                                    ┃┃┃
+  ┃┃┃  │  ★  STRONG 20 ADJUSTMENTS  —  EP 69, on ROOT=83  —  y cut toggled, x sign flipped  —  20 + 24 new = 44 numbers  ★   │                                                                                                    ┃┃┃
   ┃┃┃  ├──────────────────────────────────────────────────────────┬──────────────────────────────────────────────────────────┤                                                                                                    ┃┃┃
   ┃┃┃  │ #1  33 (cut/nc) → 38 (cut/cut)                           │ #2  44 (c+1/+1) → 49 (c+1/c+1), 24 (c-1/+1)              │                                                                                                    ┃┃┃
   ┃┃┃  │ #3  83 (nc/nc) → 88 (nc/cut)                             │ #4  93 (+1/nc) → 98 (+1/cut), 73 (-1/nc)                 │                                                                                                    ┃┃┃
@@ -3340,7 +3340,7 @@
   ┃┃┃  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓                                 ┃┃┃
   ┃┃┃  ┃┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓┃                                 ┃┃┃
   ┃┃┃  ┃┃┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓┃┃                                 ┃┃┃
-  ┃┃┃  ┃┃┃ ★  NEXT OPERATION-OCJP  —  from the LAST row 19 (c-2/c+1), 46 (c+1/c-2)  on EP=83  ★                                                                                               ┃┃┃                                 ┃┃┃
+  ┃┃┃  ┃┃┃ ★  NEXT OPERATION-OCJP  —  from the LAST row 19 (c-2/c+1), 46 (c+1/c-2)  on ROOT=83  ★                                                                                             ┃┃┃                                 ┃┃┃
   ┃┃┃  ┃┃┃                                                                                                                                                                                    ┃┃┃                                 ┃┃┃
   ┃┃┃  ┃┃┃ ┌──────────────────────────────────────────────────────────┬──────────────────────────────────────────────────────────┬──────────────────────────────────────────────────────────┐ ┃┃┃                                 ┃┃┃
   ┃┃┃  ┃┃┃ │  1. 07 (+2/c-1), 97+ (+1/c-1), 06* (+2/c-2),             │  2. 70 (-1/c+2), 60+ (-2/c+2), 79* (-1/c+1),             │  3. 04 (+2/+1), 94+ (+1/+1), 05* (+2/+2), 95* (+1/+2),   │ ┃┃┃                                 ┃┃┃
@@ -3397,7 +3397,7 @@
   ┃┃┃  ┃┃┃                                                                                                                                                                                    ┃┃┃                                 ┃┃┃
   ┃┃┃  ┃┃┃ ALL (100): 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 ┃┃┃                                 ┃┃┃
   ┃┃┃  ┃┃┃     56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99                                            ┃┃┃                                 ┃┃┃
-  ┃┃┃  ┃┃┃ 1-20 = the user's operations;  21-30 ^ = mirror forms;  31-38 ° = one operation, sign flipped on one side;  39 = EP cut/cut;  40 = EP itself nc/nc                                 ┃┃┃                                 ┃┃┃
+  ┃┃┃  ┃┃┃ 1-20 = the user's operations;  21-30 ^ = mirror forms;  31-38 ° = one operation, sign flipped on one side;  39 = ROOT cut/cut;  40 = ROOT itself nc/nc                             ┃┃┃                                 ┃┃┃
   ┃┃┃  ┃┃┃ after the comma, + = the same place with its x step switched (1 <-> 2), y kept (-1/c+1 -> -2/c+1);                                                                                 ┃┃┃                                 ┃┃┃
   ┃┃┃  ┃┃┃   when x is nc or cut, the y step switched instead (nc/+2 -> nc/+1)                                                                                                                ┃┃┃                                 ┃┃┃
   ┃┃┃  ┃┃┃ after the next commas, * = the y step switched, and both steps switched (-2/-2 -> -2/-1, -1/-1)                                                                                    ┃┃┃                                 ┃┃┃
@@ -3412,7 +3412,7 @@
   ┃┃┃  ┃┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛┃                                 ┃┃┃
   ┃┃┃  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛                                 ┃┃┃
   ┃┃┃  ┌──────────────────────────────────────────────────────────────────────────────────────┐                                                                                                                                   ┃┃┃
-  ┃┃┃  │ ★  OCJP FINAL 4  —  after 69, EP=83  ★                                               │                                                                                                                                   ┃┃┃
+  ┃┃┃  │ ★  OCJP FINAL 4  —  EP 69, ROOT=83  ★                                                │                                                                                                                                   ┃┃┃
   ┃┃┃  │                                                                                      │                                                                                                                                   ┃┃┃
   ┃┃┃  │ 1. 84 (nc/+1)   in 3 lists: RECOMMENDED, same op again, 3RRR RESULT                  │                                                                                                                                   ┃┃┃
   ┃┃┃  │ 2. 03 (+2/nc)   in 2 lists: RECOMMENDED, 3RRR RESULT                                 │                                                                                                                                   ┃┃┃
@@ -3433,7 +3433,7 @@
   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-  ┃ ★  OCJP FINAL 4 with operations (the prediction)  —  after 69 (70→69 -1/-1), EP=83  ★                                                                                                              ┃
+  ┃ ★  OCJP FINAL 4 with operations (the prediction)  —  EP 69 (70→69 -1/-1), ROOT=83  ★                                                                                                               ┃
   ┃                                                                                                                                                                                                    ┃
   ┃ ┌────────────┬────────┬───────────┬──────────────┬────────────┬─────────────────────────────────────┬──────────────────────────────────────────────┬─────────────────────────────────────────────┐ ┃
   ┃ │ #          │ Number │ Operation │ yx (op)      │ How it's   │ From which Op                       │ LAST op / previous op check                  │ Votes (lists)                               │ ┃
@@ -3512,7 +3512,7 @@
   ┃ ├───┼──────────────┼───────┼─────────────────────────────────────┼───┼────┼──────────────┼───────┼─────────────────────────────────┤                                                               ┃
   ┃ │ 5 │ 33 (cut/nc)  │ R2    │ Op3 xy · Op20 yx                    │ ║ │ 10 │ 74 (-1/+1)   │ R5    │ Op9 yx                          │                                                               ┃
   ┃ └───┴──────────────┴───────┴─────────────────────────────────────┴───┴────┴──────────────┴───────┴─────────────────────────────────┘                                                               ┃
-  ┃   Votes: R5 = family of a FINAL 4 number, R2 = one per step family, R18 = EP family gap                                                                                                            ┃
+  ┃   Votes: R5 = family of a FINAL 4 number, R2 = one per step family, R18 = ROOT family gap                                                                                                          ┃
   ┃                                                                                                                                                                                                    ┃
   ┃ PRIME 4 FAMILY — 12 numbers; replay 293 rounds held 59 (chance 44.4); live 28 of 158                                                                                                               ┃
   ┃   + reversed — 12 more numbers; replay held 36 (chance 29.8); live 7 of 150                                                                                                                        ┃
@@ -3549,9 +3549,9 @@
   ┃   count of random numbers at 0/1/2/all changes (24/62/82/86%); 14% of results no row can make.                                                                                                     ┃
   ┃   So no list can promise a hit: pick a ladder step by how many numbers you want to play.                                                                                                           ┃
   ┃                                                                                                                                                                                                    ┃
-  ┃ EP ROW FINDER — display only: in replay over 293 rounds it held the result at chance (79 vs 76.5)                                                                                                  ┃
-  ┃ EP ROW FINDER (EP 83): rows starting at the EP or its cut forms first, then one step away; as/yx = new ops, xF/yF/bF = sign flipped x/y/both, xC/yC = cut switched, old/oldX/oldF =                ┃
-  ┃       old ops as is/crossed/flipped                                                                                                                                                                ┃
+  ┃ ROOT ROW FINDER — display only: in replay over 293 rounds it held the result at chance (79 vs 76.5)                                                                                                ┃
+  ┃ ROOT ROW FINDER (ROOT 83): rows starting at the ROOT or its cut forms first, then one step away; as/yx = new ops, xF/yF/bF = sign flipped x/y/both, xC/yC = cut switched,                          ┃
+  ┃       old/oldX/oldF = old ops as is/crossed/flipped                                                                                                                                                ┃
   ┃ ┌──────┬───────────────────┬────┬────┬────┬────┬────┬────┬────┬─────┬──────┬──────┐                                                                                                                ┃
   ┃ │ Row  │ Starts at         │ as │ yx │ xF │ yF │ bF │ xC │ yC │ old │ oldX │ oldF │                                                                                                                ┃
   ┃ ├──────┼───────────────────┼────┼────┼────┼────┼────┼────┼────┼─────┼──────┼──────┤                                                                                                                ┃
@@ -3598,30 +3598,30 @@
   ┃ ├──────────────────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┼───────────┤                  ┃
   ┃ │ 14. row ending at after: x cut+flip, y cut, on the after no.             │ - (no row ends there)                                                                  │ 0 of 14   │                  ┃
   ┃ ├──────────────────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┼───────────┤                  ┃
-  ┃ │ 15. first number in EP's family: x kept, y cut switched                  │ Op12 88->65: 60 (-2/c+2)                                                               │ 1 of 113  │                  ┃
+  ┃ │ 15. first number in ROOT's family: x kept, y cut switched                │ Op12 88->65: 60 (-2/c+2)                                                               │ 1 of 113  │                  ┃
   ┃ ├──────────────────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┼───────────┤                  ┃
   ┃ │ 16. row ending at after +-1: new ops as they are, yx                     │ - (no row ends there)                                                                  │ 0 of 16   │                  ┃
   ┃ ├──────────────────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┼───────────┤                  ┃
-  ┃ │ 17. first number = EP: new x sign flipped, y kept                        │ - (no such row)                                                                        │ 1 of 41   │                  ┃
+  ┃ │ 17. first number = ROOT: new x sign flipped, y kept                      │ - (no such row)                                                                        │ 1 of 41   │                  ┃
   ┃ ├──────────────────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┼───────────┤                  ┃
-  ┃ │ 18. EP family gap (8x/3x first numbers): first missing = pick            │ 87 (nc/c-1)                                                                            │ 6 of 178  │                  ┃
+  ┃ │ 18. ROOT family gap (8x/3x first numbers): first missing = pick          │ 87 (nc/c-1)                                                                            │ 6 of 178  │                  ┃
   ┃ ├──────────────────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┼───────────┤                  ┃
-  ┃ │ 19. first number = EP full cut (38): old ops on EP                       │ - (no row starts there)                                                                │ 1 of 37   │                  ┃
+  ┃ │ 19. first number = ROOT full cut (38): old ops on ROOT                   │ - (no row starts there)                                                                │ 1 of 37   │                  ┃
   ┃ ├──────────────────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┼───────────┤                  ┃
-  ┃ │ 20. EP units cut (88), used twice -> next: yx as is                      │ Op6 89->00: yx 47 (c+1/c-1)                                                            │ 1 of 40   │                  ┃
+  ┃ │ 20. ROOT units cut (88), used twice -> next: yx as is                    │ Op6 89->00: yx 47 (c+1/c-1)                                                            │ 1 of 40   │                  ┃
   ┃ ├──────────────────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┼───────────┤                  ┃
-  ┃ │ 21. row at EP tens-cut - 1 (32): both signs flipped                      │ Op10 32->19: 01 (+2/-2)                                                                │ 0 of 34   │                  ┃
+  ┃ │ 21. row at ROOT tens-cut - 1 (32): both signs flipped                    │ Op10 32->19: 01 (+2/-2)                                                                │ 0 of 34   │                  ┃
   ┃ ├──────────────────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┼───────────┤                  ┃
-  ┃ │ 22. rows starting with EP tens 8: old ops crossed, y flipped             │ Op6 89: 91 (+1/-2) · Op9 88: 28 (c-1/cut) · Op12 88: 55 (c+2/+2) · Op20 86: 32         │ 5 of 155  │                  ┃
+  ┃ │ 22. rows starting with ROOT tens 8: old ops crossed, y flipped           │ Op6 89: 91 (+1/-2) · Op9 88: 28 (c-1/cut) · Op12 88: 55 (c+2/+2) · Op20 86: 32         │ 5 of 155  │                  ┃
   ┃ │                                                                          │ (cut/-1) · Op22 80: 55 (c+2/+2)                                                        │           │                  ┃
   ┃ ├──────────────────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┼───────────┤                  ┃
-  ┃ │ 23. row starting at the EP: yx, y cut switched                           │ - (no row starts at the EP)                                                            │ 0 of 40   │                  ┃
+  ┃ │ 23. row starting at the ROOT: yx, y cut switched                         │ - (no row starts at the ROOT)                                                          │ 0 of 40   │                  ┃
   ┃ ├──────────────────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┼───────────┤                  ┃
   ┃ │ 24. row ending at after: old ops crossed, x sign flipped, y cut switched │ - (no row ends there)                                                                  │ 1 of 13   │                  ┃
   ┃ ├──────────────────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┼───────────┤                  ┃
   ┃ │ 25. row that comes twice: xy and yx, y cut switched (replay 0 of 54)     │ Op10/12/22: 60 (-2/c+2) · Op10/12/22: 06 (+2/c-2)                                      │ 0 of 24   │                  ┃
   ┃ ├──────────────────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┼───────────┤                  ┃
-  ┃ │ 26. row starting at EP units cut (88): yx, both cuts switched            │ Op9 88->32: 29 (c-1/c+1) · Op12 88->65: 56 (c+2/c-2)                                   │ 1 of 30   │                  ┃
+  ┃ │ 26. row starting at ROOT units cut (88): yx, both cuts switched          │ Op9 88->32: 29 (c-1/c+1) · Op12 88->65: 56 (c+2/c-2)                                   │ 1 of 30   │                  ┃
   ┃ ├──────────────────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┼───────────┤                  ┃
   ┃ │ 27. LAST row: new ops crossed, x sign flipped, y cut switched            │ Op25 LAST: 21 (c-1/-2)                                                                 │ 1 of 115  │                  ┃
   ┃ ├──────────────────────────────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────┼───────────┤                  ┃
@@ -3630,23 +3630,23 @@
   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-  ┃ ROUND SUMMARY (after 69 (70→69 -1/-1), EP 83)                                                                                                                                                      ┃
+  ┃ ROUND SUMMARY (EP 69 (70→69 -1/-1), ROOT 83)                                                                                                                                                       ┃
   ┃                                                                                                                                                                                                    ┃
-  ┃ ■ CROSSED options (after 69 (70→69 -1/-1), EP 83)                                                                                                                                                  ┃
-  ┃   Op25 LAST 61 → 83, old +2/+2, new c-2/c+1                                                 NUMBERS FORMED (x option × y option)                                                                   ┃
-  ┃ ┌───────────────────────────────┬─────────┬──────────────┬──────────────┬───────────────┐   ┌─────────┬─────────┬─────────┬────────┬─────────┐                                                     ┃
-  ┃ │                               │ as is   │ sign flipped │ cut switched │ step switched │   │ x \ y   │ 6 (c-2) │ 0 (c+2) │ 1 (-2) │ 7 (c-1) │                                                     ┃
-  ┃ ├───────────────────────────────┼─────────┼──────────────┼──────────────┼───────────────┤   ├─────────┼─────────┼─────────┼────────┼─────────┤                                                     ┃
-  ┃ │ x from new y c+1 (EP tens 8)  │ 4 (c+1) │ 2 (c-1)      │ 9 (+1)       │ 5 (c+2)       │   │ 4 (c+1) │ 46      │ 40      │ 41     │ 47      │                                                     ┃
-  ┃ │ y from new x c-2 (EP units 3) │ 6 (c-2) │ 0 (c+2)      │ 1 (-2)       │ 7 (c-1)       │   │ 2 (c-1) │ 26      │ 20      │ 21     │ 27      │                                                     ┃
-  ┃ └───────────────────────────────┴─────────┴──────────────┴──────────────┴───────────────┘   │ 9 (+1)  │ 96      │ 90      │ 91     │ 97      │                                                     ┃
-  ┃                                                                                             │ 5 (c+2) │ 56      │ 50      │ 51     │ 57      │                                                     ┃
-  ┃                                                                                             └─────────┴─────────┴─────────┴────────┴─────────┘                                                     ┃
+  ┃ ■ CROSSED options (EP 69 (70→69 -1/-1), ROOT 83)                                                                                                                                                   ┃
+  ┃   Op25 LAST 61 → 83, old +2/+2, new c-2/c+1                                                   NUMBERS FORMED (x option × y option)                                                                 ┃
+  ┃ ┌─────────────────────────────────┬─────────┬──────────────┬──────────────┬───────────────┐   ┌─────────┬─────────┬─────────┬────────┬─────────┐                                                   ┃
+  ┃ │                                 │ as is   │ sign flipped │ cut switched │ step switched │   │ x \ y   │ 6 (c-2) │ 0 (c+2) │ 1 (-2) │ 7 (c-1) │                                                   ┃
+  ┃ ├─────────────────────────────────┼─────────┼──────────────┼──────────────┼───────────────┤   ├─────────┼─────────┼─────────┼────────┼─────────┤                                                   ┃
+  ┃ │ x from new y c+1 (ROOT tens 8)  │ 4 (c+1) │ 2 (c-1)      │ 9 (+1)       │ 5 (c+2)       │   │ 4 (c+1) │ 46      │ 40      │ 41     │ 47      │                                                   ┃
+  ┃ │ y from new x c-2 (ROOT units 3) │ 6 (c-2) │ 0 (c+2)      │ 1 (-2)       │ 7 (c-1)       │   │ 2 (c-1) │ 26      │ 20      │ 21     │ 27      │                                                   ┃
+  ┃ └─────────────────────────────────┴─────────┴──────────────┴──────────────┴───────────────┘   │ 9 (+1)  │ 96      │ 90      │ 91     │ 97      │                                                   ┃
+  ┃                                                                                               │ 5 (c+2) │ 56      │ 50      │ 51     │ 57      │                                                   ┃
+  ┃                                                                                               └─────────┴─────────┴─────────┴────────┴─────────┘                                                   ┃
   ┃   16 combinations, 16 different numbers: 20 21 26 27 40 41 46 47 50 51 56 57 90 91 96 97                                                                                                           ┃
   ┃   live (both digits inside the grid): 11 of 120 (chance about 19.2)                                                                                                                                ┃
   ┃                                                                                                                                                                                                    ┃
-  ┃ ■ LAST-OP 4 (after 69 (70→69 -1/-1), EP 83)                                                                                                                                                        ┃
-  ┃   LAST-OP 4  —  strongest 4 from the LAST row [Op25] 61 → 83, EP=83   (replay by series: top 4 held 19, chance 11.7; top 8 held 42, chance 23.4)                                                   ┃
+  ┃ ■ LAST-OP 4 (EP 69 (70→69 -1/-1), ROOT 83)                                                                                                                                                         ┃
+  ┃   LAST-OP 4  —  strongest 4 from the LAST row [Op25] 61 → 83, ROOT=83   (replay by series: top 4 held 19, chance 11.7; top 8 held 42, chance 23.4)                                                 ┃
   ┃   live: top 4 4 of 112, top 8 9 of 112                                                                                                                                                             ┃
   ┃      ★ 1. 67 (-2/c-1)   new xy, x cut switched, y sign flipped                                                                                                                                     ┃
   ┃      ★ 2. 66 (-2/c-2)   old xy, x sign flipped, y cut switched + flipped                                                                                                                           ┃
@@ -3657,7 +3657,7 @@
   ┃        7. 65 (-2/+2)   old yx, x sign flipped, y as is                                                                                                                                             ┃
   ┃        8. 10 (c-2/c+2)   old yx, x cut switched + flipped, y cut switched                                                                                                                          ┃
   ┃                                                                                                                                                                                                    ┃
-  ┃ ■ PRIME (after 69 (70→69 -1/-1), EP 83)                                                                                                                                                            ┃
+  ┃ ■ PRIME (EP 69 (70→69 -1/-1), ROOT 83)                                                                                                                                                             ┃
   ┃ ┌───┬──────────────┬───────┬─────────────────────────────────────┬───┬────┬──────────────┬───────┬─────────────────────────────────┐                                                               ┃
   ┃ │ # │ PRIME number │ Votes │ From which Op (simplest change)     │ ║ │ #  │ PRIME number │ Votes │ From which Op (simplest change) │                                                               ┃
   ┃ ├───┼──────────────┼───────┼─────────────────────────────────────┼───┼────┼──────────────┼───────┼─────────────────────────────────┤                                                               ┃
@@ -3672,7 +3672,7 @@
   ┃ │ 5 │ 33 (cut/nc)  │ R2    │ Op3 xy · Op20 yx                    │ ║ │ 10 │ 74 (-1/+1)   │ R5    │ Op9 yx                          │                                                               ┃
   ┃ └───┴──────────────┴───────┴─────────────────────────────────────┴───┴────┴──────────────┴───────┴─────────────────────────────────┘                                                               ┃
   ┃                                                                                                                                                                                                    ┃
-  ┃ ■ PLAY LADDER (after 69 (70→69 -1/-1), EP 83)                                                                                                                                                      ┃
+  ┃ ■ PLAY LADDER (EP 69 (70→69 -1/-1), ROOT 83)                                                                                                                                                       ┃
   ┃ ┌───────────────────┬───────────────────────────────┬───────┬───────────────────────────────┬───────────┐                                                                                          ┃
   ┃ │ Step              │ Adds                          │ Total │ Replay: held / chance         │ Live      │                                                                                          ┃
   ┃ ├───────────────────┼───────────────────────────────┼───────┼───────────────────────────────┼───────────┤                                                                                          ┃
@@ -3689,7 +3689,7 @@
   ┃ │ + PRIME 10 FAMILY │ 38 83 88                      │ 28    │ 114 (38.9%), chance 85.2      │ 40 of 145 │                                                                                          ┃
   ┃ └───────────────────┴───────────────────────────────┴───────┴───────────────────────────────┴───────────┘                                                                                          ┃
   ┃                                                                                                                                                                                                    ┃
-  ┃ ■ OCJP FINAL 4 with operations (after 69 (70→69 -1/-1), EP 83)                                                                                                                                     ┃
+  ┃ ■ OCJP FINAL 4 with operations (EP 69 (70→69 -1/-1), ROOT 83)                                                                                                                                      ┃
   ┃ ┌────────────┬────────┬───────────┬──────────────┬────────────┬─────────────────────────────────────┬──────────────────────────────────────────────┬─────────────────────────────────────────────┐ ┃
   ┃ │ #          │ Number │ Operation │ yx (op)      │ How it's   │ From which Op                       │ LAST op / previous op check                  │ Votes (lists)                               │ ┃
   ┃ │            │        │           │              │ made       │                                     │                                              │                                             │ ┃
@@ -3719,10 +3719,10 @@
   ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  CHAT VIEW (same as the chat notes) — after 69 (70→69 -1/-1), EP 83
+  CHAT VIEW (same as the chat notes) — EP 69 (70→69 -1/-1), ROOT 83
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-  ■ 4. RRR: NEXT OPERATION: after 69 (70→69 -1/-1), EP 83
+  ■ 4. RRR: NEXT OPERATION: EP 69 (70→69 -1/-1), ROOT 83
 
   ┌───────────┬─────────┬───────┬───────┬───────┬───────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┬──────────────┐   ┌───────────┬────────┬───────┐
   │ Pos       │ Source  │ old x │ old y │ new x │ new y │ xy (op)      │ yx (op)      │ *xy (op)     │ *yx (op)     │ ~xy (op)     │ ~yx (op)     │   │ Pick      │ Number │ Op    │
@@ -3771,24 +3771,24 @@
   old/newold numbers: 04 05 06 15 24 28 33 34 37 43 51 60 84 88 89 93 95 97 98   live 1 of 17 (replay 155 rounds: 19 vs chance 25.3)
   oldy·newy± = old y op on x, new y sign flipped on y; oldx·newx± = old x op on x, new x sign flipped on y.  ON TEST, not in FINAL 4.
   ± numbers: 00 07 09 24 32 38 48 51 65 83 88 93 97 98   live 3 of 13 (replay 159 rounds: 17 vs chance 17.4)
-  after·LAST old xy = LAST row old ops on the AFTER number 69: 81 (+2/+2)   live 0 of 1 (history 1293 rounds: 26 vs chance 12.9).  ON TEST, not in FINAL 4.
+  EP·LAST old xy = LAST row old ops on the EP (last number) 69: 81 (+2/+2)   live 0 of 1 (history 1293 rounds: 26 vs chance 12.9).  ON TEST, not in FINAL 4.
   ~xy = old y cut switched + sign flipped on x, old x cut switched on y (reverse of *; ~yx the other way).  ON TEST, not in FINAL 4.
   ~ numbers: 10 11 20 34 39 43 48 56 57 66 84 89 93 98   live 3 of 22 (replay 150 rounds: 25 vs chance 15.7; held-out of all forms 9 vs 11.1)
   *xy = old y as is on x, old x cut switched + sign flipped on y (*yx reads it the other way).  ON TEST, not in FINAL 4.
   * numbers: 06 14 15 23 28 37 50 73 82 87 96   live 2 of 28 (replay 144 rounds: 18 vs chance 8.1, held-out 8 vs 6.3)
-  EP row: no row starts at EP 83 this round   live 0 of 4
+  ROOT row: no row starts at ROOT 83 this round   live 0 of 4
   Outer flip move (S29: x = outer x sign flipped, y = LAST new y sign flipped): 97 (+1/c-1)   live 0 of 25 (replay 5 of 146 vs chance 1.5, picked from 24 forms)
   Outer op move (x as is, y cut switched + flipped): 79 (-1/c+1)   live 0 of 28 (replay 3 of 144 vs chance 1.4)
 
-  ■ CROSSED options + NUMBERS FORMED: Op25 LAST 61 → 83, new c-2/c+1, after 69 (70→69 -1/-1), EP 83
+  ■ CROSSED options + NUMBERS FORMED: Op25 LAST 61 → 83, new c-2/c+1, EP 69 (70→69 -1/-1), ROOT 83
 
-  ┌───────────────────────────────┬─────────┬──────────────┬──────────────┬───────────────┐
-  │                               │ as is   │ sign flipped │ cut switched │ step switched │
-  ├───────────────────────────────┼─────────┼──────────────┼──────────────┼───────────────┤
-  │ x from new y c+1 (EP tens 8)  │ 4 (c+1) │ 2 (c-1)      │ 9 (+1)       │ 5 (c+2)       │
-  ├───────────────────────────────┼─────────┼──────────────┼──────────────┼───────────────┤
-  │ y from new x c-2 (EP units 3) │ 6 (c-2) │ 0 (c+2)      │ 1 (-2)       │ 7 (c-1)       │
-  └───────────────────────────────┴─────────┴──────────────┴──────────────┴───────────────┘
+  ┌─────────────────────────────────┬─────────┬──────────────┬──────────────┬───────────────┐
+  │                                 │ as is   │ sign flipped │ cut switched │ step switched │
+  ├─────────────────────────────────┼─────────┼──────────────┼──────────────┼───────────────┤
+  │ x from new y c+1 (ROOT tens 8)  │ 4 (c+1) │ 2 (c-1)      │ 9 (+1)       │ 5 (c+2)       │
+  ├─────────────────────────────────┼─────────┼──────────────┼──────────────┼───────────────┤
+  │ y from new x c-2 (ROOT units 3) │ 6 (c-2) │ 0 (c+2)      │ 1 (-2)       │ 7 (c-1)       │
+  └─────────────────────────────────┴─────────┴──────────────┴──────────────┴───────────────┘
 
   ┌─────────┬─────────┬─────────┬────────┬─────────┐
   │ x \ y   │ 6 (c-2) │ 0 (c+2) │ 1 (-2) │ 7 (c-1) │
@@ -3805,7 +3805,7 @@
   16 different numbers. Live 11 of 120 (chance about 19.2).
   Rule 28 (crossed) picks: 97 (+1/c-1) · 92 (+1/-1) y+cut · 99 (+1/c+1) y+flip · 94 (+1/+1) y+cut+flip   (7 of 107)
 
-  ■ LAST-OP 4: after 69 (70→69 -1/-1), EP 83   (live top 4 4 of 112, top 8 9 of 112)
+  ■ LAST-OP 4: EP 69 (70→69 -1/-1), ROOT 83   (live top 4 4 of 112, top 8 9 of 112)
 
   ┌─────┬────────┬─────────┬────────────────────────────────────────────────────────────┐
   │ #   │ Number │ Op      │ Cell                                                       │
@@ -3829,7 +3829,7 @@
 
   Which ops (x and y) do you pick?
 
-  ■ PRIME: after 69 (70→69 -1/-1), EP 83
+  ■ PRIME: EP 69 (70→69 -1/-1), ROOT 83
 
   ┌───┬──────────────┬───────┬─────────────────────────────────────┬───┬────┬──────────────┬───────┬─────────────────────────────────┐
   │ # │ PRIME number │ Votes │ From which Op (simplest change)     │ ║ │ #  │ PRIME number │ Votes │ From which Op (simplest change) │
@@ -3845,7 +3845,7 @@
   │ 5 │ 33 (cut/nc)  │ R2    │ Op3 xy · Op20 yx                    │ ║ │ 10 │ 74 (-1/+1)   │ R5    │ Op9 yx                          │
   └───┴──────────────┴───────┴─────────────────────────────────────┴───┴────┴──────────────┴───────┴─────────────────────────────────┘
 
-  ■ PLAY LADDER: after 69 (70→69 -1/-1), EP 83
+  ■ PLAY LADDER: EP 69 (70→69 -1/-1), ROOT 83
 
   ┌───────────────────┬───────────────────────────────┬───────┬───────────────────────────────┬───────────┐
   │ Step              │ Adds                          │ Total │ Replay: held / chance         │ Live      │
@@ -3863,7 +3863,7 @@
   │ + PRIME 10 FAMILY │ 38 83 88                      │ 28    │ 114 (38.9%), chance 85.2      │ 40 of 145 │
   └───────────────────┴───────────────────────────────┴───────┴───────────────────────────────┴───────────┘
 
-  ■ OCJP FINAL 4 with operations: after 69 (70→69 -1/-1), EP 83
+  ■ OCJP FINAL 4 with operations: EP 69 (70→69 -1/-1), ROOT 83
 
   ┌────────────┬────────┬───────────┬──────────────┬────────────┬─────────────────────────────────────┬──────────────────────────────────────────────┬─────────────────────────────────────────────┐
   │ #          │ Number │ Operation │ yx (op)      │ How it's   │ From which Op                       │ LAST op / previous op check                  │ Votes (lists)                               │
@@ -3894,7 +3894,7 @@
 
 
 ════════════════════════════════════════════════════════════════════════
-  RRR: NEXT OPERATION  →  EP=83  (x = 8, y = 3)
+  RRR: NEXT OPERATION  →  ROOT=83  (x = 8, y = 3)
   Pos          Source    old x  old y     new x  new y   xy (op)      yx (op)      *xy (op)     *yx (op)     ~xy (op)     ~yx (op)     old xy       old yx       newold xy    oldnew yx    oldy·newy±   oldx·newx±   
   [Op3]        36 → 96   c+1    nc     →  cut    nc      33 (cut/nc)  88 (nc/cut)  82 (nc/-1)   73 (-1/nc)   34 (cut/+1)  98 (+1/cut)  43 (c+1/nc)  89 (nc/c+1)  33 (cut/nc)  88 (nc/cut)  83 (nc/nc)   48 (c+1/cut) 
   [Op6]        89 → 00   +2     +1     →  c-1    c+1     29 (c-1/c+1) 47 (c+1/c-1) 96 (+1/c-2)  14 (c-2/+1)  20 (c-1/c+2) 57 (c+2/c-1) 04 (+2/+1)   95 (+1/+2)   24 (c-1/+1)  97 (+1/c-1)  97 (+1/c-1)  09 (+2/c+1)  

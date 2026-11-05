@@ -873,7 +873,7 @@ def show_power_box():
     if not got:
         return
     ep, uniq = got
-    body = [f"★  POWER BASE — ALL {len(uniq)} NUMBERS, NO REPEATS  (EP={ep:02d})  ★", ""]
+    body = [f"★  POWER BASE — ALL {len(uniq)} NUMBERS, NO REPEATS  (ROOT={ep:02d})  ★", ""]
     body += [''.join(f"  {c}" for c in uniq[k:k + 10]) for k in range(0, len(uniq), 10)]
     body += ["", "★ = also in the STRONG 20    * = also in the RECOMMENDED list",
              "+ = digits reversed of a table number whose series is there",
@@ -1009,7 +1009,7 @@ def ep_row_finder(ep, rows):
     (about 1 in 8 by chance); the right change still differs by round.
     Returns [(pos, first, relation, {variant: (number, 'x/y')})]."""
     ex, ey = ep // 10, ep % 10
-    forms = [(ep, 'EP'), (cut(ex) * 10 + cut(ey), 'full cut'),
+    forms = [(ep, 'ROOT'), (cut(ex) * 10 + cut(ey), 'full cut'),
              (ex * 10 + cut(ey), 'units cut'), (cut(ex) * 10 + ey, 'tens cut')]
     rel = {}
     for n, lab in forms:
@@ -1395,7 +1395,7 @@ def show_final_box():
         r8 = f"Op{pos7}: {n8:02d} ({_op_label(not cx7, kx7)}/{_op_label(cy7, -ky7)})"
     two = lambda ns: ' '.join(f"{n:02d}" for n in ns)
     star = _RRR3_PREV.get('star_picks') or []
-    body = [f"★  OCJP FINAL 4 with operations (the prediction)  —  {_after_tag(fb['after'])}, EP={ep:02d}  ★", ""]
+    body = [f"★  OCJP FINAL 4 with operations (the prediction)  —  {_after_tag(fb['after'])}, ROOT={ep:02d}  ★", ""]
     def table(head, rows_, wrap_col):
         # box lines with a rule between rows, the same look as the chat tables
         room = _term_w() - 12
@@ -1478,7 +1478,7 @@ def show_final_box():
     _RRR3_PREV['sum_prime'] = table(["#", "PRIME number", "Votes", "From which Op (simplest change)", "║",
                                      "#", "PRIME number", "Votes", "From which Op (simplest change)"], prow5, 3)
     body += _RRR3_PREV['sum_prime']
-    body.append("  Votes: R5 = family of a FINAL 4 number, R2 = one per step family, R18 = EP family gap")
+    body.append("  Votes: R5 = family of a FINAL 4 number, R2 = one per step family, R18 = ROOT family gap")
     # PRIME 4 FAMILY (user, 2026-10-31, P15 = 74: PRIME 24 with its tens cut):
     # every PRIME 4 number with its digit-cut family (as is, tens cut, units
     # cut, both cut).  Replay 293 rounds: held 59 (avg 15.2 numbers, chance
@@ -1536,8 +1536,8 @@ def show_final_box():
              "  count of random numbers at 0/1/2/all changes (24/62/82/86%); 14% of results no row can make.",
              "  So no list can promise a hit: pick a ladder step by how many numbers you want to play."]
     finder = ep_row_finder(ep, _RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else [])
-    body += ["", "EP ROW FINDER — display only: in replay over 293 rounds it held the result at chance (79 vs 76.5)",
-             f"EP ROW FINDER (EP {ep:02d}): rows starting at the EP or its cut forms first, then one step away;"
+    body += ["", "ROOT ROW FINDER — display only: in replay over 293 rounds it held the result at chance (79 vs 76.5)",
+             f"ROOT ROW FINDER (ROOT {ep:02d}): rows starting at the ROOT or its cut forms first, then one step away;"
                  " as/yx = new ops, xF/yF/bF = sign flipped x/y/both, xC/yC = cut switched, old/oldX/oldF = old ops as is/crossed/flipped"]
     if finder:
         body += table(["Row", "Starts at", "as", "yx", "xF", "yF", "bF", "xC", "yC", "old", "oldX", "oldF"],
@@ -1547,7 +1547,7 @@ def show_final_box():
         body.append(f"  {len(uniq)} different numbers: " + ' '.join(f"{n:02d}" for n in uniq)
                     + f"   (live record: result inside {rec('finder')} rounds)")
     else:
-        body.append("  - no row starts at the EP, its cut forms or one step from them")
+        body.append("  - no row starts at the ROOT, its cut forms or one step from them")
     body += ["", "On test (user rules, not part of FINAL 4). Replay over 293 rounds: rules 2, 5 and 18 beat chance",
              "(rule 2: 24 vs 11.7; rule 5: 95 vs 73.8; rule 18: 17 vs 12.8); rules 6-23 together are at chance."]
     body += table(["On test (your rules)", "Numbers with operations", "Record"],
@@ -1575,29 +1575,29 @@ def show_final_box():
                     r13 or '- (no such row)', rec('rule13')],
                    ["14. row ending at after: x cut+flip, y cut, on the after no.",
                     ' · '.join(r14) or '- (no row ends there)', rec('rule14')],
-                   ["15. first number in EP's family: x kept, y cut switched",
+                   ["15. first number in ROOT's family: x kept, y cut switched",
                     r15 or '- (no such row)', rec('rule15')],
                    ["16. row ending at after +-1: new ops as they are, yx",
                     ' · '.join(r16) or '- (no row ends there)', rec('rule16')],
-                   ["17. first number = EP: new x sign flipped, y kept",
+                   ["17. first number = ROOT: new x sign flipped, y kept",
                     r17 or '- (no such row)', rec('rule17')],
-                   [f"18. EP family gap ({ex}x/{cut(ex)}x first numbers): first missing = pick",
-                    r18 or '- (no row in the EP family)', rec('rule18')],
-                   [f"19. first number = EP full cut ({full19:02d}): old ops on EP",
+                   [f"18. ROOT family gap ({ex}x/{cut(ex)}x first numbers): first missing = pick",
+                    r18 or '- (no row in the ROOT family)', rec('rule18')],
+                   [f"19. first number = ROOT full cut ({full19:02d}): old ops on ROOT",
                     ' · '.join(r19) or '- (no row starts there)', rec('rule19')],
-                   [f"20. EP units cut ({ex}{cut(ey)}), used twice -> next: yx as is",
+                   [f"20. ROOT units cut ({ex}{cut(ey)}), used twice -> next: yx as is",
                     r20 or f'- (no row starts at {k20:02d})', rec('rule20')],
-                   [f"21. row at EP tens-cut - 1 ({k21:02d}): both signs flipped",
+                   [f"21. row at ROOT tens-cut - 1 ({k21:02d}): both signs flipped",
                     r21 or f'- (no row starts at {k21:02d})', rec('rule21')],
-                   [f"22. rows starting with EP tens {ex}: old ops crossed, y flipped",
+                   [f"22. rows starting with ROOT tens {ex}: old ops crossed, y flipped",
                     ' · '.join(r22) or '- (no such row)', rec('rule22')],
-                   ["23. row starting at the EP: yx, y cut switched",
-                    ' · '.join(r23) or '- (no row starts at the EP)', rec('rule23')],
+                   ["23. row starting at the ROOT: yx, y cut switched",
+                    ' · '.join(r23) or '- (no row starts at the ROOT)', rec('rule23')],
                    ["24. row ending at after: old ops crossed, x sign flipped, y cut switched",
                     ' · '.join(r24) or '- (no row ends there)', rec('rule24')],
                    ["25. row that comes twice: xy and yx, y cut switched (replay 0 of 54)",
                     ' · '.join(r25) or '- (no row comes twice)', rec('rule25')],
-                   [f"26. row starting at EP units cut ({ex}{cut(ey)}): yx, both cuts switched",
+                   [f"26. row starting at ROOT units cut ({ex}{cut(ey)}): yx, both cuts switched",
                     ' · '.join(r26) or '- (no row starts there)', rec('rule26')],
                    ["27. LAST row: new ops crossed, x sign flipped, y cut switched",
                     ' · '.join(r27) or '- (no LAST row)', rec('rule27')],
@@ -4100,7 +4100,7 @@ def _rrr_one_row_pick(ep, after, rows):
         return {n, cut(t) * 10 + u, t * 10 + cut(u), cut(t) * 10 + cut(u), u * 10 + t}
     plain = [r for r in rows if r[7] != 'LAST']
     for why, ok in (("ends at the after number", lambda r: r[2] == after),
-                    ("starts at the EP", lambda r: r[1] == ep),
+                    ("starts at the ROOT", lambda r: r[1] == ep),
                     ("ends in the after's family", lambda r: r[2] in fam(after) and r[2] != after)):
         hit = [r for r in plain if ok(r)]
         if hit:
@@ -4154,7 +4154,7 @@ def _rrr_lastop4(ep, rows, pre):
         return f"{base} {rd}, x {names[fx[1:] or '-']}, y {names[fy[1:] or '-']}"
     _RRR3_PREV['lastop'] = [n for n, _, _ in nums[:8]]
     _RRR3_PREV['lastop_full'] = [(n, op, say(lab)) for n, op, lab in nums[:8]]
-    out = ["", f"  LAST-OP 4  —  strongest 4 from the LAST row [{pre}{last[0]}] {last[1]:02d} → {last[2]:02d}, EP={ep:02d}"
+    out = ["", f"  LAST-OP 4  —  strongest 4 from the LAST row [{pre}{last[0]}] {last[1]:02d} → {last[2]:02d}, ROOT={ep:02d}"
                 f"   (replay by series: top 4 held 19, chance 11.7; top 8 held 42, chance 23.4)",
            f"  live: top 4 {RRR_LIVE.get('rrr3_lastop4_hits', 0)} of {RRR_LIVE.get('rrr3_lastop4_rounds', 0)},"
            f" top 8 {RRR_LIVE.get('rrr3_lastop8_hits', 0)} of {RRR_LIVE.get('rrr3_lastop8_rounds', 0)}"]
@@ -4177,8 +4177,8 @@ def _rrr_crossed(ep, rows):
         return [name] + [f"{_op_apply(d, cc, kk)} ({_op_label(cc, kk)})"
                          for cc, kk in ((c, k), (c, -k), (not c, k), (c, sw[k]))]
     h = ["", "as is", "sign flipped", "cut switched", "step switched"]
-    rws = [row(f"x from new y {OP_ABBREV[ny]} (EP tens {ep // 10})", ny, ep // 10),
-           row(f"y from new x {OP_ABBREV[nx]} (EP units {ep % 10})", nx, ep % 10)]
+    rws = [row(f"x from new y {OP_ABBREV[ny]} (ROOT tens {ep // 10})", ny, ep // 10),
+           row(f"y from new x {OP_ABBREV[nx]} (ROOT units {ep % 10})", nx, ep % 10)]
     w = [max(len(str(r[i])) for r in [h] + rws) for i in range(len(h))]
     line = lambda r: "│ " + " │ ".join(str(v).ljust(w[i]) for i, v in enumerate(r)) + " │"
     bar = lambda l, m, r: l + m.join("─" * (x + 2) for x in w) + r
@@ -4278,9 +4278,9 @@ def _after_tag(a):
     the operation that took the number before it to it."""
     fl = _RRR3_PREV.get('flat') or []
     if len(fl) < 2 or fl[-1] != a:
-        return f"after {a:02d}"
+        return f"EP {a:02d}"
     p = fl[-2]
-    return (f"after {a:02d} ({p:02d}→{a:02d} "
+    return (f"EP {a:02d} ({p:02d}→{a:02d} "
             f"{OP_ABBREV[find_op(p // 10, a // 10)]}/{OP_ABBREV[find_op(p % 10, a % 10)]})")
 
 
@@ -4329,7 +4329,7 @@ def show_round_summary():
     if 'sum_final4' not in P:
         return
     a, ep = P.get('sum_head', (0, 0))
-    tag = f"({_after_tag(a)}, EP {ep:02d})"
+    tag = f"({_after_tag(a)}, ROOT {ep:02d})"
     body = []
     for title, key in ((f"CROSSED options {tag}", 'sum_crossed'), (f"LAST-OP 4 {tag}", 'sum_lastop'),
                        (f"PRIME {tag}", 'sum_prime'), (f"PLAY LADDER {tag}", 'sum_ladder'),
@@ -4357,7 +4357,7 @@ def show_chat_view():
     if 'sum_final4' not in P:
         return
     a, ep = P.get('sum_head', (0, 0))
-    tag = f"{_after_tag(a)}, EP {ep:02d}"
+    tag = f"{_after_tag(a)}, ROOT {ep:02d}"
     ex, ey = ep // 10, ep % 10
     B, R = "\033[1;36m", "\033[0m"
     def head(t):
@@ -4413,7 +4413,7 @@ def show_chat_view():
         if _lr and _fl:
             _af = _fl[-1]; _lox, _loy = _lr[-1][3], _lr[-1][4]
             _ao = apply_op(_af // 10, _lox) * 10 + apply_op(_af % 10, _loy)
-            print(f"  after·LAST old xy = LAST row old ops on the AFTER number {_af:02d}: {_ao:02d} ({OP_ABBREV[_lox]}/{OP_ABBREV[_loy]})"
+            print(f"  EP·LAST old xy = LAST row old ops on the EP (last number) {_af:02d}: {_ao:02d} ({OP_ABBREV[_lox]}/{OP_ABBREV[_loy]})"
                   f"   live {RRR_LIVE.get('rrr3_afterold_hits', 0)} of {RRR_LIVE.get('rrr3_afterold_rounds', 0)}"
                   f" (history 1293 rounds: 26 vs chance 12.9).  ON TEST, not in FINAL 4.")
         stars = sorted({int(c_[:2]) for r_ in t4 for c_ in r_[8:10]})
@@ -4427,11 +4427,11 @@ def show_chat_view():
               f"\n  * numbers: {' '.join(f'{v:02d}' for v in stars)}   live {RRR_LIVE.get('rrr3_starcol_hits', 0)} of {RRR_LIVE.get('rrr3_starcol_rounds', 0)}"
               f" (replay 144 rounds: 18 vs chance 8.1, held-out 8 vs 6.3)")
         if not any(r_[1] == ep for r_ in rows):
-            print(f"  EP row: no row starts at EP {ep:02d} this round   live {RRR_LIVE.get('rrr3_eprow_hits', 0)} of {RRR_LIVE.get('rrr3_eprow_rounds', 0)}")
+            print(f"  ROOT row: no row starts at ROOT {ep:02d} this round   live {RRR_LIVE.get('rrr3_eprow_hits', 0)} of {RRR_LIVE.get('rrr3_eprow_rounds', 0)}")
         for pos_, s_a_, s_b_, ox_, oy_, nx_, ny_, mk_ in rows:
             if s_a_ == ep:      # user S27: the row that starts at the EP
                 v1 = apply_op(ex, nx_) * 10 + apply_op(ey, ox_); v2 = apply_op(ex, ox_) * 10 + apply_op(ey, nx_)
-                print(f"  EP row Op{pos_} ({s_a_:02d}→{s_b_:02d}): x = new x, y = old x as is: {v1:02d} ({OP_ABBREV[nx_]}/{OP_ABBREV[ox_]})"
+                print(f"  ROOT row Op{pos_} ({s_a_:02d}→{s_b_:02d}): x = new x, y = old x as is: {v1:02d} ({OP_ABBREV[nx_]}/{OP_ABBREV[ox_]})"
                       f" · yx {v2:02d} ({OP_ABBREV[ox_]}/{OP_ABBREV[nx_]})   live {RRR_LIVE.get('rrr3_eprow_hits', 0)} of {RRR_LIVE.get('rrr3_eprow_rounds', 0)}"
                       f" (replay 3 of 38 vs chance 0.8)")
         lastr = [r_ for r_ in rows if r_[7] == 'LAST']
@@ -4503,10 +4503,10 @@ def _rrr_last_menu(ep, rows, pre):
         bar = "─" * (sum(w) + 3 * len(w) + 1)
         return [bar, line(h), bar] + [line(r) for r in rws] + [bar]
     out = ["", f"  LAST ROW DIGIT MENU  —  [{pre}{pos}]LAST {a:02d} → {b:02d}   old {OP_ABBREV[ox]}/{OP_ABBREV[oy]}"
-                f"   new {OP_ABBREV[nx]}/{OP_ABBREV[ny]}   EP={ep:02d}",
-           f"  x digit (EP tens {ep // 10}):"]
+                f"   new {OP_ABBREV[nx]}/{OP_ABBREV[ny]}   ROOT={ep:02d}",
+           f"  x digit (ROOT tens {ep // 10}):"]
     out += ["  " + l for l in table(hdr, cells(ep // 10), 3)]
-    out.append(f"  y digit (EP units {ep % 10}):")
+    out.append(f"  y digit (ROOT units {ep % 10}):")
     out += ["  " + l for l in table(hdr, cells(ep % 10), 3)]
     return out
 
@@ -4531,7 +4531,7 @@ def _rrr_one_row(ep, after, rows, pre):
            # P12 = 92: the chosen row (Op24 61->58) old yx c+2/-1 with both
            # signs flipped -> c-2/+1 on EP 61
            ("old ops yx, both signs flipped", num((soy[0], -soy[1]), (sox[0], -sox[1])))]
-    out = ["", f"  ONE ROW PICK  —  one Pos / source only, EP={ep:02d}, after {after:02d}",
+    out = ["", f"  ONE ROW PICK  —  one Pos / source only, ROOT={ep:02d}, EP {after:02d}",
            f"  [{pre}{pos}]{mark}  {a:02d} → {b:02d}   old {OP_ABBREV[ox]}/{OP_ABBREV[oy]}   "
            f"new {OP_ABBREV[nx]}/{OP_ABBREV[ny]}   (why: {why})"]
     out += [f"     {lab_:<54} {n_}" for lab_, n_ in ops]
@@ -4560,7 +4560,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     head = (f"  {'Pos':<12} {'Source':<9} {'old x':<6} {'old y':<6}    "
             f"{'new x':<6} {'new y':<6}  {'xy (op)':<{KW}}{'yx (op)':<{KW}}{'*xy (op)':<{KW}}{'*yx (op)':<{KW}}{'~xy (op)':<{KW}}{'~yx (op)':<{KW}}"
             f"{'old xy':<{KW}}{'old yx':<{KW}}{'newold xy':<{KW}}{'oldnew yx':<{KW}}{'oldy·newy±':<{KW}}{'oldx·newx±':<{KW}}")
-    body = [f"RRR:  NEXT OPERATION → EP={ep:02d}".center(len(head)), "", head, '─' * len(head)]
+    body = [f"RRR:  NEXT OPERATION → ROOT={ep:02d}".center(len(head)), "", head, '─' * len(head)]
     live = grid_ep is not None and grid_ep >= 0
     star = (lambda v: '★' if v // 10 == cut(grid_ep // 10) else ' ') if live else (lambda v: ' ')
     both_cut = []          # every RRR number with the types of its new x / new y
@@ -4605,7 +4605,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     # +2/c+2 -> c+2/c-2 = 33 on EP 60
     nc_spec = _rrr_nc_special(ep, row_ops)
     if nc_spec:
-        body += ["", f"  NC/CUT SPECIAL  —  after an nc/cut, cut/nc or nc/nc row: next row modified, EP={ep:02d}"]
+        body += ["", f"  NC/CUT SPECIAL  —  after an nc/cut, cut/nc or nc/nc row: next row modified, ROOT={ep:02d}"]
         for trig, nxt, lst in nc_spec:
             body.append(f"  [{pos_prefix}{trig[0]}] {OP_ABBREV[trig[1]]}/{OP_ABBREV[trig[2]]}  →  "
                         f"[{pos_prefix}{nxt[0]}] xy {OP_ABBREV[nxt[1]]}/{OP_ABBREV[nxt[2]]}, yx {OP_ABBREV[nxt[2]]}/{OP_ABBREV[nxt[1]]}:")
@@ -4766,7 +4766,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         first_seen.setdefault(v, (v, lab))
     rec = list(first_seen.values())
     rec_items = [f"{v:02d}{star(v).strip()} ({lab})" for v, lab in rec]
-    rec_lines = [f"  ★ 3RRR RECOMMENDED on EP={ep:02d}  →  " + ('   '.join(rec_items[:5]) if rec_items else "none this round")]
+    rec_lines = [f"  ★ 3RRR RECOMMENDED on ROOT={ep:02d}  →  " + ('   '.join(rec_items[:5]) if rec_items else "none this round")]
     rec_lines += ["       " + '   '.join(rec_items[k:k + 7]) for k in range(5, len(rec_items), 7)]
     same = None
     if _RRR3_PREV.get('op'):
@@ -4815,13 +4815,13 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             wide_votes[v] = wide_votes.get(v, 0) + 1
     wide = list(wide.values())
     rec_items = [f"{v:02d}{star(v).strip()} ({lab})" for v, lab in rec]
-    rec_lines = [f"  ★ 3RRR RECOMMENDED on EP={ep:02d}  →  " + ('   '.join(rec_items[:5]) if rec_items else "none this round")]
+    rec_lines = [f"  ★ 3RRR RECOMMENDED on ROOT={ep:02d}  →  " + ('   '.join(rec_items[:5]) if rec_items else "none this round")]
     rec_lines += ["       " + '   '.join(rec_items[k:k + 7]) for k in range(5, len(rec_items), 7)]
     yx_items = [f"{v:02d}{star(v).strip()} ({lab})" for v, lab in rec_yx]
-    rec_lines += [f"    3RRR RECOMMENDED yx on EP={ep:02d}  →  " + ('   '.join(yx_items[:5]) if yx_items else "none this round")]
+    rec_lines += [f"    3RRR RECOMMENDED yx on ROOT={ep:02d}  →  " + ('   '.join(yx_items[:5]) if yx_items else "none this round")]
     rec_lines += ["       " + '   '.join(yx_items[k:k + 7]) for k in range(5, len(yx_items), 7)]
     wide_items = [f"{v:02d}{star(v).strip()} ({lab})" for v, lab in wide]
-    rec_lines += [f"    3RRR WIDE on EP={ep:02d}  →  " + ('   '.join(wide_items[:6]) if wide_items else "none this round")]
+    rec_lines += [f"    3RRR WIDE on ROOT={ep:02d}  →  " + ('   '.join(wide_items[:6]) if wide_items else "none this round")]
     rec_lines += ["       " + '   '.join(wide_items[k:k + 7]) for k in range(6, len(wide_items), 7)]
     # STRONG 16: at most 16 numbers.  Ranking chosen by testing 1,700 ways
     # of weighting the sources on all 363 recorded rounds, each series held
@@ -6479,7 +6479,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     s_cw = max([len(c) for c in s_cells] + [16]) + 2
     s_per = 4
     s_tw = s_per * s_cw + s_per - 1
-    s_title = f"★  3RRR STRONG 20   —   operations applied on EP={ep:02d}  ★"
+    s_title = f"★  3RRR STRONG 20   —   operations applied on ROOT={ep:02d}  ★"
     strong_lines = [f"  {s_g}┌{'─' * s_tw}┐{s_rst}",
                     f"  {s_g}│{s_rst}{s_rib}{s_title:^{s_tw}}{s_rst}{s_g}│{s_rst}",
                     f"  {s_g}├{'┬'.join('─' * s_cw for _ in range(s_per))}┤{s_rst}"]
@@ -6551,7 +6551,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     a_per = 2
     a_cw = max([len(c) for c in a_cells] + [2 * s_cw - 1, 56]) + 2
     a_tw = a_per * a_cw + a_per - 1
-    a_after = f"after {grid_ep:02d}, on EP={ep:02d}" if grid_ep is not None and grid_ep >= 0 else f"on EP={ep:02d}"
+    a_after = f"EP {grid_ep:02d}, on ROOT={ep:02d}" if grid_ep is not None and grid_ep >= 0 else f"on ROOT={ep:02d}"
     a_new = len(set(strong_adj) - set(strong))
     a_title = (f"★  STRONG 20 ADJUSTMENTS  —  {a_after}  —  y cut toggled, x sign flipped  —  "
                f"{len(strong)} + {a_new} new = {len(strong) + a_new} numbers  ★")
@@ -6582,7 +6582,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     f_cw = max([len(c) for c in f_cells] + [16]) + 2
     f_per = 4
     f_tw = f_per * f_cw + f_per - 1
-    f_title = f"★  40RRR FINAL-RESULT-TABLE  —  all {len(f_all)} recommended numbers on EP={ep:02d}  ★"
+    f_title = f"★  40RRR FINAL-RESULT-TABLE  —  all {len(f_all)} recommended numbers on ROOT={ep:02d}  ★"
     final_lines = [f"  {s_g}┌{'─' * f_tw}┐{s_rst}",
                    f"  {s_g}│{s_rst}{s_rib}{f_title:^{f_tw}}{s_rst}{s_g}│{s_rst}",
                    f"  {s_g}├{'┬'.join('─' * f_cw for _ in range(f_per))}┤{s_rst}"]
@@ -7138,7 +7138,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         p_cw = max([len(c) for grp in p_rows for line in grp for c in line] + [21]) + 2
         p_tw = 4 * p_cw + 3
         p_rib = "\033[1;30;43m"
-        p_title = f"★  POWER BASE  —  4 numbers, operations applied on EP={ep:02d}  ★"
+        p_title = f"★  POWER BASE  —  4 numbers, operations applied on ROOT={ep:02d}  ★"
         power_lines = [f"  {s_g}┌{'─' * p_tw}┐{s_rst}",
                        f"  {s_g}│{s_rst}{p_rib}{p_title:^{p_tw}}{s_rst}{s_g}│{s_rst}",
                        f"  {s_g}├{'┬'.join('─' * p_cw for _ in range(4))}┤{s_rst}"]
@@ -7338,7 +7338,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                     y_done.add(int(c_[:2]))
                     cells_[k_] = c_ + ', ' + _x_lab(x_ycut[int(c_[:2])]).replace(' (', '+ (', 1)
         x_title = (f"★  CharRow  —  {len(x_have)} numbers, x only: cut toggled, then sign changed; "
-                   f"repeats replaced; last-op steps for x cut; y cut again; cut/nc turned, on EP={ep:02d}  ★")
+                   f"repeats replaced; last-op steps for x cut; y cut again; cut/nc turned, on ROOT={ep:02d}  ★")
         # the CharRow numbers once each, beside the STRONG 20 table (user's
         # screenshots, 2026-10-13): no repeats, table order, each with its
         # operation on the EP
@@ -7432,7 +7432,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                             | {m_[0] for xf_ in o_xf for m_ in xf_})
             o_gw = o_per * (o_cw + 1) - 1
             o_body = [f"★  NEXT OPERATION-OCJP  —  from the LAST row {both_cut[-2][0]:02d} ({both_cut[-2][2]}),"
-                      f" {both_cut[-1][0]:02d} ({both_cut[-1][2]})  on EP={ep:02d}  ★", "",
+                      f" {both_cut[-1][0]:02d} ({both_cut[-1][2]})  on ROOT={ep:02d}  ★", "",
                       '┌' + '┬'.join('─' * o_cw for _ in range(o_per)) + '┐']
             for k_ in range(0, len(o_cells), o_per):
                 if k_:
@@ -7442,7 +7442,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                     o_body.append('│' + '│'.join(f" {(c[j_] if j_ < len(c) else ''):<{o_cw - 1}}" for c in row_) + '│')
             o_body.append('└' + '┴'.join('─' * o_cw for _ in range(o_per)) + '┘')
             o_body += ["", f"ALL ({len(o_uniq)}): " + ' '.join(f"{v_:02d}" for v_ in o_uniq),
-                       "1-20 = the user's operations;  21-30 ^ = mirror forms;  31-38 ° = one operation, sign flipped on one side;  39 = EP cut/cut;  40 = EP itself nc/nc",
+                       "1-20 = the user's operations;  21-30 ^ = mirror forms;  31-38 ° = one operation, sign flipped on one side;  39 = ROOT cut/cut;  40 = ROOT itself nc/nc",
                        "after the comma, + = the same place with its x step switched (1 <-> 2), y kept (-1/c+1 -> -2/c+1);",
                        "  when x is nc or cut, the y step switched instead (nc/+2 -> nc/+1)",
                        "after the next commas, * = the y step switched, and both steps switched (-2/-2 -> -2/-1, -1/-1)",
@@ -7492,7 +7492,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                                'tie': [list(strong), [v for v, _ in fam_seats], [v for _, _, l_ in nc_spec for v, _ in l_]],
                                'place': {str(k): v for k, v in f4_place.items()},
                                'final4': [v for v, _ in ocjp_final4]}, fh)
-            f4_body = [f"★  OCJP FINAL 4  —  after {grid_ep:02d}, EP={ep:02d}  ★", ""]
+            f4_body = [f"★  OCJP FINAL 4  —  EP {grid_ep:02d}, ROOT={ep:02d}  ★", ""]
             for k_, (v_, nm_) in enumerate(ocjp_final4):
                 f4_body.append(f"{k_ + 1}. {v_:02d} ({OP_ABBREV[find_op(ep // 10, v_ // 10)]}/{OP_ABBREV[find_op(ep % 10, v_ % 10)]})"
                                f"   in {len(nm_)} lists: {', '.join(nm_) if nm_ else '-'}")
@@ -7531,13 +7531,13 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         r_band = ' '.join(f"{p_t * 10 + (p_u + k_) % 10:02d}" for k_ in range(-2, 3))
         r_2nd = ((grid_ep // 10 + 6) % 10) * 10 + p_u
         r_rows = [("After number", f"{grid_ep:02d}", "the last result; the round comes after it"),
-                  ("Operations on EP", f"{ep:02d}", "the number every operation is applied on"),
+                  ("Operations on ROOT", f"{ep:02d}", "the number every operation is applied on"),
                   ("Declared number", _s_lab(p_decl), f"cut / c-1 on the after number {grid_ep:02d}"),
                   ("Decade", f"{p_t}0-{p_t}9", "the after number's tens digit cut"),
                   ("Band", r_band, "the declared number and 1, 2 either side"),
                   ("2nd number", _s_lab(r_2nd), f"c+1 / c-1 on the after number {grid_ep:02d}"),
                   ("Same operation again", _s_lab(same[0]) if same else "-",
-                   "the last round's operation applied again on this EP"),
+                   "the last round's operation applied again on this ROOT"),
                   ("3RRR result line", ' '.join(n_[:2] for n_, _ in found[:4]) or "-", "the 3RRR RESULT numbers"),
                   ("POWER BASE", ', '.join(_s_lab(v_) for v_, _ in p_four), "declared, decade up, one below, one above")]
         # star picks (user, 2026-10-13: "apply * mark on accurate prediction
@@ -7588,7 +7588,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                            "FINAL 4's #1: one exact pick (2.5% vs 1%)"))
         r_w = [max(len(r_[k_]) for r_ in r_rows) + 2 for k_ in range(3)]
         r_tw = sum(r_w) + 2
-        r_title = f"★  ROUND SUMMARY  —  after {grid_ep:02d}, operations on EP={ep:02d}  ★"
+        r_title = f"★  ROUND SUMMARY  —  EP {grid_ep:02d}, operations on ROOT={ep:02d}  ★"
         r_tw = max(r_tw, len(r_title) + 2)
         r_w[2] += r_tw - (sum(r_w) + 2)
         r_box = [f"  {s_g}┌{'─' * r_tw}┐{s_rst}",
@@ -7601,9 +7601,9 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         # 2026-10-23): every two-digit number in the summary's value column
         # (After number and EP left out), no repeats, ascending, one row a
         # decade 00-09 .. 90-99, each number in its own units slot
-        u_nums = sorted({int(v_) for r_ in r_rows if r_[0] not in ("After number", "Operations on EP")
+        u_nums = sorted({int(v_) for r_ in r_rows if r_[0] not in ("After number", "Operations on ROOT")
                          for v_ in re.findall(r'\b\d\d\b', r_[1])})
-        u_title = f"★  SUMMARY NUMBERS  —  {len(u_nums)}, no repeats, after {grid_ep:02d}, EP={ep:02d}  ★"
+        u_title = f"★  SUMMARY NUMBERS  —  {len(u_nums)}, no repeats, EP {grid_ep:02d}, ROOT={ep:02d}  ★"
         u_rows = [(f"{d_}0-{d_}9", ' '.join(f"{d_ * 10 + k_:02d}" if d_ * 10 + k_ in u_nums else '  '
                                              for k_ in range(10))) for d_ in range(10)]
         u_w = [max(len(a_) for a_, _ in u_rows) + 2, len(u_rows[0][1]) + 2]
@@ -7662,16 +7662,16 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: declared y a +1/+2 step — the cut steps of the other sign too (-1/+1 -> -1/c-1, -1/c-2)",
                        "     declared cell: the first rule's two numbers also with the cut step on x switched (c+2/-1 -> c+1/-1)",
                        "     declared cell: x = declared x step without cut, other sign and number, y a cut step — also only the cut on y (-1/c-2 -> -1/cut)",
-                       "     declared cell: the last round's operation again, on the running value instead of the EP (-1/cut on 27 -> 12)",
+                       "     declared cell: the last round's operation again, on the running value instead of the ROOT (-1/cut on 27 -> 12)",
                        "     declared cell: declared operations crossed, y without its cut and step switched on x, x without its cut on y (nc/c-1 -> -2/nc)",
                        "     declared cell: the last round's operation again on the running value with its x step switched (+2/nc on 06 -> +1/nc on 06 = 16)",
-                       "     declared cell: the last round's operation again on the EP with nc on y (c+1/+2 -> c+1/nc)",
+                       "     declared cell: the last round's operation again on the ROOT with nc on y (c+1/+2 -> c+1/nc)",
                        "     declared cell: declared x without its cut + sign flipped, with the cut steps of the other sign on a +1/+2 declared y (c-2/+2 -> +2/c-1, +2/c-2)",
-                       "     declared cell: the crossed declared operations (nc/-1 -> -2/nc) applied on the running value instead of the EP (-2/nc on 28 = 08)",
+                       "     declared cell: the crossed declared operations (nc/-1 -> -2/nc) applied on the running value instead of the ROOT (-2/nc on 28 = 08)",
                        "     declared cell: a STRONG 20 number and a 3RRR RESULT number of the same family (53 and 85) bring that STRONG 20 number with both digits cut (53 -> 08)",
                        "     declared cell: the whole NUMBER BAND (declared number ± 1, ± 2) is in the cell (50, 52, 54 -> also 51, 53)",
-                       "     declared cell: the SAME OPERATION AGAIN number (the last round's operation on this EP) is in the cell (cut/c-2 again -> 26)",
-                       "     declared cell: the EP and a 3RRR RESULT number of the same family (02 and 70) bring the EP with both digits cut (02 -> 57)",
+                       "     declared cell: the SAME OPERATION AGAIN number (the last round's operation on this ROOT) is in the cell (cut/c-2 again -> 26)",
+                       "     declared cell: the ROOT and a 3RRR RESULT number of the same family (02 and 70) bring the ROOT with both digits cut (02 -> 57)",
                        "     declared cell: the first 3RRR RESULT number itself is in the cell (08)",
                        "     declared cell: every RRR: NEXT OPERATION table number, xy and yx (89 (+1/-1))",
                        "     declared cell: the SAME OPERATION AGAIN crossed, yx and yx turned (old y cut removed, old x sign flipped) (+1/-1 -> 45 (-1/-1))",
@@ -7687,7 +7687,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the STRONG 20 seats below the band with y cut toggled (67 (-1/-1) -> 62 (-1/c-1))",
                        "     declared cell: RECOMMENDED F, the last row not crossed with one side dropped to nc (55 (-2/nc))",
                        "     declared cell: RECOMMENDED F, the last row not crossed with both sides one step down / up (24 (-1/-2))",
-                       "     declared cell: the RRR table row that gave the star pick, its old operation again on this EP, xy and yx (-1/+1 -> 28, 46)",
+                       "     declared cell: the RRR table row that gave the star pick, its old operation again on this ROOT, xy and yx (-1/+1 -> 28, 46)",
                        "     declared cell: the LAST row of the next-operation table, its number with a cut on y comes with y one step down (22 (c+1/cut) -> 21 (c+1/c-1))",
                        "     declared cell: the first STRONG 20 number above the band with a cut and step on x and a plain step on y, the cut taken off x (23 (c-2/+1) -> 73 (-2/+1))",
                        "     declared cell: a star pick turn with a cut on y comes with its y one step down (46 (cut/cut) -> 45 (cut/c-1))",
@@ -7710,21 +7710,21 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                        "     declared cell: the band number one under the declared number with the cut toggled on its x, nc / c-2 on the running value (09 -> 02)",
                        "     declared cell: a STRONG 20 number under the band with a plain step of one on y brings the same with nc on y (00 (c+2/-1) -> 01 (c+2/nc))",
                        "     declared cell: a STRONG 20 number above the band with nc on x brings the same with its y cut toggled (25 (nc/+1) -> 20 (nc/c+1))",
-                       "     declared cell: the EP itself, nc/nc, is in the cell (EP 68 -> 68)",
-                       "     declared cell: the c+2 / c-2 number of the running value read on the EP and mirrored, both signs flipped (09 (-2/-2) -> 43 (+2/+2))",
+                       "     declared cell: the ROOT itself, nc/nc, is in the cell (ROOT 68 -> 68)",
+                       "     declared cell: the c+2 / c-2 number of the running value read on the ROOT and mirrored, both signs flipped (09 (-2/-2) -> 43 (+2/+2))",
                        "     declared cell: the 2nd NUMBER one above, c+1 / cut on the running value (71 -> 36)",
                        "     declared cell: the last round's operation with its x sign flipped and its y without the cut (c+1/c-2 -> c-1/-2 = 71)",
                        "     declared cell: the SAME OPERATION AGAIN number mirrored, the last round's operation with both signs flipped (c-1/c+2 -> c+1/c-2 = 31)",
                        "     declared cell: the declared operations crossed, both signs flipped and both steps switched (90 (c-1/-1) -> +2/c+2 = 78)",
                        "     declared cell: the 3RRR RESULT C number with its x step switched, the nearest x (56 (-1/nc) -> 46 (-2/nc))",
                        "     declared cell: the SAME OPERATION AGAIN number mirrored with its x step switched (c-2/c-1 -> c+1/c+1 = 76) also with its units digit cut (-> 71)",
-                       "     declared cell: the operation of two rounds back again on this EP is in the cell (c+1/-2 again -> 30)",
+                       "     declared cell: the operation of two rounds back again on this ROOT is in the cell (c+1/-2 again -> 30)",
                        "     declared cell: the 2nd NUMBER with its x sign flipped (73 (-1/+1) -> 93 (+1/+1)) also with both digits cut (-> 48)",
-                       "     declared cell: the 2nd NUMBER's operation applied on the running value instead of the EP (62 = +1/+1 on EP 51; +1/+1 on 08 -> 19)",
+                       "     declared cell: the 2nd NUMBER's operation applied on the running value instead of the ROOT (62 = +1/+1 on ROOT 51; +1/+1 on 08 -> 19)",
                        "     declared cell: the 2nd NUMBER with its x sign flipped and its y step switched, c-1 / c-2 on the running value (65 -> 08)",
                        "     declared cell: two STRONG 20 numbers above the band, -1 and +1 on x with the same y (13 and 33), bring the number between them, nc on x (-> 23)",
                        "     declared cell: a 3RRR RESULT number that is a STRONG 20 number above the band with both digits cut (88 -> 33) is in the cell",
-                       "     declared cell: the declared operation applied on the running value instead of the EP (30 = +2/nc on EP 10; +2/nc on 86 -> 06)",
+                       "     declared cell: the declared operation applied on the running value instead of the ROOT (30 = +2/nc on ROOT 10; +2/nc on 86 -> 06)",
                        "     declared cell: the SAME OPERATION AGAIN number mirrored (both signs flipped) with its x step switched (c+1/-1 -> c-2/+1 = 68)",
                        "     declared cell: two STRONG 20 numbers that are each other with both digits cut (24 and 79) bring the number between them, the lower one with its tens cut (74)",
                        "     declared cell: the declared number with its digits reversed (60 -> 06)",
@@ -7756,7 +7756,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              "     numbers 1-20 are the STRONG 20; the rest follow in the order of the lists below", "",
              *res_lines,
              *rec_lines,
-             "     recommended = 3RRR numbers + rules E and F + same operation again + EP itself, EP cut + unused RRR pairs",
+             "     recommended = 3RRR numbers + rules E and F + same operation again + ROOT itself, ROOT cut + unused RRR pairs",
              "     recommended yx = each recommended value's two operations crossed (numbers not already recommended)",
              "     wide = rule G: the single moves seen on middle rows, tried on every row (numbers not already above)", "",
              "  HOW THE OPERATIONS MOVED  (each row = an earlier row crossed: old y → new x, old x → new y)"]
@@ -7853,7 +7853,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
              "       " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in numberless) if numberless else "none this round"),
              "     or rule B with the numbers stepped down/up, up/down, up/up:",
              "       " + ('   '.join(f"{v:02d}{star(v).strip()} ({lab})" for v, lab in b_steps) if b_steps else "none this round")]
-    body += ["", "  SAME OPERATION AGAIN  (the previous round's operation on this EP):  "
+    body += ["", "  SAME OPERATION AGAIN  (the previous round's operation on this ROOT):  "
              + (f"{same[0]:02d}{star(same[0]).strip()} ({same[1]})" if same else "not available")]
     if same:
         body += [f"     yx (crossed):  {same_yx[0]:02d}{star(same_yx[0]).strip()} ({same_yx[1]})"
@@ -7890,7 +7890,8 @@ def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, fin
     entries = _kk_entries(sequence, ep)
 
     sep('═')
-    title = (f"  {label}   (EP={ep:02d}, bracket starts with "
+    _nm = 'ROOT' if label.startswith('KK CHAIN') else 'EP'      # chain runs on the ROOT, special on the EP
+    title = (f"  {label}   ({_nm}={ep:02d}, bracket starts with "
              f"{' or '.join(str(d) for d in bracket)})")
     if not (show_missing and entries):
         print(f"\n{title}\n")
@@ -7962,7 +7963,7 @@ def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, fin
     # Unique values box — every value once, sorted by number; count is
     # occurrences across all 6 value columns (not once per row like the ranked box)
     uniq = _kk_unique_counts(entries)
-    left = _kk_box(f"{label}  (EP={ep:02d})  UNIQUE VALUES ({len(uniq)})",
+    left = _kk_box(f"{label}  ({_nm}={ep:02d})  UNIQUE VALUES ({len(uniq)})",
                    sorted(uniq.items()))
     if merge_counts is not None:
         # KK MERGE — special ∪ chain, no duplicates, counts summed; printed beside
@@ -8866,7 +8867,7 @@ def rrr_ask_ops():
     a = lambda o: OP_ABBREV[o]
     print()
     sep('═')
-    print(f"  RRR: NEXT OPERATION  →  EP={ep:02d}  (x = {ep // 10}, y = {ep % 10})")
+    print(f"  RRR: NEXT OPERATION  →  ROOT={ep:02d}  (x = {ep // 10}, y = {ep % 10})")
     print(f"  {'Pos':<12} {'Source':<9} {'old x':<6} {'old y':<6}    {'new x':<6} {'new y':<6}  {'xy (op)':<13}{'yx (op)':<13}"
           f"{'*xy (op)':<13}{'*yx (op)':<13}{'~xy (op)':<13}{'~yx (op)':<13}{'old xy':<13}{'old yx':<13}{'newold xy':<13}{'oldnew yx':<13}{'oldy·newy±':<13}{'oldx·newx±':<13}")
     for pos, s_a, s_b, x_op, y_op, nx, ny, mark in rows:
@@ -8892,7 +8893,7 @@ def rrr_ask_ops():
         pos, s_a, s_b, x_op, y_op, nx, ny, mark = row
         cells = _ask_op_line(ep, nx, ny)
         print(f"\n  Op{pos}{(' ' + mark) if mark else ''}: source {s_a:02d} → {s_b:02d}, old {a(x_op)}/{a(y_op)} → new {a(nx)}/{a(ny)}")
-        print(f"  on EP {ep:02d}:  x {ep // 10} → {apply_op(ep // 10, nx)} ({a(nx)}),  y {ep % 10} → {apply_op(ep % 10, ny)} ({a(ny)})")
+        print(f"  on ROOT {ep:02d}:  x {ep // 10} → {apply_op(ep // 10, nx)} ({a(nx)}),  y {ep % 10} → {apply_op(ep % 10, ny)} ({a(ny)})")
         for lab, (v, o) in zip(('xy', 'yx', 'sign+xy', 'sign+yx'), cells):
             print(f"     {lab:<10} {v:02d} ({o})")
         # the extra table-4 columns of this row (*, ~, old, newold/oldnew)
@@ -8906,7 +8907,7 @@ def rrr_ask_ops():
         _ask_log('op_number', f"Op{pos} {a(nx)}/{a(ny)}", list(dict.fromkeys(v for v, _ in cells)))
     # 2. the user's own operations on EP
     while True:
-        raw = _tty_input(f"\n  Enter operations on EP {ep:02d} as x/y, several with commas or spaces "
+        raw = _tty_input(f"\n  Enter operations on ROOT {ep:02d} as x/y, several with commas or spaces "
                          f"(e.g. +2/-2, c-1/cut, nc/+1; Enter = finish): ")
         if not raw:
             break
@@ -8920,7 +8921,7 @@ def rrr_ask_ops():
                 bad.append(part.strip())
                 continue
             cells = _ask_op_line(ep, ox, oy)
-            print(f"  {a(ox)}/{a(oy)} on EP {ep:02d}:  xy {cells[0][0]:02d} ({cells[0][1]})   yx {cells[1][0]:02d} ({cells[1][1]})"
+            print(f"  {a(ox)}/{a(oy)} on ROOT {ep:02d}:  xy {cells[0][0]:02d} ({cells[0][1]})   yx {cells[1][0]:02d} ({cells[1][1]})"
                   f"   sign+xy {cells[2][0]:02d} ({cells[2][1]})   sign+yx {cells[3][0]:02d} ({cells[3][1]})")
             series += [v for v, _ in cells]
             _ask_log('operation', f"{a(ox)}/{a(oy)}", list(dict.fromkeys(v for v, _ in cells)))

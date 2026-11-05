@@ -2803,5 +2803,17 @@
    72
   ],
   "result": 72
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S60",
+  "after": 72,
+  "ep": 6,
+  "kind": "result_only",
+  "entry": "result 88 = -2/+2 on ROOT 06 (EP 72); ~xy Op31 (~ 5/28) + STRONG 20 #17; >40; FINAL 4/booster/combined miss",
+  "numbers": [
+   88
+  ],
+  "result": 88
  }
 ]

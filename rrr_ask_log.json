@@ -2767,5 +2767,17 @@
    24
   ],
   "result": 24
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S57",
+  "after": 24,
+  "ep": 20,
+  "kind": "result_only",
+  "entry": "result 41 = +2/+1 on ROOT 20 (EP 24); oldx·newx± Op7 (± 4/16); 1 change from Op7 old xy, Op16 xy, Op17 yx; >40; FINAL 4 miss; EP·LAST old 35 miss (0/4)",
+  "numbers": [
+   41
+  ],
+  "result": 41
  }
 ]

@@ -932,6 +932,44 @@ def _op_label(c, k):
     return 'nc' if k == 0 else f"{k:+d}"
 
 
+def _f4_booster(ep, v):
+    """FINAL 4 BOOSTER (user 2026-11-05, S58): from one FINAL 4 number's ops on
+    the ROOT, read xy (x op, y op) and yx (y op on x, x op on y):
+      2) cut removed  - every side that has a cut loses it (c+1 -> +1, cut -> nc)
+      3) cut added    - every side without a cut gets it (+1 -> c+1, nc -> cut)
+      4) sign flipped - the 2) and 3) numbers with both signs flipped
+      5) step +1 / -1 - the 2) and 3) numbers with both steps one up and one down
+    Returns {'xy': {2: [...], 3: [...], 4: [...], 5: [...]}, 'yx': {...}}."""
+    ex, ey = ep // 10, ep % 10
+    sx = _op_side(OP_ABBREV[find_op(ex, v // 10)]); sy = _op_side(OP_ABBREV[find_op(ey, v % 10)])
+    out = {}
+    for rd, (px, py) in (('xy', (sx, sy)), ('yx', (sy, sx))):
+        num = lambda a, b: _op_apply(ex, a[0], a[1]) * 10 + _op_apply(ey, b[0], b[1])
+        base = []
+        if px[0] or py[0]:
+            base.append((2, (False, px[1]), (False, py[1])))
+        if not px[0] or not py[0]:
+            base.append((3, (True, px[1]), (True, py[1])))
+        d = {2: [], 3: [], 4: [], 5: []}
+        for st, a, b in base:
+            d[st].append(num(a, b))
+            d[4].append(num((a[0], -a[1]), (b[0], -b[1])))
+            d[5] += [num((a[0], a[1] + 1), (b[0], b[1] + 1)), num((a[0], a[1] - 1), (b[0], b[1] - 1))]
+        out[rd] = {k: list(dict.fromkeys(x)) for k, x in d.items()}
+    return out
+
+
+def _f4_booster_set(ep, f4):
+    """Every BOOSTER number of the FINAL 4 numbers, once, in order (FINAL 4 numbers left out)."""
+    seen = []
+    for v in f4:
+        b = _f4_booster(ep, v)
+        for rd in ('xy', 'yx'):
+            for k in (2, 3, 4, 5):
+                seen += [n for n in b[rd][k] if n not in seen and n not in f4]
+    return seen
+
+
 def _digit_family(n):
     """The 8-number family: both digits as is or cut, in both orders (10 -> 10 15 60 65 01 51 06 56)."""
     a, b = n // 10, n % 10
@@ -1059,14 +1097,19 @@ def show_final_box():
     # "From which Op" (user, 2026-10-31): the RRR: NEXT OPERATION row that
     # makes each FINAL 4 number, simplest change first (number_sources)
     rows_f = _RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else []
-    rows = [["#", "Number", "Operation", "yx (op)", "How it's made", "From which Op", "LAST op / previous op check", "Votes (lists)"]]
+    rows = [["#", "Number", "Operation", "yx (op)", "Booster xy", "Booster yx",
+             "How it's made", "From which Op", "LAST op / previous op check", "Votes (lists)"]]
+    def bst_(v, rd):
+        # BOOSTER cells (user 2026-11-05): 2) cut removed 3) cut added 4) their signs flipped 5) their steps +1/-1
+        b = _f4_booster(ep, v)[rd]
+        return ' '.join(f"{k})" + ','.join(f"{n:02d}" for n in b[k]) for k in (2, 3, 4, 5) if b[k])
     def yx_(v):
         # yx column (user 2026-11-04): y op on x, x op on y, as in table 4
         xo, yo = find_op(ex, v // 10), find_op(ey, v % 10)
         return f"{apply_op(ex, yo) * 10 + apply_op(ey, xo):02d} ({OP_ABBREV[yo]}/{OP_ABBREV[xo]})"
     for k_, (v, names) in enumerate(f4):
         src_ = number_sources(ep, rows_f, v)
-        rows.append(["MASTER = 1" if k_ == 0 else str(k_ + 1), f"{v:02d}", lab(v), yx_(v), made(v),
+        rows.append(["MASTER = 1" if k_ == 0 else str(k_ + 1), f"{v:02d}", lab(v), yx_(v), bst_(v, 'xy'), bst_(v, 'yx'), made(v),
                      ' · '.join(src_) if src_ else 'no row within 2 changes',
                      lastprev_check(ep, rows_f, v),
                      f"{len(names)} ({', '.join(names)})"])
@@ -1402,7 +1445,7 @@ def show_final_box():
         w_ = [max(len(r_[i]) for r_ in [head] + rows_) for i in range(len(head))]
         wcs = wrap_col if isinstance(wrap_col, tuple) else (wrap_col,)
         for j in wcs[1:]:
-            w_[j] = min(w_[j], 44)
+            w_[j] = min(w_[j], 17 if head[j].startswith('Booster') else 30 if j == 8 and len(head) > 8 else 44)
         wrap_col = wcs[0]
         w_[wrap_col] = max(10, min(w_[wrap_col], room - sum(w_) + w_[wrap_col] - 3 * len(head)))
         rule = lambda l, m_, r: l + m_.join('─' * (x + 2) for x in w_) + r
@@ -1414,11 +1457,16 @@ def show_final_box():
             for k2 in range(max(len(c) for c in cells)):
                 out.append('│ ' + ' │ '.join((c[k2] if k2 < len(c) else '').ljust(x) for c, x in zip(cells, w_)) + ' │')
         return out + [rule('└', '┴', '┘')]
-    _RRR3_PREV['sum_final4'] = table(rows[0], rows[1:], (4, 6, 5)) + [
+    _bset = _f4_booster_set(ep, top4)
+    _RRR3_PREV['f4_booster'] = _bset
+    _RRR3_PREV['sum_final4'] = table(rows[0], rows[1:], (6, 8, 7, 4, 5, 9)) + [
         "  LAST op / previous op check: LAST row (new ops or its old = previous ops) and the row before it; fewest changes.",
         "  Tested on 412 rounds (F N M K O P Q R): ranking FINAL 4 by it held 28 vs 29 now, so it is a check, not the ranking.",
         f"  yx column: {' '.join(r_[3][:2] for r_ in rows[1:])}   live {RRR_LIVE.get('rrr3_f4yx_hits', 0)} of {RRR_LIVE.get('rrr3_f4yx_rounds', 0)}"
-        f"  (replay 10 of 152 vs chance 6.1; display only, not in FINAL 4)"]
+        f"  (replay 10 of 152 vs chance 6.1; display only, not in FINAL 4)",
+        f"  BOOSTER ({len(_bset)}, FINAL 4 left out): {' '.join(f'{n:02d}' for n in sorted(_bset))}",
+        f"    live {RRR_LIVE.get('rrr3_booster_hits', 0)} of {RRR_LIVE.get('rrr3_booster_rounds', 0)}; history 1293 rounds: held 331 vs chance 342 (x0.97);"
+        f" as FINAL 4 vote/tie-break 91/78 vs 97 now -> display only, not in FINAL 4"]
     _RRR3_PREV['sum_head'] = (fb['after'], ep)
     # MegaStar / PowerStar (user 2026-11-04): FINAL 4 #1 and #2, shown beside table 4
     _RRR3_PREV['two_star'] = [(r_[1], r_[2]) for r_ in rows[1:3]]
@@ -3539,7 +3587,7 @@ RRR_LIVE = {
     'rrr3_rule1_rounds': 366, 'rrr3_rule1_hits': 12, 'rrr3_rule2_rounds': 260, 'rrr3_rule2_hits': 18,
     'rrr3_rule3_rounds': 261, 'rrr3_rule3_hits': 13, 'rrr3_rule4_rounds': 244, 'rrr3_rule4_hits': 3,
     'rrr3_rule5_rounds': 214, 'rrr3_rule5_hits': 62, 'rrr3_rule6_rounds': 46, 'rrr3_rule6_hits': 1,
-    'rrr3_rule7_rounds': 119, 'rrr3_rule7_hits': 3, 'rrr3_rule8_rounds': 119, 'rrr3_rule8_hits': 4, 'rrr3_rule9_rounds': 60, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 43, 'rrr3_rule10_hits': 2, 'rrr3_rule11_rounds': 6, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 66, 'rrr3_rule12_hits': 2, 'rrr3_rule13_rounds': 18, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 14, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 115, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 16, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 41, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 181, 'rrr3_rule18_hits': 6, 'rrr3_rule19_rounds': 38, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 42, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 36, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 158, 'rrr3_rule22_hits': 5, 'rrr3_rule23_rounds': 40, 'rrr3_rule23_hits': 0, 'rrr3_rule24_rounds': 13, 'rrr3_lastop4_rounds': 115, 'rrr3_lastop4_hits': 4, 'rrr3_lastop8_rounds': 115, 'rrr3_lastop8_hits': 9, 'rrr3_rule28_rounds': 110, 'rrr3_rule28_hits': 7, 'rrr3_rule27_rounds': 118, 'rrr3_rule27_hits': 1, 'rrr3_rule26_rounds': 32, 'rrr3_rule26_hits': 1, 'rrr3_rule25_rounds': 25, 'rrr3_rule25_hits': 0, 'rrr3_rule24_hits': 1, 'rrr3_onerow_rounds': 166, 'rrr3_onerow_hits': 1, 'rrr3_onerow5_rounds': 166, 'rrr3_prime4fam_rounds': 161, 'rrr3_prime4fam_hits': 28, 'rrr3_prime4rev_rounds': 153, 'rrr3_crossgrid_rounds': 123, 'rrr3_crossgrid_hits': 11, 'rrr3_lad_prime4_rounds': 148, 'rrr3_lad_prime4_hits': 6, 'rrr3_lad_prime8_rounds': 148, 'rrr3_lad_prime8_hits': 12, 'rrr3_lad_prime10_rounds': 148, 'rrr3_lad_prime10_hits': 13, 'rrr3_lad_prime4family_rounds': 148, 'rrr3_lad_prime4family_hits': 28, 'rrr3_lad_reversed_rounds': 148, 'rrr3_lad_reversed_hits': 33, 'rrr3_lad_prime10family_rounds': 148, 'rrr3_lad_prime10family_hits': 40, 'rrr3_prime4rev_hits': 7, 'rrr3_onerow5_hits': 4, 'rrr3_finder_rounds': 203, 'rrr3_finder_hits': 37, 'rrr3_prime4_rounds': 205, 'rrr3_prime4_hits': 9, 'rrr3_prime10_rounds': 205, 'rrr3_prime10_hits': 21, 'rrr3_prime8_rounds': 175, 'rrr3_starcol_rounds': 31, 'rrr3_starcol_hits': 2, 'rrr3_f4yx_rounds': 23, 'rrr3_f4yx_hits': 2, 'rrr3_twostar_rounds': 25, 'rrr3_twostar_hits': 0, 'rrr3_tilde_rounds': 25, 'rrr3_tilde_hits': 4, 'rrr3_oflip_rounds': 28, 'rrr3_oflip_hits': 0, 'rrr3_eprow_rounds': 4, 'rrr3_eprow_hits': 0, 'rrr3_outer_rounds': 31, 'rrr3_outer_hits': 0, 'rrr3_sflip_rounds': 16, 'rrr3_sflip_hits': 4, 'rrr3_oldcols_rounds': 20, 'rrr3_oldcols_hits': 1, 'rrr3_afterold_rounds': 4, 'rrr3_afterold_hits': 0, 'rrr3_prime8_hits': 17,
+    'rrr3_rule7_rounds': 119, 'rrr3_rule7_hits': 3, 'rrr3_rule8_rounds': 119, 'rrr3_rule8_hits': 4, 'rrr3_rule9_rounds': 60, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 43, 'rrr3_rule10_hits': 2, 'rrr3_rule11_rounds': 6, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 66, 'rrr3_rule12_hits': 2, 'rrr3_rule13_rounds': 18, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 14, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 115, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 16, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 41, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 181, 'rrr3_rule18_hits': 6, 'rrr3_rule19_rounds': 38, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 42, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 36, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 158, 'rrr3_rule22_hits': 5, 'rrr3_rule23_rounds': 40, 'rrr3_rule23_hits': 0, 'rrr3_rule24_rounds': 13, 'rrr3_lastop4_rounds': 115, 'rrr3_lastop4_hits': 4, 'rrr3_lastop8_rounds': 115, 'rrr3_lastop8_hits': 9, 'rrr3_rule28_rounds': 110, 'rrr3_rule28_hits': 7, 'rrr3_rule27_rounds': 118, 'rrr3_rule27_hits': 1, 'rrr3_rule26_rounds': 32, 'rrr3_rule26_hits': 1, 'rrr3_rule25_rounds': 25, 'rrr3_rule25_hits': 0, 'rrr3_rule24_hits': 1, 'rrr3_onerow_rounds': 166, 'rrr3_onerow_hits': 1, 'rrr3_onerow5_rounds': 166, 'rrr3_prime4fam_rounds': 161, 'rrr3_prime4fam_hits': 28, 'rrr3_prime4rev_rounds': 153, 'rrr3_crossgrid_rounds': 123, 'rrr3_crossgrid_hits': 11, 'rrr3_lad_prime4_rounds': 148, 'rrr3_lad_prime4_hits': 6, 'rrr3_lad_prime8_rounds': 148, 'rrr3_lad_prime8_hits': 12, 'rrr3_lad_prime10_rounds': 148, 'rrr3_lad_prime10_hits': 13, 'rrr3_lad_prime4family_rounds': 148, 'rrr3_lad_prime4family_hits': 28, 'rrr3_lad_reversed_rounds': 148, 'rrr3_lad_reversed_hits': 33, 'rrr3_lad_prime10family_rounds': 148, 'rrr3_lad_prime10family_hits': 40, 'rrr3_prime4rev_hits': 7, 'rrr3_onerow5_hits': 4, 'rrr3_finder_rounds': 203, 'rrr3_finder_hits': 37, 'rrr3_prime4_rounds': 205, 'rrr3_prime4_hits': 9, 'rrr3_prime10_rounds': 205, 'rrr3_prime10_hits': 21, 'rrr3_prime8_rounds': 175, 'rrr3_starcol_rounds': 31, 'rrr3_starcol_hits': 2, 'rrr3_f4yx_rounds': 23, 'rrr3_f4yx_hits': 2, 'rrr3_twostar_rounds': 25, 'rrr3_twostar_hits': 0, 'rrr3_tilde_rounds': 25, 'rrr3_tilde_hits': 4, 'rrr3_oflip_rounds': 28, 'rrr3_oflip_hits': 0, 'rrr3_eprow_rounds': 4, 'rrr3_eprow_hits': 0, 'rrr3_outer_rounds': 31, 'rrr3_outer_hits': 0, 'rrr3_sflip_rounds': 16, 'rrr3_sflip_hits': 4, 'rrr3_oldcols_rounds': 20, 'rrr3_oldcols_hits': 1, 'rrr3_afterold_rounds': 4, 'rrr3_afterold_hits': 0, 'rrr3_booster_rounds': 0, 'rrr3_booster_hits': 0, 'rrr3_prime8_hits': 17,
 }
 
 

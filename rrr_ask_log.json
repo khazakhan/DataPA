@@ -2851,5 +2851,17 @@
    43
   ],
   "result": 43
+ },
+ {
+  "time": "2026-11-05",
+  "round": "S64",
+  "after": 43,
+  "ep": 70,
+  "kind": "result_only",
+  "entry": "result 95 = +2/cut on ROOT 70 (EP 43); exact Op3 *xy cell (* 3/38), STRONG 20, 3RRR yx, PRIME 4 reversed, rule 5, 80-net (3/4); >40; FINAL 4/booster/combined/All+bb miss. Fixed net80 live check to use the displayed list.",
+  "numbers": [
+   95
+  ],
+  "result": 95
  }
 ]

@@ -7475,6 +7475,15 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             ocjp_final4 = _rrr_final4(o_uniq, f4_lists,
                                       [strong, [v for v, _ in fam_seats], [v for _, _, l_ in nc_spec for v, _ in l_]],
                                       f4_place)
+            if os.environ.get('RRR3_F4DUMP'):
+                # audit dump (2026-11-05): the FINAL 4 inputs, for tools/final4_audit.py
+                import json
+                with open(os.environ['RRR3_F4DUMP'], 'w') as fh:
+                    json.dump({'ep': ep, 'cands': list(o_uniq),
+                               'lists': {k: list(v) for k, v in f4_lists.items()},
+                               'tie': [list(strong), [v for v, _ in fam_seats], [v for _, _, l_ in nc_spec for v, _ in l_]],
+                               'place': {str(k): v for k, v in f4_place.items()},
+                               'final4': [v for v, _ in ocjp_final4]}, fh)
             f4_body = [f"★  OCJP FINAL 4  —  after {grid_ep:02d}, EP={ep:02d}  ★", ""]
             for k_, (v_, nm_) in enumerate(ocjp_final4):
                 f4_body.append(f"{k_ + 1}. {v_:02d} ({OP_ABBREV[find_op(ep // 10, v_ // 10)]}/{OP_ABBREV[find_op(ep % 10, v_ % 10)]})"

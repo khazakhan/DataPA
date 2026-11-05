@@ -1505,7 +1505,10 @@ def show_final_box():
     _RRR3_PREV['sum_final4'] += [
         f"    count 2+: {' '.join(f'{n:02d}' for n, c in _comb if c >= 2)}   live all {RRR_LIVE.get('rrr3_comb_hits', 0)} of {RRR_LIVE.get('rrr3_comb_rounds', 0)},"
         f" count 2+ {RRR_LIVE.get('rrr3_comb2_hits', 0)} of {RRR_LIVE.get('rrr3_comb2_rounds', 0)}",
-        "    history 1293 rounds: all (~32) 451 vs chance 421 (x1.07); count 2+ (~15) 221 vs 196 (x1.13); count 3+ (~4) 63 vs 55 (x1.15). Display only."]
+        "    history 1293 rounds: all (~32) 451 vs chance 421 (x1.07); count 2+ (~15) 221 vs 196 (x1.13); count 3+ (~4) 63 vs 55 (x1.15). Display only.",
+        # user 2026-11-05: plain ascending lists below ALL COMBINED, no ops
+        f"    ascending, all ({len(_comb)}): {' '.join(f'{n:02d}' for n in sorted(n for n, c in _comb))}",
+        f"    ascending, count 2+ ({sum(c >= 2 for n, c in _comb)}): {' '.join(f'{n:02d}' for n in sorted(n for n, c in _comb if c >= 2))}"]
     _RRR3_PREV['sum_head'] = (fb['after'], ep)
     # MegaStar / PowerStar (user 2026-11-04): FINAL 4 #1 and #2, shown beside table 4
     _RRR3_PREV['two_star'] = [(r_[1], r_[2]) for r_ in rows[1:3]]

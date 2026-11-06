@@ -2959,5 +2959,17 @@
    70
   ],
   "result": 70
+ },
+ {
+  "time": "2026-11-06",
+  "round": "S73",
+  "after": 70,
+  "ep": 69,
+  "kind": "result_only",
+  "entry": "result 75 = +1/c+1 on ROOT 69 (EP 70); FINAL 4 yx column hit (#2 20 read yx), ALL COMBINED (3/16), RECOMMENDED, CharRow, top 10 #7, PRIME 10, All+bb (7/13), 80-net (9/13); FINAL 4 itself, ONE-MEN-ARMY (0/6) miss",
+  "numbers": [
+   75
+  ],
+  "result": 75
  }
 ]

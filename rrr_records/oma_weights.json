@@ -1,0 +1,17 @@
+{
+ "weights": {
+  "rule1": 0.252,
+  "rule14": 0.734,
+  "rule17": 0.246,
+  "rule19": 0.716,
+  "rule2": 0.64,
+  "rule20": 0.793,
+  "rule21": 0.588,
+  "rule27": 0.241,
+  "rule3": 0.209,
+  "rule6": 0.602,
+  "rule8": 0.456,
+  "strong": 0.299
+ },
+ "note": "log lift on 1293 history rounds, lists with log-lift >= 0.2 (held-out test 344 of 1293 vs chance 259, STRONG 20 349)"
+}

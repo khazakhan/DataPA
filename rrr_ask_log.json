@@ -3089,5 +3089,17 @@
   "entry": "new series T uploaded (t1.txt = second block of the paste); S parked at S83; T2 declared EP 67 (32->67 c-2/cut), ROOT 11 (67->11 cut/c-1), 1 row, FINAL 4 17 30 65 93",
   "numbers": [],
   "result": null
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T2",
+  "after": 67,
+  "ep": 11,
+  "kind": "result_only",
+  "entry": "result 60 = cut/-1 on ROOT 11 (EP 67); ONE-MEN-ARMY HIT #18 (2/16), 3RRR STRONG 20, top40, rule5, PRIME 4 FAMILY, 80-net 16/23; no row within 2 changes; FINAL 4, booster, combined, All+bb miss",
+  "numbers": [
+   60
+  ],
+  "result": 60
  }
 ]

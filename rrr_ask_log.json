@@ -2971,5 +2971,17 @@
    75
   ],
   "result": 75
+ },
+ {
+  "time": "2026-11-06",
+  "round": "S74",
+  "after": 75,
+  "ep": 18,
+  "kind": "result_only",
+  "entry": "result 75 = c+1/c+2 on ROOT 18 (EP 75, repeat); ONE-MEN-ARMY first hit (1/7), STRONG, WIDE, BOOSTER (2/17), combined, All+bb, 80-net; FINAL 4 miss",
+  "numbers": [
+   75
+  ],
+  "result": 75
  }
 ]

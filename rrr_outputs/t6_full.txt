@@ -2863,6 +2863,13 @@
   [1;32m┃[0m [1m  LAST op / previous op check: LAST row (new ops or its old = previous ops) and the row before it; fewest changes.                                                                         [0m [1;32m┃[0m
   [1;32m┃[0m [1m  Tested on 412 rounds (F N M K O P Q R): ranking FINAL 4 by it held 28 vs 29 now, so it is a check, not the ranking.                                                                      [0m [1;32m┃[0m
   [1;32m┃[0m [1m  yx column: 12 87 21 13   live 4 of 52  (replay 10 of 152 vs chance 6.1; display only, not in FINAL 4)                                                                                    [0m [1;32m┃[0m
+  [1;32m┃[0m [1m  BEST FORMS (8, 4 strongest xy/yx forms of all 1,378 rounds, old ops on ROOT 44 (76→44 c+2/-2)):                                                                                          [0m [1;32m┃[0m
+  [1;32m┃[0m [1m      old xy, y cut switched                       03 (c+1/-1) Op7  76 (c-2/+2) Op12                                                                                                       [0m [1;32m┃[0m
+  [1;32m┃[0m [1m      old xy, x sign flipped, y cut switched       83 (c-1/-1) Op7  16 (c+2/+2) Op12                                                                                                       [0m [1;32m┃[0m
+  [1;32m┃[0m [1m      old yx, x and y cut switched                 35 (-1/+1) Op7  62 (+2/-2) Op12                                                                                                         [0m [1;32m┃[0m
+  [1;32m┃[0m [1m      old xy, x cut switched, y cut sw + flipped   55 (+1/+1) Op7  22 (-2/-2) Op12                                                                                                         [0m [1;32m┃[0m
+  [1;32m┃[0m [1m      ascending: 03 16 22 35 55 62 76 83                                                                                                                                                   [0m [1;32m┃[0m
+  [1;32m┃[0m [1m    live 0 of 0; all 1,378 rounds x1.24 (picked on them); picked on history, live 18 vs 16.3 chance -> display only, not in FINAL 4                                                        [0m [1;32m┃[0m
   [1;32m┃[0m [1m  BOOSTER (30, FINAL 4 left out, ops on ROOT 44 (76→44 c+2/-2)):                                                                                                                           [0m [1;32m┃[0m
   [1;32m┃[0m [1m      06 (c+1/+2)  07 (c+1/c-2)  15 (c+2/+1)  17 (c+2/c-2)  18 (c+2/c-1)  23 (-2/-1)  25 (-2/+1)  26 (-2/+2)  28 (-2/c-1)  29 (-2/cut)                                                     [0m [1;32m┃[0m
   [1;32m┃[0m [1m      32 (-1/-2)  34 (-1/nc)  36 (-1/+2)  37 (-1/c-2)  43 (nc/-1)  47 (nc/c-2)  51 (+1/c+2)  52 (+1/-2)  56 (+1/+2)  60 (+2/c+1)                                                           [0m [1;32m┃[0m
@@ -3150,6 +3157,13 @@
   [1;36m┃[0m   LAST op / previous op check: LAST row (new ops or its old = previous ops) and the row before it; fewest changes.                                                                          [1;36m┃[0m
   [1;36m┃[0m   Tested on 412 rounds (F N M K O P Q R): ranking FINAL 4 by it held 28 vs 29 now, so it is a check, not the ranking.                                                                       [1;36m┃[0m
   [1;36m┃[0m   yx column: 12 87 21 13   live 4 of 52  (replay 10 of 152 vs chance 6.1; display only, not in FINAL 4)                                                                                     [1;36m┃[0m
+  [1;36m┃[0m   BEST FORMS (8, 4 strongest xy/yx forms of all 1,378 rounds, old ops on ROOT 44 (76→44 c+2/-2)):                                                                                           [1;36m┃[0m
+  [1;36m┃[0m       old xy, y cut switched                       03 (c+1/-1) Op7  76 (c-2/+2) Op12                                                                                                        [1;36m┃[0m
+  [1;36m┃[0m       old xy, x sign flipped, y cut switched       83 (c-1/-1) Op7  16 (c+2/+2) Op12                                                                                                        [1;36m┃[0m
+  [1;36m┃[0m       old yx, x and y cut switched                 35 (-1/+1) Op7  62 (+2/-2) Op12                                                                                                          [1;36m┃[0m
+  [1;36m┃[0m       old xy, x cut switched, y cut sw + flipped   55 (+1/+1) Op7  22 (-2/-2) Op12                                                                                                          [1;36m┃[0m
+  [1;36m┃[0m       ascending: 03 16 22 35 55 62 76 83                                                                                                                                                    [1;36m┃[0m
+  [1;36m┃[0m     live 0 of 0; all 1,378 rounds x1.24 (picked on them); picked on history, live 18 vs 16.3 chance -> display only, not in FINAL 4                                                         [1;36m┃[0m
   [1;36m┃[0m   BOOSTER (30, FINAL 4 left out, ops on ROOT 44 (76→44 c+2/-2)):                                                                                                                            [1;36m┃[0m
   [1;36m┃[0m       06 (c+1/+2)  07 (c+1/c-2)  15 (c+2/+1)  17 (c+2/c-2)  18 (c+2/c-1)  23 (-2/-1)  25 (-2/+1)  26 (-2/+2)  28 (-2/c-1)  29 (-2/cut)                                                      [1;36m┃[0m
   [1;36m┃[0m       32 (-1/-2)  34 (-1/nc)  36 (-1/+2)  37 (-1/c-2)  43 (nc/-1)  47 (nc/c-2)  51 (+1/c+2)  52 (+1/-2)  56 (+1/+2)  60 (+2/c+1)                                                            [1;36m┃[0m
@@ -3339,6 +3353,13 @@
     LAST op / previous op check: LAST row (new ops or its old = previous ops) and the row before it; fewest changes.
     Tested on 412 rounds (F N M K O P Q R): ranking FINAL 4 by it held 28 vs 29 now, so it is a check, not the ranking.
     yx column: 12 87 21 13   live 4 of 52  (replay 10 of 152 vs chance 6.1; display only, not in FINAL 4)
+    BEST FORMS (8, 4 strongest xy/yx forms of all 1,378 rounds, old ops on ROOT 44 (76→44 c+2/-2)):
+        old xy, y cut switched                       03 (c+1/-1) Op7  76 (c-2/+2) Op12
+        old xy, x sign flipped, y cut switched       83 (c-1/-1) Op7  16 (c+2/+2) Op12
+        old yx, x and y cut switched                 35 (-1/+1) Op7  62 (+2/-2) Op12
+        old xy, x cut switched, y cut sw + flipped   55 (+1/+1) Op7  22 (-2/-2) Op12
+        ascending: 03 16 22 35 55 62 76 83
+      live 0 of 0; all 1,378 rounds x1.24 (picked on them); picked on history, live 18 vs 16.3 chance -> display only, not in FINAL 4
     BOOSTER (30, FINAL 4 left out, ops on ROOT 44 (76→44 c+2/-2)):
         06 (c+1/+2)  07 (c+1/c-2)  15 (c+2/+1)  17 (c+2/c-2)  18 (c+2/c-1)  23 (-2/-1)  25 (-2/+1)  26 (-2/+2)  28 (-2/c-1)  29 (-2/cut)
         32 (-1/-2)  34 (-1/nc)  36 (-1/+2)  37 (-1/c-2)  43 (nc/-1)  47 (nc/c-2)  51 (+1/c+2)  52 (+1/-2)  56 (+1/+2)  60 (+2/c+1)

@@ -96,6 +96,11 @@ if _cb.get(res, 0) >= 2: hits.append('rrr3_comb2_hits')
 # ALL + booster of booster (user 2026-11-05, live from S61)
 up['rrr3_allbb_rounds'] = 1
 if res in D._f4_all_bb(ep, rec['ranked'][:4]): hits.append('rrr3_allbb_hits')
+# BEST FORMS (user 2026-11-07, live from T6): 4 best xy/yx forms, old ops on ROOT
+_AB = {v: k for k, v in D.OP_ABBREV.items()}
+up['rrr3_bestform_rounds'] = 1
+if res in [n for n, *_ in D._best_forms(ep, [(r_['pos'], _AB[r_['old'][0]], _AB[r_['old'][1]]) for r_ in rec['rows']])]:
+    hits.append('rrr3_bestform_hits')
 # 80-NUMBER NET (user 2026-11-05, live from S61)
 up['rrr3_net80_rounds'] = 1
 if res in (rec.get('net80') or D._f4_net80(ep, rec['ranked'][:4], rec['ranked'])): hits.append('rrr3_net80_hits')

@@ -998,6 +998,30 @@ def _f4_all_bb(ep, f4):
     return sorted(out)
 
 
+# BEST FORMS (user 2026-11-07 "implement using best and best one logic"): the 4 xy/yx forms that
+# held the result most often over all 1,378 recorded rounds (1293 history + 85 live S2-T5), applied on
+# the ROOT with each RRR row's OLD ops.  tools/opposite_study.py: each about x1.24 on the rounds it was
+# picked on, but picked on history and scored on live the top 4 held 18 vs 16.3 by chance -> display only.
+_BEST_FORMS = (
+    ('old xy, y cut switched',                     lambda ox, oy: (ox, KK_CUT_TOGGLE[oy])),
+    ('old xy, x sign flipped, y cut switched',     lambda ox, oy: (SIGN_FLIP[ox], KK_CUT_TOGGLE[oy])),
+    ('old yx, x and y cut switched',               lambda ox, oy: (KK_CUT_TOGGLE[oy], KK_CUT_TOGGLE[ox])),
+    ('old xy, x cut switched, y cut sw + flipped', lambda ox, oy: (KK_CUT_TOGGLE[ox], SIGN_FLIP[KK_CUT_TOGGLE[oy]])),
+)
+
+
+def _best_forms(ep, rows):
+    """rows = [(pos, ox, oy)] with full op names; returns [(number, x_op, y_op, form, pos)] first-seen order."""
+    out, seen = [], set()
+    for name, f in _BEST_FORMS:
+        for pos, ox, oy in rows:
+            x, y = f(ox, oy)
+            n = apply_op(ep // 10, x) * 10 + apply_op(ep % 10, y)
+            if n not in seen:
+                seen.add(n); out.append((n, x, y, name, pos))
+    return out
+
+
 def _f4_net80(ep, f4, rk, size=80):
     """80-NUMBER NET (user 2026-11-05: 'target 80%'): exactly `size` numbers in
     priority order FINAL 4 > count 2+ > rest of All > rest of All + booster of
@@ -1119,6 +1143,23 @@ def ep_row_finder(ep, rows):
     out.sort(key=lambda t: (t[0], [f for f, _ in forms].index(next(n for n, l in forms if t[4].startswith(l)))
                             if t[0] == 0 else 9, -t[1]))
     return [(pos, a, b, lab, v) for _, pos, a, b, lab, v in out]
+
+
+def _best_forms_lines(ep):
+    rows_ = [(r_[0], r_[3], r_[4]) for r_ in (_RRR_ASK.get('rows') or [])]
+    bf = _best_forms(ep, rows_)
+    _RRR3_PREV['bestform'] = [n for n, *_ in bf]
+    if not bf:
+        return []
+    out = [f"  BEST FORMS ({len(bf)}, 4 strongest xy/yx forms of all 1,378 rounds, old ops on ROOT {_root_op(ep)}):"]
+    for name, _f in _BEST_FORMS:
+        items = [f"{n:02d} ({OP_ABBREV[x]}/{OP_ABBREV[y]}) Op{pos}" for n, x, y, nm, pos in bf if nm == name]
+        if items:
+            out.append(f"      {name:44s} " + '  '.join(items))
+    out.append(f"      ascending: {' '.join(f'{n:02d}' for n in sorted(n for n, *_ in bf))}")
+    out.append(f"    live {RRR_LIVE.get('rrr3_bestform_hits', 0)} of {RRR_LIVE.get('rrr3_bestform_rounds', 0)};"
+               " all 1,378 rounds x1.24 (picked on them); picked on history, live 18 vs 16.3 chance -> display only, not in FINAL 4")
+    return out
 
 
 def show_final_box():
@@ -1519,7 +1560,7 @@ def show_final_box():
         "  LAST op / previous op check: LAST row (new ops or its old = previous ops) and the row before it; fewest changes.",
         "  Tested on 412 rounds (F N M K O P Q R): ranking FINAL 4 by it held 28 vs 29 now, so it is a check, not the ranking.",
         f"  yx column: {' '.join(r_[3][:2] for r_ in rows[1:])}   live {RRR_LIVE.get('rrr3_f4yx_hits', 0)} of {RRR_LIVE.get('rrr3_f4yx_rounds', 0)}"
-        f"  (replay 10 of 152 vs chance 6.1; display only, not in FINAL 4)",
+        f"  (replay 10 of 152 vs chance 6.1; display only, not in FINAL 4)"] + _best_forms_lines(ep) + [
         f"  BOOSTER ({len(_bset)}, FINAL 4 left out, ops on ROOT {_root_op(ep)}):"] + [
         "      " + l_ for l_ in _nops_wrap(ep, sorted(_bset), ind='').split('\n')] + [
         f"    live {RRR_LIVE.get('rrr3_booster_hits', 0)} of {RRR_LIVE.get('rrr3_booster_rounds', 0)}; history 1293 rounds: held 331 vs chance 342 (x0.97);"

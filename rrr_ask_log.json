@@ -2947,5 +2947,17 @@
    52
   ],
   "result": 52
+ },
+ {
+  "time": "2026-11-06",
+  "round": "S72",
+  "after": 52,
+  "ep": 19,
+  "kind": "result_only",
+  "entry": "result 70 = c+1/+1 on ROOT 19 (EP 52); held by no list (outside 80-net); nearest Op23 LAST new xy/yx x cut sw (1 change); FINAL 4, ONE-MEN-ARMY (0/5) miss",
+  "numbers": [
+   70
+  ],
+  "result": 70
  }
 ]

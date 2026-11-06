@@ -3055,5 +3055,17 @@
    11
   ],
   "result": 11
+ },
+ {
+  "time": "2026-11-06",
+  "round": "S81",
+  "after": 11,
+  "ep": 84,
+  "kind": "result_only",
+  "entry": "result 45 = c+1/+1 on ROOT 84 (EP 11); only CharRow display; 80-net left-out (15/21); nearest row 2 changes; FINAL 4, ONE-MEN-ARMY (1/14), booster, combined, All+bb miss",
+  "numbers": [
+   45
+  ],
+  "result": 45
  }
 ]

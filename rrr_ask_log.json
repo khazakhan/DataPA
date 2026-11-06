@@ -3019,5 +3019,17 @@
    53
   ],
   "result": 53
+ },
+ {
+  "time": "2026-11-06",
+  "round": "S78",
+  "after": 53,
+  "ep": 43,
+  "kind": "result_only",
+  "entry": "result 61 = +2/-2 on ROOT 43 (EP 53); no list (80-net left-out), no row within 2 changes; FINAL 4, ONE-MEN-ARMY (1/11) miss. 96 sent first by mistake, undone",
+  "numbers": [
+   61
+  ],
+  "result": 61
  }
 ]

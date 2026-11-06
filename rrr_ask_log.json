@@ -3185,5 +3185,17 @@
    11
   ],
   "result": 11
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T10",
+  "after": 11,
+  "ep": 7,
+  "kind": "result_only",
+  "entry": "result 69 = c+1/+2 on ROOT 07 (EP 11); OCJP FINAL 4 HIT #2 = PowerStar (46/796, two-star 2/59); RRR table Op2 xy exact, STRONG, RECOMMENDED, PRIME 4/8/10, combined + count 2+, All+bb, 80-net; OMA (3/24), BEST FORMS (0/5) miss",
+  "numbers": [
+   69
+  ],
+  "result": 69
  }
 ]

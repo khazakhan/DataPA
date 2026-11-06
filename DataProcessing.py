@@ -3340,6 +3340,7 @@ def load_data(source):
     parser, since that format needs multi-line-per-record extraction, not
     simple whitespace-split-and-int()."""
     lines = [line for line in source]
+    _RRR3_PREV['raw_lines'] = lines          # for ONE-MEN-ARMY (re-runs the page on the same data)
     text = "\n".join(lines)
     if is_weekly_archive_format(text):
         return parse_weekly_archive(text)
@@ -4421,6 +4422,73 @@ def _root_op(r):
                 return (f"{r:02d} ({e:02d}→{r:02d} "
                         f"{OP_ABBREV[find_op(e // 10, r // 10)]}/{OP_ABBREV[find_op(e % 10, r % 10)]})")
     return f"{r:02d}"
+
+
+def _oma_compute(src, ep):
+    """ONE-MEN-ARMY core (user 2026-11-06): lists that fired above chance on the
+    1293 history rounds vote with log-lift weights (rrr_records/oma_weights.json);
+    top 20 by score, ties by the page ranking.  Returns [(n, score, [lists])]."""
+    wf = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'rrr_records', 'oma_weights.json')
+    W = json.load(open(wf))['weights']
+    pos = {v: i for i, v in enumerate(src.get('rk', []))}
+    sc, who = defaultdict(float), defaultdict(list)
+    for k, w in W.items():
+        for v in set(src.get(k, [])):
+            sc[v] += w; who[v].append(k)
+    top = sorted(range(100), key=lambda v: (-sc[v], pos.get(v, 999), v))[:20]
+    return [(v, sc[v], sorted(who[v], key=lambda k: -W[k])) for v in top]
+
+
+def show_one_men_army():
+    """ONE-MEN-ARMY box on the local page (user 2026-11-06: 'when run from local
+    machine also show this').  Collects every list the page shows by running the
+    page once more on the same data (tools/replay_collect.py, ~2 s); skipped inside
+    that inner run.  Display only, never part of FINAL 4."""
+    if os.environ.get('RRR3_DUMP2') or os.environ.get('OMA_OFF'):
+        return
+    lines = _RRR3_PREV.get('raw_lines'); ep = _RRR_ASK.get('ep')
+    if not lines or ep is None:
+        return
+    import tempfile
+    here = os.path.dirname(os.path.abspath(__file__))
+    try:
+        sys.path.insert(0, os.path.join(here, 'tools'))
+        from replay_collect import collect
+        fd, tmp = tempfile.mkstemp(suffix='.txt'); os.close(fd)
+        with open(tmp, 'w') as fh:
+            fh.write(''.join(l if l.endswith('\n') else l + '\n' for l in lines))
+        cwd = os.getcwd()
+        try:
+            src = collect(tmp)
+        finally:
+            os.chdir(cwd); os.remove(tmp)
+        oma = _oma_compute(src, ep)
+    except Exception as e:
+        print(f"\n  ONE-MEN-ARMY: not available ({e})"); return
+    ex, ey = ep // 10, ep % 10
+    op = lambda v: f"{OP_ABBREV[find_op(ex, v // 10)]}/{OP_ABBREV[find_op(ey, v % 10)]}"
+    logf = os.path.join(here, 'rrr_records', 'oma_live.jsonl')
+    done = [json.loads(l) for l in open(logf)] if os.path.exists(logf) else []
+    done = [r for r in done if 'result' in r]
+    hits = sum(r['result'] in r['oma'] for r in done)
+    fl = _RRR3_PREV.get('flat') or []
+    head = f"ONE-MEN-ARMY  —  20 strongest from all fired tables  —  {_after_tag(fl[-1]) if fl else 'EP'}, ROOT {_root_op(ep)}"
+    body = [head, ""]
+    half = (len(oma) + 1) // 2
+    for i in range(half):
+        cells = []
+        for j in (i, i + half):
+            if j < len(oma):
+                v, sc_, who = oma[j]
+                cells.append(f"{j + 1:2d}. {v:02d} ({op(v)})  [{', '.join(who) or 'ranking'}]")
+        body.append("    ".join(c.ljust(54) for c in cells).rstrip())
+    body += ["", f"ascending: {' '.join(f'{v:02d}' for v in sorted(v for v, _, _ in oma))}",
+             f"live {hits} of {len(done)}; history held-out 344 of 1293 (26.6%) vs chance 20%; STRONG 20 alone 349. Display only, not in FINAL 4."]
+    w = max(len(b) for b in body) + 2
+    print("\n  ┏" + "━" * w + "┓")
+    for b in body:
+        print("  ┃ " + b.ljust(w - 1) + "┃")
+    print("  ┗" + "━" * w + "┛")
 
 
 _CHAT_REAL_OUT = None
@@ -8827,6 +8895,7 @@ def run(data_source, user_x_op=None, user_y_op=None):
         print()
         print("\n".join(_rrr_end))
     show_three_box()
+    show_one_men_army()
     show_final_box()
     show_round_summary()
     show_chat_view()

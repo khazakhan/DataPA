@@ -24,7 +24,7 @@ ds = sys.argv[1]
 W = json.load(open('rrr_records/oma_weights.json'))['weights']
 src = collect(ds)
 with contextlib.redirect_stdout(io.StringIO()):
-    D.run(open(ds), None, None)
+    os.environ['OMA_OFF'] = '1'; D.run(open(ds), None, None)
 ep = D._RRR_ASK['ep']; ex, ey = ep // 10, ep % 10
 pos = {v: i for i, v in enumerate(src['rk'])}
 sc = collections.Counter(); who = collections.defaultdict(list)
@@ -41,7 +41,8 @@ if '--score' in sys.argv:
     rnd = sys.argv[sys.argv.index('--score') + 1]
     recs = [r for r in recs if r['round'] != rnd] + [dict(round=rnd, dataset=ds, root=ep, oma=oma)]
     open(LOG, 'w').write(''.join(json.dumps(r) + '\n' for r in recs))
-print(f"ONE-MEN-ARMY (20 strongest from all fired tables, ops on ROOT {D._root_op(ep)}):")
+fl = D._RRR3_PREV.get('flat') or []
+print(f"ONE-MEN-ARMY (20 strongest from all fired tables, {D._after_tag(fl[-1]) if fl else 'EP'}, ops on ROOT {D._root_op(ep)}):")
 for i, v in enumerate(oma):
     print(f"  {i+1:2d}. {v:02d} ({op(v)})  score {sc[v]:.2f}  [{', '.join(sorted(who[v], key=lambda k: -W[k]))}]")
 print(f"  ascending: {' '.join(f'{v:02d}' for v in sorted(oma))}")

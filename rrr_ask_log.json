@@ -3173,5 +3173,17 @@
    7
   ],
   "result": 7
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T9",
+  "after": 7,
+  "ep": 95,
+  "kind": "result_only",
+  "entry": "result 11 = +2/c+1 on ROOT 95 (EP 07); 69 sent first by mistake, that run undone (git checkout of the T8 commit state); only 80-net 21/30; no row within 2 changes; FINAL 4, OMA (3/23), BEST FORMS (0/4) miss",
+  "numbers": [
+   11
+  ],
+  "result": 11
  }
 ]

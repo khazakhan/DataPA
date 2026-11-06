@@ -3149,5 +3149,17 @@
    19
   ],
   "result": 19
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T7",
+  "after": 19,
+  "ep": 81,
+  "kind": "result_only",
+  "entry": "result 11 = c-2/nc on ROOT 81 (EP 19); near miss = yx of FINAL 4 #1 84; yx column 5/54, ALL COMBINED 6/31, rule3, hot, top40, All+bb 14/28, 80-net 20/28; FINAL 4, OMA (3/21), BEST FORMS (0/2) miss. Deep look: sequence_signal_study.py, 10 series 23,807 results, no usable signal",
+  "numbers": [
+   11
+  ],
+  "result": 11
  }
 ]

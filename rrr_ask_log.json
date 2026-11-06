@@ -3067,5 +3067,17 @@
    45
   ],
   "result": 45
+ },
+ {
+  "time": "2026-11-06",
+  "round": "S82",
+  "after": 45,
+  "ep": 43,
+  "kind": "result_only",
+  "entry": "result 39 = -1/c+1 on ROOT 43 (EP 45); 3RRR rec yx, ~ numbers (Op12 ~xy, 6/50), old/newold (Op12 newold xy, 4/45); 80-net left-out (15/22); FINAL 4, ONE-MEN-ARMY (1/15) miss",
+  "numbers": [
+   39
+  ],
+  "result": 39
  }
 ]

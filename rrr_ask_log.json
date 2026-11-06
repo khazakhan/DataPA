@@ -2935,5 +2935,17 @@
    38
   ],
   "result": 38
+ },
+ {
+  "time": "2026-11-06",
+  "round": "S71",
+  "after": 38,
+  "ep": 36,
+  "kind": "result_only",
+  "entry": "result 52 = +2/c+1 on ROOT 36 (EP 38); held by no list (outside 80-net too); nearest row needs 3 changes; FINAL 4, ONE-MEN-ARMY (0/4) miss",
+  "numbers": [
+   52
+  ],
+  "result": 52
  }
 ]

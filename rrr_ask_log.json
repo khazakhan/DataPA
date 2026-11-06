@@ -2995,5 +2995,17 @@
    17
   ],
   "result": 17
+ },
+ {
+  "time": "2026-11-06",
+  "round": "S76",
+  "after": 17,
+  "ep": 1,
+  "kind": "result_only",
+  "entry": "result 17 = +1/c+1 on ROOT 01 (EP 17, repeat); only 80-net (12/16); nearest row 3 changes; FINAL 4, ONE-MEN-ARMY (1/9), booster, combined miss",
+  "numbers": [
+   17
+  ],
+  "result": 17
  }
 ]

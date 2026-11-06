@@ -76,3 +76,30 @@ for top in (1, 4, 8):
     print(f"   top {top} history forms: live held {held} of {len(live)} vs chance {sz/100:.1f}")
 rk2 = sorted(FORMS, key=lambda k: -(lh[k] / max(ls[k], 1)))
 print("   best LIVE forms, on HISTORY:", [(k[0], label(k[1], k[2]), hh[k], round(hs[k]/100, 1)) for k in rk2[:3]])
+
+# --- same test with the EP (last number) as the base, and ROOT+EP together (user 2026-11-07) ---
+def run_base(rounds, name):
+    out = collections.Counter(); sz = collections.Counter(); n = 0
+    for root, ep, res, rows in rounds:
+        n += 1
+        S = {'ROOT': set(), 'EP': set()}
+        S0 = {'ROOT': set(), 'EP': set()}; SO = {'ROOT': set(), 'EP': set()}
+        for (ox, oy, nx, ny) in rows:
+            P = pairs(full(ox), full(oy), full(nx), full(ny))
+            for (src, fx, fy) in FORMS:
+                p, q = P[src]
+                for b, base in (('ROOT', root), ('EP', ep)):
+                    v = ap(base, T(p, fx), T(q, fy)); S[b].add(v)
+                    if not fx and not fy: S0[b].add(v)
+                    if fx == fy == 'FC': SO[b].add(v)
+        for tag, d in (('as is', S0), ('fully opposite', SO), ('any form', S)):
+            for b in ('ROOT', 'EP'):
+                k = f'{tag:15s} on {b}'; out[k] += res in d[b]; sz[k] += len(d[b])
+            k = f'{tag:15s} on ROOT+EP'; u = d['ROOT'] | d['EP']; out[k] += res in u; sz[k] += len(u)
+    print(f"\n== {name}: {n} rounds, base = ROOT / EP ==")
+    for k in out:
+        print(f"   {k:30s} held {out[k]:5d} vs chance {sz[k]/100:7.1f}  x{out[k]/(sz[k]/100):4.2f}   (avg {sz[k]/n:4.1f} numbers)")
+live2 = [(r['ep'], r['after'], r['result'], [(x['old'][0], x['old'][1], x['new'][0], x['new'][1]) for x in r['rows']]) for r in L]
+run_base(live2, 'LIVE S2-T5')
+hist2 = [(h['ep'], h.get('after', h.get('last')), h['res'], [(row[3], row[4], row[5], row[6]) for row in h['rows']]) for h in H if h['rows'] and h.get('after', h.get('last')) is not None]
+if hist2: run_base(hist2, 'HISTORY')

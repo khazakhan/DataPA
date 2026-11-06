@@ -3161,5 +3161,17 @@
    11
   ],
   "result": 11
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T8",
+  "after": 11,
+  "ep": 66,
+  "kind": "result_only",
+  "entry": "result 07 = c-1/+1 on ROOT 66 (EP 11); exact old/newold (Op4 newold xy, Op5 old yx) 5/52, 3RRR yx; 80-net left-out; FINAL 4, OMA (3/22), BEST FORMS (0/3) miss. Full study final4_full_study.py on 1293 rounds: current FINAL 4 97 best of 11 makers -> kept",
+  "numbers": [
+   7
+  ],
+  "result": 7
  }
 ]

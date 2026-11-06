@@ -2887,5 +2887,17 @@
    76
   ],
   "result": 76
+ },
+ {
+  "time": "2026-11-06",
+  "round": "S67",
+  "after": 76,
+  "ep": 99,
+  "kind": "result_only",
+  "entry": "result 58 = c+1/-1 on ROOT 99 (EP 76); nearest Op7 new xy x cut switched (1 change); only 3RRR yx, PRIME 4 reversed, rule 5; >40; outside 80-net; FINAL 4 miss",
+  "numbers": [
+   58
+  ],
+  "result": 58
  }
 ]

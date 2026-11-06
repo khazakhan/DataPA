@@ -3031,5 +3031,17 @@
    61
   ],
   "result": 61
+ },
+ {
+  "time": "2026-11-06",
+  "round": "S79",
+  "after": 61,
+  "ep": 83,
+  "kind": "result_only",
+  "entry": "result 96 = +1/c-2 on ROOT 83 (EP 61); 3RRR WIDE, All+bb 10/19, 80-net 14/19; nearest row 2 changes; FINAL 4, ONE-MEN-ARMY (1/12), booster, combined miss",
+  "numbers": [
+   96
+  ],
+  "result": 96
  }
 ]

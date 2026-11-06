@@ -3197,5 +3197,17 @@
    69
   ],
   "result": 69
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T11",
+  "after": 69,
+  "ep": 96,
+  "kind": "result_only",
+  "entry": "result 03 = +1/c+2 on ROOT 96 (EP 69); rule1, rule5, PRIME 4 FAMILY 33/196, All+bb 16/32, 80-net 23/32; nearest row 2 changes; FINAL 4, OMA (3/25), BEST FORMS (0/6) miss",
+  "numbers": [
+   3
+  ],
+  "result": 3
  }
 ]

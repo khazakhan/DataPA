@@ -3079,5 +3079,15 @@
    39
   ],
   "result": 39
+ },
+ {
+  "time": "2026-11-06",
+  "round": "T1",
+  "after": 67,
+  "ep": 11,
+  "kind": "new_series",
+  "entry": "new series T uploaded (t1.txt = second block of the paste); S parked at S83; T2 declared EP 67 (32->67 c-2/cut), ROOT 11 (67->11 cut/c-1), 1 row, FINAL 4 17 30 65 93",
+  "numbers": [],
+  "result": null
  }
 ]

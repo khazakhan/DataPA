@@ -372,7 +372,7 @@ def show_result_analysis(root, result, ops_list, scores=None, top4=None):
     table2_ops = [(SIGN_FLIP[x], SIGN_FLIP[y]) for x, y in ops_list]
 
     sep('═')
-    print(f"\n  RESULT = {result:02d}   ←   ROOT {root:02d}  (x={rx}, y={ry})\n")
+    print(f"\n  RESULT = {result:02d}   ←   ROOT {_root_op(root)}  (x={rx}, y={ry})\n")
     found1 = show_matching("TABLE 1", "Op#",  ops_list)
     found2 = show_matching("TABLE 2", "NE#",  table2_ops)
     if not found1 and not found2:
@@ -721,7 +721,7 @@ def _root_ops_table(root, ops_list, strong, rec):
     hdr = (f" {'#':>2}  {'x op':<6}{'y op':<6}{'Number':<8}{'yx':<5}{'s+xy (op)':<{SW}}{'s+yx (op)':<{SW}}"
            f"{'cut xy (op)':<{SW}}{'cut sign (op)':<{SW}}{'S#':>2} ")
     iw  = len(hdr)
-    ttl = f" ROOT OPS → ROOT={root:02d}  (S=strong ★=recommended) "
+    ttl = f" ROOT OPS → ROOT={_root_op(root)}  (S=strong ★=recommended) "
     out = ["╔" + ttl.center(iw, "═") + "╗", "║" + " " * iw + "║", "║" + hdr + "║", "╟" + "─" * iw + "╢"]
     per_op = {}
     hits   = {}                  # every value → highest S# of a row it appears in
@@ -873,7 +873,7 @@ def show_power_box():
     if not got:
         return
     ep, uniq = got
-    body = [f"★  POWER BASE — ALL {len(uniq)} NUMBERS, NO REPEATS  (ROOT={ep:02d})  ★", ""]
+    body = [f"★  POWER BASE — ALL {len(uniq)} NUMBERS, NO REPEATS  (ROOT={_root_op(ep)})  ★", ""]
     body += [''.join(f"  {c}" for c in uniq[k:k + 10]) for k in range(0, len(uniq), 10)]
     body += ["", "★ = also in the STRONG 20    * = also in the RECOMMENDED list",
              "+ = digits reversed of a table number whose series is there",
@@ -1489,7 +1489,7 @@ def show_final_box():
         r8 = f"Op{pos7}: {n8:02d} ({_op_label(not cx7, kx7)}/{_op_label(cy7, -ky7)})"
     two = lambda ns: ' '.join(f"{n:02d}" for n in ns)
     star = _RRR3_PREV.get('star_picks') or []
-    body = [f"★  OCJP FINAL 4 with operations (the prediction)  —  {_after_tag(fb['after'])}, ROOT={ep:02d}  ★", ""]
+    body = [f"★  OCJP FINAL 4 with operations (the prediction)  —  {_after_tag(fb['after'])}, ROOT={_root_op(ep)}  ★", ""]
     def table(head, rows_, wrap_col):
         # box lines with a rule between rows, the same look as the chat tables
         room = _term_w() - 12
@@ -1520,7 +1520,7 @@ def show_final_box():
         "  Tested on 412 rounds (F N M K O P Q R): ranking FINAL 4 by it held 28 vs 29 now, so it is a check, not the ranking.",
         f"  yx column: {' '.join(r_[3][:2] for r_ in rows[1:])}   live {RRR_LIVE.get('rrr3_f4yx_hits', 0)} of {RRR_LIVE.get('rrr3_f4yx_rounds', 0)}"
         f"  (replay 10 of 152 vs chance 6.1; display only, not in FINAL 4)",
-        f"  BOOSTER ({len(_bset)}, FINAL 4 left out, ops on ROOT {ep:02d}):"] + [
+        f"  BOOSTER ({len(_bset)}, FINAL 4 left out, ops on ROOT {_root_op(ep)}):"] + [
         "      " + l_ for l_ in _nops_wrap(ep, sorted(_bset), ind='').split('\n')] + [
         f"    live {RRR_LIVE.get('rrr3_booster_hits', 0)} of {RRR_LIVE.get('rrr3_booster_rounds', 0)}; history 1293 rounds: held 331 vs chance 342 (x0.97);"
         f" as FINAL 4 vote/tie-break 91/78 vs 97 now -> display only, not in FINAL 4",
@@ -1663,7 +1663,7 @@ def show_final_box():
              "  So no list can promise a hit: pick a ladder step by how many numbers you want to play."]
     finder = ep_row_finder(ep, _RRR_ASK.get('rows', []) if _RRR_ASK.get('ep') == ep else [])
     body += ["", "ROOT ROW FINDER — display only: in replay over 293 rounds it held the result at chance (79 vs 76.5)",
-             f"ROOT ROW FINDER (ROOT {ep:02d}): rows starting at the ROOT or its cut forms first, then one step away;"
+             f"ROOT ROW FINDER (ROOT {_root_op(ep)}): rows starting at the ROOT or its cut forms first, then one step away;"
                  " as/yx = new ops, xF/yF/bF = sign flipped x/y/both, xC/yC = cut switched, old/oldX/oldF = old ops as is/crossed/flipped"]
     if finder:
         body += table(["Row", "Starts at", "as", "yx", "xF", "yF", "bF", "xC", "yC", "old", "oldX", "oldF"],
@@ -1805,7 +1805,7 @@ def show_root_missing_combos(root, ops_list, strong, rec):
     SW  = 15
     hdr = (f" {'Rank':>4}  {'x op':<6}{'y op':<6}{'Number':<8}{'yx':<5}{'s+xy (op)':<{SW}}"
            f"{'s+yx (op)':<{SW}}{'cut xy (op)':<{SW}}{'cut sign (op)':<{SW}}{'★#':>2} {'S#':>3} ")
-    body = [f" NON-EXISTING OP COMBINATIONS → ROOT={root:02d}",
+    body = [f" NON-EXISTING OP COMBINATIONS → ROOT={_root_op(root)}",
             f" {len(xs)} x ops × {len(ys)} y ops used in the transitions = {len(xs) * len(ys)} combos;"
             f" {len(seen & {(x, y) for x in xs for y in ys})} exist, {len(rows)} never occur",
             " Priority: ★ recommended first, then S# (strong values of 6)",
@@ -4280,7 +4280,7 @@ def _rrr_lastop4(ep, rows, pre):
         return f"{base} {rd}, x {names[fx[1:] or '-']}, y {names[fy[1:] or '-']}"
     _RRR3_PREV['lastop'] = [n for n, _, _ in nums[:8]]
     _RRR3_PREV['lastop_full'] = [(n, op, say(lab)) for n, op, lab in nums[:8]]
-    out = ["", f"  LAST-OP 4  —  strongest 4 from the LAST row [{pre}{last[0]}] {last[1]:02d} → {last[2]:02d}, ROOT={ep:02d}"
+    out = ["", f"  LAST-OP 4  —  strongest 4 from the LAST row [{pre}{last[0]}] {last[1]:02d} → {last[2]:02d}, ROOT={_root_op(ep)}"
                 f"   (replay by series: top 4 held 19, chance 11.7; top 8 held 42, chance 23.4)",
            f"  live: top 4 {RRR_LIVE.get('rrr3_lastop4_hits', 0)} of {RRR_LIVE.get('rrr3_lastop4_rounds', 0)},"
            f" top 8 {RRR_LIVE.get('rrr3_lastop8_hits', 0)} of {RRR_LIVE.get('rrr3_lastop8_rounds', 0)}"]
@@ -4410,6 +4410,19 @@ def _after_tag(a):
             f"{OP_ABBREV[find_op(p // 10, a // 10)]}/{OP_ABBREV[find_op(p % 10, a % 10)]})")
 
 
+def _root_op(r):
+    """'80 (58→80 c-2/+2)' (user screenshot 2026-11-06): the ROOT with the
+    operation from the earlier EP it followed (EP number -> ROOT)."""
+    fl = _RRR3_PREV.get('flat') or []
+    if len(fl) >= 2:
+        e = fl[-1]
+        for i in range(len(fl) - 2, -1, -1):
+            if fl[i] == e and fl[i + 1] == r:
+                return (f"{r:02d} ({e:02d}→{r:02d} "
+                        f"{OP_ABBREV[find_op(e // 10, r // 10)]}/{OP_ABBREV[find_op(e % 10, r % 10)]})")
+    return f"{r:02d}"
+
+
 _CHAT_REAL_OUT = None
 
 
@@ -4455,7 +4468,7 @@ def show_round_summary():
     if 'sum_final4' not in P:
         return
     a, ep = P.get('sum_head', (0, 0))
-    tag = f"({_after_tag(a)}, ROOT {ep:02d})"
+    tag = f"({_after_tag(a)}, ROOT {_root_op(ep)})"
     body = []
     for title, key in ((f"CROSSED options {tag}", 'sum_crossed'), (f"LAST-OP 4 {tag}", 'sum_lastop'),
                        (f"PRIME {tag}", 'sum_prime'), (f"PLAY LADDER {tag}", 'sum_ladder'),
@@ -4483,7 +4496,7 @@ def show_chat_view():
     if 'sum_final4' not in P:
         return
     a, ep = P.get('sum_head', (0, 0))
-    tag = f"{_after_tag(a)}, ROOT {ep:02d}"
+    tag = f"{_after_tag(a)}, ROOT {_root_op(ep)}"
     ex, ey = ep // 10, ep % 10
     B, R = "\033[1;36m", "\033[0m"
     def head(t):
@@ -4553,7 +4566,7 @@ def show_chat_view():
               f"\n  * numbers: {_nops_wrap(ep, stars)}\n      live {RRR_LIVE.get('rrr3_starcol_hits', 0)} of {RRR_LIVE.get('rrr3_starcol_rounds', 0)}"
               f" (replay 144 rounds: 18 vs chance 8.1, held-out 8 vs 6.3)")
         if not any(r_[1] == ep for r_ in rows):
-            print(f"  ROOT row: no row starts at ROOT {ep:02d} this round   live {RRR_LIVE.get('rrr3_eprow_hits', 0)} of {RRR_LIVE.get('rrr3_eprow_rounds', 0)}")
+            print(f"  ROOT row: no row starts at ROOT {_root_op(ep)} this round   live {RRR_LIVE.get('rrr3_eprow_hits', 0)} of {RRR_LIVE.get('rrr3_eprow_rounds', 0)}")
         for pos_, s_a_, s_b_, ox_, oy_, nx_, ny_, mk_ in rows:
             if s_a_ == ep:      # user S27: the row that starts at the EP
                 v1 = apply_op(ex, nx_) * 10 + apply_op(ey, ox_); v2 = apply_op(ex, ox_) * 10 + apply_op(ey, nx_)
@@ -4629,7 +4642,7 @@ def _rrr_last_menu(ep, rows, pre):
         bar = "─" * (sum(w) + 3 * len(w) + 1)
         return [bar, line(h), bar] + [line(r) for r in rws] + [bar]
     out = ["", f"  LAST ROW DIGIT MENU  —  [{pre}{pos}]LAST {a:02d} → {b:02d}   old {OP_ABBREV[ox]}/{OP_ABBREV[oy]}"
-                f"   new {OP_ABBREV[nx]}/{OP_ABBREV[ny]}   ROOT={ep:02d}",
+                f"   new {OP_ABBREV[nx]}/{OP_ABBREV[ny]}   ROOT={_root_op(ep)}",
            f"  x digit (ROOT tens {ep // 10}):"]
     out += ["  " + l for l in table(hdr, cells(ep // 10), 3)]
     out.append(f"  y digit (ROOT units {ep % 10}):")
@@ -4657,7 +4670,7 @@ def _rrr_one_row(ep, after, rows, pre):
            # P12 = 92: the chosen row (Op24 61->58) old yx c+2/-1 with both
            # signs flipped -> c-2/+1 on EP 61
            ("old ops yx, both signs flipped", num((soy[0], -soy[1]), (sox[0], -sox[1])))]
-    out = ["", f"  ONE ROW PICK  —  one Pos / source only, ROOT={ep:02d}, EP {after:02d}",
+    out = ["", f"  ONE ROW PICK  —  one Pos / source only, ROOT={_root_op(ep)}, EP {after:02d}",
            f"  [{pre}{pos}]{mark}  {a:02d} → {b:02d}   old {OP_ABBREV[ox]}/{OP_ABBREV[oy]}   "
            f"new {OP_ABBREV[nx]}/{OP_ABBREV[ny]}   (why: {why})"]
     out += [f"     {lab_:<54} {n_}" for lab_, n_ in ops]
@@ -4686,7 +4699,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     head = (f"  {'Pos':<12} {'Source':<9} {'old x':<6} {'old y':<6}    "
             f"{'new x':<6} {'new y':<6}  {'xy (op)':<{KW}}{'yx (op)':<{KW}}{'*xy (op)':<{KW}}{'*yx (op)':<{KW}}{'~xy (op)':<{KW}}{'~yx (op)':<{KW}}"
             f"{'old xy':<{KW}}{'old yx':<{KW}}{'newold xy':<{KW}}{'oldnew yx':<{KW}}{'oldy·newy±':<{KW}}{'oldx·newx±':<{KW}}")
-    body = [f"RRR:  NEXT OPERATION → ROOT={ep:02d}".center(len(head)), "", head, '─' * len(head)]
+    body = [f"RRR:  NEXT OPERATION → ROOT={_root_op(ep)}".center(len(head)), "", head, '─' * len(head)]
     live = grid_ep is not None and grid_ep >= 0
     star = (lambda v: '★' if v // 10 == cut(grid_ep // 10) else ' ') if live else (lambda v: ' ')
     both_cut = []          # every RRR number with the types of its new x / new y
@@ -4731,7 +4744,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     # +2/c+2 -> c+2/c-2 = 33 on EP 60
     nc_spec = _rrr_nc_special(ep, row_ops)
     if nc_spec:
-        body += ["", f"  NC/CUT SPECIAL  —  after an nc/cut, cut/nc or nc/nc row: next row modified, ROOT={ep:02d}"]
+        body += ["", f"  NC/CUT SPECIAL  —  after an nc/cut, cut/nc or nc/nc row: next row modified, ROOT={_root_op(ep)}"]
         for trig, nxt, lst in nc_spec:
             body.append(f"  [{pos_prefix}{trig[0]}] {OP_ABBREV[trig[1]]}/{OP_ABBREV[trig[2]]}  →  "
                         f"[{pos_prefix}{nxt[0]}] xy {OP_ABBREV[nxt[1]]}/{OP_ABBREV[nxt[2]]}, yx {OP_ABBREV[nxt[2]]}/{OP_ABBREV[nxt[1]]}:")
@@ -4892,7 +4905,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         first_seen.setdefault(v, (v, lab))
     rec = list(first_seen.values())
     rec_items = [f"{v:02d}{star(v).strip()} ({lab})" for v, lab in rec]
-    rec_lines = [f"  ★ 3RRR RECOMMENDED on ROOT={ep:02d}  →  " + ('   '.join(rec_items[:5]) if rec_items else "none this round")]
+    rec_lines = [f"  ★ 3RRR RECOMMENDED on ROOT={_root_op(ep)}  →  " + ('   '.join(rec_items[:5]) if rec_items else "none this round")]
     rec_lines += ["       " + '   '.join(rec_items[k:k + 7]) for k in range(5, len(rec_items), 7)]
     same = None
     if _RRR3_PREV.get('op'):
@@ -4941,13 +4954,13 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             wide_votes[v] = wide_votes.get(v, 0) + 1
     wide = list(wide.values())
     rec_items = [f"{v:02d}{star(v).strip()} ({lab})" for v, lab in rec]
-    rec_lines = [f"  ★ 3RRR RECOMMENDED on ROOT={ep:02d}  →  " + ('   '.join(rec_items[:5]) if rec_items else "none this round")]
+    rec_lines = [f"  ★ 3RRR RECOMMENDED on ROOT={_root_op(ep)}  →  " + ('   '.join(rec_items[:5]) if rec_items else "none this round")]
     rec_lines += ["       " + '   '.join(rec_items[k:k + 7]) for k in range(5, len(rec_items), 7)]
     yx_items = [f"{v:02d}{star(v).strip()} ({lab})" for v, lab in rec_yx]
-    rec_lines += [f"    3RRR RECOMMENDED yx on ROOT={ep:02d}  →  " + ('   '.join(yx_items[:5]) if yx_items else "none this round")]
+    rec_lines += [f"    3RRR RECOMMENDED yx on ROOT={_root_op(ep)}  →  " + ('   '.join(yx_items[:5]) if yx_items else "none this round")]
     rec_lines += ["       " + '   '.join(yx_items[k:k + 7]) for k in range(5, len(yx_items), 7)]
     wide_items = [f"{v:02d}{star(v).strip()} ({lab})" for v, lab in wide]
-    rec_lines += [f"    3RRR WIDE on ROOT={ep:02d}  →  " + ('   '.join(wide_items[:6]) if wide_items else "none this round")]
+    rec_lines += [f"    3RRR WIDE on ROOT={_root_op(ep)}  →  " + ('   '.join(wide_items[:6]) if wide_items else "none this round")]
     rec_lines += ["       " + '   '.join(wide_items[k:k + 7]) for k in range(6, len(wide_items), 7)]
     # STRONG 16: at most 16 numbers.  Ranking chosen by testing 1,700 ways
     # of weighting the sources on all 363 recorded rounds, each series held
@@ -6605,7 +6618,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     s_cw = max([len(c) for c in s_cells] + [16]) + 2
     s_per = 4
     s_tw = s_per * s_cw + s_per - 1
-    s_title = f"★  3RRR STRONG 20   —   operations applied on ROOT={ep:02d}  ★"
+    s_title = f"★  3RRR STRONG 20   —   operations applied on ROOT={_root_op(ep)}  ★"
     strong_lines = [f"  {s_g}┌{'─' * s_tw}┐{s_rst}",
                     f"  {s_g}│{s_rst}{s_rib}{s_title:^{s_tw}}{s_rst}{s_g}│{s_rst}",
                     f"  {s_g}├{'┬'.join('─' * s_cw for _ in range(s_per))}┤{s_rst}"]
@@ -6677,7 +6690,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     a_per = 2
     a_cw = max([len(c) for c in a_cells] + [2 * s_cw - 1, 56]) + 2
     a_tw = a_per * a_cw + a_per - 1
-    a_after = f"EP {grid_ep:02d}, on ROOT={ep:02d}" if grid_ep is not None and grid_ep >= 0 else f"on ROOT={ep:02d}"
+    a_after = f"EP {grid_ep:02d}, on ROOT={_root_op(ep)}" if grid_ep is not None and grid_ep >= 0 else f"on ROOT={_root_op(ep)}"
     a_new = len(set(strong_adj) - set(strong))
     a_title = (f"★  STRONG 20 ADJUSTMENTS  —  {a_after}  —  y cut toggled, x sign flipped  —  "
                f"{len(strong)} + {a_new} new = {len(strong) + a_new} numbers  ★")
@@ -6708,7 +6721,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
     f_cw = max([len(c) for c in f_cells] + [16]) + 2
     f_per = 4
     f_tw = f_per * f_cw + f_per - 1
-    f_title = f"★  40RRR FINAL-RESULT-TABLE  —  all {len(f_all)} recommended numbers on ROOT={ep:02d}  ★"
+    f_title = f"★  40RRR FINAL-RESULT-TABLE  —  all {len(f_all)} recommended numbers on ROOT={_root_op(ep)}  ★"
     final_lines = [f"  {s_g}┌{'─' * f_tw}┐{s_rst}",
                    f"  {s_g}│{s_rst}{s_rib}{f_title:^{f_tw}}{s_rst}{s_g}│{s_rst}",
                    f"  {s_g}├{'┬'.join('─' * f_cw for _ in range(f_per))}┤{s_rst}"]
@@ -7264,7 +7277,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         p_cw = max([len(c) for grp in p_rows for line in grp for c in line] + [21]) + 2
         p_tw = 4 * p_cw + 3
         p_rib = "\033[1;30;43m"
-        p_title = f"★  POWER BASE  —  4 numbers, operations applied on ROOT={ep:02d}  ★"
+        p_title = f"★  POWER BASE  —  4 numbers, operations applied on ROOT={_root_op(ep)}  ★"
         power_lines = [f"  {s_g}┌{'─' * p_tw}┐{s_rst}",
                        f"  {s_g}│{s_rst}{p_rib}{p_title:^{p_tw}}{s_rst}{s_g}│{s_rst}",
                        f"  {s_g}├{'┬'.join('─' * p_cw for _ in range(4))}┤{s_rst}"]
@@ -7464,7 +7477,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                     y_done.add(int(c_[:2]))
                     cells_[k_] = c_ + ', ' + _x_lab(x_ycut[int(c_[:2])]).replace(' (', '+ (', 1)
         x_title = (f"★  CharRow  —  {len(x_have)} numbers, x only: cut toggled, then sign changed; "
-                   f"repeats replaced; last-op steps for x cut; y cut again; cut/nc turned, on ROOT={ep:02d}  ★")
+                   f"repeats replaced; last-op steps for x cut; y cut again; cut/nc turned, on ROOT={_root_op(ep)}  ★")
         # the CharRow numbers once each, beside the STRONG 20 table (user's
         # screenshots, 2026-10-13): no repeats, table order, each with its
         # operation on the EP
@@ -7558,7 +7571,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                             | {m_[0] for xf_ in o_xf for m_ in xf_})
             o_gw = o_per * (o_cw + 1) - 1
             o_body = [f"★  NEXT OPERATION-OCJP  —  from the LAST row {both_cut[-2][0]:02d} ({both_cut[-2][2]}),"
-                      f" {both_cut[-1][0]:02d} ({both_cut[-1][2]})  on ROOT={ep:02d}  ★", "",
+                      f" {both_cut[-1][0]:02d} ({both_cut[-1][2]})  on ROOT={_root_op(ep)}  ★", "",
                       '┌' + '┬'.join('─' * o_cw for _ in range(o_per)) + '┐']
             for k_ in range(0, len(o_cells), o_per):
                 if k_:
@@ -7618,7 +7631,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                                'tie': [list(strong), [v for v, _ in fam_seats], [v for _, _, l_ in nc_spec for v, _ in l_]],
                                'place': {str(k): v for k, v in f4_place.items()},
                                'final4': [v for v, _ in ocjp_final4]}, fh)
-            f4_body = [f"★  OCJP FINAL 4  —  EP {grid_ep:02d}, ROOT={ep:02d}  ★", ""]
+            f4_body = [f"★  OCJP FINAL 4  —  EP {grid_ep:02d}, ROOT={_root_op(ep)}  ★", ""]
             for k_, (v_, nm_) in enumerate(ocjp_final4):
                 f4_body.append(f"{k_ + 1}. {v_:02d} ({OP_ABBREV[find_op(ep // 10, v_ // 10)]}/{OP_ABBREV[find_op(ep % 10, v_ % 10)]})"
                                f"   in {len(nm_)} lists: {', '.join(nm_) if nm_ else '-'}")
@@ -7714,7 +7727,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                            "FINAL 4's #1: one exact pick (2.5% vs 1%)"))
         r_w = [max(len(r_[k_]) for r_ in r_rows) + 2 for k_ in range(3)]
         r_tw = sum(r_w) + 2
-        r_title = f"★  ROUND SUMMARY  —  EP {grid_ep:02d}, operations on ROOT={ep:02d}  ★"
+        r_title = f"★  ROUND SUMMARY  —  EP {grid_ep:02d}, operations on ROOT={_root_op(ep)}  ★"
         r_tw = max(r_tw, len(r_title) + 2)
         r_w[2] += r_tw - (sum(r_w) + 2)
         r_box = [f"  {s_g}┌{'─' * r_tw}┐{s_rst}",
@@ -7729,7 +7742,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
         # decade 00-09 .. 90-99, each number in its own units slot
         u_nums = sorted({int(v_) for r_ in r_rows if r_[0] not in ("After number", "Operations on ROOT")
                          for v_ in re.findall(r'\b\d\d\b', r_[1])})
-        u_title = f"★  SUMMARY NUMBERS  —  {len(u_nums)}, no repeats, EP {grid_ep:02d}, ROOT={ep:02d}  ★"
+        u_title = f"★  SUMMARY NUMBERS  —  {len(u_nums)}, no repeats, EP {grid_ep:02d}, ROOT={_root_op(ep)}  ★"
         u_rows = [(f"{d_}0-{d_}9", ' '.join(f"{d_ * 10 + k_:02d}" if d_ * 10 + k_ in u_nums else '  '
                                              for k_ in range(10))) for d_ in range(10)]
         u_w = [max(len(a_) for a_, _ in u_rows) + 2, len(u_rows[0][1]) + 2]
@@ -8017,7 +8030,8 @@ def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, fin
 
     sep('═')
     _nm = 'ROOT' if label.startswith('KK CHAIN') else 'EP'      # chain runs on the ROOT, special on the EP
-    title = (f"  {label}   ({_nm}={ep:02d}, bracket starts with "
+    _nv = _root_op(ep) if _nm == 'ROOT' else f"{ep:02d}"
+    title = (f"  {label}   ({_nm}={_nv}, bracket starts with "
              f"{' or '.join(str(d) for d in bracket)})")
     if not (show_missing and entries):
         print(f"\n{title}\n")
@@ -8089,7 +8103,7 @@ def _kk_table(sequence, ep, label, pos_prefix, empty_msg, merge_counts=None, fin
     # Unique values box — every value once, sorted by number; count is
     # occurrences across all 6 value columns (not once per row like the ranked box)
     uniq = _kk_unique_counts(entries)
-    left = _kk_box(f"{label}  ({_nm}={ep:02d})  UNIQUE VALUES ({len(uniq)})",
+    left = _kk_box(f"{label}  ({_nm}={_nv})  UNIQUE VALUES ({len(uniq)})",
                    sorted(uniq.items()))
     if merge_counts is not None:
         # KK MERGE — special ∪ chain, no duplicates, counts summed; printed beside
@@ -8194,6 +8208,7 @@ def run(data_source, user_x_op=None, user_y_op=None):
         rows = data_source
     else:
         rows = load_data(data_source)
+        _RRR3_PREV['flat'] = [v for row in rows for v in row if isinstance(v, int) and v >= 0]  # early, for _root_op
 
     if not rows:
         print("ERROR: No data loaded.")
@@ -8993,7 +9008,7 @@ def rrr_ask_ops():
     a = lambda o: OP_ABBREV[o]
     print()
     sep('═')
-    print(f"  RRR: NEXT OPERATION  →  ROOT={ep:02d}  (x = {ep // 10}, y = {ep % 10})")
+    print(f"  RRR: NEXT OPERATION  →  ROOT={_root_op(ep)}  (x = {ep // 10}, y = {ep % 10})")
     print(f"  {'Pos':<12} {'Source':<9} {'old x':<6} {'old y':<6}    {'new x':<6} {'new y':<6}  {'xy (op)':<13}{'yx (op)':<13}"
           f"{'*xy (op)':<13}{'*yx (op)':<13}{'~xy (op)':<13}{'~yx (op)':<13}{'old xy':<13}{'old yx':<13}{'newold xy':<13}{'oldnew yx':<13}{'oldy·newy±':<13}{'oldx·newx±':<13}")
     for pos, s_a, s_b, x_op, y_op, nx, ny, mark in rows:
@@ -9019,7 +9034,7 @@ def rrr_ask_ops():
         pos, s_a, s_b, x_op, y_op, nx, ny, mark = row
         cells = _ask_op_line(ep, nx, ny)
         print(f"\n  Op{pos}{(' ' + mark) if mark else ''}: source {s_a:02d} → {s_b:02d}, old {a(x_op)}/{a(y_op)} → new {a(nx)}/{a(ny)}")
-        print(f"  on ROOT {ep:02d}:  x {ep // 10} → {apply_op(ep // 10, nx)} ({a(nx)}),  y {ep % 10} → {apply_op(ep % 10, ny)} ({a(ny)})")
+        print(f"  on ROOT {_root_op(ep)}:  x {ep // 10} → {apply_op(ep // 10, nx)} ({a(nx)}),  y {ep % 10} → {apply_op(ep % 10, ny)} ({a(ny)})")
         for lab, (v, o) in zip(('xy', 'yx', 'sign+xy', 'sign+yx'), cells):
             print(f"     {lab:<10} {v:02d} ({o})")
         # the extra table-4 columns of this row (*, ~, old, newold/oldnew)
@@ -9033,7 +9048,7 @@ def rrr_ask_ops():
         _ask_log('op_number', f"Op{pos} {a(nx)}/{a(ny)}", list(dict.fromkeys(v for v, _ in cells)))
     # 2. the user's own operations on EP
     while True:
-        raw = _tty_input(f"\n  Enter operations on ROOT {ep:02d} as x/y, several with commas or spaces "
+        raw = _tty_input(f"\n  Enter operations on ROOT {_root_op(ep)} as x/y, several with commas or spaces "
                          f"(e.g. +2/-2, c-1/cut, nc/+1; Enter = finish): ")
         if not raw:
             break
@@ -9047,7 +9062,7 @@ def rrr_ask_ops():
                 bad.append(part.strip())
                 continue
             cells = _ask_op_line(ep, ox, oy)
-            print(f"  {a(ox)}/{a(oy)} on ROOT {ep:02d}:  xy {cells[0][0]:02d} ({cells[0][1]})   yx {cells[1][0]:02d} ({cells[1][1]})"
+            print(f"  {a(ox)}/{a(oy)} on ROOT {_root_op(ep)}:  xy {cells[0][0]:02d} ({cells[0][1]})   yx {cells[1][0]:02d} ({cells[1][1]})"
                   f"   sign+xy {cells[2][0]:02d} ({cells[2][1]})   sign+yx {cells[3][0]:02d} ({cells[3][1]})")
             series += [v for v, _ in cells]
             _ask_log('operation', f"{a(ox)}/{a(oy)}", list(dict.fromkeys(v for v, _ in cells)))
@@ -9113,6 +9128,7 @@ def main():
             break
 
         rows = load_data(lines)
+        _RRR3_PREV['flat'] = [v for row in rows for v in row if isinstance(v, int) and v >= 0]  # early, for _root_op
         if not rows:
             print("\n  ! Could not parse any numbers. Please try again.\n")
             continue

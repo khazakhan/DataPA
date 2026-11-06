@@ -2983,5 +2983,17 @@
    75
   ],
   "result": 75
+ },
+ {
+  "time": "2026-11-06",
+  "round": "S75",
+  "after": 75,
+  "ep": 75,
+  "kind": "result_only",
+  "entry": "result 17 = c-1/+2 on ROOT 75 (EP 75); BOOSTER (73/23 step 5, 55 yx) -> combined x3, count 2+ (3/18); 3RRR yx, All+bb 9/15, 80-net 11/15; >40; FINAL 4, ONE-MEN-ARMY (1/8) miss",
+  "numbers": [
+   17
+  ],
+  "result": 17
  }
 ]

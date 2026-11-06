@@ -2923,5 +2923,17 @@
    30
   ],
   "result": 30
+ },
+ {
+  "time": "2026-11-06",
+  "round": "S70",
+  "after": 30,
+  "ep": 53,
+  "kind": "result_only",
+  "entry": "result 38 = -2/cut on ROOT 53 (EP 30); nearest Op27 old yx x flip (1 change); 3RRR WIDE, All+bb (6/10), 80-net (8/10); >40; FINAL 4, ONE-MEN-ARMY (0/3), booster, combined miss",
+  "numbers": [
+   38
+  ],
+  "result": 38
  }
 ]

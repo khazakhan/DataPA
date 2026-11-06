@@ -3113,5 +3113,17 @@
    88
   ],
   "result": 88
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T4",
+  "after": 88,
+  "ep": 95,
+  "kind": "result_only",
+  "entry": "result 30 = c-1/cut on ROOT 95 (EP 88); ONE-MEN-ARMY HIT #14 (3/18), STRONG 20, rule5, PRIME4 reversed, 80-net 17/25; no row within 2 changes; FINAL 4, booster, combined miss",
+  "numbers": [
+   30
+  ],
+  "result": 30
  }
 ]

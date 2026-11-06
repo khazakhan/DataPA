@@ -3043,5 +3043,17 @@
    96
   ],
   "result": 96
+ },
+ {
+  "time": "2026-11-06",
+  "round": "S80",
+  "after": 96,
+  "ep": 43,
+  "kind": "result_only",
+  "entry": "result 11 = c+2/-2 on ROOT 43 (EP 96); old/newold (Op9/Op19 oldnew yx, 3/43), All+bb 11/20, 80-net 15/20; nearest row 1 change; FINAL 4, ONE-MEN-ARMY (1/13), booster, combined miss",
+  "numbers": [
+   11
+  ],
+  "result": 11
  }
 ]

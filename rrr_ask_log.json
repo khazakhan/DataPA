@@ -3007,5 +3007,17 @@
    17
   ],
   "result": 17
+ },
+ {
+  "time": "2026-11-06",
+  "round": "S77",
+  "after": 17,
+  "ep": 17,
+  "kind": "result_only",
+  "entry": "result 53 = c-1/c+1 on ROOT 17 (EP 17) = Op18 LAST *yx exact; * numbers (5/51), 3RRR RECOMMENDED, top40, 80-net (13/17); FINAL 4, ONE-MEN-ARMY (1/10), booster, combined miss",
+  "numbers": [
+   53
+  ],
+  "result": 53
  }
 ]

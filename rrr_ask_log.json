@@ -3137,5 +3137,17 @@
    76
   ],
   "result": 76
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T6",
+  "after": 76,
+  "ep": 44,
+  "kind": "result_only",
+  "entry": "result 19 = c+2/cut on ROOT 44 (EP 76); 3RRR RECOMMENDED, top20, hot, All+bb 13/27, 80-net 19/27; no row within 2 changes; FINAL 4, OMA (3/20), BEST FORMS (0/1, first live round) miss",
+  "numbers": [
+   19
+  ],
+  "result": 19
  }
 ]

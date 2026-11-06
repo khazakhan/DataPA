@@ -3125,5 +3125,17 @@
    30
   ],
   "result": 30
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T5",
+  "after": 30,
+  "ep": 42,
+  "kind": "result_only",
+  "entry": "result 76 = c-2/c-1 on ROOT 42 (EP 30); All+bb 12/26, 80-net 18/26; nearest row 3 changes; FINAL 4, ONE-MEN-ARMY (3/19) miss. User asked why OCJP FINAL 4 misses: live S2-T5 study, result outside top 40 in 56/85",
+  "numbers": [
+   76
+  ],
+  "result": 76
  }
 ]

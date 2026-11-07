@@ -3341,5 +3341,17 @@
    3
   ],
   "result": 3
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T23",
+  "after": 3,
+  "ep": 6,
+  "kind": "result_only",
+  "entry": "result 92 = -1/c+1 on ROOT 06 (EP 03); held by nothing (92 in 80-net left-out); FINAL 4 (98 25 27 43) miss. User: improvise FINAL 4 -> tools/final4_mix_live.py: 162 live rounds, chance 6.5: FINAL 4 10, PRIME 4 9, LAST-OP 4 5, FINAL3+PRIME 10, FINAL2+PRIME2 9, FINAL2+LASTOP2 10, FINAL3+LASTOP1 12, ranked 5-8 5 -> all chance, FINAL 4 kept",
+  "numbers": [
+   92
+  ],
+  "result": 92
  }
 ]

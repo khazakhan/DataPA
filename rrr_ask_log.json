@@ -3365,5 +3365,17 @@
    10
   ],
   "result": 10
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T25",
+  "after": 10,
+  "ep": 31,
+  "kind": "result_only",
+  "entry": "result 63 = c-2/+2 on ROOT 31 (EP 10); exact Op4 old yx (old/newold 7/69); ONE-MEN-ARMY HIT (#7, 7/39), STRONG, REC, rule3, rule5, PRIME 10 (#10, 29/254), PRIME 4 family, All+bb 23/46, 80-net 33/46; FINAL 4 (14 61 74 13), BEST FORMS (3/20), EP\u00b7LAST 26 miss",
+  "numbers": [
+   63
+  ],
+  "result": 63
  }
 ]

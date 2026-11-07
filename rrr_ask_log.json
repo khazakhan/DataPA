@@ -3293,5 +3293,17 @@
    29
   ],
   "result": 29
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T19",
+  "after": 29,
+  "ep": 68,
+  "kind": "result_only",
+  "entry": "result 33 = c+2/cut on ROOT 68 (EP 29); Op12 LAST *xy (6/74), booster of FINAL 4 #1 88 (BOOSTER 5/43), ALL COMBINED + count 2+ (x3; 10/43, 7/43), REC, rule5, PRIME 8 (#7), PRIME 4 family, All+bb 21/40, 80-net 30/40; FINAL 4 (88 42 48 66), OMA (6/33), BEST FORMS (1/14), EP\u00b7LAST 26 miss",
+  "numbers": [
+   33
+  ],
+  "result": 33
  }
 ]

@@ -3233,5 +3233,17 @@
    17
   ],
   "result": 17
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T14",
+  "after": 17,
+  "ep": 57,
+  "kind": "result_only",
+  "entry": "result 31 = -2/c-1 on ROOT 57 (EP 17); user noted EP\u00b7LAST old xy 31 = first EP\u00b7LAST hit (1/42); RRR table exact Op6 xy, yx, hot, rule5, PRIME 4 rev, 80-net 26/35; FINAL 4 (02 07 18 52), OMA (5/28), BEST FORMS (0/9), All+bb miss",
+  "numbers": [
+   31
+  ],
+  "result": 31
  }
 ]

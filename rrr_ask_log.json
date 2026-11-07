@@ -3269,5 +3269,17 @@
    67
   ],
   "result": 67
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T17",
+  "after": 67,
+  "ep": 60,
+  "kind": "result_only",
+  "entry": "result 09 = c-1/-1 on ROOT 60 (EP 67); only hot, wide, 80-net 28/38; nearest row 1 change; FINAL 4 (39 23 29 50), OMA (5/31), BEST FORMS (1/12), All+bb, EP\u00b7LAST 16 miss",
+  "numbers": [
+   9
+  ],
+  "result": 9
  }
 ]

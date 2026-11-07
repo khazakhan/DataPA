@@ -3531,5 +3531,17 @@
    5
   ],
   "result": 5
+ },
+ {
+  "time": "2026-11-07",
+  "round": "U12",
+  "after": 5,
+  "ep": 4,
+  "kind": "result_only",
+  "entry": "result 76 = c+2/+2 on ROOT 04 (EP 05); RRR table exact Op11 LAST xy (162/1397), REC, hot, ONE ROW, 80-net 44/59; FINAL 4 (56 02 41 51), yx, FINAL 8 (0/9), OMA (9/52), All+bb miss",
+  "numbers": [
+   76
+  ],
+  "result": 76
  }
 ]

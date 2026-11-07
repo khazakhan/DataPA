@@ -108,6 +108,13 @@ if res in D._final8(rec['ranked'][:4], rec['prime10'], rec['ranked']): hits.appe
 if rec.get('r28'):
     up['rrr3_rule28_rounds'] = 1
     if res in rec['r28']: hits.append('rrr3_rule28_hits')
+# OPEN / CLOSE digit (user 2026-11-07, live from U15): rank-weighted tens / units of OCJP top 10
+_oo, _cc = D._open_close(rec['ranked'])
+up['rrr3_open1_rounds'] = 1; up['rrr3_close1_rounds'] = 1
+if res // 10 == _oo[0]: hits.append('rrr3_open1_hits')
+if res // 10 in _oo: hits.append('rrr3_open3_hits')
+if res % 10 == _cc[0]: hits.append('rrr3_close1_hits')
+if res % 10 in _cc: hits.append('rrr3_close3_hits')
 # EPROOTGEN (user 2026-11-07, live from U15): EP op + ROOT op crossed, widened to 20
 _tg = [int(x) for x in re.findall(r'(?<![\d*])\d{1,2}(?![\d*])', open(rec['dataset']).read())]
 if len(_tg) >= 2:

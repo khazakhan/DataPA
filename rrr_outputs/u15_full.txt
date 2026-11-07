@@ -2696,6 +2696,8 @@
   [1;32m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
   [1;32m┃[0m [1m★  OCJP FINAL 4 with operations (the prediction)  —  EP 57 (06→57 cut/+1), ROOT=03 (57→03 cut/c+1)  ★                                                                                        [0m [1;32m┃[0m
   [1;32m┃[0m [1m                                                                                                                                                                                             [0m [1;32m┃[0m
+  [1;32m┃[0m [1m  OPEN digit (tens): 0  strongest 3: 0 3 8      CLOSE digit (units): 0  strongest 3: 0 3 6                                                                                                   [0m [1;32m┃[0m
+  [1;32m┃[0m [1m      live OPEN 0/0 of 0, CLOSE 0/0 of 0 (1 digit / 3 digits); history 1293 rounds 1 digit 12.9% / 13.1%, 3 digits 33.8% / 34.1% (chance 10% / 30%). Display only.                           [0m [1;32m┃[0m
   [1;32m┃[0m [1m┌────────────┬────────┬───────────┬──────────────┬──────────────────────┬──────────────────────┬────────────┬───────────────────────────┬──────────────────────────┬────────────────────────┐[0m [1;32m┃[0m
   [1;32m┃[0m [1m│ #          │ Number │ Operation │ yx (op)      │ Booster xy           │ Booster yx           │ How it's   │ From which Op             │ LAST op / previous op    │ Votes (lists)          │[0m [1;32m┃[0m
   [1;32m┃[0m [1m│            │        │           │              │                      │                      │ made       │                           │ check                    │                        │[0m [1;32m┃[0m
@@ -2996,6 +2998,8 @@
   [1;36m┃[0m └───────────────────┴────────────────────────────┴───────┴───────────────────────────────┴───────────┘                                                                                        [1;36m┃[0m
   [1;36m┃[0m                                                                                                                                                                                               [1;36m┃[0m
   [1;36m┃[0m ■ OCJP FINAL 4 with operations (EP 57 (06→57 cut/+1), ROOT 03 (57→03 cut/c+1))                                                                                                                [1;36m┃[0m
+  [1;36m┃[0m   OPEN digit (tens): 0  strongest 3: 0 3 8      CLOSE digit (units): 0  strongest 3: 0 3 6                                                                                                    [1;36m┃[0m
+  [1;36m┃[0m       live OPEN 0/0 of 0, CLOSE 0/0 of 0 (1 digit / 3 digits); history 1293 rounds 1 digit 12.9% / 13.1%, 3 digits 33.8% / 34.1% (chance 10% / 30%). Display only.                            [1;36m┃[0m
   [1;36m┃[0m ┌────────────┬────────┬───────────┬──────────────┬──────────────────────┬──────────────────────┬────────────┬───────────────────────────┬──────────────────────────┬────────────────────────┐ [1;36m┃[0m
   [1;36m┃[0m │ #          │ Number │ Operation │ yx (op)      │ Booster xy           │ Booster yx           │ How it's   │ From which Op             │ LAST op / previous op    │ Votes (lists)          │ [1;36m┃[0m
   [1;36m┃[0m │            │        │           │              │                      │                      │ made       │                           │ check                    │                        │ [1;36m┃[0m
@@ -3198,6 +3202,8 @@
 
   [1;36m■ OCJP FINAL 4 with operations: EP 57 (06→57 cut/+1), ROOT 03 (57→03 cut/c+1)[0m
 
+    OPEN digit (tens): 0  strongest 3: 0 3 8      CLOSE digit (units): 0  strongest 3: 0 3 6
+        live OPEN 0/0 of 0, CLOSE 0/0 of 0 (1 digit / 3 digits); history 1293 rounds 1 digit 12.9% / 13.1%, 3 digits 33.8% / 34.1% (chance 10% / 30%). Display only.
   ┌────────────┬────────┬───────────┬──────────────┬──────────────────────┬──────────────────────┬────────────┬───────────────────────────┬──────────────────────────┬────────────────────────┐
   │ #          │ Number │ Operation │ yx (op)      │ Booster xy           │ Booster yx           │ How it's   │ From which Op             │ LAST op / previous op    │ Votes (lists)          │
   │            │        │           │              │                      │                      │ made       │                           │ check                    │                        │

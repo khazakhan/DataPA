@@ -3591,5 +3591,17 @@
    45
   ],
   "result": 45
+ },
+ {
+  "time": "2026-11-07",
+  "round": "U17",
+  "after": 45,
+  "ep": 87,
+  "kind": "result_only",
+  "entry": "result 87 = nc/nc on ROOT 87 (EP 45); FINAL 8 HIT again (#7 87 = PRIME 8 add; 2/14), PRIME 8 26/242, PRIME 10, PRIME 4 family, BOOSTER (9/67), ALL COMBINED + count 2+ (10/67), REC, rule1, rule5, All+bb 32/64, 80-net 47/64; no row; FINAL 4 (12 32 51 98), OPEN (3 1 9) / CLOSE (2 1 8), EPROOTGEN (0/3), OMA (9/57) miss",
+  "numbers": [
+   87
+  ],
+  "result": 87
  }
 ]

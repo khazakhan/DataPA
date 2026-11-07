@@ -3209,17 +3209,5 @@
    3
   ],
   "result": 3
- },
- {
-  "time": "2026-11-07",
-  "round": "T12",
-  "after": 3,
-  "ep": 8,
-  "kind": "result_only",
-  "entry": "result 03 = nc/cut on ROOT 08 (EP 03); exact Op4 newold xy (old/newold 6/56), REC, rule5, PRIME 8/10, PRIME 4 FAMILY 34/197, 80-net 24/33; FINAL 4 #3 08 one change (y cut); FINAL 4, OMA (3/26), BEST FORMS (0/7), All+bb miss",
-  "numbers": [
-   3
-  ],
-  "result": 3
  }
 ]

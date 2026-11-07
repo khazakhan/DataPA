@@ -3389,5 +3389,17 @@
    12
   ],
   "result": 12
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T27",
+  "after": 12,
+  "ep": 92,
+  "kind": "result_only",
+  "entry": "result 49 = cut/c+2 on ROOT 92 (EP 12); exact Op8 old yx (old/newold 8/71), booster of FINAL 4 #3 94 (6/51), ALL COMBINED + count 2+ (8/51), REC, rule5, ONE ROW, PRIME 4 family, All+bb 24/48, 80-net 35/48; FINAL 4 (40 64 94 02), PRIME 8, OMA (7/41), BEST FORMS (3/22) miss. User: new data upload next -> series T parked at T28 (t27.txt)",
+  "numbers": [
+   49
+  ],
+  "result": 49
  }
 ]

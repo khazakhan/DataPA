@@ -2913,6 +2913,8 @@
   [1;32m┃[0m [1m└────────────┴────────┴───────────┴──────────────┴──────────────────────┴──────────────────────┴────────────┴────────────────────────────┴──────────────────────────┴────────────────────────┘[0m [1;32m┃[0m
   [1;32m┃[0m [1m  LAST op / previous op check: LAST row (new ops or its old = previous ops) and the row before it; fewest changes.                                                                            [0m [1;32m┃[0m
   [1;32m┃[0m [1m  Tested on 412 rounds (F N M K O P Q R): ranking FINAL 4 by it held 28 vs 29 now, so it is a check, not the ranking.                                                                         [0m [1;32m┃[0m
+  [1;32m┃[0m [1m  FINAL 8 (FINAL 4 + PRIME 8 adds): 64 (c-2/cut) · 92 (c+1/c-2) · 04 (c+2/cut) · 13 (-2/c-1) · 36 (nc/c+2) · 86 (cut/c+2) · 33 (nc/c-1) · 69 (c-2/nc)                                         [0m [1;32m┃[0m
+  [1;32m┃[0m [1m      ascending: 04 13 33 36 64 69 86 92   live 0 of 0; replay 228 live rounds held 24 (10.5%) vs chance 18.2 -> bigger net, same odds per number                                             [0m [1;32m┃[0m
   [1;32m┃[0m [1m  yx column: 82 65 86 77   live 6 of 76  (replay 10 of 152 vs chance 6.1; display only, not in FINAL 4)                                                                                       [0m [1;32m┃[0m
   [1;32m┃[0m [1m  BEST FORMS (18, 4 strongest xy/yx forms of all 1,378 rounds, old ops on ROOT 39 (48→39 -1/+1)):                                                                                             [0m [1;32m┃[0m
   [1;32m┃[0m [1m      old xy, y cut switched                       31 (nc/+2) Op4  26 (-1/c+2) Op5  56 (+2/c+2) Op8  64 (c-2/cut) Op10  75 (c-1/c+1) Op14                                                     [0m [1;32m┃[0m
@@ -3202,6 +3204,8 @@
   [1;36m┃[0m └────────────┴────────┴───────────┴──────────────┴──────────────────────┴──────────────────────┴────────────┴────────────────────────────┴──────────────────────────┴────────────────────────┘ [1;36m┃[0m
   [1;36m┃[0m   LAST op / previous op check: LAST row (new ops or its old = previous ops) and the row before it; fewest changes.                                                                             [1;36m┃[0m
   [1;36m┃[0m   Tested on 412 rounds (F N M K O P Q R): ranking FINAL 4 by it held 28 vs 29 now, so it is a check, not the ranking.                                                                          [1;36m┃[0m
+  [1;36m┃[0m   FINAL 8 (FINAL 4 + PRIME 8 adds): 64 (c-2/cut) · 92 (c+1/c-2) · 04 (c+2/cut) · 13 (-2/c-1) · 36 (nc/c+2) · 86 (cut/c+2) · 33 (nc/c-1) · 69 (c-2/nc)                                          [1;36m┃[0m
+  [1;36m┃[0m       ascending: 04 13 33 36 64 69 86 92   live 0 of 0; replay 228 live rounds held 24 (10.5%) vs chance 18.2 -> bigger net, same odds per number                                              [1;36m┃[0m
   [1;36m┃[0m   yx column: 82 65 86 77   live 6 of 76  (replay 10 of 152 vs chance 6.1; display only, not in FINAL 4)                                                                                        [1;36m┃[0m
   [1;36m┃[0m   BEST FORMS (18, 4 strongest xy/yx forms of all 1,378 rounds, old ops on ROOT 39 (48→39 -1/+1)):                                                                                              [1;36m┃[0m
   [1;36m┃[0m       old xy, y cut switched                       31 (nc/+2) Op4  26 (-1/c+2) Op5  56 (+2/c+2) Op8  64 (c-2/cut) Op10  75 (c-1/c+1) Op14                                                      [1;36m┃[0m
@@ -3404,6 +3408,8 @@
   └────────────┴────────┴───────────┴──────────────┴──────────────────────┴──────────────────────┴────────────┴────────────────────────────┴──────────────────────────┴────────────────────────┘
     LAST op / previous op check: LAST row (new ops or its old = previous ops) and the row before it; fewest changes.
     Tested on 412 rounds (F N M K O P Q R): ranking FINAL 4 by it held 28 vs 29 now, so it is a check, not the ranking.
+    FINAL 8 (FINAL 4 + PRIME 8 adds): 64 (c-2/cut) · 92 (c+1/c-2) · 04 (c+2/cut) · 13 (-2/c-1) · 36 (nc/c+2) · 86 (cut/c+2) · 33 (nc/c-1) · 69 (c-2/nc)
+        ascending: 04 13 33 36 64 69 86 92   live 0 of 0; replay 228 live rounds held 24 (10.5%) vs chance 18.2 -> bigger net, same odds per number
     yx column: 82 65 86 77   live 6 of 76  (replay 10 of 152 vs chance 6.1; display only, not in FINAL 4)
     BEST FORMS (18, 4 strongest xy/yx forms of all 1,378 rounds, old ops on ROOT 39 (48→39 -1/+1)):
         old xy, y cut switched                       31 (nc/+2) Op4  26 (-1/c+2) Op5  56 (+2/c+2) Op8  64 (c-2/cut) Op10  75 (c-1/c+1) Op14

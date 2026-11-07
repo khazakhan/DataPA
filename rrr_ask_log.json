@@ -3483,5 +3483,17 @@
    28
   ],
   "result": 28
+ },
+ {
+  "time": "2026-11-07",
+  "round": "U8",
+  "after": 28,
+  "ep": 40,
+  "kind": "result_only",
+  "entry": "result 14 = c+2/c-1 on ROOT 40 (EP 28); exact Op7 old yx (old/newold 9/78), BOOSTER (7/58), ALL COMBINED (12/58), PRIME 4 family, rule5, hot, All+bb 27/55, 80-net 40/55; FINAL 4 (19 89 20 28), FINAL 8 (0/5), OMA (8/48), user Rule 28 chain (18) miss",
+  "numbers": [
+   14
+  ],
+  "result": 14
  }
 ]

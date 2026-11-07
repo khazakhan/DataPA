@@ -3401,5 +3401,15 @@
    49
   ],
   "result": 49
+ },
+ {
+  "time": "2026-11-07",
+  "round": "U2",
+  "after": 67,
+  "ep": 67,
+  "kind": "new_data",
+  "entry": "NEW DATA series U uploaded (194 rows x 7, blanks and ** skipped -> 1,329 numbers; saved u_raw_paste.txt = u1.txt); series T parked at T28. U2 declared EP 67 (67\u219267 nc/nc), ROOT 67, 3 rows, FINAL 4 88 05 10 41",
+  "numbers": [],
+  "result": null
  }
 ]

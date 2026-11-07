@@ -3567,5 +3567,17 @@
    57
   ],
   "result": 57
+ },
+ {
+  "time": "2026-11-07",
+  "round": "U15",
+  "after": 57,
+  "ep": 3,
+  "kind": "result_only",
+  "entry": "result 77 = c+2/c-1 on ROOT 03 (EP 57); only All+bb 30/62, 80-net 45/62; no row makes it; FINAL 4 (00 36 80 03), OPEN 0 (0 3 8) / CLOSE 0 (0 3 6) miss, FINAL 8 (0/12), EPROOTGEN (0/1), Rule 28 (8/112, now auto), OMA (9/55) miss",
+  "numbers": [
+   77
+  ],
+  "result": 77
  }
 ]

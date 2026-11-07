@@ -3447,5 +3447,17 @@
    90
   ],
   "result": 90
+ },
+ {
+  "time": "2026-11-07",
+  "round": "U5",
+  "after": 90,
+  "ep": 85,
+  "kind": "result_only",
+  "entry": "result 69 = -2/c-1 on ROOT 85 (EP 90); \u00b1 (Op1 oldy\u00b7newy\u00b1, 6/71), ONE ROW PICK, rule5, PRIME 4 rev, hot, char row, All+bb 25/52, 80-net 38/52; FINAL 4 (42 46 10 18), FINAL 8 (0/2), OMA (8/45), BEST FORMS miss. User: modify FINAL 4 ops (10 c-2/cut -> -2/c-1 = 69), '98% guaranteed', check all 1300 rounds -> tools/f4_opmod_study.py on 1,293 rounds: as is 4 numbers 97 (7.5%); one notch x only 16.4 nums 20.0%; one side 27.2 nums 28.8%; one notch BOTH sides 55.6 nums 55.9% = chance -> hits only grow with numbers covered; 98% would need ~98 numbers; FINAL 4 kept",
+  "numbers": [
+   69
+  ],
+  "result": 69
  }
 ]

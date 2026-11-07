@@ -3305,5 +3305,17 @@
    33
   ],
   "result": 33
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T20",
+  "after": 33,
+  "ep": 99,
+  "kind": "result_only",
+  "entry": "result 92 = nc/c-2 on ROOT 99 (EP 33); PRIME 8 #5 (24/219), REC, rule5, PRIME 4 family, All+bb 22/41, 80-net 31/41; no row makes it; FINAL 4 (08 10 64 97), OMA (6/34), BEST FORMS (1/15), EP\u00b7LAST 29 miss. User: improve FINAL 4, 'very near'. T-series check (19 rds): FINAL 4 2 (chance 0.8), PRIME 8 5 (chance 1.5), count 2+ 4, booster 2, OMA 5 (chance 3.8); history: count 3+ (~4) 63 and booster vote 91 vs FINAL 4 97 -> FINAL 4 kept, PRIME 8 noted",
+  "numbers": [
+   92
+  ],
+  "result": 92
  }
 ]

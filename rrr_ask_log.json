@@ -3459,5 +3459,17 @@
    69
   ],
   "result": 69
+ },
+ {
+  "time": "2026-11-07",
+  "round": "U6",
+  "after": 69,
+  "ep": 17,
+  "kind": "result_only",
+  "entry": "result 42 = c-2/cut on ROOT 17 (EP 69); Outer flip move 42 first live hit (1/84), yx list (122/1042), All+bb 26/53, 80-net 39/53; FINAL 4 (12 55 91 09), FINAL 8 (0/3), OMA (8/46), BEST FORMS, op grid (28 nums) miss; user noted xy grid 92 (-2/cut) is one cut from 42",
+  "numbers": [
+   42
+  ],
+  "result": 42
  }
 ]

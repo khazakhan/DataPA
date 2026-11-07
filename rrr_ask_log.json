@@ -3245,5 +3245,17 @@
    31
   ],
   "result": 31
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T15",
+  "after": 31,
+  "ep": 60,
+  "kind": "result_only",
+  "entry": "result 23 = c+1/c-2 on ROOT 60 (EP 31); booster of FINAL 4 #3 52 (BOOSTER 4/39, ALL COMBINED 8/39, count 2+ 5/39), REC, ONE ROW, All+bb 19/36, 80-net 27/36; nearest row 1 change; FINAL 4 (44 08 52 15), OMA (5/29), BEST FORMS (0/10), EP\u00b7LAST 61 miss",
+  "numbers": [
+   23
+  ],
+  "result": 23
  }
 ]

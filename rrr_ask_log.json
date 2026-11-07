@@ -3329,5 +3329,17 @@
    37
   ],
   "result": 37
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T22",
+  "after": 37,
+  "ep": 11,
+  "kind": "result_only",
+  "entry": "result 03 = -1/+2 on ROOT 11 (EP 37); Op9 ~yx (~ 7/71), BEST FORMS 2nd hit (old xy, x cut sw, y cut sw+flip, Op9; 2/17), char row, 80-net 32/43; nearest row 2 changes; FINAL 4 (40 37 73 04), PRIME 8, OMA (6/36), All+bb, EP\u00b7LAST 96 miss",
+  "numbers": [
+   3
+  ],
+  "result": 3
  }
 ]

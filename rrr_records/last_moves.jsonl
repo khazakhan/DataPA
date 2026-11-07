@@ -166,3 +166,4 @@
 {"round": "T19", "ep": 68, "result": 33, "x_op": "c+2", "y_op": "cut", "last": {"pos": 12, "src": "61->68", "old": ["nc", "c+2"], "new": ["-2", "c-1"]}, "x_from": ["old y as is"], "y_from": ["old x cut switched"], "check": true}
 {"round": "T20", "ep": 99, "result": 92, "x_op": "nc", "y_op": "c-2", "last": {"pos": 16, "src": "03->99", "old": ["-1", "c+1"], "new": ["-1", "c-2"]}, "x_from": [], "y_from": ["new y as is"], "check": true}
 {"round": "T21", "ep": 75, "result": 37, "x_op": "c+1", "y_op": "+2", "last": {"pos": 8, "src": "32->75", "old": ["c-1", "c-2"], "new": ["+2", "-2"]}, "x_from": ["old x sign flipped"], "y_from": ["new x as is", "new y sign flipped"], "check": true}
+{"round": "T22", "ep": 11, "result": 3, "x_op": "-1", "y_op": "+2", "last": {"pos": 10, "src": "52->11", "old": ["c+1", "-1"], "new": ["c+1", "nc"]}, "x_from": ["old y as is"], "y_from": [], "check": true}

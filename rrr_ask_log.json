@@ -3257,5 +3257,17 @@
    23
   ],
   "result": 23
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T16",
+  "after": 23,
+  "ep": 98,
+  "kind": "result_only",
+  "entry": "result 67 = c+2/-1 on ROOT 98 (EP 23); BEST FORMS first hit (old yx, x and y cut switched, Op14 LAST; 1/11), char row; nearest row 2 changes; FINAL 4 (51 24 72 00), OMA (5/30), All+bb, 80-net (67 left out) and EP\u00b7LAST 65 miss",
+  "numbers": [
+   67
+  ],
+  "result": 67
  }
 ]

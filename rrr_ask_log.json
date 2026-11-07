@@ -3471,5 +3471,17 @@
    42
   ],
   "result": 42
+ },
+ {
+  "time": "2026-11-07",
+  "round": "U7",
+  "after": 42,
+  "ep": 89,
+  "kind": "result_only",
+  "entry": "result 28 = c-1/-1 on ROOT 89 (EP 42); only ONE ROW lines; 28 in 80-net left-out (39/54); FINAL 4 (02 14 04 11), FINAL 8 (0/4), OMA (8/47), op grid miss. User chain: Rule 28 pick 87 -> reverse 78 -> cut tens 28. tools/rule28_chain_study.py on 1,293 rds: pick1 as is 21 (chance 12.9), reversed 11, reversed+cut tens 11, all 4 picks rev+cut tens 39 (chance 46.5) -> chance, not added",
+  "numbers": [
+   28
+  ],
+  "result": 28
  }
 ]

@@ -3507,5 +3507,17 @@
    3
   ],
   "result": 3
+ },
+ {
+  "time": "2026-11-07",
+  "round": "U10",
+  "after": 3,
+  "ep": 52,
+  "kind": "result_only",
+  "entry": "result 99 = c-1/c+2 on ROOT 52 (EP 03); RRR table exact Op6 xy (161/1395), FINAL 4 yx column (yx of #2 26; 7/83), BOOSTER, ALL COMBINED + count 2+, REC, All+bb 28/57, 80-net 42/57; FINAL 4 (60 26 31 56), FINAL 8 (0/7), OMA (9/50) miss",
+  "numbers": [
+   99
+  ],
+  "result": 99
  }
 ]

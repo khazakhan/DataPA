@@ -188,3 +188,4 @@
 {"round": "U15", "ep": 3, "result": 77, "x_op": "c+2", "y_op": "c-1", "last": {"pos": 8, "src": "38->03", "old": ["c+2", "cut"], "new": ["nc", "+1"]}, "x_from": ["old x as is"], "y_from": [], "check": true}
 {"round": "U16", "ep": 10, "result": 45, "x_op": "c-2", "y_op": "cut", "last": {"pos": 10, "src": "36->10", "old": ["-2", "c-1"], "new": ["+1", "+2"]}, "x_from": ["old x cut switched", "old y step switched"], "y_from": [], "check": true}
 {"round": "U17", "ep": 87, "result": 87, "x_op": "nc", "y_op": "nc", "last": {"pos": 11, "src": "19->87", "old": ["c+2", "-2"], "new": ["c+2", "+1"]}, "x_from": [], "y_from": [], "check": true}
+{"round": "U18", "ep": 15, "result": 35, "x_op": "+2", "y_op": "nc", "last": {"pos": 14, "src": "93->15", "old": ["+2", "+2"], "new": ["c-2", "c+1"]}, "x_from": ["old x as is", "old y as is"], "y_from": [], "check": true}

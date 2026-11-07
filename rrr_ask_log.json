@@ -3603,5 +3603,17 @@
    87
   ],
   "result": 87
+ },
+ {
+  "time": "2026-11-07",
+  "round": "U18",
+  "after": 87,
+  "ep": 15,
+  "kind": "result_only",
+  "entry": "result 35 = +2/nc on ROOT 15 (EP 87); OCJP FINAL 4 HIT #4 (48/830), also yx of #2 17 (yx column 8/91); FINAL 8 3/15; ONE-MEN-ARMY HIT 10/58; RRR table exact Op8 xy (163/1403); STRONG, PRIME 4 (13/273), PRIME 8/10, PRIME 4 family, rule2/3/5, REC; OPEN 3-digit (3 in 1 4 3; 2/4) and CLOSE 1-digit 5 HIT (1/4); comb + count2+, All+bb, 80-net; EPROOTGEN (0/4) miss",
+  "numbers": [
+   35
+  ],
+  "result": 35
  }
 ]

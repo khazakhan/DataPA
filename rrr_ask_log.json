@@ -3317,5 +3317,17 @@
    92
   ],
   "result": 92
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T21",
+  "after": 92,
+  "ep": 75,
+  "kind": "result_only",
+  "entry": "result 37 = c+1/+2 on ROOT 75 (EP 92); LAST-OP 4 #2 (5/160) + LAST-OP 8 (11/160), rule5, PRIME 4 rev, char row; 37 was in 80-net left-out (31/42); FINAL 4 (00 40 65 78), PRIME 8, OMA (6/35), BEST FORMS (1/16), All+bb, EP\u00b7LAST 35 miss",
+  "numbers": [
+   37
+  ],
+  "result": 37
  }
 ]

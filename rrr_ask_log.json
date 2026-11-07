@@ -3377,5 +3377,17 @@
    63
   ],
   "result": 63
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T26",
+  "after": 63,
+  "ep": 64,
+  "kind": "result_only",
+  "entry": "result 12 = cut/-2 on ROOT 64 (EP 63); only 80-net (34/47); no row makes it; FINAL 4 (96 47 81 87), PRIME 8, OMA (7/40), BEST FORMS (3/21), All+bb, EP\u00b7LAST 37 miss",
+  "numbers": [
+   12
+  ],
+  "result": 12
  }
 ]

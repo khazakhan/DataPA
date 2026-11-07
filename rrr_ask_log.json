@@ -3675,5 +3675,17 @@
    2
   ],
   "result": 2
+ },
+ {
+  "time": "2026-11-07",
+  "round": "U24",
+  "after": 2,
+  "ep": 56,
+  "kind": "result_only",
+  "entry": "result 10 = c+1/c-1 on ROOT 56 (EP 02); OCJP FINAL 4 HIT #1 = MASTER = MegaStar (FINAL 4 50/836, MASTER 7/782, MegaStar/PowerStar 3/99); RRR table Op14 LAST xy exact; FINAL 8 5/21; ONE-MEN-ARMY HIT; OPEN digit 1 HIT (2/10), CLOSE digit 0 HIT (2/10); EPROOTGEN HIT (10 c+1/c-1; 2/10); STRONG, PRIME 4/8/10, rules 2/5, REC, ONE ROW, comb, All+bb, 80-net",
+  "numbers": [
+   10
+  ],
+  "result": 10
  }
 ]

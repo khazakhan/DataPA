@@ -59,3 +59,17 @@ for lab, kinds, yx in (('xy + yx (swap only)', '', True), ('sign change, both si
             x, y = op_of(r['root'], v); s |= {ap(r['root'], a, b) for a, b in f(x, y)}
         cov += len(s); hits += r['res'] in s
     print(f"  {lab:38s} covers {cov/n:5.1f} numbers   held {hits:4d} = {100*hits/n:5.1f}%   chance {cov/n:5.1f}%")
+
+# user follow-up 2: 'within the OCJP FINAL 4 operations, xy and yx with the 4 x ops and 4 y ops, to the ROOT'
+def grid(root, f4, mode):
+    X = [op_of(root, v)[0] for v in f4]; Y = [op_of(root, v)[1] for v in f4]
+    s = {ap(root, a, b) for a in X for b in Y}                      # x_i / y_j
+    if mode >= 2: s |= {ap(root, b, a) for a in X for b in Y}       # y_j / x_i (yx)
+    if mode >= 3: s |= {ap(root, a, b) for a in X + Y for b in X + Y}  # any of the 8 ops on either side
+    return s
+print("\nFINAL 4 op grid on the ROOT:")
+for lab, mode in (('x ops x y ops (xy grid)', 1), ('xy grid + yx grid', 2), ('all 8 ops on both sides', 3)):
+    hits = cov = 0
+    for r in R:
+        s = grid(r['root'], r['rk'][:4], mode); cov += len(s); hits += r['res'] in s
+    print(f"  {lab:38s} covers {cov/n:5.1f} numbers   held {hits:4d} = {100*hits/n:5.1f}%   chance {cov/n:5.1f}%   extra {hits - cov/100:+.0f}")

@@ -3281,5 +3281,17 @@
    9
   ],
   "result": 9
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T18",
+  "after": 9,
+  "ep": 21,
+  "kind": "result_only",
+  "entry": "result 29 = nc/-2 on ROOT 21 (EP 09); OCJP FINAL 4 HIT #4 (47/804) from Op2 old xy exact (old/newold 6/62); user marked 29 near Op3/Op4 yx in table 4; ONE-MEN-ARMY HIT (6/32), REC, rule2, PRIME 4/8/10, PRIME 4 family, ALL COMBINED + count 2+, All+bb, 80-net",
+  "numbers": [
+   29
+  ],
+  "result": 29
  }
 ]

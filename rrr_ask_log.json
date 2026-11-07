@@ -3543,5 +3543,17 @@
    76
   ],
   "result": 76
+ },
+ {
+  "time": "2026-11-07",
+  "round": "U13",
+  "after": 76,
+  "ep": 9,
+  "kind": "result_only",
+  "entry": "result 06 = nc/c+2 on ROOT 09 (EP 76); only wide list; 06 in 80-net left-out (44/60); no row makes it; FINAL 4 (22 71 26 34), yx, FINAL 8 (0/10), OMA (9/53), All+bb miss",
+  "numbers": [
+   6
+  ],
+  "result": 6
  }
 ]

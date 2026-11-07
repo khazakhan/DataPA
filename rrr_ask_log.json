@@ -3495,5 +3495,17 @@
    14
   ],
   "result": 14
+ },
+ {
+  "time": "2026-11-07",
+  "round": "U9",
+  "after": 14,
+  "ep": 95,
+  "kind": "result_only",
+  "entry": "result 03 = +1/-2 on ROOT 95 (EP 14); ONE-MEN-ARMY HIT (9/49), STRONG, Outer flip move 03 (2nd hit, 2/87), 80-net 41/56; FINAL 4 (13 31 46 55), FINAL 8 (0/6) miss. User: check old xy / old yx hit rate on total rounds -> tools/oldxy_study.py: history 1,293 LAST row old xy 8 / old yx 14 (chance 12.9 each), all rows old xy 76 / old yx 70 (chance 75) / both 127 (chance 138); live 234 all rows both 18 (chance 22.5); series T+U 34 all rows old yx 4 (chance 1.1), both 5 (chance 2.1) -> chance overall, recent T/U run small sample",
+  "numbers": [
+   3
+  ],
+  "result": 3
  }
 ]

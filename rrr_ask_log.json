@@ -3423,5 +3423,17 @@
    72
   ],
   "result": 72
+ },
+ {
+  "time": "2026-11-07",
+  "round": "U3",
+  "after": 72,
+  "ep": 13,
+  "kind": "result_only",
+  "entry": "result 48 = c-2/cut on ROOT 13 (EP 72); only 80-net (36/50); nearest row 2 changes; FINAL 4 (06 28 12 13), PRIME 8, OMA (7/43), BEST FORMS (3/24), All+bb, EP\u00b7LAST 72 miss",
+  "numbers": [
+   48
+  ],
+  "result": 48
  }
 ]

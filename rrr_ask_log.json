@@ -3221,5 +3221,17 @@
    6
   ],
   "result": 6
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T13",
+  "after": 6,
+  "ep": 62,
+  "kind": "result_only",
+  "entry": "result 17 = cut/cut on ROOT 62 (EP 06); REC, PRIME 10 family, All+bb 18/34, 80-net 25/34; no row makes it; FINAL 4, OMA (5/27), BEST FORMS (0/8) miss. Improve request: tools/op_repeat_study.py full cut 12, prev result op on ROOT 0 / EP 3, ROOT->EP op on ROOT 14 / EP 15 (chance 12.9 each), all 4 together 28 vs 52 -> nothing added",
+  "numbers": [
+   17
+  ],
+  "result": 17
  }
 ]

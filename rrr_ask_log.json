@@ -3519,5 +3519,17 @@
    99
   ],
   "result": 99
+ },
+ {
+  "time": "2026-11-07",
+  "round": "U11",
+  "after": 99,
+  "ep": 23,
+  "kind": "result_only",
+  "entry": "result 05 = -2/+2 on ROOT 23 (EP 99); LAST-OP 8 (12/176), All+bb 29/58, 80-net 43/58; nearest row 1 change; FINAL 4 (43 60 31 49), yx column, FINAL 8 (0/8), OMA (9/51) miss",
+  "numbers": [
+   5
+  ],
+  "result": 5
  }
 ]

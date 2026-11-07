@@ -3555,5 +3555,17 @@
    6
   ],
   "result": 6
+ },
+ {
+  "time": "2026-11-07",
+  "round": "U14",
+  "after": 6,
+  "ep": 24,
+  "kind": "result_only",
+  "entry": "result 57 = c-2/c-2 on ROOT 24 (EP 06); Rule 28 pick 2 (rule28 counter had not been auto-bumped since Q; added by hand 8/111); 57 in 80-net left-out; FINAL 4 (44 16 21 03), FINAL 8 (0/11), OMA (9/54) miss. User EPROOTGEN idea (EP op x1/y1 + ROOT op x2/y2 -> 16 combos on ROOT, widened by cut/decut/sign/+-1, 20 strongest): tools/eprootgen_study.py on 1,293 rds: 16 base 11.8 nums 152 (11.8%), 20 strongest 257 (19.9%, chance 20%), all widened 80.6 nums 80.7% -> chance. Added as display-only EPROOTGEN table + live counter rrr3_eprootgen from U15 (would have held 57 at U14)",
+  "numbers": [
+   57
+  ],
+  "result": 57
  }
 ]

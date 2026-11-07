@@ -3615,5 +3615,17 @@
    35
   ],
   "result": 35
+ },
+ {
+  "time": "2026-11-07",
+  "round": "U19",
+  "after": 35,
+  "ep": 88,
+  "kind": "result_only",
+  "entry": "result 05 = +2/c+2 on ROOT 88 (EP 35); EPROOTGEN FIRST HIT (05 +2/c+2; 1/5), OPEN 3-digit set (0 in 8 0 4; 3/5), 80-net 49/66; no row; FINAL 4 (08 80 86 88), FINAL 8 (3/16), CLOSE (8 / 8 4 0), OMA (10/59), All+bb miss",
+  "numbers": [
+   5
+  ],
+  "result": 5
  }
 ]

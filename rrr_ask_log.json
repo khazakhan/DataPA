@@ -3353,5 +3353,17 @@
    92
   ],
   "result": 92
+ },
+ {
+  "time": "2026-11-07",
+  "round": "T24",
+  "after": 92,
+  "ep": 37,
+  "kind": "result_only",
+  "entry": "result 10 = -2/c-2 on ROOT 37 (EP 92); Op2 ~yx (~ 8/73), BEST FORMS 3rd hit (old xy, x cut sw, y cut sw+flip, Op2; 3/19); 10 in 80-net left-out (32/45); nearest row 1 change; FINAL 4 (29 55 67 23), PRIME 8, OMA (6/38), All+bb, EP\u00b7LAST 54 miss",
+  "numbers": [
+   10
+  ],
+  "result": 10
  }
 ]

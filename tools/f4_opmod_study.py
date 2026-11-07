@@ -35,3 +35,27 @@ for k, f in RULES.items():
             s |= {ap(r['root'], a, b) for a, b in f(x, y)}
         cov += len(s); hits += r['res'] in s
     print(f"  {k:38s} covers {cov/n:5.1f} numbers   held {hits:4d} = {100*hits/n:5.1f}%   chance {cov/n:5.1f}%")
+
+# user follow-up: 'check with respect to sign change and cut and decut and xy and yx'
+def T(o, kinds):
+    c, s = parse(o); out = {(c, s)}
+    if 'S' in kinds: out |= {(c, -s) for c, s in list(out)}
+    if 'C' in kinds: out |= {(1 - c, s) for c, s in list(out)}
+    return [name(*p) for p in out]
+def rule2(kinds, yx):
+    def f(x, y):
+        pairs = [(a, b) for a in T(x, kinds) for b in T(y, kinds)]
+        return pairs + ([(b, a) for a, b in pairs] if yx else [])
+    return f
+print("\nsign change (S), cut/decut (C), xy and yx:")
+for lab, kinds, yx in (('xy + yx (swap only)', '', True), ('sign change, both sides', 'S', False),
+                       ('sign change + yx', 'S', True), ('cut/decut, both sides', 'C', False),
+                       ('cut/decut + yx', 'C', True), ('sign + cut/decut', 'SC', False),
+                       ('sign + cut/decut + yx (all)', 'SC', True)):
+    f = rule2(kinds, yx); hits = cov = 0
+    for r in R:
+        s = set()
+        for v in r['rk'][:4]:
+            x, y = op_of(r['root'], v); s |= {ap(r['root'], a, b) for a, b in f(x, y)}
+        cov += len(s); hits += r['res'] in s
+    print(f"  {lab:38s} covers {cov/n:5.1f} numbers   held {hits:4d} = {100*hits/n:5.1f}%   chance {cov/n:5.1f}%")

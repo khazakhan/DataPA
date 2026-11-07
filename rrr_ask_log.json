@@ -3579,5 +3579,17 @@
    77
   ],
   "result": 77
+ },
+ {
+  "time": "2026-11-07",
+  "round": "U16",
+  "after": 77,
+  "ep": 10,
+  "kind": "result_only",
+  "entry": "result 45 = c-2/cut on ROOT 10 (EP 77); FINAL 8 FIRST HIT (#8 45 = PRIME 8 add; 1/13), PRIME 8 25/241, PRIME 10, OPEN 3-digit set (4 in 0 4 8; 1/2), REC, rule5, PRIME 4 rev, All+bb 31/63, 80-net 46/63; no row makes it; FINAL 4 (43 09 84 03), OPEN 1 digit (0), CLOSE (3 / 3 4 1), EPROOTGEN (0/2), OMA (9/56) miss",
+  "numbers": [
+   45
+  ],
+  "result": 45
  }
 ]

@@ -3699,5 +3699,17 @@
    63
   ],
   "result": 63
+ },
+ {
+  "time": "2026-11-08",
+  "round": "U26",
+  "after": 63,
+  "ep": 0,
+  "kind": "result_only",
+  "entry": "result 12 = +1/+2 on ROOT 00 (EP 63); BOOSTER (13/76), ALL COMBINED (21/76), OPEN 3-digit set (1 in 0 1 6; 9/12), All+bb 39/73, 80-net 55/73; nearest row 1 change; FINAL 4 (06 10 18 64), FINAL 8 (5/23), CLOSE (8 / 8 0 6), EPROOTGEN (2/12), OMA (13/66) miss",
+  "numbers": [
+   12
+  ],
+  "result": 12
  }
 ]

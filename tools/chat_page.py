@@ -274,10 +274,35 @@ def turned_lists(P):
         return [], []
 
 
+def fullcut_list(P):
+    """Both digits cut (n+5 on each digit) of FINAL 4 and of its yx column (user 2026-11-09,
+    X7: 34 -> 89).  History 1293: FINAL 4 54 vs 49.2, yx 60 vs 45.5; live 266: 17 vs 10.1,
+    11 vs 9.4 (one-digit cuts are below chance, not shown).  Display only."""
+    try:
+        sys.path.insert(0, HERE)
+        import io as _io, contextlib as _cl
+        with _cl.redirect_stdout(_io.StringIO()):
+            import DataProcessing as D
+        rt = int(P['root']); ex, ey = rt // 10, rt % 10
+        op = lambda n: f"{D.OP_ABBREV[D.find_op(ex, n // 10)]}/{D.OP_ABBREV[D.find_op(ey, n % 10)]}"
+        cut = lambda n: ((n // 10 + 5) % 10) * 10 + (n % 10 + 5) % 10
+        f4 = [int(x['n']) for x in P['f4']]
+        yxs = [int(NUMOP.search(x['yx']).group(1)) for x in P['f4'] if NUMOP.search(x['yx'])]
+        out = []
+        for v in f4 + yxs:
+            n = cut(v)
+            if n not in f4 and n not in [q for q, _ in out]:
+                out.append((n, op(n)))
+        return out
+    except Exception:
+        return []
+
+
 def build(series_round, prevP, prevD, P, res):
     R = f'{res:02d}'
     prevP['step'] = step_list(prevP); P['step'] = step_list(P)
     prevP['trf4'], prevP['tryx'] = turned_lists(prevP); P['trf4'], P['tryx'] = turned_lists(P)
+    prevP['fcut'] = fullcut_list(prevP); P['fcut'] = fullcut_list(P)
     op = op_on(prevP['root'], res)
     ck = lambda b: '✓' if b else '✗'
     f4 = [d['n'] for d in prevP['f4']]
@@ -312,6 +337,7 @@ def build(series_round, prevP, prevD, P, res):
     cells = lambda rows, cols: {m for r in rows for c in cols if c < len(r) for m in re.findall(r'\b\d\d\b', r[c])}
     note('the ~ / ± / * numbers', R in (prevP['tl'] + ' ' + prevP['pm'] + ' ' + prevP['st']).split()
          or R in cells(prevP['t1'], (8, 9, 10, 11)) or R in cells(prevP['t2'], (6, 7)))
+    note('FULL CUT (both digits) of FINAL 4 / yx', R in [f'{n:02d}' for n, _ in prevP['fcut']])
     note('FINAL 4 digits turned', R in [f'{n:02d}' for n, _ in prevP['trf4']])
     note('yx column digits turned', R in [f'{n:02d}' for n, _ in prevP['tryx']])
     note('FINAL 4 STEP ±1', R in [f'{n:02d}' for n, _ in prevP.get('step', [])])
@@ -359,6 +385,7 @@ def build(series_round, prevP, prevD, P, res):
           [f"Outer flip / outer op ({' / '.join(x[0] for x in (prevP['oflip'], prevP['oop']) if x)})", ck(R in [x[0] for x in (prevP['oflip'], prevP['oop']) if x]), ' / '.join(x[2] for x in (P['oflip'], P['oop']) if x) or '—'],
           [f"RRR yx list ({' '.join(yxl)})", ck(R in yxl), '—'],
           [f"RRR table ({' '.join(tbl)})", ck(R in tbl), '—'],
+          [f"FULL CUT of FINAL 4 + yx ({' '.join(f'{n:02d}' for n, _ in prevP['fcut'])})", ck(R in [f'{n:02d}' for n, _ in prevP['fcut']]), 'test 114 vs 94.7'],
           [f"CROSSED grid ({len(prevP['grid'])} numbers)", ck(R in prevP['grid']), P['grid_live']],
           [f"ONE ROW PICK ({prevP['orp'][0] if prevP['orp'] else '—'})", ck(bool(prevP['orp']) and R == prevP['orp'][0]), P['orp'][2] if P['orp'] else '—'],
           ['80-number list' + (f' ({R} left out)' if R in prevP['left'] else ''), ck(R not in prevP['left']), P['net_live']]]))
@@ -393,6 +420,8 @@ def build(series_round, prevP, prevD, P, res):
         rows.append(['EP·LAST old xy (test)', f'{n} ({o} on EP {e})', lv])
     if P['orp']:
         rows.append(['ONE ROW PICK', f"{P['orp'][0]} ({P['orp'][1]})", P['orp'][2]])
+    rows.append(['FULL CUT, both digits, of FINAL 4 + yx (display only)', ' · '.join(f'{n:02d} ({o})' for n, o in P['fcut']) or '—',
+                 'history 114 vs 94.7, live 28 vs 19.5'])
     rows.append(['FINAL 4 digits turned (display only)', ' · '.join(f'{n:02d} ({o})' for n, o in P['trf4']) or '—',
                  'history 54 vs 44.6, live 9 vs 9.2'])
     rows.append(['yx column digits turned (display only)', ' · '.join(f'{n:02d} ({o})' for n, o in P['tryx']) or '—',

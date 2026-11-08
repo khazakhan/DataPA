@@ -9272,6 +9272,37 @@ def rrr_ask_ops():
 
 # ── Entry Point ───────────────────────────────────────────────────────────────
 
+def show_chat_page():
+    """CHAT PAGE at the very end of the local page (user 2026-11-09: 'save this format
+    and sequence ... when we run from local also').  Same tables and order as the chat
+    reply (tools/chat_page.py: result check of the last number, table 4, MegaStar,
+    other lists, ONE-MEN-ARMY, OCJP FINAL 4 last).  Runs the page again on the data
+    (~8 s); skipped inside those inner runs.  Display only.  CHAT_PAGE_MD=<file> also
+    writes the markdown (tools/round.sh uses it for rrr_outputs/<round>.md)."""
+    if os.environ.get('CHAT_PAGE_OFF') or os.environ.get('RRR3_DUMP2') or os.environ.get('OMA_OFF'):
+        return
+    lines = _RRR3_PREV.get('raw_lines')
+    if not lines:
+        return
+    import tempfile, subprocess
+    here = os.path.dirname(os.path.abspath(__file__))
+    fd, tmp = tempfile.mkstemp(suffix='.txt'); os.close(fd)
+    try:
+        with open(tmp, 'w') as fh:
+            fh.write(''.join(l if l.endswith('\n') else l + '\n' for l in lines))
+        cmd = [sys.executable, os.path.join(here, 'tools', 'chat_page.py'), tmp]
+        if os.environ.get('CHAT_PAGE_ROUND'):
+            cmd += ['--round', os.environ['CHAT_PAGE_ROUND']]
+        if os.environ.get('CHAT_PAGE_MD'):
+            cmd += ['--md', os.environ['CHAT_PAGE_MD']]
+        sys.stdout.flush()
+        subprocess.run(cmd, cwd=here)
+    except Exception as e:
+        print(f"\n  CHAT PAGE: not available ({e})")
+    finally:
+        os.remove(tmp)
+
+
 def main():
     parser = argparse.ArgumentParser(
         description='DataProcessing — Number sequence analyser using cut rule',
@@ -9308,6 +9339,7 @@ def main():
             with open(args.datafile, 'r') as f:
                 root, ops_list, last_top4, last_scores = run(f, args.x_op, args.y_op)
             _chat_unmute()
+            show_chat_page()
             if args.result is not None:
                 show_result_analysis(root, args.result, ops_list, last_scores, last_top4)
         except FileNotFoundError:
@@ -9331,6 +9363,7 @@ def main():
 
         root, ops_list, last_top4, last_scores = run(rows, args.x_op, args.y_op)
         _chat_unmute()
+        show_chat_page()
 
         if root is None:
             continue

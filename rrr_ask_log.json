@@ -3687,5 +3687,17 @@
    10
   ],
   "result": 10
+ },
+ {
+  "time": "2026-11-08",
+  "round": "U25",
+  "after": 10,
+  "ep": 67,
+  "kind": "result_only",
+  "entry": "result 63 = nc/c+1 on ROOT 67 (EP 10); ONE-MEN-ARMY HIT (13/65), STRONG, OPEN digit 6 HIT (3/11; set 8/11); 63 in 80-net left-out (54/72); nearest row 2 changes; FINAL 4 (21 65 66 00), FINAL 8 (5/22), CLOSE (1 / 1 6 0), EPROOTGEN (2/11), All+bb miss",
+  "numbers": [
+   63
+  ],
+  "result": 63
  }
 ]

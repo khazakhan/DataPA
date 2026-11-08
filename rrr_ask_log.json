@@ -3817,5 +3817,17 @@
    67
   ],
   "result": 67
+ },
+ {
+  "time": "2026-11-08",
+  "round": "V8",
+  "after": 67,
+  "ep": 29,
+  "kind": "result_only",
+  "entry": "result 67 = c-1/-2 on ROOT 29 (EP 67); OPEN 3-digit set (6 in 1 2 6; 12/21), hot, rule5, PRIME 4 rev; 67 in 80-net left-out (62/82); everything else miss. NOTE: V2-V8 results 56 04 65 44 10 67 67 = exactly the last row of the U chart, so V chart now equals U chart (except row 145) and V9 = same position as U2 (EP 67 ROOT 67); U's next results were 72 48 90 69 42 28 14 ... -> if user continues with those, live counters would count the same results twice",
+  "numbers": [
+   67
+  ],
+  "result": 67
  }
 ]

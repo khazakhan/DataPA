@@ -253,9 +253,31 @@ def step_list(P):
         return []
 
 
+def turned_lists(P):
+    """Digits turned (user 2026-11-09, X6: 51 = yx-column 15 turned).  rev(FINAL 4) and
+    rev(FINAL 4 yx column).  History 1293: rev FINAL 4 54 vs 44.6, rev yx 48 vs 44.0;
+    live 266: 9 vs 9.2 and 16 vs 9.1 -> display only."""
+    try:
+        sys.path.insert(0, HERE)
+        import io as _io, contextlib as _cl
+        with _cl.redirect_stdout(_io.StringIO()):
+            import DataProcessing as D
+        rt = int(P['root']); ex, ey = rt // 10, rt % 10
+        op = lambda n: f"{D.OP_ABBREV[D.find_op(ex, n // 10)]}/{D.OP_ABBREV[D.find_op(ey, n % 10)]}"
+        rev = lambda n: (n % 10) * 10 + n // 10
+        f4 = [int(x['n']) for x in P['f4']]
+        yxs = [int(NUMOP.search(x['yx']).group(1)) for x in P['f4'] if NUMOP.search(x['yx'])]
+        a = [(rev(v), op(rev(v))) for v in f4 if rev(v) not in f4]
+        b = [(rev(v), op(rev(v))) for v in yxs if rev(v) not in f4]
+        return list(dict.fromkeys(a)), list(dict.fromkeys(b))
+    except Exception:
+        return [], []
+
+
 def build(series_round, prevP, prevD, P, res):
     R = f'{res:02d}'
     prevP['step'] = step_list(prevP); P['step'] = step_list(P)
+    prevP['trf4'], prevP['tryx'] = turned_lists(prevP); P['trf4'], P['tryx'] = turned_lists(P)
     op = op_on(prevP['root'], res)
     ck = lambda b: '✓' if b else '✗'
     f4 = [d['n'] for d in prevP['f4']]
@@ -290,6 +312,8 @@ def build(series_round, prevP, prevD, P, res):
     cells = lambda rows, cols: {m for r in rows for c in cols if c < len(r) for m in re.findall(r'\b\d\d\b', r[c])}
     note('the ~ / ± / * numbers', R in (prevP['tl'] + ' ' + prevP['pm'] + ' ' + prevP['st']).split()
          or R in cells(prevP['t1'], (8, 9, 10, 11)) or R in cells(prevP['t2'], (6, 7)))
+    note('FINAL 4 digits turned', R in [f'{n:02d}' for n, _ in prevP['trf4']])
+    note('yx column digits turned', R in [f'{n:02d}' for n, _ in prevP['tryx']])
     note('FINAL 4 STEP ±1', R in [f'{n:02d}' for n, _ in prevP.get('step', [])])
     note('the RRR table old / newold columns', R in cells(prevP['t2'], (2, 3, 4, 5)) or R in prevP['oldnew'].split())
     note('the 80-number list', R not in prevP['left'])
@@ -369,6 +393,10 @@ def build(series_round, prevP, prevD, P, res):
         rows.append(['EP·LAST old xy (test)', f'{n} ({o} on EP {e})', lv])
     if P['orp']:
         rows.append(['ONE ROW PICK', f"{P['orp'][0]} ({P['orp'][1]})", P['orp'][2]])
+    rows.append(['FINAL 4 digits turned (display only)', ' · '.join(f'{n:02d} ({o})' for n, o in P['trf4']) or '—',
+                 'history 54 vs 44.6, live 9 vs 9.2'])
+    rows.append(['yx column digits turned (display only)', ' · '.join(f'{n:02d} ({o})' for n, o in P['tryx']) or '—',
+                 'history 48 vs 44.0, live 16 vs 9.1'])
     rows.append(['FINAL 4 STEP ±1 (one side, display only)', ' · '.join(f'{n:02d} ({o})' for n, o in P['step']) or '—',
                  'history 165 vs chance 186 (below chance)'])
     rows.append(['~ / ± / *', ' · '.join(x for x in (P['tl'], P['pm'], P['st']) if x), '—'])

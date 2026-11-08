@@ -263,7 +263,8 @@ def build(series_round, prevP, prevD, P, res):
     A(f"# {'Round ' + sr + ' result' if sr else 'Last result'}: {R} = {op} on ROOT {prevP['root']} ({prevP['rootop']}), EP {prevP['ep']} ({prevP['epop']})\n")
     A(f"{R} was held by " + (', '.join(f'**{h}**' for h in held) or 'no list') + '. '
       + ('Missed: ' + ', '.join(miss) + '.' if miss else '') + '\n')
-    A(f"## Result check: {sr or 'last result'} = {R}, EP {prevP['ep']}, ROOT {prevP['root']}")
+    phd = f"EP {prevP['ep']} ({prevP['epop']}), ROOT {prevP['root']} ({prevP['rootop']})"
+    A(f"## Result check: {sr or 'last result'} = {R} ({op} on ROOT {prevP['root']}): {phd}")
     ol = P['oc_live']
     A(mk([['List', f'Held {R}?', 'Live now'],
           [f"OCJP FINAL 4 ({' '.join(f4)})", ck(R in f4), P['f4_rec']],
@@ -292,9 +293,10 @@ def build(series_round, prevP, prevD, P, res):
     A(mk([['Pos', 'Source', 'old xy (op)', 'old yx (op)', 'newold xy', 'oldnew yx', 'oldy·newy±', 'oldx·newx±']] + P['t2']))
     A('')
     if P['stars']:
-        A(mk([['Pick', 'Number', f"Op on ROOT {P['root']}"]] + [[f'**{a}**', f'**{b}**', c] for a, b, c in P['stars']]))
+        A(f"## MegaStar / PowerStar: {hd}")
+        A(mk([['Pick', 'Number', f"Op on ROOT {P['root']} ({P['rootop']})"]] + [[f'**{a}**', f'**{b}**', c] for a, b, c in P['stars']]))
         A(f"\nMegaStar / PowerStar live {P['stars_live']}.\n")
-    A(f"## Other lists with operations on ROOT {P['root']} ({P['rootop']}): EP {P['ep']}")
+    A(f"## Other lists with operations: {hd}")
     rows = [['List', 'Numbers (op)', 'Live']]
     if P.get('eprg'):
         rows.append([f"EPROOTGEN ({P['eprg_head']})", P['eprg'], P['eprg_live']])
@@ -317,19 +319,22 @@ def build(series_round, prevP, prevD, P, res):
     rows.append(['~ / ± / *', ' · '.join(x for x in (P['tl'], P['pm'], P['st']) if x), '—'])
     rows.append(['old/newold', P['oldnew'], '—'])
     A(mk(rows))
-    A(f"\n## ONE-MEN-ARMY: EP {P['ep']}, ROOT {P['root']} (live {P['oma_live']})")
+    A(f"\n## ONE-MEN-ARMY: {hd} (live {P['oma_live']})")
     A(f"**Ascending:** {' '.join(P['oma_asc'])}\n")
     A(f"## OCJP FINAL 4 with operations: {hd}\n")
+    A(f"### OPEN / CLOSE digits: {hd}")
     A(mk([['', 'Strongest digit', 'Strongest 3'],
           ['**OPEN (tens)**', f"**{P['open']}**", ' · '.join(P['open3'])],
           ['**CLOSE (units)**', f"**{P['close']}**", ' · '.join(P['close3'])]]))
     A('')
-    rows = [['#', 'Number', f"Op on ROOT {P['root']}", 'yx (op)', 'Booster xy / yx (first)', 'From which Op', 'Votes']]
+    A(f"### OCJP FINAL 4: {hd}")
+    rows = [['#', 'Number', f"Op on ROOT {P['root']} ({P['rootop']})", 'yx (op)', 'Booster xy / yx (first)', 'From which Op', 'Votes']]
     for d in P['f4']:
         rk = '**MASTER = 1**' if d['rank'].startswith('MASTER') else d['rank']
         rows.append([rk, f"**{d['n']}**", d['op'], d['yx'], f"{d['bxy']} / {d['byx']}", d['src'], d['votes']])
     A(mk(rows))
-    A(f"\n**FINAL 8:** " + ' · '.join(f'{n}' if k < 4 else f'**{n}** ({o})' for k, (n, o) in enumerate(P['f8'])))
+    A(f"\n### FINAL 8 / Count 2+ / All / 80-number list: {hd}\n")
+    A(f"**FINAL 8:** " + ' · '.join(f'{n}' if k < 4 else f'**{n}** ({o})' for k, (n, o) in enumerate(P['f8'])))
     A(f"**FINAL 8 ascending:** {' '.join(sorted(n for n, _ in P['f8']))} (live {P['f8_live']})\n")
     A(f"**Count 2+ ({len(P['c2'])}):** {' '.join(P['c2'])}\n")
     A(f"**Ascending, all ({len(P['all'])}):** {' '.join(P['all'])}\n")

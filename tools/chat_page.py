@@ -248,6 +248,8 @@ def build(series_round, prevP, prevD, P, res):
     note('the outer flip / outer op move', R in [x[0] for x in (prevP['oflip'], prevP['oop']) if x])
     yxl = [f'{x:02d}' for x in prevD.get('yx', [])]
     note('the RRR yx list', R in yxl)
+    tbl = sorted({f'{(x[0] if isinstance(x, list) else x):02d}' for x in prevD.get('table', [])})
+    note('the RRR table', R in tbl)
     note('the BOOSTER', R in prevP['booster']); note('count 2+', R in prevP['c2'])
     note('BEST FORMS', R in prevP['bf'])
     note('ONE ROW PICK', bool(prevP['orp']) and R == prevP['orp'][0])
@@ -278,6 +280,7 @@ def build(series_round, prevP, prevD, P, res):
           [f"Rule 28 ({' '.join(n for n, _ in prevP['r28'])})", ck(R in [n for n, _ in prevP['r28']]), P['r28_live']],
           [f"Outer flip / outer op ({' / '.join(x[0] for x in (prevP['oflip'], prevP['oop']) if x)})", ck(R in [x[0] for x in (prevP['oflip'], prevP['oop']) if x]), ' / '.join(x[2] for x in (P['oflip'], P['oop']) if x) or '—'],
           [f"RRR yx list ({' '.join(yxl)})", ck(R in yxl), '—'],
+          [f"RRR table ({' '.join(tbl)})", ck(R in tbl), '—'],
           [f"CROSSED grid ({len(prevP['grid'])} numbers)", ck(R in prevP['grid']), P['grid_live']],
           [f"ONE ROW PICK ({prevP['orp'][0] if prevP['orp'] else '—'})", ck(bool(prevP['orp']) and R == prevP['orp'][0]), P['orp'][2] if P['orp'] else '—'],
           ['80-number list' + (f' ({R} left out)' if R in prevP['left'] else ''), ck(R not in prevP['left']), P['net_live']]]))

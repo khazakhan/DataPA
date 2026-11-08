@@ -345,17 +345,29 @@ def build(series_round, prevP, prevD, P, res):
 
 # ── terminal view of the markdown ────────────────────────────────────────────
 def render(md):
+    """Terminal view: every markdown table becomes a box whose top bar names the
+    EP and ROOT with their operations (user 2026-11-09), taken from the heading above."""
     B, N = '\x1b[1m', '\x1b[0m'
     bold = lambda s: re.sub(r'\*\*(.+?)\*\*', B + r'\1' + N, s)
     plain = lambda s: s.replace('**', '')
     out, tbl = [], []
+    title = ['']
     def flush():
         if not tbl:
             return
         rows = [[c.strip() for c in r.strip().strip('|').split('|')] for r in tbl if not re.match(r'^\|[-|]+\|$', r.strip())]
         w = [max(len(plain(r[k])) for r in rows) for k in range(len(rows[0]))]
+        t = title[0]
+        inner = sum(x + 2 for x in w) + len(w) - 1
+        if t and len(t) + 2 > inner:
+            w[-1] += len(t) + 2 - inner; inner = len(t) + 2
         line = lambda a, b, c: '  ' + a + b.join('─' * (x + 2) for x in w) + c
-        out.append(line('┌', '┬', '┐'))
+        if t:
+            out.append('  ┌' + '─' * inner + '┐')
+            out.append('  │ ' + B + t + N + ' ' * (inner - len(t) - 1) + '│')
+            out.append(line('├', '┬', '┤'))
+        else:
+            out.append(line('┌', '┬', '┐'))
         for k, r in enumerate(rows):
             out.append('  │' + '│'.join(' ' + bold(c) + ' ' * (w[i] - len(plain(c)) + 1) for i, c in enumerate(r)) + '│')
             out.append(line('├', '┼', '┤') if k < len(rows) - 1 else line('└', '┴', '┘'))
@@ -366,6 +378,8 @@ def render(md):
         flush()
         if ln.startswith('#'):
             out.append('  ' + B + '■ ' + ln.lstrip('# ') + N)
+            m = re.search(r'EP \d+ \([^)]*\), ROOT \d+ \([^)]*\)', ln)
+            title[0] = m.group(0) if m else ''
         elif ln:
             import textwrap
             out += ['  ' + bold(w) for w in textwrap.wrap(ln, 190)]

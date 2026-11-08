@@ -265,8 +265,10 @@ def build(series_round, prevP, prevD, P, res):
     note('BEST FORMS', R in prevP['bf'])
     note('ONE ROW PICK', bool(prevP['orp']) and R == prevP['orp'][0])
     note('MegaStar/PowerStar', R in [b for _, b, _ in prevP['stars']])
-    note('the ~ / ± / * numbers', R in (prevP['tl'] + ' ' + prevP['pm'] + ' ' + prevP['st']).split())
-    note('old/newold', R in prevP['oldnew'].split())
+    cells = lambda rows, cols: {m for r in rows for c in cols if c < len(r) for m in re.findall(r'\b\d\d\b', r[c])}
+    note('the ~ / ± / * numbers', R in (prevP['tl'] + ' ' + prevP['pm'] + ' ' + prevP['st']).split()
+         or R in cells(prevP['t1'], (8, 9, 10, 11)) or R in cells(prevP['t2'], (6, 7)))
+    note('the RRR table old / newold columns', R in cells(prevP['t2'], (2, 3, 4, 5)) or R in prevP['oldnew'].split())
     note('the 80-number list', R not in prevP['left'])
     # every list the round record says held the result (rrr_records/live.jsonl, written by
     # record_round.py), so nothing the counters saw is left off the page

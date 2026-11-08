@@ -3841,5 +3841,17 @@
    72
   ],
   "result": 72
+ },
+ {
+  "time": "2026-11-08",
+  "round": "V10",
+  "after": 72,
+  "ep": 13,
+  "kind": "replay",
+  "entry": "result 48 = U3's result (replay of U chart); page advanced, not counted live. V11 = U4 position",
+  "numbers": [
+   48
+  ],
+  "result": 48
  }
 ]

@@ -3735,5 +3735,15 @@
    37
   ],
   "result": 37
+ },
+ {
+  "time": "2026-11-08",
+  "round": "V2",
+  "after": 16,
+  "ep": 57,
+  "kind": "new_data",
+  "entry": "user pasted 'new data' twice; both were the series U chart (1st: U minus last 4 rows; 2nd: U minus last row 56 04 65 44 10 67 67, row 145 23 -> **). Asked; user re-sent, so set up as SERIES V (v1.txt = v_raw_paste.txt, 1,321 numbers, ends 70 16 02). Series U parked at U29. V2 declared EP 02 (16\u219202 -1/c+1), ROOT 57 (02\u219257 cut/cut), 2 rows, FINAL 4 70 19 35 45",
+  "numbers": [],
+  "result": null
  }
 ]

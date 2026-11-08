@@ -3745,5 +3745,17 @@
   "entry": "user pasted 'new data' twice; both were the series U chart (1st: U minus last 4 rows; 2nd: U minus last row 56 04 65 44 10 67 67, row 145 23 -> **). Asked; user re-sent, so set up as SERIES V (v1.txt = v_raw_paste.txt, 1,321 numbers, ends 70 16 02). Series U parked at U29. V2 declared EP 02 (16\u219202 -1/c+1), ROOT 57 (02\u219257 cut/cut), 2 rows, FINAL 4 70 19 35 45",
   "numbers": [],
   "result": null
+ },
+ {
+  "time": "2026-11-08",
+  "round": "V2",
+  "after": 16,
+  "ep": 57,
+  "kind": "result_only",
+  "entry": "result 56 = nc/-1 on ROOT 57 (EP 02); STRONG, yx list, All+bb 42/76, 80-net 58/76; no row makes it; FINAL 4 (70 19 35 45), FINAL 8 (5/26), OPEN (7 / 7 4 1), CLOSE (9 / 9 5 0), EPROOTGEN (3/15), OMA (13/69) miss",
+  "numbers": [
+   56
+  ],
+  "result": 56
  }
 ]

@@ -123,6 +123,15 @@ def parse(L):
     P['stars_live'] = live(' '.join(L[s4:e1 + 3]))
     t2, e2 = box_after(L, e1 + 1)
     P['t2'] = [r[:8] for r in t2[1:]]
+    zone = L[s4:e2 + 2]
+    st = []
+    for ln in zone:
+        for m in re.finditer(r'(MegaStar|PowerStar)\s*│\s*(\d\d)\s*│\s*([^\s│]+)', ln):
+            if m.group(1) not in [x[0] for x in st]:
+                st.append(m.groups())
+    if st:
+        P['stars'] = st
+    P['stars_live'] = live(' '.join(zone))
     g = lambda key: L[find(L, e2, key)] if find(L, e2, key) is not None else ''
     gi = lambda key: find(L, e2, key)
     i = gi('old/newold numbers:'); P['oldnew'] = ' '.join(nums(L[i].split(':', 1)[1])) if i else ''

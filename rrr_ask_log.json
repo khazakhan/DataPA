@@ -3829,5 +3829,17 @@
    67
   ],
   "result": 67
+ },
+ {
+  "time": "2026-11-08",
+  "round": "V9",
+  "after": 67,
+  "ep": 67,
+  "kind": "replay",
+  "entry": "result 72 = +1/cut on ROOT 67 = U2's result at the same position (V chart = U chart). Page advanced (v9.txt, v10_full.txt) but NOT recorded/bumped in live counters to avoid counting U2 twice. V10 page = U3 page: FINAL 4 06 28 12 13 (U3 result was 48)",
+  "numbers": [
+   72
+  ],
+  "result": 72
  }
 ]

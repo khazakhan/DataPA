@@ -73,13 +73,14 @@ def last_idx(L, key, before=None):
 
 def box_after(L, i):
     """Rows (cells joined over wrapped lines) of the first ┌..└ box at/after line i."""
-    while i < len(L) and '┌' not in L[i]:
+    first = lambda ln: ln.lstrip()[:1]
+    while i < len(L) and first(L[i]) != '┌':
         i += 1
     rows, cur = [], None
     i += 1
-    while i < len(L) and '└' not in L[i]:
+    while i < len(L) and first(L[i]) != '└':
         ln = L[i]
-        if '├' in ln:
+        if first(ln) == '├':
             if cur:
                 rows.append(cur)
             cur = None
@@ -103,7 +104,7 @@ def find(L, start, key, stop=None):
 
 
 def live(s):
-    m = re.search(r'live (\d+ of \d+)', s)
+    m = re.search(r'[Ll]ive (\d+ of \d+)', s)
     return m.group(1) if m else '—'
 
 
@@ -119,7 +120,7 @@ def parse(L):
     t1, e1 = box_after(L, s4)
     P['t1'] = [r[:12] for r in t1[1:]]
     P['stars'] = [(r[13], r[14], r[15]) for r in t1[1:] if len(r) > 15 and r[13] in ('MegaStar', 'PowerStar')]
-    P['stars_live'] = live(' '.join(L[e1:e1 + 3]))
+    P['stars_live'] = live(' '.join(L[s4:e1 + 3]))
     t2, e2 = box_after(L, e1 + 1)
     P['t2'] = [r[:8] for r in t2[1:]]
     g = lambda key: L[find(L, e2, key)] if find(L, e2, key) is not None else ''
@@ -142,6 +143,12 @@ def parse(L):
     P['oflip'] = (m.group(1), m.group(2), live(ln)) if m else None
     ln = g('Outer op move'); m = NUMOP.search(ln.split(':', 1)[-1]) if ln else None
     P['oop'] = (m.group(1), m.group(2), live(ln)) if m else None
+    i = gi('■ CROSSED options')
+    P['grid'] = []
+    if i:
+        b1, e = box_after(L, i); b2, _ = box_after(L, e + 1)
+        P['grid'] = [c for r in b2[1:] for c in r[1:] if re.fullmatch(r'\d\d', c)]
+    P['grid_live'] = live(L[find(L, i, 'different numbers')]) if i else '—'
     ln = g('Rule 28 (crossed) picks:')
     P['r28'] = NUMOP.findall(ln.split(':', 1)[1]) if ln else []
     P['r28_live'] = (re.search(r'\((\d+ of \d+)\)', ln) or [None, '—'])[1] if ln else '—'
@@ -237,8 +244,13 @@ def build(series_round, prevP, prevD, P, res):
     note('RECOMMENDED', R in recl)
     note('LAST-OP 4', R in [n for n, _ in prevP['lastop']])
     note('Rule 28', R in [n for n, _ in prevP['r28']])
+    note('the CROSSED grid', R in prevP['grid'])
     note('the BOOSTER', R in prevP['booster']); note('count 2+', R in prevP['c2'])
     note('BEST FORMS', R in prevP['bf'])
+    note('ONE ROW PICK', bool(prevP['orp']) and R == prevP['orp'][0])
+    note('MegaStar/PowerStar', R in [b for _, b, _ in prevP['stars']])
+    note('the ~ / ± / * numbers', R in (prevP['tl'] + ' ' + prevP['pm'] + ' ' + prevP['st']).split())
+    note('old/newold', R in prevP['oldnew'].split())
     note('the 80-number list', R not in prevP['left'])
     out = []
     A = out.append
@@ -260,6 +272,9 @@ def build(series_round, prevP, prevD, P, res):
           ['RECOMMENDED', ck(R in recl), '—'],
           [f"yx column ({' '.join(prevP['yxcol'])})", ck(R in prevP['yxcol']), P['yx_live']],
           [f"LAST-OP 4 ({' '.join(n for n, _ in prevP['lastop'])})", ck(R in [n for n, _ in prevP['lastop']]), P['lo_live']],
+          [f"Rule 28 ({' '.join(n for n, _ in prevP['r28'])})", ck(R in [n for n, _ in prevP['r28']]), P['r28_live']],
+          [f"CROSSED grid ({len(prevP['grid'])} numbers)", ck(R in prevP['grid']), P['grid_live']],
+          [f"ONE ROW PICK ({prevP['orp'][0] if prevP['orp'] else '—'})", ck(bool(prevP['orp']) and R == prevP['orp'][0]), P['orp'][2] if P['orp'] else '—'],
           ['80-number list' + (f' ({R} left out)' if R in prevP['left'] else ''), ck(R not in prevP['left']), P['net_live']]]))
     A(f"\nThe earlier {P['ep']} was followed by {P['root']}, so **ROOT = {P['root']} ({P['rootop']})**. {len(P['t1'])} rows qualify.\n")
     hd = f"EP {P['ep']} ({P['epop']}), ROOT {P['root']} ({P['rootop']})"

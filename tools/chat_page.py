@@ -232,8 +232,30 @@ def mk(rows):
                      '|' + '---|' * len(rows[0]) for k, r in enumerate([rows[0], None] + rows[1:]))
 
 
+def step_list(P):
+    """FINAL 4 numbers with ONE side's step moved +1/-1 (user 2026-11-09, X5: 85 = 75 with x -2 -> -1).
+    History 1293 rounds: held 165 vs chance 186.5 (~14 numbers) -> display only."""
+    try:
+        sys.path.insert(0, HERE)
+        import io as _io, contextlib as _cl
+        with _cl.redirect_stdout(_io.StringIO()):
+            import DataProcessing as D
+        rt = int(P['root']); ex, ey = rt // 10, rt % 10; stp = []
+        f4 = [x['n'] for x in P['f4']]
+        for v in map(int, f4):
+            sx = D._op_side(D.OP_ABBREV[D.find_op(ex, v // 10)]); sy = D._op_side(D.OP_ABBREV[D.find_op(ey, v % 10)])
+            for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                n = D._op_apply(ex, sx[0], sx[1] + dx) * 10 + D._op_apply(ey, sy[0], sy[1] + dy)
+                if f'{n:02d}' not in f4 and n not in [q for q, _ in stp]:
+                    stp.append((n, f"{D.OP_ABBREV[D.find_op(ex, n // 10)]}/{D.OP_ABBREV[D.find_op(ey, n % 10)]}"))
+        return stp
+    except Exception:
+        return []
+
+
 def build(series_round, prevP, prevD, P, res):
     R = f'{res:02d}'
+    prevP['step'] = step_list(prevP); P['step'] = step_list(P)
     op = op_on(prevP['root'], res)
     ck = lambda b: '✓' if b else '✗'
     f4 = [d['n'] for d in prevP['f4']]
@@ -268,6 +290,7 @@ def build(series_round, prevP, prevD, P, res):
     cells = lambda rows, cols: {m for r in rows for c in cols if c < len(r) for m in re.findall(r'\b\d\d\b', r[c])}
     note('the ~ / ± / * numbers', R in (prevP['tl'] + ' ' + prevP['pm'] + ' ' + prevP['st']).split()
          or R in cells(prevP['t1'], (8, 9, 10, 11)) or R in cells(prevP['t2'], (6, 7)))
+    note('FINAL 4 STEP ±1', R in [f'{n:02d}' for n, _ in prevP.get('step', [])])
     note('the RRR table old / newold columns', R in cells(prevP['t2'], (2, 3, 4, 5)) or R in prevP['oldnew'].split())
     note('the 80-number list', R not in prevP['left'])
     # every list the round record says held the result (rrr_records/live.jsonl, written by
@@ -346,6 +369,8 @@ def build(series_round, prevP, prevD, P, res):
         rows.append(['EP·LAST old xy (test)', f'{n} ({o} on EP {e})', lv])
     if P['orp']:
         rows.append(['ONE ROW PICK', f"{P['orp'][0]} ({P['orp'][1]})", P['orp'][2]])
+    rows.append(['FINAL 4 STEP ±1 (one side, display only)', ' · '.join(f'{n:02d} ({o})' for n, o in P['step']) or '—',
+                 'history 165 vs chance 186 (below chance)'])
     rows.append(['~ / ± / *', ' · '.join(x for x in (P['tl'], P['pm'], P['st']) if x), '—'])
     rows.append(['old/newold', P['oldnew'], '—'])
     A(mk(rows))

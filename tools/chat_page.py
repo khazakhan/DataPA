@@ -298,11 +298,38 @@ def fullcut_list(P):
         return []
 
 
+LIVE_ROWS = os.path.join(HERE, 'rrr_records', 'display_rows_live.jsonl')
+
+
+def row_live(series_round, res, prevP):
+    """Live record of the display-only rows (STEP ±1, digits turned, FULL CUT), counted
+    from 2026-11-09 X5.  One line per round in rrr_records/display_rows_live.jsonl."""
+    R = f'{res:02d}'
+    held = {'step': R in [f'{n:02d}' for n, _ in prevP['step']],
+            'trf4': R in [f'{n:02d}' for n, _ in prevP['trf4']],
+            'tryx': R in [f'{n:02d}' for n, _ in prevP['tryx']],
+            'fcut': R in [f'{n:02d}' for n, _ in prevP['fcut']]}
+    sizes = {k: len(prevP[k]) for k in held}
+    recs = []
+    if os.path.exists(LIVE_ROWS):
+        recs = [json.loads(l) for l in open(LIVE_ROWS) if l.strip()]
+    if series_round and not any(r['round'] == series_round for r in recs):
+        recs.append({'round': series_round, 'result': res, 'held': held, 'sizes': sizes})
+        with open(LIVE_ROWS, 'a') as fh:
+            fh.write(json.dumps(recs[-1]) + '\n')
+    out = {}
+    for k in held:
+        rr = [r for r in recs if k in r['held']]
+        out[k] = f"live {sum(r['held'][k] for r in rr)} of {len(rr)} (chance {sum(r['sizes'][k] for r in rr) / 100:.1f})"
+    return out
+
+
 def build(series_round, prevP, prevD, P, res):
     R = f'{res:02d}'
     prevP['step'] = step_list(prevP); P['step'] = step_list(P)
     prevP['trf4'], prevP['tryx'] = turned_lists(prevP); P['trf4'], P['tryx'] = turned_lists(P)
     prevP['fcut'] = fullcut_list(prevP); P['fcut'] = fullcut_list(P)
+    LV = row_live(series_round, res, prevP)
     op = op_on(prevP['root'], res)
     ck = lambda b: '✓' if b else '✗'
     f4 = [d['n'] for d in prevP['f4']]
@@ -421,13 +448,13 @@ def build(series_round, prevP, prevD, P, res):
     if P['orp']:
         rows.append(['ONE ROW PICK', f"{P['orp'][0]} ({P['orp'][1]})", P['orp'][2]])
     rows.append(['FULL CUT, both digits, of FINAL 4 + yx (display only)', ' · '.join(f'{n:02d} ({o})' for n, o in P['fcut']) or '—',
-                 'history 114 vs 94.7, live 28 vs 19.5'])
+                 f"history 114 vs 94.7; {LV['fcut']}"])
     rows.append(['FINAL 4 digits turned (display only)', ' · '.join(f'{n:02d} ({o})' for n, o in P['trf4']) or '—',
-                 'history 54 vs 44.6, live 9 vs 9.2'])
+                 f"history 54 vs 44.6; {LV['trf4']}"])
     rows.append(['yx column digits turned (display only)', ' · '.join(f'{n:02d} ({o})' for n, o in P['tryx']) or '—',
-                 'history 48 vs 44.0, live 16 vs 9.1'])
+                 f"history 48 vs 44.0; {LV['tryx']}"])
     rows.append(['FINAL 4 STEP ±1 (one side, display only)', ' · '.join(f'{n:02d} ({o})' for n, o in P['step']) or '—',
-                 'history 165 vs chance 186 (below chance)'])
+                 f"history 165 vs chance 186; {LV['step']}"])
     rows.append(['~ / ± / *', ' · '.join(x for x in (P['tl'], P['pm'], P['st']) if x), '—'])
     rows.append(['old/newold', P['oldnew'], '—'])
     A(mk(rows))

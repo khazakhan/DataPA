@@ -3757,5 +3757,17 @@
    56
   ],
   "result": 56
+ },
+ {
+  "time": "2026-11-08",
+  "round": "V3",
+  "after": 56,
+  "ep": 71,
+  "kind": "result_only",
+  "entry": "result 04 = c-2/c-2 on ROOT 71 (EP 56); ONE-MEN-ARMY HIT (14/70), STRONG, \u00b1 numbers (Op11 oldx\u00b7newx\u00b1 04; 7/96), BEST FORMS (4/51), EPROOTGEN (04 c-2/c-2; 4/16), 80-net 59/77; nearest row 1 change; FINAL 4 (70 83 94 27), FINAL 8 (5/27), OPEN (8 / 8 7 9), CLOSE (0 / 0 3 1), All+bb miss",
+  "numbers": [
+   4
+  ],
+  "result": 4
  }
 ]

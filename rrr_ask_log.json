@@ -3805,5 +3805,17 @@
    10
   ],
   "result": 10
+ },
+ {
+  "time": "2026-11-08",
+  "round": "V7",
+  "after": 10,
+  "ep": 70,
+  "kind": "result_only",
+  "entry": "result 67 = -1/c+2 on ROOT 70 (EP 10); only OPEN 3-digit set (6 in 2 0 6; 11/20); 67 in 80-net left-out (62/81); nearest row 2 changes; everything else miss (FINAL 4 24 65 83 01, FINAL 8 5/31, CLOSE 5/5 4 1, EPROOTGEN 4/20, OMA 14/74)",
+  "numbers": [
+   67
+  ],
+  "result": 67
  }
 ]

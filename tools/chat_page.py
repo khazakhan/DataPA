@@ -247,6 +247,8 @@ def build(series_round, prevP, prevD, P, res):
         (held if b else miss).append(name)
     note('OCJP FINAL 4', R in f4); note('FINAL 8', R in f8)
     note('the OPEN digit', t == prevP['open']); note('the CLOSE digit', u == prevP['close'])
+    note(f"the OPEN 3-digit set ({' '.join(prevP['open3'])})", t in prevP['open3'] and t != prevP['open'])
+    note(f"the CLOSE 3-digit set ({' '.join(prevP['close3'])})", u in prevP['close3'] and u != prevP['close'])
     note('the yx column', R in prevP['yxcol']); note('EPROOTGEN', R in prevP['eprg_set'])
     note(f"ONE-MEN-ARMY (#{oma[R]})" if R in oma else 'ONE-MEN-ARMY', R in oma)
     note(f"STRONG 20 (#{strong.index(R) + 1})" if R in strong else 'STRONG 20', R in strong)
@@ -266,6 +268,23 @@ def build(series_round, prevP, prevD, P, res):
     note('the ~ / ± / * numbers', R in (prevP['tl'] + ' ' + prevP['pm'] + ' ' + prevP['st']).split())
     note('old/newold', R in prevP['oldnew'].split())
     note('the 80-number list', R not in prevP['left'])
+    # every list the round record says held the result (rrr_records/live.jsonl, written by
+    # record_round.py), so nothing the counters saw is left off the page
+    NAMES = {'rec': None, 'strong': None, 'yx': None, 'table': None, 'wide': 'the wide list',
+             'charrow': 'CharRow', 'hot': 'the hot list', 'top4': None, 'top10': 'ranked top 10',
+             'top20': 'ranked top 20', 'top40': 'ranked top 40', 'prime10': 'PRIME 10',
+             'prime4fam': 'PRIME 4 family', 'prime4rev': 'PRIME 4 reversed', 'finder': 'the finder',
+             'lastop8': 'LAST-OP 8', 'ncspec': 'NC/CUT special', 'one_row': None}
+    try:
+        recs = [json.loads(l) for l in open(os.path.join(HERE, 'rrr_records', 'live.jsonl'))]
+        rr = [r for r in recs if r.get('round') == series_round and r.get('result') == res]
+        for k in (rr[-1]['held_by'] if rr else []):
+            nm = NAMES.get(k, k.replace('rule', 'rule ') if k.startswith('rule') else k)
+            if nm and nm not in held:
+                held.append(nm)
+    except Exception:
+        pass
+    miss[:] = [m for m in miss if '3-digit set' not in m]
     out = []
     A = out.append
     sr = series_round

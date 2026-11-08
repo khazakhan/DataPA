@@ -3793,5 +3793,17 @@
    44
   ],
   "result": 44
+ },
+ {
+  "time": "2026-11-08",
+  "round": "V6",
+  "after": 44,
+  "ep": 66,
+  "kind": "result_only",
+  "entry": "result 10 = cut/c-1 on ROOT 66 (EP 44); CLOSE digit 0 HIT (3/19; set 6/19), BOOSTER (15/83), ALL COMBINED (23/83), REC, hot, All+bb 44/80, 80-net 62/80; nearest row 3 changes; FINAL 4 (04 20 02 07), FINAL 8 (5/30), OPEN (0 / 0 5 2), EPROOTGEN (4/19), OMA (14/73) miss",
+  "numbers": [
+   10
+  ],
+  "result": 10
  }
 ]

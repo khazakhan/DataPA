@@ -3781,5 +3781,17 @@
    65
   ],
   "result": 65
+ },
+ {
+  "time": "2026-11-08",
+  "round": "V5",
+  "after": 65,
+  "ep": 80,
+  "kind": "result_only",
+  "entry": "result 44 = c+1/c-1 on ROOT 80 (EP 65); Rule 28 pick 1 (9/129), Outer op move 44 FIRST HIT (1/113), CLOSE 3-digit (4 in 3 8 4; 5/18), hot, All+bb 43/79, 80-net 61/79; no row; FINAL 4 (13 28 64 66), FINAL 8 (5/29), OPEN (1 / 1 6 2), EPROOTGEN (4/18), OMA (14/72) miss",
+  "numbers": [
+   44
+  ],
+  "result": 44
  }
 ]

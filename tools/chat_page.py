@@ -514,12 +514,73 @@ def _cols():
         return 200
 
 
+RING = '\u2b55'   # ⭕ red ring, no fill (user 2026-11-09)
+
+
+def _near(r):
+    """The result and the numbers one digit-step away from it (tens or units +-1, wrapping)."""
+    a, b = r // 10, r % 10
+    return {r, ((a + 1) % 10) * 10 + b, ((a - 1) % 10) * 10 + b, a * 10 + (b + 1) % 10, a * 10 + (b - 1) % 10}
+
+
+def ring_section(prev_md, R, label):
+    """'Where R was' (user 2026-11-09, screenshot Y48): every place on the previous page where the
+    result itself (exact, bold) or a number one step away from it stood, marked with a red ring."""
+    near = _near(R)
+    tok = re.compile(r'(?<!\d)(\d\d)(?!\d)( \([^)]*\))?')
+    rows, head, sec = [], None, ''
+    def grab(cell, allnum):
+        out = []
+        c = cell.replace('**', '')
+        for m in tok.finditer(c):
+            if not (allnum or m.group(2)):
+                continue
+            v = int(m.group(1))
+            if v in near:
+                t = f"{RING}{m.group(1)}{m.group(2) or ''}"
+                out.append(f"**{t}**" if v == R else t + ' near')
+        return out
+    for ln in prev_md.split('\n'):
+        if ln.startswith('## ') or ln.startswith('### '):
+            sec = re.sub(r':.*', '', ln.lstrip('# ')); head = None; continue
+        if ln.startswith('|'):
+            cells = [c.strip() for c in ln.strip().strip('|').split('|')]
+            if re.match(r'^[-| ]+$', ln.strip()):
+                continue
+            if head is None:
+                head = cells; continue
+            if sec.startswith('Result check'):
+                continue
+            for i, c in enumerate(cells[1:], 1):
+                if head[i].lower().startswith(('live', 'votes', 'from which', 'source', 'op on')):
+                    continue
+                got = grab(c, bool(re.fullmatch(r'[\d\s·*]+', c.replace('**', ''))))
+                if got:
+                    lab = f"{cells[0].replace('**', '')}" + ('' if head[i].startswith('Numbers') else f" · {head[i]}")
+                    pre = '' if sec.startswith('Other lists') else re.sub(r' with operations$', '', sec) + ' · '
+                    rows.append([pre + lab, ' · '.join(got)])
+        elif ln.startswith('**') and ':**' in ln:
+            name, rest = ln.split(':**', 1)
+            rest = re.sub(r'\(live[^)]*\)', '', rest)
+            got = grab(rest, '(' not in rest)
+            if got:
+                nm = name.strip('*')
+                rows.append([('ONE-MEN-ARMY ascending' if nm == 'Ascending' and sec.startswith('ONE-MEN') else nm), ' · '.join(got)])
+        else:
+            head = None if not ln.strip() else head
+    if not rows:
+        return f"\n## {RING} Where {R:02d} was on the {label} page\n\n{R:02d} and its one-step neighbours were on no list of the {label} page.\n"
+    body = '\n'.join(f"| {a} | {b} |" for a, b in rows)
+    return (f"\n## {RING} Where {R:02d} was on the {label} page ({RING} bold = exact, {RING} near = one digit-step away: "
+            f"{' '.join(f'{v:02d}' for v in sorted(_near(R) - {R}))})\n| Where | Marked |\n|---|---|\n{body}\n")
+
+
 def render(md, width=None):
     """Terminal view: every markdown table becomes a box whose top bar names the
     EP and ROOT with their operations (user 2026-11-09), taken from the heading above."""
     B, N = '\x1b[1m', '\x1b[0m'
     bold = lambda s: re.sub(r'\*\*(.+?)\*\*', B + r'\1' + N, s)
-    plain = lambda s: s.replace('**', '')
+    plain = lambda s: s.replace('**', '') + ' ' * s.count(RING)   # ⭕ is 2 columns wide
     W = min(width or _cols(), 230) - 1
     out, tbl = [], []
     title = ['']
@@ -583,6 +644,14 @@ def main():
         p.stdin.write(_feed(prev_text) if k < 2 else _feed(text)); p.stdin.close()
     prevL, prevD, curL, curD = [_finish(p, j) for p, j in jobs]
     md = build(label, parse(prevL), prevD, parse(curL), res, curD)
+    # red rings on the previous page's numbers that matched / were one step from the result
+    if md_out and res is not None:
+        m = re.match(r'(.*?)([a-z]+)(\d+)\.md$', md_out)
+        prev_md = f"{m.group(1)}{m.group(2)}{int(m.group(3)) - 1}.md" if m else None
+        if prev_md and os.path.exists(prev_md):
+            sec = ring_section(open(prev_md).read(), int(res), f"{m.group(2).upper()}{int(m.group(3)) - 1}")
+            i = md.find('\nThe earlier ')
+            md = md[:i] + '\n' + sec + md[i:] if i >= 0 else md + sec
     if md_out:
         with open(md_out, 'w') as fh:
             fh.write(md)

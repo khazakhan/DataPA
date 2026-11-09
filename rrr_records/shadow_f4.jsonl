@@ -7,4 +7,5 @@
 {"round": "Y32", "pick": [26, 24, 29, 22], "result": 13}
 {"round": "Y33", "pick": [69, 67, 62, 65], "result": 56}
 {"round": "Y34", "pick": [2, 0, 5, 8], "result": 62}
-{"round": "Y35", "pick": [18, 16, 11, 14], "result": null}
+{"round": "Y35", "pick": [18, 16, 11, 14], "result": 98}
+{"round": "Y36", "pick": [44, 42, 47, 40], "result": null}

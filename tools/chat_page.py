@@ -627,6 +627,23 @@ def render(md, width=None):
     return '\n'.join(out)
 
 
+# 5 stars (red, blue, green, yellow, white): the local output window starts after this
+# line, with the same tables and order as the chat reply (user 2026-11-09).
+FIVE_STARS = '  ' + '  '.join(f'\033[1;{c}m★\033[0m' for c in (31, 34, 32, 33, 97))
+
+
+def _label_from_datasets(text):
+    """Round label (e.g. Z9) of a local run: the rrr_datasets/<s><n>.txt with the same numbers."""
+    import glob
+    want = re.findall(r'\d\d|\*\*', text)
+    base = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'rrr_datasets')
+    for f in sorted(glob.glob(os.path.join(base, '*.txt')), key=os.path.getmtime, reverse=True):
+        m = re.match(r'([a-z]+)(\d+)\.txt$', os.path.basename(f))
+        if m and re.findall(r'\d\d|\*\*', open(f).read()) == want:
+            return f'{m.group(1).upper()}{m.group(2)}'
+    return ''
+
+
 def main():
     a = sys.argv[1:]
     if not a:
@@ -638,26 +655,32 @@ def main():
     prev_text, res = drop_last_number(text)
     if label is None:
         m = re.match(r'([a-z]+)(\d+)\.txt$', os.path.basename(path))
-        label = f'{m.group(1).upper()}{m.group(2)}' if m else ''
+        label = f'{m.group(1).upper()}{m.group(2)}' if m else _label_from_datasets(text)
     jobs = [_run(prev_text), _run(prev_text, dump=True), _run(text), _run(text, dump=True)]
     for k, (p, _) in enumerate(jobs):
         p.stdin.write(_feed(prev_text) if k < 2 else _feed(text)); p.stdin.close()
     prevL, prevD, curL, curD = [_finish(p, j) for p, j in jobs]
     md = build(label, parse(prevL), prevD, parse(curL), res, curD)
     # red rings on the previous page's numbers that matched / were one step from the result
+    # (local runs too: the previous page is rrr_outputs/<round>.md of the result's round)
+    prev_md = prev_lab = None
     if md_out and res is not None:
         m = re.match(r'(.*?)([a-z]+)(\d+)\.md$', md_out)
-        prev_md = f"{m.group(1)}{m.group(2)}{int(m.group(3)) - 1}.md" if m else None
+        if m:
+            prev_md = f"{m.group(1)}{m.group(2)}{int(m.group(3)) - 1}.md"
+            prev_lab = f"{m.group(2).upper()}{int(m.group(3)) - 1}"
+    elif res is not None and re.match(r'[A-Z]+\d+$', label or ''):
+        prev_md = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'rrr_outputs', label.lower() + '.md')
+        prev_lab = label
+    if True:
         if prev_md and os.path.exists(prev_md):
-            sec = ring_section(open(prev_md).read(), int(res), f"{m.group(2).upper()}{int(m.group(3)) - 1}")
+            sec = ring_section(open(prev_md).read(), int(res), prev_lab)
             i = md.find('\nThe earlier ')
             md = md[:i] + '\n' + sec + md[i:] if i >= 0 else md + sec
     if md_out:
         with open(md_out, 'w') as fh:
             fh.write(md)
-    print('\n' + '═' * 100)
-    print('  CHAT PAGE  —  same tables and order as the chat reply')
-    print('═' * 100)
+    print('\n' + FIVE_STARS)
     print(render(md))
 
 

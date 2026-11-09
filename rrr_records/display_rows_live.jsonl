@@ -13,3 +13,4 @@
 {"round": "X17", "result": 36, "held": {"step": true, "trf4": false, "tryx": false, "fcut": false}, "sizes": {"step": 16, "trf4": 2, "tryx": 0, "fcut": 6}}
 {"round": "X18", "result": 48, "held": {"step": false, "trf4": false, "tryx": false, "fcut": false}, "sizes": {"step": 16, "trf4": 2, "tryx": 2, "fcut": 2}}
 {"round": "X19", "result": 63, "held": {"step": false, "trf4": false, "tryx": false, "fcut": false}, "sizes": {"step": 12, "trf4": 4, "tryx": 4, "fcut": 6}}
+{"round": "X20", "result": 72, "held": {"step": false, "trf4": true, "tryx": false, "fcut": true}, "sizes": {"step": 14, "trf4": 3, "tryx": 4, "fcut": 8}}

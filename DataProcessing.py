@@ -1667,7 +1667,9 @@ def show_final_box():
            f"CLOSE digit (units): {_oc_c[0]}  strongest 3: {' '.join(map(str, _oc_c))}",
            f"      live OPEN {RRR_LIVE.get('rrr3_open1_hits', 0)}/{RRR_LIVE.get('rrr3_open3_hits', 0)} of {RRR_LIVE.get('rrr3_open1_rounds', 0)}, "
            f"CLOSE {RRR_LIVE.get('rrr3_close1_hits', 0)}/{RRR_LIVE.get('rrr3_close3_hits', 0)} of {RRR_LIVE.get('rrr3_close1_rounds', 0)} (1 digit / 3 digits);"
-           f" history 1293 rounds 1 digit 12.9% / 13.1%, 3 digits 33.8% / 34.1% (chance 10% / 30%). Display only."]
+           + (" OPEN from the chart's tens steps, EP tens last (walk-forward 12.7-16.2% / 35-37%);"
+              if _tens_avoid() is not None else " OPEN history 1293 rounds 12.9% / 33.8%;")
+           + " CLOSE history 13.1% / 34.1% (chance 10% / 30%). Display only."]
     _RRR3_PREV['sum_final4'] = _oc + table(rows[0], rows[1:], (6, 8, 7, 4, 5, 9)) + [
         "  LAST op / previous op check: LAST row (new ops or its old = previous ops) and the row before it; fewest changes.",
         "  Tested on 412 rounds (F N M K O P Q R): ranking FINAL 4 by it held 28 vs 29 now, so it is a check, not the ranking.",
@@ -7883,16 +7885,19 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                                f"   in {len(nm_)} lists: {', '.join(nm_) if nm_ else '-'}")
             f4_body += ["", "the OCJP numbers most of the never-repaired lists also hold",
                         "(RECOMMENDED, RRR table, same op again, 3RRR RESULT; WIDE and yx dropped 2026-10-26)",
-                        "walk-forward, 436 past rounds: 36 hits = 8.3%; any 4 numbers = 4.0%",
-                        "about twice chance, but it still misses about 92 rounds in 100"]
+                        f"live {RRR_LIVE.get('rrr3_final4_hits', 0)} of {RRR_LIVE.get('rrr3_final4_rounds', 0)}"
+                        f" (chance 4% = {RRR_LIVE.get('rrr3_final4_rounds', 0) * 0.04:.0f}); old walk-forward 436 rounds 8.3%",
+                        "it misses most rounds"] + ([
+                        f"tens-repeat rule: EP tens {_tens_avoid()} goes last (this chart repeats tens < 6%)"]
+                        if _tens_avoid() is not None else [])
             # OCJP MASTER (user, 2026-10-16: "finally we are going to use
             # this one result only"): FINAL 4's #1 as the one exact pick
             if ocjp_final4:
                 m_ = ocjp_final4[0][0]
                 f4_body += ["", f"OCJP MASTER (one exact pick) = #1  {m_:02d} "
                                 f"({OP_ABBREV[find_op(ep // 10, m_ // 10)]}/{OP_ABBREV[find_op(ep % 10, m_ % 10)]})",
-                            "#1 was the result in 15 of 590 past rounds = 2.5% (one number by chance = 1%);",
-                            "live K46-K99: 3 of 54. It misses most rounds"]
+                            f"live {RRR_LIVE.get('rrr3_master_hits', 0)} of {RRR_LIVE.get('rrr3_master_rounds', 0)}"
+                            " (one number by chance = 1%); old history 15 of 590. It misses most rounds"]
             f4_w = max(len(l_) for l_ in f4_body) + 2
             strong_lines += [o_ind + f"{s_g}┌{'─' * f4_w}┐{s_rst}"]
             strong_lines += [o_ind + f"{s_g}│{s_rst} \033[1m{l_:<{f4_w - 2}}{s_rst} {s_g}│{s_rst}" for l_ in f4_body]

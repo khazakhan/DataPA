@@ -361,6 +361,7 @@ def build(series_round, prevP, prevD, P, res, curD=None):
     note('the BOOSTER', R in prevP['booster']); note('count 2+', R in prevP['c2'])
     note('BEST FORMS', R in prevP['bf'])
     note('ONE ROW PICK', bool(prevP['orp']) and R == prevP['orp'][0])
+    note('EP·LAST old xy (test)', bool(prevP.get('eplast')) and R == prevP['eplast'][0])
     note('MegaStar/PowerStar', R in [b for _, b, _ in prevP['stars']])
     cells = lambda rows, cols: {m for r in rows for c in cols if c < len(r) for m in re.findall(r'\b\d\d\b', r[c])}
     note('the ~ / ± / * numbers', R in (prevP['tl'] + ' ' + prevP['pm'] + ' ' + prevP['st']).split()

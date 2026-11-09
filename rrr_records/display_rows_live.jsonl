@@ -28,3 +28,4 @@
 {"round": "X32", "result": 4, "held": {"step": false, "trf4": false, "tryx": false, "fcut": false}, "sizes": {"step": 12, "trf4": 3, "tryx": 4, "fcut": 6}}
 {"round": "X33", "result": 57, "held": {"step": true, "trf4": false, "tryx": false, "fcut": false}, "sizes": {"step": 16, "trf4": 4, "tryx": 4, "fcut": 8}}
 {"round": "X34", "result": 99, "held": {"step": false, "trf4": false, "tryx": false, "fcut": false}, "sizes": {"step": 16, "trf4": 4, "tryx": 4, "fcut": 7}}
+{"round": "X35", "result": 42, "held": {"step": false, "trf4": false, "tryx": false, "fcut": false}, "sizes": {"step": 16, "trf4": 4, "tryx": 4, "fcut": 6}}

@@ -23,4 +23,5 @@
 {"round": "Y48", "pick": [86, 84, 89, 82], "result": 28}
 {"round": "Y49", "pick": [74, 72, 77, 70], "result": 90}
 {"round": "Y50", "pick": [46, 44, 49, 42], "result": 28}
-{"round": "Y51", "pick": [74, 72, 77, 70], "result": null}
+{"round": "Y51", "pick": [74, 72, 77, 70], "result": 84}
+{"round": "Y52", "pick": [30, 33, 38, 40], "result": null}

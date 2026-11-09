@@ -110,6 +110,7 @@ if rec.get('r28'):
     up['rrr3_rule28_rounds'] = 1
     if res in rec['r28']: hits.append('rrr3_rule28_hits')
 # OPEN / CLOSE digit (user 2026-11-07, live from U15): rank-weighted tens / units of OCJP top 10
+D._RRR3_PREV['flat'] = [int(x) for x in open(rec['dataset']).read().split() if x.isdigit()]  # step OPEN needs the chart (fix 2026-11-09)
 _oo, _cc = D._open_close(rec['ranked'])
 up['rrr3_open1_rounds'] = 1; up['rrr3_close1_rounds'] = 1
 if res // 10 == _oo[0]: hits.append('rrr3_open1_hits')

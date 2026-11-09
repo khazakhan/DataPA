@@ -26,7 +26,7 @@ next="$(echo "$s" | tr a-z A-Z)$((n + 1))"
 [ -f "$cur" ] && { echo "$cur already exists (round already done?)"; exit 1; }
 
 cp "$prev" "$cur"
-printf '%02d\n' "$res" >> "$cur"
+res=$((10#$res)); printf '%02d\n' "$res" >> "$cur"
 
 # result op on the ROOT (x/y), needed by last_move.py
 ops=$(python3 - "$prev" "$res" <<'PY'

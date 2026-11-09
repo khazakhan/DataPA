@@ -186,6 +186,7 @@ def parse(L):
     P['bf'] = nums(L[j].split('ascending:')[1]); P['bf_live'] = live(L[j + 1])
     i = gf('BOOSTER ('); j = find(L, i, 'live')
     P['booster'] = re.findall(r'(\d\d) \(', ' '.join(L[i + 1:j]))
+    P['booster_ops'] = re.findall(r'(\d\d) \(([^)]+)\)', ' '.join(L[i + 1:j])); P['booster_live'] = live(L[j])
     i = gf('ascending, count 2+ ('); P['c2'] = nums(L[i].split(':', 1)[1])
     i = gf('ascending, all ('); P['all'] = nums(L[i].split(':', 1)[1])
     i = gf('left out (20):'); P['left'] = nums(L[i].split(':', 1)[1]); P['net_live'] = live(L[i + 1])
@@ -475,6 +476,9 @@ def build(series_round, prevP, prevD, P, res):
     A(f"\n### FINAL 8 / Count 2+ / All / 80-number list: {hd}\n")
     A(f"**FINAL 8:** " + ' · '.join(f'{n}' if k < 4 else f'**{n}** ({o})' for k, (n, o) in enumerate(P['f8'])))
     A(f"**FINAL 8 ascending:** {' '.join(sorted(n for n, _ in P['f8']))} (live {P['f8_live']})\n")
+    if P.get('booster_ops'):
+        A(f"**BOOSTER, full list ({len(P['booster_ops'])}, FINAL 4 left out, live {P['booster_live']}):** "
+          + ' · '.join(f'{n} ({o})' for n, o in P['booster_ops']) + "\n")
     A(f"**Count 2+ ({len(P['c2'])}):** {' '.join(P['c2'])}\n")
     A(f"**Ascending, all ({len(P['all'])}):** {' '.join(P['all'])}\n")
     A(f"**80-number list, left out (20):** {' '.join(P['left'])}\n")

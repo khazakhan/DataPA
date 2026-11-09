@@ -1219,10 +1219,29 @@ def _open_close(rk, N=10, k=3):
     return out[0][:k], out[1][:k]
 
 
-def _final8(top4, prime, rk):
-    """FINAL 8 (user 2026-11-07): FINAL 4, then PRIME 8 numbers not yet in, then the ranking, up to 8."""
+def _shadow4(flat):
+    """SHADOW 4 (tools/shadow_f4.py): the 4 numbers the chart has most often moved to from
+    the last number's digits (tens step x units step), the EP's tens digit skipped on
+    low-repeat charts.  Pure chart statistics, no RRR rules."""
+    if not flat or len(flat) < 50:
+        return []
+    S = list(zip(flat, flat[1:]))
+    t, u = [0] * 10, [0] * 10
+    for a, b in S:
+        t[(b // 10 - a // 10) % 10] += 1; u[(b % 10 - a % 10) % 10] += 1
+    e = flat[-1]; rep = t[0] / len(S)
+    sc = {n: (t[(n // 10 - e // 10) % 10] + 1) * (u[(n % 10 - e % 10) % 10] + 1) for n in range(100)
+          if not (rep < 0.06 and n // 10 == e // 10)}
+    return sorted(sc, key=lambda n: (-sc[n], n))[:4]
+
+
+def _final8(top4, prime, rk, flat=None):
+    """FINAL 8: FINAL 4, then the SHADOW 4 chart-step picks not yet in (2026-11-09: on 350 logged
+    live rounds FINAL 4 + SHADOW 4 held 45 = 12.9% vs 8% chance; the old FINAL 8 with PRIME 8 adds
+    held 9.8% live), then PRIME 8 / the ranking to fill up to 8."""
     out = []
-    for v in list(top4) + list(prime[:8]) + list(rk[4:] if rk else []):
+    sh = _shadow4(flat if flat is not None else (_RRR3_PREV.get('flat') or []))
+    for v in list(top4) + sh + list(prime[:8]) + list(rk[4:] if rk else []):
         v = v[0] if isinstance(v, tuple) else v
         if v not in out:
             out.append(v)
@@ -1724,9 +1743,9 @@ def show_final_box():
     # FINAL 8 (user 2026-11-07, live from U4): FINAL 4 + PRIME 8 adds, filled by ranking
     _f8 = _final8(top4, prime, rk)
     _RRR3_PREV['final8'] = _f8
-    _f8l = [f"  FINAL 8 (FINAL 4 + PRIME 8 adds): " + ' · '.join(wop(n) for n in _f8),
+    _f8l = [f"  FINAL 8 (FINAL 4 + SHADOW 4 adds): " + ' · '.join(wop(n) for n in _f8),
             f"      ascending: {' '.join(f'{n:02d}' for n in sorted(_f8))}   live {rec('final8')}; "
-            f"replay 228 live rounds held 24 (10.5%) vs chance 18.2 -> bigger net, same odds per number"]
+            f"350 logged live rounds: FINAL 4 + SHADOW 4 held 45 (12.9%) vs chance 28 (old PRIME-8 adds 9.8%)"]
     for _lst in (body, _RRR3_PREV.get('sum_final4') or []):
         _ix = [i for i, l_ in enumerate(_lst) if isinstance(l_, str) and l_.startswith('  yx column:')]
         if _ix:

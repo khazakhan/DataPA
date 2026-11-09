@@ -180,7 +180,7 @@ def parse(L):
                             byx=f'{b2.group(1)} ({b2.group(2)})' if b2 else '—',
                             how=r[6], src=r[7], votes=r[9] if len(r) > 9 else ''))
     gf = lambda key: find(L, fe, key)
-    i = gf('FINAL 8 (FINAL 4 + PRIME 8 adds):')
+    i = gf('FINAL 8 (FINAL 4 + SHADOW 4 adds):')
     P['f8'] = NUMOP.findall(L[i].split(':', 1)[1]); P['f8_live'] = live(L[i + 1])
     i = gf('yx column:'); P['yxcol'] = nums(L[i].split(':', 1)[1].split('live')[0]); P['yx_live'] = live(L[i])
     i = gf('BEST FORMS ('); j = find(L, i, 'ascending:')
@@ -481,7 +481,7 @@ def build(series_round, prevP, prevD, P, res, curD=None):
         rows.append([rk, f"**{d['n']}**", d['op'], d['yx'], f"{d['bxy']} / {d['byx']}", d['src'], d['votes']])
     A(mk(rows))
     A(f"\n### FINAL 8 / Count 2+ / All / 80-number list: {hd}\n")
-    A(f"**FINAL 8:** " + ' · '.join(f'{n}' if k < 4 else f'**{n}** ({o})' for k, (n, o) in enumerate(P['f8'])))
+    A(f"**FINAL 8 (FINAL 4 + SHADOW 4):** " + ' · '.join(f'{n}' if k < 4 else f'**{n}** ({o})' for k, (n, o) in enumerate(P['f8'])))
     A(f"**FINAL 8 ascending:** {' '.join(sorted(n for n, _ in P['f8']))} (live {P['f8_live']})\n")
     if P.get('booster_ops'):
         A(f"**BOOSTER, full list ({len(P['booster_ops'])}, FINAL 4 left out, live {P['booster_live']}):** "

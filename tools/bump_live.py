@@ -103,7 +103,8 @@ if res in [n for n, *_ in D._best_forms(ep, [(r_['pos'], _AB[r_['old'][0]], _AB[
     hits.append('rrr3_bestform_hits')
 # FINAL 8 (user 2026-11-07, live from U4): FINAL 4 + PRIME 8 adds, filled by ranking
 up['rrr3_final8_rounds'] = 1
-if res in D._final8(rec['ranked'][:4], rec['prime10'], rec['ranked']): hits.append('rrr3_final8_hits')
+_flat = [int(x) for x in open(rec['dataset']).read().split() if x.isdigit()]
+if res in D._final8(rec['ranked'][:4], rec['prime10'], rec['ranked'], _flat): hits.append('rrr3_final8_hits')
 # Rule 28 picks (auto from U15; before that the counter was bumped by hand)
 if rec.get('r28'):
     up['rrr3_rule28_rounds'] = 1

@@ -325,7 +325,7 @@ def row_live(series_round, res, prevP):
     return out
 
 
-def build(series_round, prevP, prevD, P, res):
+def build(series_round, prevP, prevD, P, res, curD=None):
     R = f'{res:02d}'
     prevP['step'] = step_list(prevP); P['step'] = step_list(P)
     prevP['trf4'], prevP['tryx'] = turned_lists(prevP); P['trf4'], P['tryx'] = turned_lists(P)
@@ -461,6 +461,11 @@ def build(series_round, prevP, prevD, P, res):
     A(mk(rows))
     A(f"\n## ONE-MEN-ARMY: {hd} (live {P['oma_live']})")
     A(f"**Ascending:** {' '.join(P['oma_asc'])}\n")
+    cs = sorted(f'{x:02d}' for x in (curD or {}).get('strong', []))
+    if cs:
+        extra = sorted(set(cs) - set(P['oma_asc']))
+        A(f"**STRONG 20** shares {20 - len(extra)} of 20 with ONE-MEN-ARMY"
+          + (f"; STRONG 20 only: {' '.join(extra)}\n" if extra else " (same list this round)\n"))
     A(f"## OCJP FINAL 4 with operations: {hd}\n")
     A(f"### OPEN / CLOSE digits: {hd}")
     A(mk([['', 'Strongest digit', 'Strongest 3'],
@@ -544,11 +549,11 @@ def main():
     if label is None:
         m = re.match(r'([a-z]+)(\d+)\.txt$', os.path.basename(path))
         label = f'{m.group(1).upper()}{m.group(2)}' if m else ''
-    jobs = [_run(prev_text), _run(prev_text, dump=True), _run(text)]
-    for p, _ in jobs:
-        p.stdin.write(_feed(prev_text) if p is not jobs[2][0] else _feed(text)); p.stdin.close()
-    prevL, prevD, curL = [_finish(p, j) for p, j in jobs]
-    md = build(label, parse(prevL), prevD, parse(curL), res)
+    jobs = [_run(prev_text), _run(prev_text, dump=True), _run(text), _run(text, dump=True)]
+    for k, (p, _) in enumerate(jobs):
+        p.stdin.write(_feed(prev_text) if k < 2 else _feed(text)); p.stdin.close()
+    prevL, prevD, curL, curD = [_finish(p, j) for p, j in jobs]
+    md = build(label, parse(prevL), prevD, parse(curL), res, curD)
     if md_out:
         with open(md_out, 'w') as fh:
             fh.write(md)

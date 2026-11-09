@@ -83,3 +83,4 @@
 {"round": "Y52", "result": 23, "held": {"step": false, "trf4": true, "tryx": true, "fcut": false}, "sizes": {"step": 13, "trf4": 4, "tryx": 4, "fcut": 5}}
 {"round": "Y53", "result": 77, "held": {"step": false, "trf4": false, "tryx": false, "fcut": false}, "sizes": {"step": 14, "trf4": 4, "tryx": 3, "fcut": 7}}
 {"round": "Y54", "result": 62, "held": {"step": false, "trf4": false, "tryx": false, "fcut": false}, "sizes": {"step": 14, "trf4": 2, "tryx": 0, "fcut": 3}}
+{"round": "Y55", "result": 8, "held": {"step": false, "trf4": false, "tryx": false, "fcut": false}, "sizes": {"step": 14, "trf4": 4, "tryx": 4, "fcut": 6}}

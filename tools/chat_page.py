@@ -14,6 +14,7 @@ The dataset's last number is the result being checked; the page before it is the
 data without that number.  Everything is read from DataProcessing.py's own output, so
 nothing here changes a prediction.  Display only.
 """
+import textwrap
 import os, re, sys, json, tempfile, subprocess
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -493,12 +494,33 @@ def build(series_round, prevP, prevD, P, res, curD=None):
 
 
 # ── terminal view of the markdown ────────────────────────────────────────────
-def render(md):
+def _cols():
+    """Real terminal width, even when stdout is piped through tee (round.sh):
+    COLUMNS, then any fd that is a tty, then /dev/tty; 200 if none."""
+    if os.environ.get('COLUMNS', '').isdigit():
+        return int(os.environ['COLUMNS'])
+    for fd in (1, 2, 0):
+        try:
+            return os.get_terminal_size(fd).columns
+        except OSError:
+            pass
+    try:
+        fd = os.open('/dev/tty', os.O_RDONLY)
+        try:
+            return os.get_terminal_size(fd).columns
+        finally:
+            os.close(fd)
+    except OSError:
+        return 200
+
+
+def render(md, width=None):
     """Terminal view: every markdown table becomes a box whose top bar names the
     EP and ROOT with their operations (user 2026-11-09), taken from the heading above."""
     B, N = '\x1b[1m', '\x1b[0m'
     bold = lambda s: re.sub(r'\*\*(.+?)\*\*', B + r'\1' + N, s)
     plain = lambda s: s.replace('**', '')
+    W = min(width or _cols(), 230) - 1
     out, tbl = [], []
     title = ['']
     def flush():
@@ -507,6 +529,10 @@ def render(md):
         rows = [[c.strip() for c in r.strip().strip('|').split('|')] for r in tbl if not re.match(r'^\|[-|]+\|$', r.strip())]
         w = [max(len(plain(r[k])) for r in rows) for k in range(len(rows[0]))]
         t = title[0]
+        # fit the box inside the terminal (user paste X33: wide rows wrapped and
+        # overwrote each other): shrink the widest column, cells wrap inside it
+        while 2 + sum(x + 3 for x in w) + 1 > W and max(w) > 6:
+            w[w.index(max(w))] -= 1
         inner = sum(x + 2 for x in w) + len(w) - 1
         if t and len(t) + 2 > inner:
             w[-1] += len(t) + 2 - inner; inner = len(t) + 2
@@ -518,7 +544,10 @@ def render(md):
         else:
             out.append(line('┌', '┬', '┐'))
         for k, r in enumerate(rows):
-            out.append('  │' + '│'.join(' ' + bold(c) + ' ' * (w[i] - len(plain(c)) + 1) for i, c in enumerate(r)) + '│')
+            parts = [[c] if len(plain(c)) <= w[i] else [x.replace('\x00', ' ') for x in textwrap.wrap(plain(c).replace(' (', '\x00('), w[i], break_on_hyphens=False)] or [''] for i, c in enumerate(r)]
+            for j in range(max(len(x) for x in parts)):
+                cells = [x[j] if j < len(x) else '' for x in parts]
+                out.append('  │' + '│'.join(' ' + bold(c) + ' ' * (w[i] - len(plain(c)) + 1) for i, c in enumerate(cells)) + '│')
             out.append(line('├', '┼', '┤') if k < len(rows) - 1 else line('└', '┴', '┘'))
         tbl.clear()
     for ln in md.split('\n'):
@@ -530,8 +559,7 @@ def render(md):
             m = re.search(r'EP \d+ \([^)]*\), ROOT \d+ \([^)]*\)', ln)
             title[0] = m.group(0) if m else ''
         elif ln:
-            import textwrap
-            out += ['  ' + bold(w) for w in textwrap.wrap(ln, 190)]
+            out += ['  ' + bold(x) for x in textwrap.wrap(ln, min(190, W - 4))]
         else:
             out.append('')
     flush()

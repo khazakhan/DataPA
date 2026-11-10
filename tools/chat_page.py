@@ -578,7 +578,7 @@ def topcolor_live(series_round, res=None, entry=None):
     done = [r for r in recs if r.get('result') is not None]
     hits = sum(r['result'] in r['members'] for r in done)
     cur = next((r for r in recs if r['round'] == series_round), None)
-    return cur, f"{hits} of {len(done)} (chance {sum(len(r['members']) for r in done) / 100:.1f})"
+    return cur, f"{hits} of {len(done)} (chance {sum(len(r['members']) for r in done) / 100:.2f})"
 
 
 def mark_families(rows):
@@ -710,10 +710,10 @@ def strongest_live(series_round, res=None, entry=None):
         fh.write(''.join(json.dumps(r) + '\n' for r in recs))
     done = [r for r in recs if r.get('result') is not None]
     cur = next((r for r in recs if r['round'] == series_round), None)
-    return cur, f"{sum(r['result'] in r['nums'] for r in done)} of {len(done)} (chance {sum(len(r['nums']) for r in done) / 100:.1f})"
+    return cur, f"{sum(r['result'] in r['nums'] for r in done)} of {len(done)} (chance {sum(len(r['nums']) for r in done) / 100:.2f})"
 
 
-def strongest_section(md, label, k=4):
+def strongest_section(md, label, k=4, avoid=None):
     """The same ⭕ view for the CURRENT page (user 2026-11-10, screenshot Z23): before the result
     is known, the numbers standing in the most places of this page, each with its places and how
     many places its one-step neighbours hold.  Display only - not a prediction."""
@@ -724,14 +724,16 @@ def strongest_section(md, label, k=4):
             places[v].append(place)
     if not places:
         return ''
-    top = sorted(places, key=lambda v: (-len(places[v]), v))[:k]
+    # low tens-repeat chart: the EP's tens digit is left out, as in FINAL 4 (DataProcessing._tens_avoid)
+    top = sorted((v for v in places if avoid is None or v // 10 != avoid), key=lambda v: (-len(places[v]), v))[:k]
     STRONGEST[:] = top
     rows = []
     for v in top:
         nb = sum(len(places.get(u, [])) for u in _near(v) - {v})
         rows.append(f"| {RING}**{v:02d}** | {len(places[v])} | {nb} | {' · '.join(places[v])} |")
     return (f"\n## {RING} Strongest on the {label} page (the {k} numbers in the most places; no result yet)\n"
-            f"| Number | Places | Near places (one step) | Where |\n|---|---|---|---|\n" + '\n'.join(rows) + '\n')
+            + (f"EP tens {avoid} left out (this chart repeats tens < 6%).\n\n" if avoid is not None else '')
+            + f"| Number | Places | Near places (one step) | Where |\n|---|---|---|---|\n" + '\n'.join(rows) + '\n')
 
 
 def render(md, width=None):
@@ -845,7 +847,9 @@ def main():
             md = md[:i] + '\n' + sec + md[i:] if i >= 0 else md + sec
     # the same ⭕ view for the current page, just before the OCJP FINAL 4 section
     cur_lab = re.sub(r'\d+$', lambda m: str(int(m.group()) + 1), label) if re.search(r'\d+$', label or '') else 'current'
-    sec = strongest_section(md, cur_lab)
+    fl = [int(x) for x in re.findall(r'(?<![\d*])\d\d(?![\d*])', text)]
+    rep_ = sum(a // 10 == b // 10 for a, b in zip(fl, fl[1:])) / max(1, len(fl) - 1)
+    sec = strongest_section(md, cur_lab, avoid=fl[-1] // 10 if len(fl) > 300 and rep_ < 0.06 else None)
     if STRONGEST and re.search(r'\d+$', label or ''):
         strongest_live(None, entry={'round': cur_lab, 'nums': STRONGEST})
     k = md.find('\n## OCJP FINAL 4 with operations')

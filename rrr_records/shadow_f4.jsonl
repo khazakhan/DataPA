@@ -51,4 +51,5 @@
 {"round": "Z21", "pick": [49, 89, 40, 42], "result": 85}
 {"round": "Z22", "pick": [30, 70, 31, 33], "result": 40}
 {"round": "Z23", "pick": [95, 35, 96, 98], "result": 84}
-{"round": "Z24", "pick": [39, 79, 30, 32], "result": null}
+{"round": "Z24", "pick": [39, 79, 30, 32], "result": 66}
+{"round": "Z25", "pick": [11, 51, 12, 14], "result": null}

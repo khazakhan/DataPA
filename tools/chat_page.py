@@ -405,12 +405,15 @@ def build(series_round, prevP, prevD, P, res, curD=None):
     phd = f"EP {prevP['ep']} ({prevP['epop']}), ROOT {prevP['root']} ({prevP['rootop']})"
     A(f"## Result check: {sr or 'last result'} = {R} ({op} on ROOT {prevP['root']}): {phd}")
     ol = P['oc_live']
+    tc, tcl = topcolor_live(series_round, int(R)) if series_round else (None, '')
     A(mk([['List', f'Held {R}?', 'Live now'],
           [f"OCJP FINAL 4 ({' '.join(f4)})", ck(R in f4), P['f4_rec']],
           [f"OCJP MASTER {f4[0]}", ck(R == f4[0]), P['ms_rec']],
           [f"FINAL 8 (+{' '.join(f8[4:])})", ck(R in f8), P['f8_live']],
           *([[f"OC-STRONG 4 ({' '.join(n for n, _ in prevP['ocs'])})", ck(R in [n for n, _ in prevP['ocs']]), P['ocs_live']]]
             if prevP.get('ocs') else []),
+          *([[f"Top colour family {tc['colour']} {tc['family']} ({' '.join(f'{v:02d}' for v in tc['members'])})",
+              ck(int(R) in tc['members']), tcl]] if tc else []),
           [f"OPEN digit {prevP['open']} / set {' '.join(prevP['open3'])}", f"{ck(t == prevP['open'])} / {ck(t in prevP['open3'])}", f"{ol[0].replace('/', ' / ')} of {ol[1]}"],
           [f"CLOSE digit {prevP['close']} / set {' '.join(prevP['close3'])} (actual {u})", f"{ck(u == prevP['close'])} / {ck(u in prevP['close3'])}", f"{ol[2].replace('/', ' / ')} of {ol[3]}"],
           ['EPROOTGEN', ck(R in prevP['eprg_set']), P.get('eprg_live', '—')],
@@ -469,6 +472,10 @@ def build(series_round, prevP, prevD, P, res, curD=None):
     rows.append(['~ / ± / *', ' · '.join(x for x in (P['tl'], P['pm'], P['st']) if x), '—'])
     rows.append(['old/newold', P['oldnew'], '—'])
     rows, legend = mark_families(rows)
+    if series_round and TOP_COLOUR:
+        nxt = re.sub(r'\d+$', lambda m: str(int(m.group()) + 1), series_round)
+        topcolor_live(None, entry={'round': nxt, 'colour': TOP_COLOUR[0], 'family': TOP_COLOUR[1],
+                                   'members': TOP_COLOUR[2], 'times': TOP_COLOUR[3]})
     A(mk(rows))
     if legend:
         A(f"\n{legend}\n")
@@ -551,6 +558,27 @@ def _family_map():
 
 
 FAMILY = _family_map()
+TOP_COLOUR = []      # [colour, family label, all members, times] of the last marked table
+TOPCOL_LOG = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'rrr_records', 'topcolor_live.jsonl')
+
+
+def topcolor_live(series_round, res=None, entry=None):
+    """Top colour family live log (user 2026-11-10, Z22: 40 came from the 🟦 45-family, the highest
+    colour count).  The page of round N saves its top family; the result of N scores it.
+    Chance = family size / 100 (8 numbers -> 8%).  Display/test only."""
+    recs = [json.loads(l) for l in open(TOPCOL_LOG)] if os.path.exists(TOPCOL_LOG) else []
+    if entry:
+        recs = [r for r in recs if r['round'] != entry['round']] + [entry]
+    if res is not None:
+        for r in recs:
+            if r['round'] == series_round:
+                r['result'] = res
+    with open(TOPCOL_LOG, 'w') as fh:
+        fh.write(''.join(json.dumps(r) + '\n' for r in recs))
+    done = [r for r in recs if r.get('result') is not None]
+    hits = sum(r['result'] in r['members'] for r in done)
+    cur = next((r for r in recs if r['round'] == series_round), None)
+    return cur, f"{hits} of {len(done)} (chance {sum(len(r['members']) for r in done) / 100:.1f})"
 
 
 def mark_families(rows):
@@ -593,6 +621,7 @@ def mark_families(rows):
     if times:
         fam_of = {FAM_COLORS[k]: f for k, (f, m) in enumerate(fams)}
         order = sorted(times, key=lambda k: (-times[k], FAM_COLORS.index(k)))
+        TOP_COLOUR[:] = [order[0], fl(fam_of[order[0]]), sorted(v for v, f in FAMILY.items() if f == fam_of[order[0]]), times[order[0]]]
         legend += ("\n\n**Colour count** (times each family's numbers stand in this table, highest first): "
                    + '  ·  '.join((f"**{k} {fl(fam_of[k])} {times[k]}**" if times[k] == times[order[0]] else f"{k} {fl(fam_of[k])} {times[k]}")
                                   for k in order))

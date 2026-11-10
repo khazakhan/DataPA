@@ -334,3 +334,4 @@
 {"round": "Z37", "ep": 55, "result": 10, "x_op": "c+1", "y_op": "cut", "last": {"pos": 9, "src": "23->55", "old": ["c-2", "+2"], "new": ["c-2", "c+2"]}, "x_from": ["new y step switched"], "y_from": [], "check": true}
 {"round": "Z38", "ep": 22, "result": 2, "x_op": "-2", "y_op": "nc", "last": {"pos": 16, "src": "56->22", "old": ["c+2", "c+1"], "new": ["-1", "+1"]}, "x_from": ["new x step switched"], "y_from": [], "check": true}
 {"round": "Z39", "ep": 57, "result": 56, "x_op": "nc", "y_op": "-1", "last": {"pos": 14, "src": "15->57", "old": ["c-1", "+2"], "new": ["c-2", "-2"]}, "x_from": [], "y_from": ["new y step switched", "old x cut switched"], "check": true}
+{"round": "Z40", "ep": 40, "result": 85, "x_op": "c-1", "y_op": "cut", "last": {"pos": 15, "src": "01->40", "old": ["c-1", "-1"], "new": ["c+1", "-2"]}, "x_from": ["new x sign flipped", "old x as is", "old y cut switched"], "y_from": [], "check": true}

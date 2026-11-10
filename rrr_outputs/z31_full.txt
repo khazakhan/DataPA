@@ -3882,6 +3882,9 @@
   │ 4          │ [1m69[0m     │ +2/+1                        │ 50 (+1/+2)  │ 14 (c+2/c+1) / 05 (c+1/c+2) │ Op4 old yx, y cut sw │ 2 (RECOMMENDED, 3RRR RESULT)   │
   └────────────┴────────┴──────────────────────────────┴─────────────┴─────────────────────────────┴──────────────────────┴────────────────────────────────┘
 
+
+  [1mMASTER 34 family[0m (34-family, EP tens 9 out): 34 39 43 48 84 89 (logged low-repeat rounds 32 of 267 vs chance 19.9; live 0 of 0 (chance 0.00))
+
   [1m■ FINAL 8 / Count 2+ / All / 80-number list: EP 96 (52→96 c-1/c-1), ROOT 48 (96→48 cut/+2)[0m
 
   [1mFINAL 8 (FINAL 4 + OC-STRONG / SHADOW):[0m 34 · 41 · 46 · 69 · [1m48[0m (nc/nc) · [1m49[0m (nc/+1) · [1m44[0m (nc/c+1) · [1m58[0m (+1/nc)

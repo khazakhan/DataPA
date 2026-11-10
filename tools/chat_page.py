@@ -729,6 +729,26 @@ def strongest_live(series_round, res=None, entry=None):
     return cur, f"{sum(r['result'] in r['nums'] for r in done)} of {len(done)} (chance {sum(len(r['nums']) for r in done) / 100:.2f})"
 
 
+MFAM_LOG = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'rrr_records', 'masterfam_live.jsonl')
+
+
+def masterfam_live(series_round, res=None, entry=None):
+    """MASTER family live log (user 2026-11-11, Z30: MASTER 14 and result 96 same family).
+    tools/f4_family_study.py: low-repeat charts 32 of 267 vs chance 19.9 (x1.6); normal charts at chance."""
+    recs = [json.loads(l) for l in open(MFAM_LOG)] if os.path.exists(MFAM_LOG) else []
+    if entry:
+        recs = [r for r in recs if r['round'] != entry['round']] + [entry]
+    if res is not None:
+        for r in recs:
+            if r['round'] == series_round:
+                r['result'] = res
+    with open(MFAM_LOG, 'w') as fh:
+        fh.write(''.join(json.dumps(r) + '\n' for r in recs))
+    done = [r for r in recs if r.get('result') is not None]
+    cur = next((r for r in recs if r['round'] == series_round), None)
+    return cur, f"{sum(r['result'] in r['nums'] for r in done)} of {len(done)} (chance {sum(len(r['nums']) for r in done) / 100:.2f})"
+
+
 def strongest_section(md, label, k=4, avoid=None):
     """The same ⭕ view for the CURRENT page (user 2026-11-10, screenshot Z23): before the result
     is known, the numbers standing in the most places of this page, each with its places and how
@@ -855,6 +875,10 @@ def main():
     if True:
         if prev_md and os.path.exists(prev_md):
             sec = ring_section(open(prev_md).read(), int(res), prev_lab)
+            mf, mlv = masterfam_live(label, int(res))
+            if mf:
+                sec += (f"\n{RING} MASTER {mf['master']:02d} family of the {prev_lab} page ({' '.join(f'{v:02d}' for v in mf['nums'])}): "
+                        f"{'✓ held' if int(res) in mf['nums'] else '✗'} {res:02d} · live {mlv}\n")
             cur, lv = strongest_live(label, int(res))
             if cur:
                 sec += (f"\n{RING} strongest 4 of the {prev_lab} page ({' '.join(f'{v:02d}' for v in cur['nums'])}): "
@@ -868,6 +892,19 @@ def main():
     sec = strongest_section(md, cur_lab, avoid=fl[-1] // 10 if len(fl) > 300 and rep_ < 0.06 else None)
     if STRONGEST and re.search(r'\d+$', label or ''):
         strongest_live(None, entry={'round': cur_lab, 'nums': STRONGEST})
+    # MASTER family under the FINAL 4 table (low tens-repeat charts only; normal charts at chance)
+    mm = re.search(r'\| \*\*MASTER = 1\*\* \| \*\*(\d\d)\*\*', md)
+    av_ = fl[-1] // 10 if len(fl) > 300 and rep_ < 0.06 else None
+    if mm and av_ is not None:
+        mv = int(mm.group(1)); fam = FAMILY[mv]
+        mem = sorted(v for v, f in FAMILY.items() if f == fam and v // 10 != av_)
+        flab = f"{fam}-family" if fam[0].isdigit() else fam
+        line = (f"\n**MASTER {mv:02d} family** ({flab}, EP tens {av_} out): {' '.join(f'{v:02d}' for v in mem)}"
+                f" (logged low-repeat rounds 32 of 267 vs chance 19.9; live {masterfam_live(None)[1]})\n")
+        k2 = md.find('\n### FINAL 8')
+        md = md[:k2] + '\n' + line + md[k2:] if k2 >= 0 else md + line
+        if re.search(r'\d+$', label or ''):
+            masterfam_live(None, entry={'round': cur_lab, 'master': mv, 'nums': mem})
     k = md.find('\n## OCJP FINAL 4 with operations')
     md = md[:k] + '\n' + sec + md[k:] if k >= 0 else md + sec
     if md_out:

@@ -125,9 +125,13 @@ def parse(L):
     P['t1'] = [r[:12] for r in t1[1:]]
     P['stars'] = [(r[13], r[14], r[15]) for r in t1[1:] if len(r) > 15 and r[13] in ('MegaStar', 'PowerStar')]
     P['stars_live'] = live(' '.join(L[s4:e1 + 3]))
-    t2, e2 = box_after(L, e1 + 1)
-    P['t2'] = [r[:8] for r in t2[1:]]
-    zone = L[s4:e2 + 2]
+    if t1 and len(t1[0]) >= 18 and t1[0][12].startswith('old xy'):
+        # wide terminal: both RRR tables in one box (old xy .. oldx·newx± are columns 12-17)
+        P['t2'] = [[r[0], r[1]] + r[12:18] for r in t1[1:]]; e2 = e1
+    else:
+        t2, e2 = box_after(L, e1 + 1)
+        P['t2'] = [r[:8] for r in t2[1:]]
+    zone = L[s4:e2 + 12]   # the MegaStar / PowerStar box sits just below the RRR table(s)
     st = []
     for ln in zone:
         for m in re.finditer(r'(MegaStar|PowerStar)\s*│\s*(\d\d)\s*│\s*([^\s│]+)', ln):

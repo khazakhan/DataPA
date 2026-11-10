@@ -1,4 +1,5 @@
 {"round": "Z22", "colour": "\ud83d\udfe6", "family": "45-family", "members": [4, 9, 40, 45, 54, 59, 90, 95], "times": 15, "result": 40}
 {"round": "Z23", "colour": "\ud83d\udfe9", "family": "23-family", "members": [23, 28, 32, 37, 73, 78, 82, 87], "times": 22, "result": 84}
 {"round": "Z24", "colour": "\ud83d\udfe9", "family": "23-family", "members": [23, 28, 32, 37, 73, 78, 82, 87], "times": 17, "result": 66}
-{"round": "Z25", "colour": "\ud83d\udfe6", "family": "12-family", "members": [12, 17, 21, 26, 62, 67, 71, 76], "times": 12}
+{"round": "Z25", "colour": "\ud83d\udfe6", "family": "12-family", "members": [12, 17, 21, 26, 62, 67, 71, 76], "times": 12, "result": 52}
+{"round": "Z26", "colour": "\ud83d\udfe7", "family": "half-cut", "members": [5, 16, 27, 38, 49, 50, 61, 72, 83, 94], "times": 15}

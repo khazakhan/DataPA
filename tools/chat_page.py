@@ -574,8 +574,12 @@ def mark_families(rows):
     fams = sorted(((f, m) for f, m in fams.items() if len(m) >= 2), key=lambda t: (-len(t[1]), t[0]))[:len(FAM_COLORS)]
     col = {v: FAM_COLORS[k] for k, (f, m) in enumerate(fams) for v in m}
     out = [rows[0]]
+    times = {}                       # colour count: how many times each family's numbers stand in the table
     for r in rows[1:]:
         c, o = r[1], outside(r[1])
+        for m in tok.finditer(o):
+            if m.group(1) in col:
+                times[col[m.group(1)]] = times.get(col[m.group(1)], 0) + 1
         parts, last = [], 0
         for m in tok.finditer(o):
             v = m.group(1)
@@ -586,6 +590,12 @@ def mark_families(rows):
     legend = ((f"{RING} strongest: {' '.join(strong)} (on {top} lists of this table)" if strong else '')
               + ('  ·  ' if strong and fams else '')
               + '  ·  '.join(f"{FAM_COLORS[k]} {fl(f)} {' '.join(sorted(m))}" for k, (f, m) in enumerate(fams)))
+    if times:
+        fam_of = {FAM_COLORS[k]: f for k, (f, m) in enumerate(fams)}
+        order = sorted(times, key=lambda k: (-times[k], FAM_COLORS.index(k)))
+        legend += ("\n\n**Colour count** (times each family's numbers stand in this table, highest first): "
+                   + '  ·  '.join((f"**{k} {fl(fam_of[k])} {times[k]}**" if times[k] == times[order[0]] else f"{k} {fl(fam_of[k])} {times[k]}")
+                                  for k in order))
     return out, legend
 
 

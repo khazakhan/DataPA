@@ -3829,6 +3829,22 @@
   [1mSTRONG 20[0m shares 20 of 20 with ONE-MEN-ARMY (same list this round)
 
 
+  [1m■ OP HISTORY 4: the ops history says come next (on Z31)[0m
+  Learned from this chart's past: after an op, how often the next op was the same, sign flipped, ±1/±2, cut switched, or crossed xy/yx. A applies it on the EP, B on the ROOT. Walk-forward
+  5,778 low-repeat rounds: top 4 held 5.1% (A) / 4.9% (B) vs chance 4.4% — close to chance. C = the 4 best of 200 fixed rules (EP or ROOT op on EP or ROOT, as is or crossed, each side same /
+  cut sw / sign / ±1): 1.33–1.44% each vs ~1.1%.
+
+  ┌───────┬─────────────────────────────┬───────────────────────────────────────────────────────────────────────────────┬────────┐
+  │ Model │ From                        │ 4 numbers (op)                                                                │ Live   │
+  ├───────┼─────────────────────────────┼───────────────────────────────────────────────────────────────────────────────┼────────┤
+  │ A     │ op into EP 52→96            │ [1m32[0m (c-1/c+1) · [1m30[0m (c-1/c-1) · [1m38[0m (c-1/+2) · [1m36[0m (c-1/nc)                       │ 0 of 0 │
+  ├───────┼─────────────────────────────┼───────────────────────────────────────────────────────────────────────────────┼────────┤
+  │ B     │ ROOT op 96→48               │ [1m81[0m (c-1/c-2) · [1m86[0m (c-1/-2) · [1m89[0m (c-1/+1) · [1m85[0m (c-1/c+2)                       │ 0 of 0 │
+  ├───────┼─────────────────────────────┼───────────────────────────────────────────────────────────────────────────────┼────────┤
+  │ C     │ best 4 direct EP/ROOT rules │ [1m55[0m (c+1/-1 on EP) · [1m06[0m (+1/nc on EP) · [1m44[0m (cut/-2 on EP) · [1m32[0m (c-1/c+1 on EP) │ 0 of 0 │
+  └───────┴─────────────────────────────┴───────────────────────────────────────────────────────────────────────────────┴────────┘
+
+
   [1m■ ⭕ Strongest on the Z31 page (the 4 numbers in the most places; no result yet)[0m
   EP tens 9 left out (this chart repeats tens < 6%).
 

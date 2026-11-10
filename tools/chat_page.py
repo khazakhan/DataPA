@@ -729,6 +729,75 @@ def strongest_live(series_round, res=None, entry=None):
     return cur, f"{sum(r['result'] in r['nums'] for r in done)} of {len(done)} (chance {sum(len(r['nums']) for r in done) / 100:.2f})"
 
 
+OPH_LOG = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'rrr_records', 'ophistory_live.jsonl')
+OPN = {0: 'nc', 1: '+1', 2: '+2', 3: 'c-2', 4: 'c-1', 5: 'cut', 6: 'c+1', 7: 'c+2', 8: '-2', 9: '-1'}
+
+
+def op_history(fl):
+    """OP HISTORY 4 (user 2026-11-11: pick the operation history says is most suitable - same op,
+    nc->cut, -1->nc, +1->cut, sign change, +-1, xy/yx crossed).  tools/op_transform_study.py model:
+    A = op into the EP -> next op, B = ROOT op -> op on ROOT; every change counted from the chart's
+    past.  Walk-forward 5,778 low-repeat predictions: top 4 A 5.1%, B 4.9% vs chance 4.4%."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from op_transform_study import Model, step, T, U
+    low = len(fl) > 300 and sum(a // 10 == b // 10 for a, b in zip(fl, fl[1:])) / (len(fl) - 1) < 0.06
+    MA, MB, last = Model(), Model(), {}
+    for i in range(1, len(fl) - 1):
+        ep, nx = fl[i], fl[i + 1]
+        if i >= 2:
+            MA.learn(step(fl[i - 2], fl[i - 1]), step(fl[i - 1], ep))
+        j = last.get(ep)
+        if j is not None and j + 1 < i:
+            MB.learn(step(ep, fl[j + 1]), step(fl[j + 1], nx))
+        last[ep] = i
+    if len(fl) >= 3:
+        MA.learn(step(fl[-3], fl[-2]), step(fl[-2], fl[-1]))
+    ep = fl[-1]; j = max((k for k in range(len(fl) - 1) if fl[k] == ep), default=None)
+    av = T(ep) if low else None
+    cands = [n for n in range(100) if av is None or T(n) != av]
+    out = {}
+    for lab, M, base, src in (('A', MA, ep, step(fl[-2], ep)), ('B', MB, fl[j + 1] if j is not None else None, None)):
+        if lab == 'B':
+            if base is None:
+                continue
+            src = step(ep, base)
+        st, su = M.side_scores(src, 0), M.side_scores(src, 1)
+        sc = {n: st[(T(n) - T(base)) % 10] * su[(U(n) - U(base)) % 10] for n in cands}
+        top = sorted(cands, key=lambda n: -sc[n])[:4]
+        out[lab] = (base, [(n, f"{OPN[(T(n) - T(base)) % 10]}/{OPN[(U(n) - U(base)) % 10]}") for n in top])
+    # C: the 4 best fixed EP/ROOT direct rules on low-repeat charts (tools/ep_root_direct_study.py,
+    # 5,778 rounds: 1.44 / 1.38 / 1.35 / 1.33% each vs ~1.1% chance, both halves steady)
+    if low and j is not None:
+        root = fl[j + 1]; eo, ro = step(fl[-2], ep), step(ep, root)
+        rules = [('EP op crossed, x sign, y cut sw', ep, (eo[1], eo[0]), lambda a: -a, lambda a: a + 5),
+                 ('ROOT op crossed, x -1, y cut sw', ep, (ro[1], ro[0]), lambda a: a - 1, lambda a: a + 5),
+                 ('ROOT op, both signs', ep, ro, lambda a: -a, lambda a: -a),
+                 ('EP op crossed, y sign', ep, (eo[1], eo[0]), lambda a: a, lambda a: -a)]
+        L = []
+        for nm, b, s_, fx, fy in rules:
+            n = ((T(b) + fx(s_[0])) % 10) * 10 + (U(b) + fy(s_[1])) % 10
+            if n not in [q for q, _ in L]:
+                L.append((n, f"{OPN[(T(n) - T(ep)) % 10]}/{OPN[(U(n) - U(ep)) % 10]} on EP"))
+        out['C'] = (ep, L)
+    return out
+
+
+def oph_live(series_round, res=None, entry=None):
+    recs = [json.loads(l) for l in open(OPH_LOG)] if os.path.exists(OPH_LOG) else []
+    if entry:
+        recs = [r for r in recs if r['round'] != entry['round']] + [entry]
+    if res is not None:
+        for r in recs:
+            if r['round'] == series_round:
+                r['result'] = res
+    with open(OPH_LOG, 'w') as fh:
+        fh.write(''.join(json.dumps(r) + '\n' for r in recs))
+    done = [r for r in recs if r.get('result') is not None]
+    cur = next((r for r in recs if r['round'] == series_round), None)
+    lv = {k: f"{sum(r['result'] in r[k] for r in done if k in r)} of {sum(k in r for r in done)}" for k in ('A', 'B', 'C')}
+    return cur, lv
+
+
 MFAM_LOG = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'rrr_records', 'masterfam_live.jsonl')
 
 
@@ -875,6 +944,10 @@ def main():
     if True:
         if prev_md and os.path.exists(prev_md):
             sec = ring_section(open(prev_md).read(), int(res), prev_lab)
+            oc_, olv = oph_live(label, int(res))
+            if oc_:
+                sec += ''.join(f"\n{RING} OP HISTORY {k} of the {prev_lab} page ({' '.join(f'{v:02d}' for v in oc_[k])}): "
+                               f"{'✓ held' if int(res) in oc_[k] else '✗'} {res:02d} · live {olv[k]} (chance 4%)\n" for k in ('A', 'B', 'C') if k in oc_)
             mf, mlv = masterfam_live(label, int(res))
             if mf:
                 sec += (f"\n{RING} MASTER {mf['master']:02d} family of the {prev_lab} page ({' '.join(f'{v:02d}' for v in mf['nums'])}): "
@@ -892,6 +965,22 @@ def main():
     sec = strongest_section(md, cur_lab, avoid=fl[-1] // 10 if len(fl) > 300 and rep_ < 0.06 else None)
     if STRONGEST and re.search(r'\d+$', label or ''):
         strongest_live(None, entry={'round': cur_lab, 'nums': STRONGEST})
+    # OP HISTORY 4 (models A / B), just before the OCJP FINAL 4 section
+    oh = op_history(fl)
+    if oh:
+        _, lv0 = oph_live(None)
+        frm = lambda k, b: {'A': f'op into EP {fl[-2]:02d}→{fl[-1]:02d}', 'B': f'ROOT op {fl[-1]:02d}→{b:02d}',
+                            'C': 'best 4 direct EP/ROOT rules'}[k]
+        rows_ = [f"| {k} | {frm(k, b)} | "
+                 + ' · '.join(f"**{n:02d}** ({o})" for n, o in L4) + f" | {lv0[k]} |" for k, (b, L4) in oh.items()]
+        sec2 = (f"\n## OP HISTORY 4: the ops history says come next (on {cur_lab})\n"
+                f"Learned from this chart's past: after an op, how often the next op was the same, sign flipped, ±1/±2, cut switched, or crossed xy/yx. "
+                f"A applies it on the EP, B on the ROOT. Walk-forward 5,778 low-repeat rounds: top 4 held 5.1% (A) / 4.9% (B) vs chance 4.4% — close to chance. C = the 4 best of 200 fixed rules (EP or ROOT op on EP or ROOT, as is or crossed, each side same / cut sw / sign / ±1): 1.33–1.44% each vs ~1.1%.\n\n"
+                f"| Model | From | 4 numbers (op) | Live |\n|---|---|---|---|\n" + '\n'.join(rows_) + '\n')
+        k3 = md.find('\n## OCJP FINAL 4 with operations')
+        md = md[:k3] + '\n' + sec2 + md[k3:] if k3 >= 0 else md + sec2
+        if re.search(r'\d+$', label or ''):
+            oph_live(None, entry={'round': cur_lab, **{k: [n for n, _ in L4] for k, (b, L4) in oh.items()}})
     # MASTER family under the FINAL 4 table (low tens-repeat charts only; normal charts at chance)
     mm = re.search(r'\| \*\*MASTER = 1\*\* \| \*\*(\d\d)\*\*', md)
     av_ = fl[-1] // 10 if len(fl) > 300 and rep_ < 0.06 else None

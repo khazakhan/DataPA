@@ -172,6 +172,12 @@ def parse(L):
     f = last_idx(L, '■ OCJP FINAL 4 with operations')
     m = re.search(r'OPEN digit \(tens\): (\d)\s+strongest 3: (\d \d \d)\s+CLOSE digit \(units\): (\d)\s+strongest 3: (\d \d \d)', L[f + 2])
     P['open'], P['open3'], P['close'], P['close3'] = m.group(1), m.group(2).split(), m.group(3), m.group(4).split()
+    i = find(L, f, 'OPEN full order:')
+    m2 = re.search(r'OPEN full order: ([\d ]+?)\s+CLOSE full order: ([\d ]+)', L[i]) if i is not None else None
+    P['open_full'], P['close_full'] = (m2.group(1).split(), m2.group(2).split()) if m2 else ([], [])
+    i = find(L, f, 'OPEN x CLOSE grid (9):')
+    P['ocgrid'] = nums(L[i].split(':', 1)[1].split('live')[0]) if i is not None else []
+    P['ocgrid_live'] = live(L[i]) if i is not None else '—'
     m = re.search(r'live OPEN (\S+) of (\d+), CLOSE (\S+) of (\d+)', L[f + 3])
     P['oc_live'] = m.groups() if m else ('—', '—', '—', '—')
     fb, fe = box_after(L, f)
@@ -414,6 +420,8 @@ def build(series_round, prevP, prevD, P, res, curD=None):
           [f"FINAL 8 (+{' '.join(f8[4:])})", ck(R in f8), P['f8_live']],
           *([[f"OC-STRONG 4 ({' '.join(n for n, _ in prevP['ocs'])})", ck(R in [n for n, _ in prevP['ocs']]), P['ocs_live']]]
             if prevP.get('ocs') else []),
+          *([[f"OPEN × CLOSE grid ({' '.join(prevP['ocgrid'])})", ck(R in prevP['ocgrid']), P['ocgrid_live']]]
+            if prevP.get('ocgrid') else []),
           *([[f"Top colour family {tc['colour']} {tc['family']} ({' '.join(f'{v:02d}' for v in tc['members'])})",
               ck(int(R) in tc['members']), tcl]] if tc else []),
           [f"OPEN digit {prevP['open']} / set {' '.join(prevP['open3'])}", f"{ck(t == prevP['open'])} / {ck(t in prevP['open3'])}", f"{ol[0].replace('/', ' / ')} of {ol[1]}"],
@@ -490,9 +498,11 @@ def build(series_round, prevP, prevD, P, res, curD=None):
           + (f"; STRONG 20 only: {' '.join(extra)}\n" if extra else " (same list this round)\n"))
     A(f"## OCJP FINAL 4 with operations: {hd}\n")
     A(f"### OPEN / CLOSE digits: {hd}")
-    A(mk([['', 'Strongest digit', 'Strongest 3'],
-          ['**OPEN (tens)**', f"**{P['open']}**", ' · '.join(P['open3'])],
-          ['**CLOSE (units)**', f"**{P['close']}**", ' · '.join(P['close3'])]]))
+    A(mk([['', 'Strongest digit', 'Strongest 3', 'Full order (strong → weak)'],
+          ['**OPEN (tens)**', f"**{P['open']}**", ' · '.join(P['open3']), ' '.join(P.get('open_full') or []) or '—'],
+          ['**CLOSE (units)**', f"**{P['close']}**", ' · '.join(P['close3']), ' '.join(P.get('close_full') or []) or '—']]))
+    if P.get('ocgrid'):
+        A(f"\n**OPEN × CLOSE grid (9):** {' '.join(P['ocgrid'])} (live {P['ocgrid_live']}; chance 9%, logged X/Y/Z rounds 18 of 106)")
     A('')
     if P.get('ocs'):
         A(f"**OC-STRONG 4** (STRONG 20 numbers inside OPEN × CLOSE; low tens-repeat charts only): "

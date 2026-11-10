@@ -116,7 +116,11 @@ if rec.get('r28'):
     if res in rec['r28']: hits.append('rrr3_rule28_hits')
 # OPEN / CLOSE digit (user 2026-11-07, live from U15): rank-weighted tens / units of OCJP top 10
 D._RRR3_PREV['flat'] = [int(x) for x in open(rec['dataset']).read().split() if x.isdigit()]  # step OPEN needs the chart (fix 2026-11-09)
+D._RRR3_PREV['strong20'] = list(rec['lists'].get('strong', []))   # OPEN uses STRONG 20 tens on low-repeat charts (2026-11-10)
 _oo, _cc = D._open_close(rec['ranked'])
+# OPEN x CLOSE grid (9 numbers), live from Z27
+up['rrr3_ocgrid_rounds'] = 1
+if res in [t * 10 + u for t in _oo for u in _cc]: hits.append('rrr3_ocgrid_hits')
 up['rrr3_open1_rounds'] = 1; up['rrr3_close1_rounds'] = 1
 if res // 10 == _oo[0]: hits.append('rrr3_open1_hits')
 if res // 10 in _oo: hits.append('rrr3_open3_hits')

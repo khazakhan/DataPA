@@ -3092,9 +3092,11 @@
   [1;32m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓[0m
   [1;32m┃[0m [1m★  OCJP FINAL 4 with operations (the prediction)  —  EP 46 (52→46 -1/c-1), ROOT=01 (46→01 c+1/cut)  ★                                                                                   [0m [1;32m┃[0m
   [1;32m┃[0m [1m                                                                                                                                                                                        [0m [1;32m┃[0m
-  [1;32m┃[0m [1m  OPEN digit (tens): 9  strongest 3: 9 3 5      CLOSE digit (units): 4  strongest 3: 4 7 9                                                                                              [0m [1;32m┃[0m
+  [1;32m┃[0m [1m  OPEN digit (tens): 9  strongest 3: 9 1 0      CLOSE digit (units): 4  strongest 3: 4 7 9                                                                                              [0m [1;32m┃[0m
   [1;32m┃[0m [1m      live OPEN 16/47 of 136, CLOSE 23/46 of 136 (1 digit / 3 digits); OPEN from the chart's tens steps, EP tens last (walk-forward 12.7-16.2% / 35-37%); CLOSE history 13.1% /         [0m [1;32m┃[0m
   [1;32m┃[0m [1m      34.1% (chance 10% / 30%). Display only.                                                                                                                                           [0m [1;32m┃[0m
+  [1;32m┃[0m [1m  OPEN full order: 9 1 0 8 6 5 3 2 7 4      CLOSE full order: 4 7 9 0 2 8 1 5 3 6                                                                                                       [0m [1;32m┃[0m
+  [1;32m┃[0m [1m  OPEN x CLOSE grid (9): 94 97 99 14 17 19 04 07 09   live 0 of 0 (chance 9%; logged X/Y/Z rounds 18 of 106)                                                                            [0m [1;32m┃[0m
   [1;32m┃[0m [1m┌────────────┬────────┬───────────┬──────────────┬──────────────────────┬──────────────────────┬────────────┬──────────────────────┬──────────────────────────┬────────────────────────┐[0m [1;32m┃[0m
   [1;32m┃[0m [1m│ #          │ Number │ Operation │ yx (op)      │ Booster xy           │ Booster yx           │ How it's   │ From which Op        │ LAST op / previous op    │ Votes (lists)          │[0m [1;32m┃[0m
   [1;32m┃[0m [1m│            │        │           │              │                      │                      │ made       │                      │ check                    │                        │[0m [1;32m┃[0m
@@ -3131,10 +3133,10 @@
   [1;32m┃[0m [1m└────────────┴────────┴───────────┴──────────────┴──────────────────────┴──────────────────────┴────────────┴──────────────────────┴──────────────────────────┴────────────────────────┘[0m [1;32m┃[0m
   [1;32m┃[0m [1m  LAST op / previous op check: LAST row (new ops or its old = previous ops) and the row before it; fewest changes.                                                                      [0m [1;32m┃[0m
   [1;32m┃[0m [1m  Tested on 412 rounds (F N M K O P Q R): ranking FINAL 4 by it held 28 vs 29 now, so it is a check, not the ranking.                                                                   [0m [1;32m┃[0m
-  [1;32m┃[0m [1m  OC-STRONG 4 (STRONG 20 inside OPEN x CLOSE, low tens-repeat charts): 94 (-1/c-2) · 99 (-1/-2) · 37 (c-2/c+1) · 90 (-1/-1)                                                             [0m [1;32m┃[0m
+  [1;32m┃[0m [1m  OC-STRONG 4 (STRONG 20 inside OPEN x CLOSE, low tens-repeat charts): 94 (-1/c-2) · 99 (-1/-2) · 19 (+1/-2) · 07 (nc/c+1)                                                              [0m [1;32m┃[0m
   [1;32m┃[0m [1m      live 0 of 8; logged X/Y/Z rounds 14 of 106 (13.2%) vs chance 4.2, FINAL 4 6 of 106. Never sure.                                                                                   [0m [1;32m┃[0m
-  [1;32m┃[0m [1m  FINAL 8 (FINAL 4 + OC-STRONG / SHADOW adds): 64 (c+1/c-2) · 37 (c-2/c+1) · 39 (c-2/-2) · 52 (cut/+1) · 94 (-1/c-2) · 99 (-1/-2) · 90 (-1/-1) · 91 (-1/nc)                             [0m [1;32m┃[0m
-  [1;32m┃[0m [1m      ascending: 37 39 52 64 90 91 94 99   live 13 of 147; X/Y/Z logged rounds: + OC-STRONG 19 of 106, + SHADOW 13 of 106 (chance ~9)                                                   [0m [1;32m┃[0m
+  [1;32m┃[0m [1m  FINAL 8 (FINAL 4 + OC-STRONG / SHADOW adds): 64 (c+1/c-2) · 37 (c-2/c+1) · 39 (c-2/-2) · 52 (cut/+1) · 94 (-1/c-2) · 99 (-1/-2) · 19 (+1/-2) · 07 (nc/c+1)                            [0m [1;32m┃[0m
+  [1;32m┃[0m [1m      ascending: 07 19 37 39 52 64 94 99   live 13 of 147; X/Y/Z logged rounds: + OC-STRONG 19 of 106, + SHADOW 13 of 106 (chance ~9)                                                   [0m [1;32m┃[0m
   [1;32m┃[0m [1m  yx column: 37 64 84 16   live 16 of 223  (replay 10 of 152 vs chance 6.1; display only, not in FINAL 4)                                                                               [0m [1;32m┃[0m
   [1;32m┃[0m [1m  BEST FORMS (14, 4 strongest xy/yx forms of all 1,378 rounds, old ops on ROOT 01 (46→01 c+1/cut)):                                                                                     [0m [1;32m┃[0m
   [1;32m┃[0m [1m      old xy, y cut switched                       04 (nc/c-2) Op5  61 (c+1/nc) Op6  93 (-1/+2) Op12  35 (c-2/c-1) Op14                                                                 [0m [1;32m┃[0m
@@ -3392,8 +3394,10 @@
   [1;36m┃[0m └───────────────────┴───────────────────────────────────────────┴───────┴───────────────────────────────┴────────────┘                                                                                                  [1;36m┃[0m
   [1;36m┃[0m                                                                                                                                                                                                                         [1;36m┃[0m
   [1;36m┃[0m ■ OCJP FINAL 4 with operations (EP 46 (52→46 -1/c-1), ROOT 01 (46→01 c+1/cut))                                                                                                                                          [1;36m┃[0m
-  [1;36m┃[0m   OPEN digit (tens): 9  strongest 3: 9 3 5      CLOSE digit (units): 4  strongest 3: 4 7 9                                                                                                                              [1;36m┃[0m
+  [1;36m┃[0m   OPEN digit (tens): 9  strongest 3: 9 1 0      CLOSE digit (units): 4  strongest 3: 4 7 9                                                                                                                              [1;36m┃[0m
   [1;36m┃[0m       live OPEN 16/47 of 136, CLOSE 23/46 of 136 (1 digit / 3 digits); OPEN from the chart's tens steps, EP tens last (walk-forward 12.7-16.2% / 35-37%); CLOSE history 13.1% / 34.1% (chance 10% / 30%). Display only. [1;36m┃[0m
+  [1;36m┃[0m   OPEN full order: 9 1 0 8 6 5 3 2 7 4      CLOSE full order: 4 7 9 0 2 8 1 5 3 6                                                                                                                                       [1;36m┃[0m
+  [1;36m┃[0m   OPEN x CLOSE grid (9): 94 97 99 14 17 19 04 07 09   live 0 of 0 (chance 9%; logged X/Y/Z rounds 18 of 106)                                                                                                            [1;36m┃[0m
   [1;36m┃[0m ┌────────────┬────────┬───────────┬──────────────┬──────────────────────┬──────────────────────┬────────────┬──────────────────────┬──────────────────────────┬────────────────────────┐                                [1;36m┃[0m
   [1;36m┃[0m │ #          │ Number │ Operation │ yx (op)      │ Booster xy           │ Booster yx           │ How it's   │ From which Op        │ LAST op / previous op    │ Votes (lists)          │                                [1;36m┃[0m
   [1;36m┃[0m │            │        │           │              │                      │                      │ made       │                      │ check                    │                        │                                [1;36m┃[0m
@@ -3430,10 +3434,10 @@
   [1;36m┃[0m └────────────┴────────┴───────────┴──────────────┴──────────────────────┴──────────────────────┴────────────┴──────────────────────┴──────────────────────────┴────────────────────────┘                                [1;36m┃[0m
   [1;36m┃[0m   LAST op / previous op check: LAST row (new ops or its old = previous ops) and the row before it; fewest changes.                                                                                                      [1;36m┃[0m
   [1;36m┃[0m   Tested on 412 rounds (F N M K O P Q R): ranking FINAL 4 by it held 28 vs 29 now, so it is a check, not the ranking.                                                                                                   [1;36m┃[0m
-  [1;36m┃[0m   OC-STRONG 4 (STRONG 20 inside OPEN x CLOSE, low tens-repeat charts): 94 (-1/c-2) · 99 (-1/-2) · 37 (c-2/c+1) · 90 (-1/-1)                                                                                             [1;36m┃[0m
+  [1;36m┃[0m   OC-STRONG 4 (STRONG 20 inside OPEN x CLOSE, low tens-repeat charts): 94 (-1/c-2) · 99 (-1/-2) · 19 (+1/-2) · 07 (nc/c+1)                                                                                              [1;36m┃[0m
   [1;36m┃[0m       live 0 of 8; logged X/Y/Z rounds 14 of 106 (13.2%) vs chance 4.2, FINAL 4 6 of 106. Never sure.                                                                                                                   [1;36m┃[0m
-  [1;36m┃[0m   FINAL 8 (FINAL 4 + OC-STRONG / SHADOW adds): 64 (c+1/c-2) · 37 (c-2/c+1) · 39 (c-2/-2) · 52 (cut/+1) · 94 (-1/c-2) · 99 (-1/-2) · 90 (-1/-1) · 91 (-1/nc)                                                             [1;36m┃[0m
-  [1;36m┃[0m       ascending: 37 39 52 64 90 91 94 99   live 13 of 147; X/Y/Z logged rounds: + OC-STRONG 19 of 106, + SHADOW 13 of 106 (chance ~9)                                                                                   [1;36m┃[0m
+  [1;36m┃[0m   FINAL 8 (FINAL 4 + OC-STRONG / SHADOW adds): 64 (c+1/c-2) · 37 (c-2/c+1) · 39 (c-2/-2) · 52 (cut/+1) · 94 (-1/c-2) · 99 (-1/-2) · 19 (+1/-2) · 07 (nc/c+1)                                                            [1;36m┃[0m
+  [1;36m┃[0m       ascending: 07 19 37 39 52 64 94 99   live 13 of 147; X/Y/Z logged rounds: + OC-STRONG 19 of 106, + SHADOW 13 of 106 (chance ~9)                                                                                   [1;36m┃[0m
   [1;36m┃[0m   yx column: 37 64 84 16   live 16 of 223  (replay 10 of 152 vs chance 6.1; display only, not in FINAL 4)                                                                                                               [1;36m┃[0m
   [1;36m┃[0m   BEST FORMS (14, 4 strongest xy/yx forms of all 1,378 rounds, old ops on ROOT 01 (46→01 c+1/cut)):                                                                                                                     [1;36m┃[0m
   [1;36m┃[0m       old xy, y cut switched                       04 (nc/c-2) Op5  61 (c+1/nc) Op6  93 (-1/+2) Op12  35 (c-2/c-1) Op14                                                                                                 [1;36m┃[0m
@@ -3603,8 +3607,10 @@
 
   [1;36m■ OCJP FINAL 4 with operations: EP 46 (52→46 -1/c-1), ROOT 01 (46→01 c+1/cut)[0m
 
-    OPEN digit (tens): 9  strongest 3: 9 3 5      CLOSE digit (units): 4  strongest 3: 4 7 9
+    OPEN digit (tens): 9  strongest 3: 9 1 0      CLOSE digit (units): 4  strongest 3: 4 7 9
         live OPEN 16/47 of 136, CLOSE 23/46 of 136 (1 digit / 3 digits); OPEN from the chart's tens steps, EP tens last (walk-forward 12.7-16.2% / 35-37%); CLOSE history 13.1% / 34.1% (chance 10% / 30%). Display only.
+    OPEN full order: 9 1 0 8 6 5 3 2 7 4      CLOSE full order: 4 7 9 0 2 8 1 5 3 6
+    OPEN x CLOSE grid (9): 94 97 99 14 17 19 04 07 09   live 0 of 0 (chance 9%; logged X/Y/Z rounds 18 of 106)
   ┌────────────┬────────┬───────────┬──────────────┬──────────────────────┬──────────────────────┬────────────┬──────────────────────┬──────────────────────────┬────────────────────────┐
   │ #          │ Number │ Operation │ yx (op)      │ Booster xy           │ Booster yx           │ How it's   │ From which Op        │ LAST op / previous op    │ Votes (lists)          │
   │            │        │           │              │                      │                      │ made       │                      │ check                    │                        │
@@ -3641,10 +3647,10 @@
   └────────────┴────────┴───────────┴──────────────┴──────────────────────┴──────────────────────┴────────────┴──────────────────────┴──────────────────────────┴────────────────────────┘
     LAST op / previous op check: LAST row (new ops or its old = previous ops) and the row before it; fewest changes.
     Tested on 412 rounds (F N M K O P Q R): ranking FINAL 4 by it held 28 vs 29 now, so it is a check, not the ranking.
-    OC-STRONG 4 (STRONG 20 inside OPEN x CLOSE, low tens-repeat charts): 94 (-1/c-2) · 99 (-1/-2) · 37 (c-2/c+1) · 90 (-1/-1)
+    OC-STRONG 4 (STRONG 20 inside OPEN x CLOSE, low tens-repeat charts): 94 (-1/c-2) · 99 (-1/-2) · 19 (+1/-2) · 07 (nc/c+1)
         live 0 of 8; logged X/Y/Z rounds 14 of 106 (13.2%) vs chance 4.2, FINAL 4 6 of 106. Never sure.
-    FINAL 8 (FINAL 4 + OC-STRONG / SHADOW adds): 64 (c+1/c-2) · 37 (c-2/c+1) · 39 (c-2/-2) · 52 (cut/+1) · 94 (-1/c-2) · 99 (-1/-2) · 90 (-1/-1) · 91 (-1/nc)
-        ascending: 37 39 52 64 90 91 94 99   live 13 of 147; X/Y/Z logged rounds: + OC-STRONG 19 of 106, + SHADOW 13 of 106 (chance ~9)
+    FINAL 8 (FINAL 4 + OC-STRONG / SHADOW adds): 64 (c+1/c-2) · 37 (c-2/c+1) · 39 (c-2/-2) · 52 (cut/+1) · 94 (-1/c-2) · 99 (-1/-2) · 19 (+1/-2) · 07 (nc/c+1)
+        ascending: 07 19 37 39 52 64 94 99   live 13 of 147; X/Y/Z logged rounds: + OC-STRONG 19 of 106, + SHADOW 13 of 106 (chance ~9)
     yx column: 37 64 84 16   live 16 of 223  (replay 10 of 152 vs chance 6.1; display only, not in FINAL 4)
     BEST FORMS (14, 4 strongest xy/yx forms of all 1,378 rounds, old ops on ROOT 01 (46→01 c+1/cut)):
         old xy, y cut switched                       04 (nc/c-2) Op5  61 (c+1/nc) Op6  93 (-1/+2) Op12  35 (c-2/c-1) Op14
@@ -3691,10 +3697,9 @@
   [1;31m★[0m  [1;34m★[0m  [1;32m★[0m  [1;33m★[0m  [1;97m★[0m
   [1m■ Round Z26 result: 46 = c-2/c+1 on ROOT 10 (52→10 c+1/-2), EP 52 (66→52 -1/c+1)[0m
 
-  46 was held by [1mthe OPEN 3-digit set (0 4 6)[0m, [1mthe BOOSTER[0m, [1mthe 80-number list[0m, [1mPRIME 4 family[0m. Missed: OCJP FINAL 4, FINAL 8, OC-STRONG 4, the OPEN digit, the CLOSE digit, the
-  yx column, EPROOTGEN, ONE-MEN-ARMY, STRONG 20, RECOMMENDED, LAST-OP 4, Rule 28, the CROSSED grid, the outer flip / outer op move, the RRR yx list, the RRR table, count 2+, BEST FORMS, ONE
-  ROW PICK, EP·LAST old xy (test), MegaStar/PowerStar, the ~ / ± / * numbers, FULL CUT (both digits) of FINAL 4 / yx, FINAL 4 digits turned, yx column digits turned, FINAL 4 STEP ±1, the RRR
-  table old / newold columns.
+  46 was held by [1mthe BOOSTER[0m, [1mthe 80-number list[0m, [1mPRIME 4 family[0m. Missed: OCJP FINAL 4, FINAL 8, OC-STRONG 4, the OPEN digit, the CLOSE digit, the yx column, EPROOTGEN, ONE-MEN-
+  ARMY, STRONG 20, RECOMMENDED, LAST-OP 4, Rule 28, the CROSSED grid, the outer flip / outer op move, the RRR yx list, the RRR table, count 2+, BEST FORMS, ONE ROW PICK, EP·LAST old xy (test),
+  MegaStar/PowerStar, the ~ / ± / * numbers, FULL CUT (both digits) of FINAL 4 / yx, FINAL 4 digits turned, yx column digits turned, FINAL 4 STEP ±1, the RRR table old / newold columns.
 
   [1m■ Result check: Z26 = 46 (c-2/c+1 on ROOT 10): EP 52 (66→52 -1/c+1), ROOT 10 (52→10 c+1/-2)[0m
   ┌─────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -3706,13 +3711,15 @@
   ├───────────────────────────────────────────────────────────────┼──────────┼──────────────────────┤
   │ OCJP MASTER 05                                                │ ✗        │ 9 of 908             │
   ├───────────────────────────────────────────────────────────────┼──────────┼──────────────────────┤
-  │ FINAL 8 (+02 49 07 47)                                        │ ✗        │ 13 of 147            │
+  │ FINAL 8 (+02 07 47 08)                                        │ ✗        │ 13 of 147            │
   ├───────────────────────────────────────────────────────────────┼──────────┼──────────────────────┤
-  │ OC-STRONG 4 (05 02 49 69)                                     │ ✗        │ 0 of 8               │
+  │ OC-STRONG 4 (05 02 69 25)                                     │ ✗        │ 0 of 8               │
+  ├───────────────────────────────────────────────────────────────┼──────────┼──────────────────────┤
+  │ OPEN × CLOSE grid (05 02 09 65 62 69 25 22 29)                │ ✗        │ 0 of 0               │
   ├───────────────────────────────────────────────────────────────┼──────────┼──────────────────────┤
   │ Top colour family 🟧 half-cut (05 16 27 38 49 50 61 72 83 94) │ ✗        │ 1 of 5 (chance 0.42) │
   ├───────────────────────────────────────────────────────────────┼──────────┼──────────────────────┤
-  │ OPEN digit 0 / set 0 4 6                                      │ ✗ / ✓    │ 16 / 47 of 136       │
+  │ OPEN digit 0 / set 0 6 2                                      │ ✗ / ✗    │ 16 / 47 of 136       │
   ├───────────────────────────────────────────────────────────────┼──────────┼──────────────────────┤
   │ CLOSE digit 5 / set 5 2 9 (actual 6)                          │ ✗ / ✗    │ 23 / 46 of 136       │
   ├───────────────────────────────────────────────────────────────┼──────────┼──────────────────────┤
@@ -3876,7 +3883,11 @@
   ┌────────┬────────┬────────────────────────┬────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
   │ Number │ Places │ Near places (one step) │ Where                                                                                                                                                  │
   ├────────┼────────┼────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ ⭕[1m93[0m   │ 9      │ 8                      │ 4. RRR · Op14 LAST · *xy (op) · 4. RRR · Op12 · oldx·newx± · BEST FORMS (14) · FINAL 4 digits turned (display only) · ~ / ± / * · ONE-MEN-ARMY         │
+  │ ⭕[1m19[0m   │ 10     │ 6                      │ FULL CUT, both digits, of FINAL 4 + yx (display only) · ONE-MEN-ARMY ascending · OPEN × CLOSE grid (9) · OCJP FINAL 4 · MASTER = 1 · Booster xy /      │
+  │        │        │                        │ yx (first) · OCJP FINAL 4 · 2 · Booster xy / yx (first) · FINAL 8 (FINAL 4 + OC-STRONG / SHADOW) · FINAL 8 ascending · BOOSTER, full list (24, FINAL 4 │
+  │        │        │                        │ left out, live 50 of 200) · Count 2+ (18) · Ascending, all (30)                                                                                        │
+  ├────────┼────────┼────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ ⭕[1m93[0m   │ 9      │ 9                      │ 4. RRR · Op14 LAST · *xy (op) · 4. RRR · Op12 · oldx·newx± · BEST FORMS (14) · FINAL 4 digits turned (display only) · ~ / ± / * · ONE-MEN-ARMY         │
   │        │        │                        │ ascending · BOOSTER, full list (24, FINAL 4 left out, live 50 of 200) · Count 2+ (18) · Ascending, all (30)                                            │
   ├────────┼────────┼────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
   │ ⭕[1m37[0m   │ 8      │ 8                      │ MegaStar / PowerStar · PowerStar · Number · FINAL 4 yx column · ONE-MEN-ARMY ascending · OCJP FINAL 4 · MASTER = 1 · yx (op) · OCJP FINAL 4 · 2 ·      │
@@ -3884,26 +3895,25 @@
   ├────────┼────────┼────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
   │ ⭕[1m64[0m   │ 8      │ 7                      │ MegaStar / PowerStar · MegaStar · Number · FINAL 4 yx column · ONE-MEN-ARMY ascending · OCJP FINAL 4 · MASTER = 1 · Number · OCJP FINAL 4 · 2 ·        │
   │        │        │                        │ yx (op) · FINAL 8 ascending · Count 2+ (18) · Ascending, all (30)                                                                                      │
-  ├────────┼────────┼────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-  │ ⭕[1m02[0m   │ 7      │ 6                      │ 4. RRR · Op6 · ~xy (op) · EPROOTGEN (EP 46 op -1/c-1 + ROOT 01 op c+1/cut) · BEST FORMS (14) · ~ / ± / * · OCJP FINAL 4 · 4 · Booster xy / yx (first)  │
-  │        │        │                        │ · BOOSTER, full list (24, FINAL 4 left out, live 50 of 200) · Ascending, all (30)                                                                      │
   └────────┴────────┴────────────────────────┴────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
   [1m■ OCJP FINAL 4 with operations: EP 46 (52→46 -1/c-1), ROOT 01 (46→01 c+1/cut)[0m
 
   [1m■ OPEN / CLOSE digits: EP 46 (52→46 -1/c-1), ROOT 01 (46→01 c+1/cut)[0m
-  ┌───────────────────────────────────────────────┐
-  │ [1mEP 46 (52→46 -1/c-1), ROOT 01 (46→01 c+1/cut)[0m │
-  ├───────────────┬─────────────────┬─────────────┤
-  │               │ Strongest digit │ Strongest 3 │
-  ├───────────────┼─────────────────┼─────────────┤
-  │ [1mOPEN (tens)[0m   │ [1m9[0m               │ 9 · 3 · 5   │
-  ├───────────────┼─────────────────┼─────────────┤
-  │ [1mCLOSE (units)[0m │ [1m4[0m               │ 4 · 7 · 9   │
-  └───────────────┴─────────────────┴─────────────┘
+  ┌────────────────────────────────────────────────────────────────────────────┐
+  │ [1mEP 46 (52→46 -1/c-1), ROOT 01 (46→01 c+1/cut)[0m                              │
+  ├───────────────┬─────────────────┬─────────────┬────────────────────────────┤
+  │               │ Strongest digit │ Strongest 3 │ Full order (strong → weak) │
+  ├───────────────┼─────────────────┼─────────────┼────────────────────────────┤
+  │ [1mOPEN (tens)[0m   │ [1m9[0m               │ 9 · 1 · 0   │ 9 1 0 8 6 5 3 2 7 4        │
+  ├───────────────┼─────────────────┼─────────────┼────────────────────────────┤
+  │ [1mCLOSE (units)[0m │ [1m4[0m               │ 4 · 7 · 9   │ 4 7 9 0 2 8 1 5 3 6        │
+  └───────────────┴─────────────────┴─────────────┴────────────────────────────┘
 
-  [1mOC-STRONG 4[0m (STRONG 20 numbers inside OPEN × CLOSE; low tens-repeat charts only): [1m94[0m (-1/c-2) · [1m99[0m (-1/-2) · [1m37[0m (c-2/c+1) · [1m90[0m (-1/-1) (live 0 of 8; logged X/Y/Z rounds
-  14 of 106 vs chance 4.2, FINAL 4 6 of 106)
+  [1mOPEN × CLOSE grid (9):[0m 94 97 99 14 17 19 04 07 09 (live 0 of 0; chance 9%, logged X/Y/Z rounds 18 of 106)
+
+  [1mOC-STRONG 4[0m (STRONG 20 numbers inside OPEN × CLOSE; low tens-repeat charts only): [1m94[0m (-1/c-2) · [1m99[0m (-1/-2) · [1m19[0m (+1/-2) · [1m07[0m (nc/c+1) (live 0 of 8; logged X/Y/Z rounds 14
+  of 106 vs chance 4.2, FINAL 4 6 of 106)
 
   [1m■ OCJP FINAL 4: EP 46 (52→46 -1/c-1), ROOT 01 (46→01 c+1/cut)[0m
   ┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -3922,8 +3932,8 @@
 
   [1m■ FINAL 8 / Count 2+ / All / 80-number list: EP 46 (52→46 -1/c-1), ROOT 01 (46→01 c+1/cut)[0m
 
-  [1mFINAL 8 (FINAL 4 + OC-STRONG / SHADOW):[0m 64 · 37 · 39 · 52 · [1m94[0m (-1/c-2) · [1m99[0m (-1/-2) · [1m90[0m (-1/-1) · [1m91[0m (-1/nc)
-  [1mFINAL 8 ascending:[0m 37 39 52 64 90 91 94 99 (live 13 of 147)
+  [1mFINAL 8 (FINAL 4 + OC-STRONG / SHADOW):[0m 64 · 37 · 39 · 52 · [1m94[0m (-1/c-2) · [1m99[0m (-1/-2) · [1m19[0m (+1/-2) · [1m07[0m (nc/c+1)
+  [1mFINAL 8 ascending:[0m 07 19 37 39 52 64 94 99 (live 13 of 147)
 
   [1mBOOSTER, full list (24, FINAL 4 left out, live 50 of 200):[0m 00 (nc/-1) · 02 (nc/+1) · 08 (nc/c+2) · 11 (+1/nc) · 13 (+1/+2) · 19 (+1/-2) · 20 (+2/-1) · 22 (+2/+1) · 23 (+2/+2) · 34
   (c-2/c-2) · 45 (c-1/c-1) · 46 (c-1/cut) · 55 (cut/c-1) · 57 (cut/c+1) · 66 (c+1/cut) · 68 (c+1/c+2) · 71 (c+2/nc) · 77 (c+2/c+1) · 78 (c+2/c+2) · 82 (-2/+1) · 89 (-2/-2) · 90 (-1/-1) · 91

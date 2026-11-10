@@ -4055,6 +4055,8 @@
 
   [1mMASTER 00 family[0m (double, EP tens 5 out): 00 11 22 33 44 66 77 88 99 (logged low-repeat rounds 32 of 267 vs chance 19.9; live 1 of 14 (chance 1.05))
 
+  [1mNEAR 8[0m (MASTER 00 and #2 06, one digit ±1): 10 90 01 09 16 96 07 05 (logged low-repeat rounds 30 of 281 vs chance 19.6; live 0 of 0 (chance 0.00))
+
   [1m■ FINAL 8 / Count 2+ / All / 80-number list: EP 58 (04→58 cut/c-1), ROOT 10 (58→10 c+1/+2)[0m
 
   [1mFINAL 8 (FINAL 4 + OC-STRONG / SHADOW):[0m 00 · 06 · 11 · 20 · [1m01[0m (-1/+1) · [1m03[0m (-1/c-2) · [1m43[0m (c-2/c-2) · [1m04[0m (-1/c-1)

@@ -798,6 +798,26 @@ def oph_live(series_round, res=None, entry=None):
     return cur, lv
 
 
+NEAR_LOG = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'rrr_records', 'near8_live.jsonl')
+
+
+def near8_live(series_round, res=None, entry=None):
+    """NEAR 8 live log (2026-11-11, tools/f4_step_study.py): MASTER and #2 with one digit +-1.
+    Low-repeat logged rounds 30 of 281 vs chance 19.6 (x1.53; live x1.45, history x1.65); normal charts at chance."""
+    recs = [json.loads(l) for l in open(NEAR_LOG)] if os.path.exists(NEAR_LOG) else []
+    if entry:
+        recs = [r for r in recs if r['round'] != entry['round']] + [entry]
+    if res is not None:
+        for r in recs:
+            if r['round'] == series_round:
+                r['result'] = res
+    with open(NEAR_LOG, 'w') as fh:
+        fh.write(''.join(json.dumps(r) + '\n' for r in recs))
+    done = [r for r in recs if r.get('result') is not None]
+    cur = next((r for r in recs if r['round'] == series_round), None)
+    return cur, f"{sum(r['result'] in r['nums'] for r in done)} of {len(done)} (chance {sum(len(r['nums']) for r in done) / 100:.2f})"
+
+
 MFAM_LOG = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'rrr_records', 'masterfam_live.jsonl')
 
 
@@ -948,6 +968,10 @@ def main():
             if oc_:
                 sec += ''.join(f"\n{RING} OP HISTORY {k} of the {prev_lab} page ({' '.join(f'{v:02d}' for v in oc_[k])}): "
                                f"{'✓ held' if int(res) in oc_[k] else '✗'} {res:02d} · live {olv[k]} (chance 4%)\n" for k in ('A', 'B', 'C') if k in oc_)
+            nr, nlv = near8_live(label, int(res))
+            if nr:
+                sec += (f"\n{RING} NEAR 8 of the {prev_lab} page ({' '.join(f'{v:02d}' for v in nr['nums'])}): "
+                        f"{'✓ held' if int(res) in nr['nums'] else '✗'} {res:02d} · live {nlv}\n")
             mf, mlv = masterfam_live(label, int(res))
             if mf:
                 sec += (f"\n{RING} MASTER {mf['master']:02d} family of the {prev_lab} page ({' '.join(f'{v:02d}' for v in mf['nums'])}): "
@@ -990,6 +1014,20 @@ def main():
         flab = f"{fam}-family" if fam[0].isdigit() else fam
         line = (f"\n**MASTER {mv:02d} family** ({flab}, EP tens {av_} out): {' '.join(f'{v:02d}' for v in mem)}"
                 f" (logged low-repeat rounds 32 of 267 vs chance 19.9; live {masterfam_live(None)[1]})\n")
+        # NEAR 8: MASTER and #2 with one digit +-1 (tens or units), FINAL 4 and EP tens left out
+        m2 = re.search(r'\n\| 2 \| \*\*(\d\d)\*\*', md)
+        f4n = [int(x) for x in re.findall(r'\n\| (?:\*\*MASTER = 1\*\*|[234]) \| \*\*(\d\d)\*\*', md)]
+        if m2:
+            nb = lambda n: [((n // 10 + d) % 10) * 10 + n % 10 for d in (1, -1)] + [(n // 10) * 10 + (n % 10 + d) % 10 for d in (1, -1)]
+            near = []
+            for base in (mv, int(m2.group(1))):
+                for v in nb(base):
+                    if v not in near and v not in f4n and v // 10 != av_:
+                        near.append(v)
+            line += (f"\n**NEAR 8** (MASTER {mv:02d} and #2 {int(m2.group(1)):02d}, one digit ±1): {' '.join(f'{v:02d}' for v in near)}"
+                     f" (logged low-repeat rounds 30 of 281 vs chance 19.6; live {near8_live(None)[1]})\n")
+            if re.search(r'\d+$', label or ''):
+                near8_live(None, entry={'round': cur_lab, 'nums': near})
         k2 = md.find('\n### FINAL 8')
         md = md[:k2] + '\n' + line + md[k2:] if k2 >= 0 else md + line
         if re.search(r'\d+$', label or ''):

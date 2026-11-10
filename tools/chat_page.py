@@ -180,7 +180,10 @@ def parse(L):
                             byx=f'{b2.group(1)} ({b2.group(2)})' if b2 else '—',
                             how=r[6], src=r[7], votes=r[9] if len(r) > 9 else ''))
     gf = lambda key: find(L, fe, key)
-    i = gf('FINAL 8 (FINAL 4 + SHADOW 4 adds):')
+    i = gf('OC-STRONG 4 (')
+    P['ocs'] = NUMOP.findall(L[i].split(':', 1)[1]) if i is not None else []
+    P['ocs_live'] = live(L[i + 1]) if i is not None else '—'
+    i = gf('FINAL 8 (FINAL 4 + ')
     P['f8'] = NUMOP.findall(L[i].split(':', 1)[1]); P['f8_live'] = live(L[i + 1])
     i = gf('yx column:'); P['yxcol'] = nums(L[i].split(':', 1)[1].split('live')[0]); P['yx_live'] = live(L[i])
     i = gf('BEST FORMS ('); j = find(L, i, 'ascending:')
@@ -344,6 +347,8 @@ def build(series_round, prevP, prevD, P, res, curD=None):
     def note(name, b):
         (held if b else miss).append(name)
     note('OCJP FINAL 4', R in f4); note('FINAL 8', R in f8)
+    if prevP.get('ocs'):
+        note('OC-STRONG 4', R in [n for n, _ in prevP['ocs']])
     note('the OPEN digit', t == prevP['open']); note('the CLOSE digit', u == prevP['close'])
     note(f"the OPEN 3-digit set ({' '.join(prevP['open3'])})", t in prevP['open3'] and t != prevP['open'])
     note(f"the CLOSE 3-digit set ({' '.join(prevP['close3'])})", u in prevP['close3'] and u != prevP['close'])
@@ -403,6 +408,8 @@ def build(series_round, prevP, prevD, P, res, curD=None):
           [f"OCJP FINAL 4 ({' '.join(f4)})", ck(R in f4), P['f4_rec']],
           [f"OCJP MASTER {f4[0]}", ck(R == f4[0]), P['ms_rec']],
           [f"FINAL 8 (+{' '.join(f8[4:])})", ck(R in f8), P['f8_live']],
+          *([[f"OC-STRONG 4 ({' '.join(n for n, _ in prevP['ocs'])})", ck(R in [n for n, _ in prevP['ocs']]), P['ocs_live']]]
+            if prevP.get('ocs') else []),
           [f"OPEN digit {prevP['open']} / set {' '.join(prevP['open3'])}", f"{ck(t == prevP['open'])} / {ck(t in prevP['open3'])}", f"{ol[0].replace('/', ' / ')} of {ol[1]}"],
           [f"CLOSE digit {prevP['close']} / set {' '.join(prevP['close3'])} (actual {u})", f"{ck(u == prevP['close'])} / {ck(u in prevP['close3'])}", f"{ol[2].replace('/', ' / ')} of {ol[3]}"],
           ['EPROOTGEN', ck(R in prevP['eprg_set']), P.get('eprg_live', '—')],
@@ -474,6 +481,10 @@ def build(series_round, prevP, prevD, P, res, curD=None):
           ['**OPEN (tens)**', f"**{P['open']}**", ' · '.join(P['open3'])],
           ['**CLOSE (units)**', f"**{P['close']}**", ' · '.join(P['close3'])]]))
     A('')
+    if P.get('ocs'):
+        A(f"**OC-STRONG 4** (STRONG 20 numbers inside OPEN × CLOSE; low tens-repeat charts only): "
+          + ' · '.join(f'**{n}** ({o})' for n, o in P['ocs'])
+          + f" (live {P['ocs_live']}; logged X/Y/Z rounds 14 of 106 vs chance 4.2, FINAL 4 6 of 106)\n")
     A(f"### OCJP FINAL 4: {hd}")
     rows = [['#', 'Number', f"Op on ROOT {P['root']} ({P['rootop']})", 'yx (op)', 'Booster xy / yx (first)', 'From which Op', 'Votes']]
     for d in P['f4']:
@@ -481,7 +492,7 @@ def build(series_round, prevP, prevD, P, res, curD=None):
         rows.append([rk, f"**{d['n']}**", d['op'], d['yx'], f"{d['bxy']} / {d['byx']}", d['src'], d['votes']])
     A(mk(rows))
     A(f"\n### FINAL 8 / Count 2+ / All / 80-number list: {hd}\n")
-    A(f"**FINAL 8 (FINAL 4 + SHADOW 4):** " + ' · '.join(f'{n}' if k < 4 else f'**{n}** ({o})' for k, (n, o) in enumerate(P['f8'])))
+    A(f"**FINAL 8 (FINAL 4 + OC-STRONG / SHADOW):** " + ' · '.join(f'{n}' if k < 4 else f'**{n}** ({o})' for k, (n, o) in enumerate(P['f8'])))
     A(f"**FINAL 8 ascending:** {' '.join(sorted(n for n, _ in P['f8']))} (live {P['f8_live']})\n")
     if P.get('booster_ops'):
         A(f"**BOOSTER, full list ({len(P['booster_ops'])}, FINAL 4 left out, live {P['booster_live']}):** "

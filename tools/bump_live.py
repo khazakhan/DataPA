@@ -104,7 +104,12 @@ if res in [n for n, *_ in D._best_forms(ep, [(r_['pos'], _AB[r_['old'][0]], _AB[
 # FINAL 8 (user 2026-11-07, live from U4): FINAL 4 + PRIME 8 adds, filled by ranking
 up['rrr3_final8_rounds'] = 1
 _flat = [int(x) for x in open(rec['dataset']).read().split() if x.isdigit()]
-if res in D._final8(rec['ranked'][:4], rec['prime10'], rec['ranked'], _flat): hits.append('rrr3_final8_hits')
+_f8 = rec.get('final8') or D._final8(rec['ranked'][:4], rec['prime10'], rec['ranked'], _flat, ocs=rec.get('ocs4', []))
+if res in _f8: hits.append('rrr3_final8_hits')
+# OC-STRONG 4 (deep dive 2026-11-10, live from Z19): only rounds where it was shown
+if rec.get('ocs4'):
+    up['rrr3_ocs4_rounds'] = 1
+    if res in rec['ocs4']: hits.append('rrr3_ocs4_hits')
 # Rule 28 picks (auto from U15; before that the counter was bumped by hand)
 if rec.get('r28'):
     up['rrr3_rule28_rounds'] = 1

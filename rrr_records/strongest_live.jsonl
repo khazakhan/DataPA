@@ -1,4 +1,5 @@
 {"round": "Z24", "nums": [13, 23, 14, 0], "result": 66}
 {"round": "Z25", "nums": [11, 34, 36, 20], "result": 52}
 {"round": "Z26", "nums": [5, 25, 69, 19], "result": 46}
-{"round": "Z27", "nums": [19, 93, 37, 64]}
+{"round": "Z27", "nums": [19, 93, 37, 64], "result": 88}
+{"round": "Z28", "nums": [15, 60, 25, 10]}

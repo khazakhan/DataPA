@@ -3709,6 +3709,24 @@
 
   [1mSTRONG 20[0m shares 15 of 20 with ONE-MEN-ARMY; STRONG 20 only: 83 84 86 87 89
 
+
+  [1m■ ⭕ Strongest on the Z24 page (the 4 numbers in the most places; no result yet)[0m
+  ┌────────┬────────┬────────────────────────┬────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ Number │ Places │ Near places (one step) │ Where                                                                                                                                                  │
+  ├────────┼────────┼────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ ⭕[1m13[0m   │ 11     │ 25                     │ 4. RRR · Op4 · xy (op) · 4. RRR · Op4 · yx (op) · MegaStar / PowerStar · PowerStar · Number · EPROOTGEN (EP 84 op c-1/c-1 + ROOT 80 op nc/c+1) · FINAL │
+  │        │        │                        │ 4 yx column · ONE-MEN-ARMY ascending · OCJP FINAL 4 · 2 · Number · OCJP FINAL 4 · 2 · yx (op) · FINAL 8 ascending · Count 2+ (7) · Ascending, all (33) │
+  ├────────┼────────┼────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ ⭕[1m23[0m   │ 9      │ 19                     │ 4. RRR · Op4 · ~yx (op) · 4. RRR · Op10 LAST · yx (op) · EPROOTGEN (EP 84 op c-1/c-1 + ROOT 80 op nc/c+1) · FINAL 4 yx column · BEST FORMS (10) ·      │
+  │        │        │                        │ FINAL 4 STEP ±1 (one side, display only) · ~ / ± / * · OCJP FINAL 4 · 3 · yx (op) · Ascending, all (33)                                                │
+  ├────────┼────────┼────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ ⭕[1m14[0m   │ 8      │ 22                     │ 4. RRR · Op4 · ~xy (op) · 4. RRR · Op10 LAST · xy (op) · EPROOTGEN (EP 84 op c-1/c-1 + ROOT 80 op nc/c+1) · ~ / ± / * · ONE-MEN-ARMY ascending · OCJP  │
+  │        │        │                        │ FINAL 4 · 3 · Number · FINAL 8 ascending · Ascending, all (33)                                                                                         │
+  ├────────┼────────┼────────────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+  │ ⭕[1m00[0m   │ 7      │ 9                      │ 4. RRR · Op10 LAST · old yx (op) · MegaStar / PowerStar · MegaStar · Number · old/newold · ONE-MEN-ARMY ascending · OCJP FINAL 4 · MASTER = 1 · Number │
+  │        │        │                        │ · FINAL 8 ascending · Ascending, all (33)                                                                                                              │
+  └────────┴────────┴────────────────────────┴────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
   [1m■ OCJP FINAL 4 with operations: EP 84 (40→84 c-1/c-1), ROOT 80 (84→80 nc/c+1)[0m
 
   [1m■ OPEN / CLOSE digits: EP 84 (40→84 c-1/c-1), ROOT 80 (84→80 nc/c+1)[0m

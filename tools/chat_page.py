@@ -634,24 +634,17 @@ def _near(r):
     return {r, ((a + 1) % 10) * 10 + b, ((a - 1) % 10) * 10 + b, a * 10 + (b + 1) % 10, a * 10 + (b - 1) % 10}
 
 
-def ring_section(prev_md, R, label):
-    """'Where R was' (user 2026-11-09, screenshot Y48): every place on the previous page where the
-    result itself (exact, bold) or a number one step away from it stood, marked with a red ring."""
-    near = _near(R)
+def _scan(md):
+    """Every number on a page with the place it stands (table cells and '**Name:** ...' lines),
+    the same places the ⭕ Where section looks at.  Yields (place, value, text, has_op)."""
     tok = re.compile(r'(?<!\d)(\d\d)(?!\d)( \([^)]*\))?')
-    rows, head, sec = [], None, ''
+    head, sec = None, ''
     def grab(cell, allnum):
-        out = []
         c = strip_marks(cell.replace('**', ''))
         for m in tok.finditer(c):
-            if not (allnum or m.group(2)):
-                continue
-            v = int(m.group(1))
-            if v in near:
-                t = f"{RING}{m.group(1)}{m.group(2) or ''}"
-                out.append(f"**{t}**" if v == R else t + ' near')
-        return out
-    for ln in prev_md.split('\n'):
+            if allnum or m.group(2):
+                yield int(m.group(1)), m.group(1) + (m.group(2) or ''), bool(m.group(2))
+    for ln in md.split('\n'):
         if ln.startswith('## ') or ln.startswith('### '):
             sec = re.sub(r':.*', '', ln.lstrip('# ')); head = None; continue
         if ln.startswith('|'):
@@ -660,30 +653,85 @@ def ring_section(prev_md, R, label):
                 continue
             if head is None:
                 head = cells; continue
-            if sec.startswith('Result check') or sec.startswith(RING):   # not the old page's own ⭕ section
+            if sec.startswith('Result check') or sec.startswith(RING):   # not a ⭕ section
                 continue
             for i, c in enumerate(cells[1:], 1):
-                if head[i].lower().startswith(('live', 'votes', 'from which', 'source', 'op on')):
+                if head[i].lower().startswith(('live', 'votes', 'from which', 'source', 'op on', 'times', 'places')):
                     continue
-                got = grab(c, bool(re.fullmatch(r'[\d\s·*]+', strip_marks(c.replace('**', '')))))
-                if got:
-                    lab = f"{cells[0].replace('**', '')}" + ('' if head[i].startswith('Numbers') else f" · {head[i]}")
-                    pre = '' if sec.startswith('Other lists') else re.sub(r' with operations$', '', sec) + ' · '
-                    rows.append([pre + lab, ' · '.join(got)])
-        elif ln.startswith('**') and ':**' in ln:
+                lab = f"{cells[0].replace('**', '')}" + ('' if head[i].startswith('Numbers') else f" · {head[i]}")
+                pre = '' if sec.startswith('Other lists') else re.sub(r' with operations$', '', sec) + ' · '
+                for v, t, op in grab(c, bool(re.fullmatch(r'[\d\s·*]+', strip_marks(c.replace('**', ''))))):
+                    yield pre + lab, v, t, op
+        elif ln.startswith('**') and ':**' in ln and not ln.startswith('**Colour count'):
             name, rest = ln.split(':**', 1)
             rest = re.sub(r'\(live[^)]*\)', '', rest)
-            got = grab(rest, '(' not in rest)
-            if got:
-                nm = name.strip('*')
-                rows.append([('ONE-MEN-ARMY ascending' if nm == 'Ascending' and sec.startswith('ONE-MEN') else nm), ' · '.join(got)])
+            nm = name.strip('*')
+            lab = 'ONE-MEN-ARMY ascending' if nm == 'Ascending' and sec.startswith('ONE-MEN') else nm
+            for v, t, op in grab(rest, '(' not in rest):
+                yield lab, v, t, op
         else:
             head = None if not ln.strip() else head
+
+
+def ring_section(prev_md, R, label):
+    """'Where R was' (user 2026-11-09, screenshot Y48): every place on the previous page where the
+    result itself (exact, bold) or a number one step away from it stood, marked with a red ring."""
+    near = _near(R)
+    rows = []
+    for place, v, t, op in _scan(prev_md):
+        if v in near:
+            m = f"{RING}{t}"
+            m = f"**{m}**" if v == R else m + ' near'
+            if rows and rows[-1][0] == place:
+                rows[-1][1].append(m)
+            else:
+                rows.append([place, [m]])
     if not rows:
         return f"\n## {RING} Where {R:02d} was on the {label} page\n\n{R:02d} and its one-step neighbours were on no list of the {label} page.\n"
-    body = '\n'.join(f"| {a} | {b} |" for a, b in rows)
+    body = '\n'.join(f"| {a} | {' · '.join(b)} |" for a, b in rows)
     return (f"\n## {RING} Where {R:02d} was on the {label} page ({RING} bold = exact, {RING} near = one digit-step away: "
             f"{' '.join(f'{v:02d}' for v in sorted(_near(R) - {R}))})\n| Where | Marked |\n|---|---|\n{body}\n")
+
+
+STRONGEST = []
+STRONG_LOG = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'rrr_records', 'strongest_live.jsonl')
+
+
+def strongest_live(series_round, res=None, entry=None):
+    """Live log of the page's ⭕ strongest 4 (saved by the page of round N, scored by its result)."""
+    recs = [json.loads(l) for l in open(STRONG_LOG)] if os.path.exists(STRONG_LOG) else []
+    if entry:
+        recs = [r for r in recs if r['round'] != entry['round']] + [entry]
+    if res is not None:
+        for r in recs:
+            if r['round'] == series_round:
+                r['result'] = res
+    with open(STRONG_LOG, 'w') as fh:
+        fh.write(''.join(json.dumps(r) + '\n' for r in recs))
+    done = [r for r in recs if r.get('result') is not None]
+    cur = next((r for r in recs if r['round'] == series_round), None)
+    return cur, f"{sum(r['result'] in r['nums'] for r in done)} of {len(done)} (chance {sum(len(r['nums']) for r in done) / 100:.1f})"
+
+
+def strongest_section(md, label, k=4):
+    """The same ⭕ view for the CURRENT page (user 2026-11-10, screenshot Z23): before the result
+    is known, the numbers standing in the most places of this page, each with its places and how
+    many places its one-step neighbours hold.  Display only - not a prediction."""
+    places = {}
+    for place, v, t, op in _scan(md):
+        places.setdefault(v, [])
+        if place not in places[v]:
+            places[v].append(place)
+    if not places:
+        return ''
+    top = sorted(places, key=lambda v: (-len(places[v]), v))[:k]
+    STRONGEST[:] = top
+    rows = []
+    for v in top:
+        nb = sum(len(places.get(u, [])) for u in _near(v) - {v})
+        rows.append(f"| {RING}**{v:02d}** | {len(places[v])} | {nb} | {' · '.join(places[v])} |")
+    return (f"\n## {RING} Strongest on the {label} page (the {k} numbers in the most places; no result yet)\n"
+            f"| Number | Places | Near places (one step) | Where |\n|---|---|---|---|\n" + '\n'.join(rows) + '\n')
 
 
 def render(md, width=None):
@@ -789,8 +837,19 @@ def main():
     if True:
         if prev_md and os.path.exists(prev_md):
             sec = ring_section(open(prev_md).read(), int(res), prev_lab)
+            cur, lv = strongest_live(label, int(res))
+            if cur:
+                sec += (f"\n{RING} strongest 4 of the {prev_lab} page ({' '.join(f'{v:02d}' for v in cur['nums'])}): "
+                        f"{'✓ held' if int(res) in cur['nums'] else '✗'} {res:02d} · live {lv}\n")
             i = md.find('\nThe earlier ')
             md = md[:i] + '\n' + sec + md[i:] if i >= 0 else md + sec
+    # the same ⭕ view for the current page, just before the OCJP FINAL 4 section
+    cur_lab = re.sub(r'\d+$', lambda m: str(int(m.group()) + 1), label) if re.search(r'\d+$', label or '') else 'current'
+    sec = strongest_section(md, cur_lab)
+    if STRONGEST and re.search(r'\d+$', label or ''):
+        strongest_live(None, entry={'round': cur_lab, 'nums': STRONGEST})
+    k = md.find('\n## OCJP FINAL 4 with operations')
+    md = md[:k] + '\n' + sec + md[k:] if k >= 0 else md + sec
     if md_out:
         with open(md_out, 'w') as fh:
             fh.write(md)

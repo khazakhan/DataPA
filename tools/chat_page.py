@@ -25,7 +25,9 @@ NUMOP = re.compile(r'(\d\d) \(([^)]*)\)')
 
 # ── running the page ─────────────────────────────────────────────────────────
 def _run(text, dump=False):
-    env = dict(os.environ, CHAT_PAGE_OFF='1')
+    # inner runs always at one width, so the page's content never depends on the user's terminal
+    # (local window == chat page at any width; only render() adapts to the screen)
+    env = dict(os.environ, CHAT_PAGE_OFF='1', COLUMNS='230')
     env.pop('RRR3_DUMP2', None); env.pop('OMA_OFF', None)
     jf = None
     if dump:

@@ -58,4 +58,5 @@
 {"round": "Z28", "pick": [33, 73, 34, 36], "result": 90}
 {"round": "Z29", "pick": [45, 85, 46, 48], "result": 52}
 {"round": "Z30", "pick": [7, 47, 8, 0], "result": 96}
-{"round": "Z31", "pick": [41, 81, 42, 44], "result": null}
+{"round": "Z31", "pick": [41, 81, 42, 44], "result": 24}
+{"round": "Z32", "pick": [79, 19, 70, 72], "result": null}

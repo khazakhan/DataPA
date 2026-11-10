@@ -14,6 +14,7 @@ The dataset's last number is the result being checked; the page before it is the
 data without that number.  Everything is read from DataProcessing.py's own output, so
 nothing here changes a prediction.  Display only.
 """
+import functools
 import textwrap
 import os, re, sys, json, tempfile, subprocess
 
@@ -467,7 +468,10 @@ def build(series_round, prevP, prevD, P, res, curD=None):
                  f"history 165 vs chance 186; {LV['step']}"])
     rows.append(['~ / ± / *', ' · '.join(x for x in (P['tl'], P['pm'], P['st']) if x), '—'])
     rows.append(['old/newold', P['oldnew'], '—'])
+    rows, legend = mark_families(rows)
     A(mk(rows))
+    if legend:
+        A(f"\n{legend}\n")
     A(f"\n## ONE-MEN-ARMY: {hd} (live {P['oma_live']})")
     A(f"**Ascending:** {' '.join(P['oma_asc'])}\n")
     cs = sorted(f'{x:02d}' for x in (curD or {}).get('strong', []))
@@ -526,6 +530,63 @@ def _cols():
 
 
 RING = '\u2b55'   # ⭕ red ring, no fill (user 2026-11-09)
+# one colour per number family (user screenshot 2026-11-10: "same family numbers with one colour code")
+FAM_COLORS = ['\U0001f7e5', '\U0001f7e6', '\U0001f7e9', '\U0001f7e8', '\U0001f7ea', '\U0001f7e7', '\U0001f7eb', '\u2b1b', '\u2b1c']
+WIDE = [RING] + FAM_COLORS          # each is 2 columns wide in the terminal
+strip_marks = lambda s: re.sub('[' + ''.join(WIDE) + ']', '', s)
+
+
+def _family_map():
+    """DataProcessing.build_family_map: 10 cut-pair families of 8 (12 = 1/6 x 2/7), HALF CUT (d, cut d), DOUBLE (dd)."""
+    fam, cut = {}, lambda d: (d + 5) % 10
+    for i in range(1, 6):
+        for j in range(i + 1, 6):
+            for a in (i, cut(i)):
+                for b in (j, cut(j)):
+                    fam[a * 10 + b] = fam[b * 10 + a] = f"{i}{j}"
+    for d in range(10):
+        fam.setdefault(d * 10 + cut(d), 'half-cut')
+        fam[d * 10 + d] = 'double'
+    return fam
+
+
+FAMILY = _family_map()
+
+
+def mark_families(rows):
+    """Other lists table (user 2026-11-10): the strongest numbers (on the most lists of the table)
+    get a ⭕ ring, and every family with 2+ different numbers in the table gets one colour square.
+    Numbers inside an op's brackets (e.g. 'on EP 41') are left alone.  Display only."""
+    tok = re.compile(r'(?<![\d(])(\d\d)(?!\d)')
+    def outside(cell):
+        return re.sub(r'\([^)]*\)', lambda m: ' ' * len(m.group(0)), cell)
+    cnt = {}
+    for r in rows[1:]:
+        for v in {m.group(1) for m in tok.finditer(outside(r[1]))}:
+            cnt[v] = cnt.get(v, 0) + 1
+    if not cnt:
+        return rows, ''
+    top = max(cnt.values())
+    strong = sorted(v for v, c in cnt.items() if c == top and c >= 2)
+    fams = {}
+    for v in cnt:
+        fams.setdefault(FAMILY[int(v)], set()).add(v)
+    fams = sorted(((f, m) for f, m in fams.items() if len(m) >= 2), key=lambda t: (-len(t[1]), t[0]))[:len(FAM_COLORS)]
+    col = {v: FAM_COLORS[k] for k, (f, m) in enumerate(fams) for v in m}
+    out = [rows[0]]
+    for r in rows[1:]:
+        c, o = r[1], outside(r[1])
+        parts, last = [], 0
+        for m in tok.finditer(o):
+            v = m.group(1)
+            parts.append(c[last:m.start()] + (RING if v in strong else '') + col.get(v, '') + v)
+            last = m.end()
+        out.append([r[0], ''.join(parts) + c[last:]] + list(r[2:]))
+    fl = lambda f: f"{f}-family" if f[0].isdigit() else f
+    legend = ((f"{RING} strongest: {' '.join(strong)} (on {top} lists of this table)" if strong else '')
+              + ('  ·  ' if strong and fams else '')
+              + '  ·  '.join(f"{FAM_COLORS[k]} {fl(f)} {' '.join(sorted(m))}" for k, (f, m) in enumerate(fams)))
+    return out, legend
 
 
 def _near(r):
@@ -542,7 +603,7 @@ def ring_section(prev_md, R, label):
     rows, head, sec = [], None, ''
     def grab(cell, allnum):
         out = []
-        c = cell.replace('**', '')
+        c = strip_marks(cell.replace('**', ''))
         for m in tok.finditer(c):
             if not (allnum or m.group(2)):
                 continue
@@ -565,7 +626,7 @@ def ring_section(prev_md, R, label):
             for i, c in enumerate(cells[1:], 1):
                 if head[i].lower().startswith(('live', 'votes', 'from which', 'source', 'op on')):
                     continue
-                got = grab(c, bool(re.fullmatch(r'[\d\s·*]+', c.replace('**', ''))))
+                got = grab(c, bool(re.fullmatch(r'[\d\s·*]+', strip_marks(c.replace('**', '')))))
                 if got:
                     lab = f"{cells[0].replace('**', '')}" + ('' if head[i].startswith('Numbers') else f" · {head[i]}")
                     pre = '' if sec.startswith('Other lists') else re.sub(r' with operations$', '', sec) + ' · '
@@ -591,7 +652,7 @@ def render(md, width=None):
     EP and ROOT with their operations (user 2026-11-09), taken from the heading above."""
     B, N = '\x1b[1m', '\x1b[0m'
     bold = lambda s: re.sub(r'\*\*(.+?)\*\*', B + r'\1' + N, s)
-    plain = lambda s: s.replace('**', '') + ' ' * s.count(RING)   # ⭕ is 2 columns wide
+    plain = lambda s: s.replace('**', '') + ' ' * sum(s.count(w) for w in WIDE)   # ⭕ and colour squares are 2 columns wide
     W = min(width or _cols(), 230) - 1
     out, tbl = [], []
     title = ['']
@@ -616,7 +677,10 @@ def render(md, width=None):
         else:
             out.append(line('┌', '┬', '┐'))
         for k, r in enumerate(rows):
-            parts = [[c] if len(plain(c)) <= w[i] else [x.replace('\x00', ' ') for x in textwrap.wrap(plain(c).replace(' (', '\x00('), w[i], break_on_hyphens=False)] or [''] for i, c in enumerate(r)]
+            # wrap by screen width: each 2-column mark becomes two private chars while wrapping
+            enc = lambda s: functools.reduce(lambda a, kw: a.replace(kw[1], chr(0xE000 + kw[0]) + '\ue0ff'), enumerate(WIDE), s)
+            dec = lambda s: functools.reduce(lambda a, kw: a.replace(chr(0xE000 + kw[0]) + '\ue0ff', kw[1]), enumerate(WIDE), s)
+            parts = [[c] if len(plain(c)) <= w[i] else [dec(x.replace('\x00', ' ')) for x in textwrap.wrap(enc(c.replace('**', '')).replace(' (', '\x00('), w[i], break_on_hyphens=False)] or [''] for i, c in enumerate(r)]
             for j in range(max(len(x) for x in parts)):
                 cells = [x[j] if j < len(x) else '' for x in parts]
                 out.append('  │' + '│'.join(' ' + bold(c) + ' ' * (w[i] - len(plain(c)) + 1) for i, c in enumerate(cells)) + '│')

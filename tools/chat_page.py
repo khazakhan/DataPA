@@ -621,7 +621,7 @@ def ring_section(prev_md, R, label):
                 continue
             if head is None:
                 head = cells; continue
-            if sec.startswith('Result check'):
+            if sec.startswith('Result check') or sec.startswith(RING):   # not the old page's own ⭕ section
                 continue
             for i, c in enumerate(cells[1:], 1):
                 if head[i].lower().startswith(('live', 'votes', 'from which', 'source', 'op on')):

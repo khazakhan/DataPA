@@ -6,4 +6,5 @@
 {"round": "Z29", "nums": [56, 1, 24, 29], "result": 52}
 {"round": "Z30", "nums": [14, 23, 9, 64], "result": 96}
 {"round": "Z31", "nums": [5, 7, 44, 28], "result": 24}
-{"round": "Z32", "nums": [11, 17, 67, 77]}
+{"round": "Z32", "nums": [11, 17, 67, 77], "result": 20}
+{"round": "Z33", "nums": [67, 70, 1, 43]}

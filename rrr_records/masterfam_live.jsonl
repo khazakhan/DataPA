@@ -25,4 +25,5 @@
 {"round": "Z55", "master": 4, "nums": [4, 9, 40, 45, 54, 59, 90, 95], "result": 13}
 {"round": "Z56", "master": 6, "nums": [1, 6, 51, 56, 60, 65], "result": 13}
 {"round": "Z57", "master": 26, "nums": [21, 26, 62, 67, 71, 76], "result": 15}
-{"round": "Z58", "master": 26, "nums": [21, 26, 62, 67, 71, 76]}
+{"round": "Z58", "master": 26, "nums": [21, 26, 62, 67, 71, 76], "result": 95}
+{"round": "Z59", "master": 45, "nums": [4, 9, 40, 45, 54, 59]}

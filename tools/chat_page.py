@@ -428,6 +428,9 @@ def build(series_round, prevP, prevD, P, res, curD=None):
           [f"FINAL 8 (+{' '.join(f8[4:])})", ck(R in f8), P['f8_live']],
           *([[f"OC-STRONG 4 ({' '.join(n for n, _ in prevP['ocs'])})", ck(R in [n for n, _ in prevP['ocs']]), P['ocs_live']]]
             if prevP.get('ocs') else []),
+          *([[f"CLOSE weak 3 ({' '.join(prevP['close_full'][-3:])}) (actual {u})", ck(u in prevP['close_full'][-3:]),
+              closeweak3_live(series_round, int(R))[1] if series_round else '—']]
+            if len(prevP.get('close_full') or []) == 10 else []),
           *([[f"OPEN-STRONG 4 ({' '.join(n for n, _ in prevP['os4'])})", ck(R in [n for n, _ in prevP['os4']]),
               openstrong4_live(series_round, int(R))[1] if series_round else '—']]
             if prevP.get('os4') else []),
@@ -512,6 +515,8 @@ def build(series_round, prevP, prevD, P, res, curD=None):
     A(mk([['', 'Strongest digit', 'Strongest 3', 'Full order (strong → weak)'],
           ['**OPEN (tens)**', f"**{P['open']}**", ' · '.join(P['open3']), ' '.join(P.get('open_full') or []) or '—'],
           ['**CLOSE (units)**', f"**{P['close']}**", ' · '.join(P['close3']), ' '.join(P.get('close_full') or []) or '—']]))
+    if len(P.get('close_full') or []) == 10:
+        A(f"\n**CLOSE weak 3** (the 3 weakest CLOSE digits, watch line): {' · '.join(P['close_full'][-3:])} (live {closeweak3_live(None)[1]})")
     if P.get('ocgrid'):
         A(f"\n**OPEN × CLOSE grid (9):** {' '.join(P['ocgrid'])} (live {P['ocgrid_live']}; chance 9%, logged X/Y/Z rounds 18 of 106)")
     A('')
@@ -845,6 +850,26 @@ def tensstep8_live(series_round, res=None, entry=None):
         NEAR_LOG = keep
 
 
+CW3_LOG = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'rrr_records', 'closeweak3_live.jsonl')
+
+
+def closeweak3_live(series_round, res=None, entry=None):
+    """CLOSE weak 3 live log (user 2026-11-11, Z70-Z75 'open and close from weak'): the 3 weakest CLOSE
+    digits.  419 logged rounds: weakest 3 positions 30% vs strongest 3 32% (chance 30%) - watch only."""
+    recs = [json.loads(l) for l in open(CW3_LOG)] if os.path.exists(CW3_LOG) else []
+    if entry:
+        recs = [r for r in recs if r['round'] != entry['round']] + [entry]
+    if res is not None:
+        for r in recs:
+            if r['round'] == series_round:
+                r['result'] = res
+    with open(CW3_LOG, 'w') as fh:
+        fh.write(''.join(json.dumps(r) + '\n' for r in recs))
+    done = [r for r in recs if r.get('result') is not None]
+    cur = next((r for r in recs if r['round'] == series_round), None)
+    return cur, f"{sum(r['result'] % 10 in r['digits'] for r in done)} of {len(done)} (chance 30%)"
+
+
 OS4_LOG = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'rrr_records', 'openstrong4_live.jsonl')
 
 
@@ -1030,6 +1055,9 @@ def main():
             md = md[:i] + '\n' + sec + md[i:] if i >= 0 else md + sec
     # the same ⭕ view for the current page, just before the OCJP FINAL 4 section
     cur_lab = re.sub(r'\d+$', lambda m: str(int(m.group()) + 1), label) if re.search(r'\d+$', label or '') else 'current'
+    mcw = re.search(r'^\*\*CLOSE weak 3\*\* \([^)]*\)[^:]*: ([\d ·]+)', md, re.M)
+    if mcw and re.search(r'\d+$', label or ''):
+        closeweak3_live(None, entry={'round': cur_lab, 'digits': [int(x) for x in re.findall(r'\d', mcw.group(1))]})
     mo4 = re.search(r'^\*\*OPEN-STRONG 4\*\* \(STRONG 20[^:]*: (.*)', md, re.M)
     if mo4 and re.search(r'\d+$', label or ''):
         openstrong4_live(None, entry={'round': cur_lab, 'nums': [int(x) for x in re.findall(r'\*\*(\d\d)\*\*', mo4.group(1).split(' (live')[0])]})

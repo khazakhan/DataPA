@@ -196,6 +196,8 @@ def parse(L):
     i = gf('OC-STRONG 4 (')
     P['ocs'] = NUMOP.findall(L[i].split(':', 1)[1]) if i is not None else []
     P['ocs_live'] = live(L[i + 1]) if i is not None else '—'
+    i = gf('OPEN-STRONG 4 (')
+    P['os4'] = NUMOP.findall(L[i].split(':', 1)[1]) if i is not None else []
     i = gf('FINAL 8 (FINAL 4 + ')
     P['f8'] = NUMOP.findall(L[i].split(':', 1)[1]); P['f8_live'] = live(L[i + 1])
     i = gf('yx column:'); P['yxcol'] = nums(L[i].split(':', 1)[1].split('live')[0]); P['yx_live'] = live(L[i])
@@ -362,6 +364,8 @@ def build(series_round, prevP, prevD, P, res, curD=None):
     note('OCJP FINAL 4', R in f4); note('FINAL 8', R in f8)
     if prevP.get('ocs'):
         note('OC-STRONG 4', R in [n for n, _ in prevP['ocs']])
+    if prevP.get('os4'):
+        note('OPEN-STRONG 4', R in [n for n, _ in prevP['os4']])
     note('the OPEN digit', t == prevP['open']); note('the CLOSE digit', u == prevP['close'])
     note(f"the OPEN 3-digit set ({' '.join(prevP['open3'])})", t in prevP['open3'] and t != prevP['open'])
     note(f"the CLOSE 3-digit set ({' '.join(prevP['close3'])})", u in prevP['close3'] and u != prevP['close'])
@@ -424,6 +428,9 @@ def build(series_round, prevP, prevD, P, res, curD=None):
           [f"FINAL 8 (+{' '.join(f8[4:])})", ck(R in f8), P['f8_live']],
           *([[f"OC-STRONG 4 ({' '.join(n for n, _ in prevP['ocs'])})", ck(R in [n for n, _ in prevP['ocs']]), P['ocs_live']]]
             if prevP.get('ocs') else []),
+          *([[f"OPEN-STRONG 4 ({' '.join(n for n, _ in prevP['os4'])})", ck(R in [n for n, _ in prevP['os4']]),
+              openstrong4_live(series_round, int(R))[1] if series_round else '—']]
+            if prevP.get('os4') else []),
           *([[f"OPEN × CLOSE grid ({' '.join(prevP['ocgrid'])})", ck(R in prevP['ocgrid']), P['ocgrid_live']]]
             if prevP.get('ocgrid') else []),
           *([[f"Top colour family {tc['colour']} {tc['family']} ({' '.join(f'{v:02d}' for v in tc['members'])})",
@@ -512,6 +519,10 @@ def build(series_round, prevP, prevD, P, res, curD=None):
         A(f"**OC-STRONG 4** (STRONG 20 numbers inside OPEN × CLOSE; low tens-repeat charts only): "
           + ' · '.join(f'**{n}** ({o})' for n, o in P['ocs'])
           + f" (live {P['ocs_live']}; logged X/Y/Z rounds 14 of 106 vs chance 4.2, FINAL 4 6 of 106)\n")
+    if P.get('os4'):
+        A(f"**OPEN-STRONG 4** (STRONG 20 numbers with tens = OPEN digit {P['open']}, OCJP rank order; live test): "
+          + ' · '.join(f'**{n}** ({o})' for n, o in P['os4'])
+          + f" (live {openstrong4_live(None)[1]}; logged Z rounds 7 of 60 vs chance 2.4, FINAL 4 1 of 60; X/Y 3 of 89 — not confirmed)\n")
     A(f"### OCJP FINAL 4: {hd}")
     rows = [['#', 'Number', f"Op on ROOT {P['root']} ({P['rootop']})", 'yx (op)', 'Booster xy / yx (first)', 'From which Op', 'Votes']]
     for d in P['f4']:
@@ -834,6 +845,21 @@ def tensstep8_live(series_round, res=None, entry=None):
         NEAR_LOG = keep
 
 
+OS4_LOG = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'rrr_records', 'openstrong4_live.jsonl')
+
+
+def openstrong4_live(series_round, res=None, entry=None):
+    """OPEN-STRONG 4 live log (user 2026-11-11, Z61): STRONG 20 numbers with tens = OPEN digit,
+    OCJP rank order, first 4 (DataProcessing._open_strong4).  Z pages 7 of 60 vs 2.4; X/Y not confirmed."""
+    global NEAR_LOG
+    keep = NEAR_LOG
+    NEAR_LOG = OS4_LOG
+    try:
+        return near8_live(series_round, res, entry)
+    finally:
+        NEAR_LOG = keep
+
+
 MFAM_LOG = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'rrr_records', 'masterfam_live.jsonl')
 
 
@@ -1004,6 +1030,9 @@ def main():
             md = md[:i] + '\n' + sec + md[i:] if i >= 0 else md + sec
     # the same ⭕ view for the current page, just before the OCJP FINAL 4 section
     cur_lab = re.sub(r'\d+$', lambda m: str(int(m.group()) + 1), label) if re.search(r'\d+$', label or '') else 'current'
+    mo4 = re.search(r'\*\*OPEN-STRONG 4\*\*[^:]*: (.*)', md)
+    if mo4 and re.search(r'\d+$', label or ''):
+        openstrong4_live(None, entry={'round': cur_lab, 'nums': [int(x) for x in re.findall(r'\*\*(\d\d)\*\*', mo4.group(1).split(' (live')[0])]})
     fl = [int(x) for x in re.findall(r'(?<![\d*])\d\d(?![\d*])', text)]
     rep_ = sum(a // 10 == b // 10 for a, b in zip(fl, fl[1:])) / max(1, len(fl) - 1)
     sec = strongest_section(md, cur_lab, avoid=fl[-1] // 10 if len(fl) > 300 and rep_ < 0.06 else None)

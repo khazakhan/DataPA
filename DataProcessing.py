@@ -1271,6 +1271,21 @@ def _ocs4(strong, rk):
     return (both + one)[:4]
 
 
+def _open_strong4(strong, rk):
+    """OPEN-STRONG 4 (user 2026-11-11 Z61 'align the result set at OCJP FINAL 4'; live test):
+    on low tens-repeat charts, the STRONG 20 numbers whose tens is the OPEN digit, in OCJP ranking
+    order (numbers outside the ranking last, ascending), first 4.  Logged Z rounds (pages z3-z62):
+    7 of 60 (halves 4/30, 3/30) vs chance 2.4 and FINAL 4 1 of 60; the whole set (~7 numbers)
+    11 of 60 vs 4.2.  X/Y rounds (older OPEN method) 3 of 89 vs FINAL 4 6 - not confirmed."""
+    if _tens_avoid() is None or not strong:
+        return []
+    o3, _c3 = _open_close(rk)
+    order = [v[0] if isinstance(v, tuple) else v for v in (rk or [])]
+    S = sorted((v for v in dict.fromkeys(strong) if v // 10 == o3[0]),
+               key=lambda v: (order.index(v) if v in order else 999, v))
+    return S[:4]
+
+
 def _final8(top4, prime, rk, flat=None, ocs=None):
     """FINAL 8: FINAL 4, then the SHADOW 4 chart-step picks not yet in (2026-11-09: on 350 logged
     live rounds FINAL 4 + SHADOW 4 held 45 = 12.9% vs 8% chance; the old FINAL 8 with PRIME 8 adds
@@ -1793,9 +1808,14 @@ def show_final_box():
     _RRR3_PREV['ocs4'] = _ocs
     _f8 = _final8(top4, prime, rk, ocs=_ocs)
     _RRR3_PREV['final8'] = _f8
+    _os4 = _open_strong4(_RRR3_PREV.get('strong20') or [], rk)
+    _RRR3_PREV['os4'] = _os4
     _f8l = [f"  OC-STRONG 4 (STRONG 20 inside OPEN x CLOSE, low tens-repeat charts): "
             + (' · '.join(wop(n) for n in _ocs) if _ocs else '- (not used on this chart)'),
             f"      live {rec('ocs4')}; logged X/Y/Z rounds 14 of 106 (13.2%) vs chance 4.2, FINAL 4 6 of 106. Never sure.",
+            f"  OPEN-STRONG 4 (STRONG 20 with tens = OPEN digit, OCJP rank order, test): "
+            + (' · '.join(wop(n) for n in _os4) if _os4 else '- (not used on this chart)'),
+            f"      logged Z rounds 7 of 60 vs chance 2.4 (FINAL 4 1 of 60); X/Y 3 of 89 (FINAL 4 6) - not confirmed, live test only.",
             f"  FINAL 8 (FINAL 4 + OC-STRONG / SHADOW adds): " + ' · '.join(wop(n) for n in _f8),
             f"      ascending: {' '.join(f'{n:02d}' for n in sorted(_f8))}   live {rec('final8')}; "
             f"X/Y/Z logged rounds: + OC-STRONG 19 of 106, + SHADOW 13 of 106 (chance ~9)"]

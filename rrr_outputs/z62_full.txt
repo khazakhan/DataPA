@@ -3300,6 +3300,8 @@
   [1;32m┃[0m [1m  Tested on 412 rounds (F N M K O P Q R): ranking FINAL 4 by it held 28 vs 29 now, so it is a check, not the ranking.                                                                        [0m [1;32m┃[0m
   [1;32m┃[0m [1m  OC-STRONG 4 (STRONG 20 inside OPEN x CLOSE, low tens-repeat charts): 62 (+2/-1) · 67 (+2/c-1) · 60 (+2/c+2) · 02 (c+1/-1)                                                                  [0m [1;32m┃[0m
   [1;32m┃[0m [1m      live 0 of 43; logged X/Y/Z rounds 14 of 106 (13.2%) vs chance 4.2, FINAL 4 6 of 106. Never sure.                                                                                       [0m [1;32m┃[0m
+  [1;32m┃[0m [1m  OPEN-STRONG 4 (STRONG 20 with tens = OPEN digit, OCJP rank order, test): 60 (+2/c+2) · 67 (+2/c-1) · 63 (+2/nc) · 61 (+2/-2)                                                               [0m [1;32m┃[0m
+  [1;32m┃[0m [1m      logged Z rounds 7 of 60 vs chance 2.4 (FINAL 4 1 of 60); X/Y 3 of 89 (FINAL 4 6) - not confirmed, live test only.                                                                      [0m [1;32m┃[0m
   [1;32m┃[0m [1m  FINAL 8 (FINAL 4 + OC-STRONG / SHADOW adds): 02 (c+1/-1) · 60 (+2/c+2) · 67 (+2/c-1) · 22 (-2/-1) · 62 (+2/-1) · 63 (+2/nc) · 65 (+2/+2) · 25 (-2/+2)                                      [0m [1;32m┃[0m
   [1;32m┃[0m [1m      ascending: 02 22 25 60 62 63 65 67   live 15 of 182; X/Y/Z logged rounds: + OC-STRONG 19 of 106, + SHADOW 13 of 106 (chance ~9)                                                        [0m [1;32m┃[0m
   [1;32m┃[0m [1m  yx column: 39 15 85 31   live 17 of 258  (replay 10 of 152 vs chance 6.1; display only, not in FINAL 4)                                                                                    [0m [1;32m┃[0m
@@ -3609,6 +3611,8 @@
   [1;36m┃[0m   Tested on 412 rounds (F N M K O P Q R): ranking FINAL 4 by it held 28 vs 29 now, so it is a check, not the ranking.                                                                                                   [1;36m┃[0m
   [1;36m┃[0m   OC-STRONG 4 (STRONG 20 inside OPEN x CLOSE, low tens-repeat charts): 62 (+2/-1) · 67 (+2/c-1) · 60 (+2/c+2) · 02 (c+1/-1)                                                                                             [1;36m┃[0m
   [1;36m┃[0m       live 0 of 43; logged X/Y/Z rounds 14 of 106 (13.2%) vs chance 4.2, FINAL 4 6 of 106. Never sure.                                                                                                                  [1;36m┃[0m
+  [1;36m┃[0m   OPEN-STRONG 4 (STRONG 20 with tens = OPEN digit, OCJP rank order, test): 60 (+2/c+2) · 67 (+2/c-1) · 63 (+2/nc) · 61 (+2/-2)                                                                                          [1;36m┃[0m
+  [1;36m┃[0m       logged Z rounds 7 of 60 vs chance 2.4 (FINAL 4 1 of 60); X/Y 3 of 89 (FINAL 4 6) - not confirmed, live test only.                                                                                                 [1;36m┃[0m
   [1;36m┃[0m   FINAL 8 (FINAL 4 + OC-STRONG / SHADOW adds): 02 (c+1/-1) · 60 (+2/c+2) · 67 (+2/c-1) · 22 (-2/-1) · 62 (+2/-1) · 63 (+2/nc) · 65 (+2/+2) · 25 (-2/+2)                                                                 [1;36m┃[0m
   [1;36m┃[0m       ascending: 02 22 25 60 62 63 65 67   live 15 of 182; X/Y/Z logged rounds: + OC-STRONG 19 of 106, + SHADOW 13 of 106 (chance ~9)                                                                                   [1;36m┃[0m
   [1;36m┃[0m   yx column: 39 15 85 31   live 17 of 258  (replay 10 of 152 vs chance 6.1; display only, not in FINAL 4)                                                                                                               [1;36m┃[0m
@@ -3837,6 +3841,8 @@
     Tested on 412 rounds (F N M K O P Q R): ranking FINAL 4 by it held 28 vs 29 now, so it is a check, not the ranking.
     OC-STRONG 4 (STRONG 20 inside OPEN x CLOSE, low tens-repeat charts): 62 (+2/-1) · 67 (+2/c-1) · 60 (+2/c+2) · 02 (c+1/-1)
         live 0 of 43; logged X/Y/Z rounds 14 of 106 (13.2%) vs chance 4.2, FINAL 4 6 of 106. Never sure.
+    OPEN-STRONG 4 (STRONG 20 with tens = OPEN digit, OCJP rank order, test): 60 (+2/c+2) · 67 (+2/c-1) · 63 (+2/nc) · 61 (+2/-2)
+        logged Z rounds 7 of 60 vs chance 2.4 (FINAL 4 1 of 60); X/Y 3 of 89 (FINAL 4 6) - not confirmed, live test only.
     FINAL 8 (FINAL 4 + OC-STRONG / SHADOW adds): 02 (c+1/-1) · 60 (+2/c+2) · 67 (+2/c-1) · 22 (-2/-1) · 62 (+2/-1) · 63 (+2/nc) · 65 (+2/+2) · 25 (-2/+2)
         ascending: 02 22 25 60 62 63 65 67   live 15 of 182; X/Y/Z logged rounds: + OC-STRONG 19 of 106, + SHADOW 13 of 106 (chance ~9)
     yx column: 39 15 85 31   live 17 of 258  (replay 10 of 152 vs chance 6.1; display only, not in FINAL 4)
@@ -3890,10 +3896,10 @@
   [1;31m★[0m  [1;34m★[0m  [1;32m★[0m  [1;33m★[0m  [1;97m★[0m
   [1m■ Round Z61 result: 17 = c+1/-1 on ROOT 58 (07→58 cut/+1), EP 07 (51→07 cut/c+1)[0m
 
-  17 was held by [1mthe OPEN 3-digit set (5 6 1)[0m, [1mthe CLOSE 3-digit set (0 7 3)[0m, [1mEPROOTGEN[0m, [1mthe 80-number list[0m. Missed: OCJP FINAL 4, FINAL 8, OC-STRONG 4, the OPEN digit, the
-  CLOSE digit, the yx column, ONE-MEN-ARMY, STRONG 20, RECOMMENDED, LAST-OP 4, Rule 28, the CROSSED grid, the outer flip / outer op move, the RRR yx list, the RRR table, the BOOSTER, count 2+,
-  BEST FORMS, ONE ROW PICK, EP·LAST old xy (test), MegaStar/PowerStar, the ~ / ± / * numbers, FULL CUT (both digits) of FINAL 4 / yx, FINAL 4 digits turned, yx column digits turned, FINAL 4
-  STEP ±1, the RRR table old / newold columns.
+  17 was held by [1mthe OPEN 3-digit set (5 6 1)[0m, [1mthe CLOSE 3-digit set (0 7 3)[0m, [1mEPROOTGEN[0m, [1mthe 80-number list[0m. Missed: OCJP FINAL 4, FINAL 8, OC-STRONG 4, OPEN-STRONG 4, the OPEN
+  digit, the CLOSE digit, the yx column, ONE-MEN-ARMY, STRONG 20, RECOMMENDED, LAST-OP 4, Rule 28, the CROSSED grid, the outer flip / outer op move, the RRR yx list, the RRR table, the
+  BOOSTER, count 2+, BEST FORMS, ONE ROW PICK, EP·LAST old xy (test), MegaStar/PowerStar, the ~ / ± / * numbers, FULL CUT (both digits) of FINAL 4 / yx, FINAL 4 digits turned, yx column digits
+  turned, FINAL 4 STEP ±1, the RRR table old / newold columns.
 
   [1m■ Result check: Z61 = 17 (c+1/-1 on ROOT 58): EP 07 (51→07 cut/c+1), ROOT 58 (07→58 cut/+1)[0m
   ┌─────────────────────────────────────────────────────────────────────────────────────────────┐
@@ -3908,6 +3914,8 @@
   │ FINAL 8 (+50 53 60 52)                                   │ ✗        │ 15 of 182             │
   ├──────────────────────────────────────────────────────────┼──────────┼───────────────────────┤
   │ OC-STRONG 4 (50 57 53 60)                                │ ✗        │ 0 of 43               │
+  ├──────────────────────────────────────────────────────────┼──────────┼───────────────────────┤
+  │ OPEN-STRONG 4 (57 50 51 52)                              │ ✗        │ 0 of 0 (chance 0.00)  │
   ├──────────────────────────────────────────────────────────┼──────────┼───────────────────────┤
   │ OPEN × CLOSE grid (50 57 53 60 67 63 10 17 13)           │ ✓        │ 3 of 35               │
   ├──────────────────────────────────────────────────────────┼──────────┼───────────────────────┤
@@ -4147,6 +4155,9 @@
 
   [1mOC-STRONG 4[0m (STRONG 20 numbers inside OPEN × CLOSE; low tens-repeat charts only): [1m62[0m (+2/-1) · [1m67[0m (+2/c-1) · [1m60[0m (+2/c+2) · [1m02[0m (c+1/-1) (live 0 of 43; logged X/Y/Z rounds
   14 of 106 vs chance 4.2, FINAL 4 6 of 106)
+
+  [1mOPEN-STRONG 4[0m (STRONG 20 numbers with tens = OPEN digit 6, OCJP rank order; live test): [1m60[0m (+2/c+2) · [1m67[0m (+2/c-1) · [1m63[0m (+2/nc) · [1m61[0m (+2/-2) (live 0 of 0 (chance 0.00);
+  logged Z rounds 7 of 60 vs chance 2.4, FINAL 4 1 of 60; X/Y 3 of 89 — not confirmed)
 
   [1m■ OCJP FINAL 4: EP 17 (07→17 +1/nc), ROOT 43 (17→43 c-2/c+1)[0m
   ┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐

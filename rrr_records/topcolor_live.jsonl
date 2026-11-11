@@ -46,4 +46,5 @@
 {"round": "Z67", "colour": "\ud83d\udfe9", "family": "45-family", "members": [4, 9, 40, 45, 54, 59, 90, 95], "times": 15, "result": 69}
 {"round": "Z68", "colour": "\ud83d\udfe5", "family": "12-family", "members": [12, 17, 21, 26, 62, 67, 71, 76], "times": 11, "result": 55}
 {"round": "Z69", "colour": "\ud83d\udfe5", "family": "14-family", "members": [14, 19, 41, 46, 64, 69, 91, 96], "times": 13, "result": 1}
-{"round": "Z70", "colour": "\ud83d\udfe5", "family": "12-family", "members": [12, 17, 21, 26, 62, 67, 71, 76], "times": 17}
+{"round": "Z70", "colour": "\ud83d\udfe5", "family": "12-family", "members": [12, 17, 21, 26, 62, 67, 71, 76], "times": 17, "result": 41}
+{"round": "Z71", "colour": "\ud83d\udfe5", "family": "23-family", "members": [23, 28, 32, 37, 73, 78, 82, 87], "times": 16}

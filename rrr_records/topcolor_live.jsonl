@@ -23,4 +23,5 @@
 {"round": "Z44", "colour": "\ud83d\udfe8", "family": "15-family", "members": [1, 6, 10, 15, 51, 56, 60, 65], "times": 18, "result": 58}
 {"round": "Z45", "colour": "\ud83d\udfe5", "family": "double", "members": [0, 11, 22, 33, 44, 55, 66, 77, 88, 99], "times": 18, "result": 39}
 {"round": "Z46", "colour": "\ud83d\udfe5", "family": "45-family", "members": [4, 9, 40, 45, 54, 59, 90, 95], "times": 13, "result": 68}
-{"round": "Z47", "colour": "\ud83d\udfe5", "family": "13-family", "members": [13, 18, 31, 36, 63, 68, 81, 86], "times": 12}
+{"round": "Z47", "colour": "\ud83d\udfe5", "family": "13-family", "members": [13, 18, 31, 36, 63, 68, 81, 86], "times": 12, "result": 11}
+{"round": "Z48", "colour": "\ud83d\udfea", "family": "34-family", "members": [34, 39, 43, 48, 84, 89, 93, 98], "times": 12}

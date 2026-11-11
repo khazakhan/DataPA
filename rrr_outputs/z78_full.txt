@@ -3949,7 +3949,7 @@
   [1;31m★[0m  [1;34m★[0m  [1;32m★[0m  [1;33m★[0m  [1;97m★[0m
   [1m■ Round Z77 result: 52 = c-1/cut on ROOT 17 (07→17 +1/nc), EP 07 (53→07 cut/c-1)[0m
 
-  52 was held by [1mFINAL 8[0m, [1mOPEN-STRONG 4[0m, [1mthe OPEN digit[0m, [1mEPROOTGEN[0m, [1mONE-MEN-ARMY (#13)[0m, [1mSTRONG 20 (#14)[0m, [1mthe RRR yx list[0m, [1mONE ROW PICK[0m, **FINAL 4 digits
+  52 was held by [1mOPEN-STRONG 4[0m, [1mthe OPEN digit[0m, [1mEPROOTGEN[0m, [1mONE-MEN-ARMY (#13)[0m, [1mSTRONG 20 (#14)[0m, [1mthe RRR yx list[0m, [1mONE ROW PICK[0m, **FINAL 4 digits
   turned[1m, [0mthe 80-number list[1m, [0mthe hot list[1m, [0mranked top 40[1m, [0mPRIME 4 reversed**. Missed: OCJP FINAL 4, FINAL 8, OC-STRONG 4, the CLOSE digit, the yx column, RECOMMENDED, LAST-OP 4, Rule
   28, the CROSSED grid, the outer flip / outer op move, the RRR table, the BOOSTER, count 2+, BEST FORMS, EP·LAST old xy (test), MegaStar/PowerStar, the ~ / ± / * numbers, FULL CUT (both
   digits) of FINAL 4 / yx, yx column digits turned, FINAL 4 STEP ±1, the RRR table old / newold columns.

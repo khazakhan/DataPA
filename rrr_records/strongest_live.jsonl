@@ -39,4 +39,5 @@
 {"round": "Z62", "nums": [21, 20, 51, 57], "result": 5}
 {"round": "Z63", "nums": [93, 76, 21, 35], "result": 44}
 {"round": "Z64", "nums": [1, 92, 0, 37], "result": 20}
-{"round": "Z65", "nums": [60, 63, 76, 54]}
+{"round": "Z65", "nums": [60, 63, 76, 54], "result": 31}
+{"round": "Z66", "nums": [87, 14, 97, 15]}

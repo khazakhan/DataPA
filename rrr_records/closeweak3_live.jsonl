@@ -6,4 +6,5 @@
 {"round": "Z80", "digits": [0, 2, 3], "result": 48}
 {"round": "Z81", "digits": [4, 6, 7], "result": 32}
 {"round": "Z82", "digits": [0, 1, 6], "result": 75}
-{"round": "Z83", "digits": [5, 6, 8]}
+{"round": "Z83", "digits": [5, 6, 8], "result": 88}
+{"round": "Z84", "digits": [1, 5, 6]}

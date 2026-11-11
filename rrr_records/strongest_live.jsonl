@@ -57,4 +57,5 @@
 {"round": "Z80", "nums": [29, 74, 71, 84], "result": 48}
 {"round": "Z81", "nums": [1, 38, 83, 29], "result": 32}
 {"round": "Z82", "nums": [87, 82, 84, 93], "result": 75}
-{"round": "Z83", "nums": [82, 19, 23, 1]}
+{"round": "Z83", "nums": [82, 19, 23, 1], "result": 88}
+{"round": "Z84", "nums": [18, 54, 9, 63]}

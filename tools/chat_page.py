@@ -535,7 +535,7 @@ def build(series_round, prevP, prevD, P, res, curD=None):
         rows.append([rk, f"**{d['n']}**", d['op'], d['yx'], f"{d['bxy']} / {d['byx']}", d['src'], d['votes']])
     A(mk(rows))
     A(f"\n### FINAL 8 / Count 2+ / All / 80-number list: {hd}\n")
-    A(f"**FINAL 8 (FINAL 4 + OC-STRONG / SHADOW):** " + ' · '.join(f'{n}' if k < 4 else f'**{n}** ({o})' for k, (n, o) in enumerate(P['f8'])))
+    A(f"**FINAL 8 (FINAL 4 + OPEN-STRONG / OC-STRONG / SHADOW):** " + ' · '.join(f'{n}' if k < 4 else f'**{n}** ({o})' for k, (n, o) in enumerate(P['f8'])))
     A(f"**FINAL 8 ascending:** {' '.join(sorted(n for n, _ in P['f8']))} (live {P['f8_live']})\n")
     if P.get('booster_ops'):
         A(f"**BOOSTER, full list ({len(P['booster_ops'])}, FINAL 4 left out, live {P['booster_live']}):** "

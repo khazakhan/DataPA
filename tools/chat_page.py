@@ -818,6 +818,22 @@ def near8_live(series_round, res=None, entry=None):
     return cur, f"{sum(r['result'] in r['nums'] for r in done)} of {len(done)} (chance {sum(len(r['nums']) for r in done) / 100:.2f})"
 
 
+STEP_LOG = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'rrr_records', 'tensstep8_live.jsonl')
+
+
+def tensstep8_live(series_round, res=None, entry=None):
+    """TENS-STEP 8 live log (user 2026-11-11 'close with +1 -1 +2 -2'; tools/f4_change_study.py): FINAL 4 numbers with
+    the tens -1 / -2.  Low-repeat logged rounds: tens -1 24/285 (x2.45; live x2.58, history x2.27), tens -1/-2 41/285
+    vs 19.3 (x2.12); cut changes were below chance."""
+    global NEAR_LOG
+    keep = NEAR_LOG
+    NEAR_LOG = STEP_LOG
+    try:
+        return near8_live(series_round, res, entry)
+    finally:
+        NEAR_LOG = keep
+
+
 MFAM_LOG = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'rrr_records', 'masterfam_live.jsonl')
 
 
@@ -972,6 +988,10 @@ def main():
             if nr:
                 sec += (f"\n{RING} NEAR 8 of the {prev_lab} page ({' '.join(f'{v:02d}' for v in nr['nums'])}): "
                         f"{'✓ held' if int(res) in nr['nums'] else '✗'} {res:02d} · live {nlv}\n")
+            ts_, tlv = tensstep8_live(label, int(res))
+            if ts_:
+                sec += (f"\n{RING} TENS-STEP 8 of the {prev_lab} page ({' '.join(f'{v:02d}' for v in ts_['nums'])}): "
+                        f"{'✓ held' if int(res) in ts_['nums'] else '✗'} {res:02d} · live {tlv}\n")
             mf, mlv = masterfam_live(label, int(res))
             if mf:
                 sec += (f"\n{RING} MASTER {mf['master']:02d} family of the {prev_lab} page ({' '.join(f'{v:02d}' for v in mf['nums'])}): "
@@ -1028,6 +1048,18 @@ def main():
                      f" (logged low-repeat rounds 30 of 281 vs chance 19.6; live {near8_live(None)[1]})\n")
             if re.search(r'\d+$', label or ''):
                 near8_live(None, entry={'round': cur_lab, 'nums': near})
+        # TENS-STEP 8: every FINAL 4 number with the tens -1, then with the tens -2
+        if f4n:
+            st8 = []
+            for d in (9, 8):
+                for n in f4n:
+                    v = ((n // 10 + d) % 10) * 10 + n % 10
+                    if v not in st8 and v not in f4n and v // 10 != av_:
+                        st8.append(v)
+            line += (f"\n**TENS-STEP 8** (FINAL 4 with the tens −1, then −2): {' '.join(f'{v:02d}' for v in st8)}"
+                     f" (logged low-repeat rounds: tens −1 24 of 285 vs 9.8, tens −1/−2 41 of 285 vs 19.3; live {tensstep8_live(None)[1]})\n")
+            if re.search(r'\d+$', label or ''):
+                tensstep8_live(None, entry={'round': cur_lab, 'nums': st8})
         k2 = md.find('\n### FINAL 8')
         md = md[:k2] + '\n' + line + md[k2:] if k2 >= 0 else md + line
         if re.search(r'\d+$', label or ''):

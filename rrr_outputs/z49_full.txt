@@ -3888,6 +3888,8 @@
 
   [1mNEAR 8[0m (MASTER 25 and #2 29, one digit ±1): 35 15 26 24 39 19 20 28 (logged low-repeat rounds 30 of 281 vs chance 19.6; live 1 of 4 (chance 0.31))
 
+  [1mTENS-STEP 8[0m (FINAL 4 with the tens −1, then −2): 15 19 55 91 05 09 45 81 (logged low-repeat rounds: tens −1 24 of 285 vs 9.8, tens −1/−2 41 of 285 vs 19.3; live 0 of 0 (chance 0.00))
+
   [1m■ FINAL 8 / Count 2+ / All / 80-number list: EP 79 (11→79 c+1/-2), ROOT 47 (79→47 c+2/-2)[0m
 
   [1mFINAL 8 (FINAL 4 + OC-STRONG / SHADOW):[0m 25 · 29 · 65 · 01 · [1m45[0m (nc/-2) · [1m39[0m (-1/+2) · [1m24[0m (-2/c+2) · [1m64[0m (+2/c+2)

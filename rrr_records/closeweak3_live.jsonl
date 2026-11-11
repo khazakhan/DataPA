@@ -16,4 +16,5 @@
 {"round": "Z90", "digits": [4, 5, 8], "result": 12}
 {"round": "Z91", "digits": [6, 8, 9], "result": 14}
 {"round": "Z92", "digits": [0, 1, 4], "result": 96}
-{"round": "Z93", "digits": [2, 7, 9]}
+{"round": "Z93", "digits": [2, 7, 9], "result": 41}
+{"round": "Z94", "digits": [0, 1, 8]}

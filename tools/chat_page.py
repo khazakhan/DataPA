@@ -1030,7 +1030,7 @@ def main():
             md = md[:i] + '\n' + sec + md[i:] if i >= 0 else md + sec
     # the same ⭕ view for the current page, just before the OCJP FINAL 4 section
     cur_lab = re.sub(r'\d+$', lambda m: str(int(m.group()) + 1), label) if re.search(r'\d+$', label or '') else 'current'
-    mo4 = re.search(r'\*\*OPEN-STRONG 4\*\*[^:]*: (.*)', md)
+    mo4 = re.search(r'^\*\*OPEN-STRONG 4\*\* \(STRONG 20[^:]*: (.*)', md, re.M)
     if mo4 and re.search(r'\d+$', label or ''):
         openstrong4_live(None, entry={'round': cur_lab, 'nums': [int(x) for x in re.findall(r'\*\*(\d\d)\*\*', mo4.group(1).split(' (live')[0])]})
     fl = [int(x) for x in re.findall(r'(?<![\d*])\d\d(?![\d*])', text)]

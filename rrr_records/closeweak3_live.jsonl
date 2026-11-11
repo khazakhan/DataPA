@@ -3,4 +3,5 @@
 {"round": "Z77", "digits": [3, 4, 8], "result": 52}
 {"round": "Z78", "digits": [9, 7, 8], "result": 78}
 {"round": "Z79", "digits": [5, 6, 9], "result": 34}
-{"round": "Z80", "digits": [0, 2, 3]}
+{"round": "Z80", "digits": [0, 2, 3], "result": 48}
+{"round": "Z81", "digits": [4, 6, 7]}

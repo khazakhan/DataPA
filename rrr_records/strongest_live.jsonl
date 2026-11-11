@@ -62,4 +62,5 @@
 {"round": "Z85", "nums": [95, 40, 78, 5], "result": 76}
 {"round": "Z86", "nums": [25, 3, 8, 85], "result": 54}
 {"round": "Z87", "nums": [81, 15, 70, 36], "result": 6}
-{"round": "Z88", "nums": [34, 39, 61, 10]}
+{"round": "Z88", "nums": [34, 39, 61, 10], "result": 17}
+{"round": "Z89", "nums": [62, 65, 69, 1]}

@@ -71,4 +71,5 @@
 {"round": "Z92", "colour": "\ud83d\udfe8", "family": "half-cut", "members": [5, 16, 27, 38, 49, 50, 61, 72, 83, 94], "times": 16, "result": 96}
 {"round": "Z93", "colour": "\ud83d\udfe6", "family": "half-cut", "members": [5, 16, 27, 38, 49, 50, 61, 72, 83, 94], "times": 14, "result": 41}
 {"round": "Z94", "colour": "\ud83d\udfe5", "family": "14-family", "members": [14, 19, 41, 46, 64, 69, 91, 96], "times": 13}
-{"round": "AA2", "colour": "\ud83d\udfe5", "family": "24-family", "members": [24, 29, 42, 47, 74, 79, 92, 97], "times": 12}
+{"round": "AA2", "colour": "\ud83d\udfe5", "family": "24-family", "members": [24, 29, 42, 47, 74, 79, 92, 97], "times": 12, "result": 67}
+{"round": "AA3", "colour": "\ud83d\udfe5", "family": "15-family", "members": [1, 6, 10, 15, 51, 56, 60, 65], "times": 12}

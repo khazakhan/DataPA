@@ -107,4 +107,5 @@
 {"round": "AA44", "master": 12, "nums": [12, 17, 21, 26, 71, 76], "result": 2}
 {"round": "AA45", "master": 20, "nums": [20, 25, 52, 57, 70, 75], "result": 18}
 {"round": "AA46", "master": 35, "nums": [3, 8, 30, 35, 53, 58, 80, 85], "result": 67}
-{"round": "AA47", "master": 14, "nums": [14, 19, 41, 46, 91, 96]}
+{"round": "AA47", "master": 14, "nums": [14, 19, 41, 46, 91, 96], "result": 77}
+{"round": "AA48", "master": 18, "nums": [13, 18, 31, 36, 63, 68, 81, 86]}

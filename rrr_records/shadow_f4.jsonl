@@ -143,4 +143,5 @@
 {"round": "AA20", "pick": [4, 7, 44, 47], "result": 82}
 {"round": "AA21", "pick": [93, 96, 33, 36], "result": 78}
 {"round": "AA22", "pick": [82, 89, 22, 29], "result": 11}
-{"round": "AA23", "pick": [22, 25, 62, 65], "result": null}
+{"round": "AA23", "pick": [22, 25, 62, 65], "result": 87}
+{"round": "AA24", "pick": [91, 98, 31, 38], "result": null}

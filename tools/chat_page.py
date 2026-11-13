@@ -454,7 +454,11 @@ def build(series_round, prevP, prevD, P, res, curD=None):
           [f"CROSSED grid ({len(prevP['grid'])} numbers)", ck(R in prevP['grid']), P['grid_live']],
           [f"ONE ROW PICK ({prevP['orp'][0] if prevP['orp'] else '—'})", ck(bool(prevP['orp']) and R == prevP['orp'][0]), P['orp'][2] if P['orp'] else '—'],
           ['80-number list' + (f' ({R} left out)' if R in prevP['left'] else ''), ck(R not in prevP['left']), P['net_live']]]))
-    A(f"\nThe earlier {P['ep']} was followed by {P['root']}, so **ROOT = {P['root']} ({P['rootop']})**. {len(P['t1'])} rows qualify.\n")
+    _src = P['rootop'].split('→')[0]
+    if _src != P['ep']:   # first-time EP: ROOT came from the stand-in (digits turned / cut)
+        A(f"\n{P['ep']} is new on this chart (no earlier {P['ep']}), so its stand-in {_src} (digits turned / cut) is used: the earlier {_src} was followed by {P['root']}, so **ROOT = {P['root']} ({P['rootop']})**. {len(P['t1'])} rows qualify.\n")
+    else:
+        A(f"\nThe earlier {P['ep']} was followed by {P['root']}, so **ROOT = {P['root']} ({P['rootop']})**. {len(P['t1'])} rows qualify.\n")
     hd = f"EP {P['ep']} ({P['epop']}), ROOT {P['root']} ({P['rootop']})"
     A(f"## 4. RRR: NEXT OPERATION: {hd}")
     A(mk([['Pos', 'Source', 'old x', 'old y', 'new x', 'new y', 'xy (op)', 'yx (op)', '*xy (op)', '*yx (op)', '~xy (op)', '~yx (op)']] + P['t1']))

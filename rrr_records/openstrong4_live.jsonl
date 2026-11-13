@@ -37,4 +37,5 @@
 {"round": "AA5", "nums": [99, 95, 96, 97], "result": 57}
 {"round": "AA6", "nums": [3, 6, 0, 1], "result": 92}
 {"round": "AA7", "nums": [46, 47, 44, 45], "result": 28}
-{"round": "AA8", "nums": [70, 71, 72, 73]}
+{"round": "AA8", "nums": [70, 71, 72, 73], "result": 94}
+{"round": "AA9", "nums": [44, 40, 42, 46]}

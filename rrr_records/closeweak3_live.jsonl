@@ -35,4 +35,5 @@
 {"round": "AA16", "digits": [0, 3, 9], "result": 70}
 {"round": "AA17", "digits": [7, 8, 9], "result": 53}
 {"round": "AA18", "digits": [3, 4, 6], "result": 29}
-{"round": "AA19", "digits": [4, 5, 6]}
+{"round": "AA19", "digits": [4, 5, 6], "result": 93}
+{"round": "AA20", "digits": [3, 7, 9]}

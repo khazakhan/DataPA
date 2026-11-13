@@ -87,4 +87,5 @@
 {"round": "AA68", "digits": [0, 3, 7], "result": 98}
 {"round": "AA69", "digits": [0, 5, 8], "result": 15}
 {"round": "AA70", "digits": [5, 6, 9], "result": 30}
-{"round": "AA71", "digits": [8, 4, 6]}
+{"round": "AA71", "digits": [8, 4, 6], "result": 42}
+{"round": "AA72", "digits": [4, 7, 8]}

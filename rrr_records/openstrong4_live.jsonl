@@ -103,4 +103,5 @@
 {"round": "AA71", "nums": [82, 80, 83, 85], "result": 42}
 {"round": "AA72", "nums": [90, 92, 94, 95], "result": 38}
 {"round": "AA73", "nums": [82, 80, 81, 83], "result": 93}
-{"round": "AA74", "nums": [41, 42, 45, 46]}
+{"round": "AA74", "nums": [41, 42, 45, 46], "result": 51}
+{"round": "AA75", "nums": [0, 2, 3, 4]}

@@ -52,6 +52,10 @@ if res in rec['prime10'][:4]: hits.append('rrr3_prime4_hits')
 if res in rec['prime10'][:8]: hits.append('rrr3_prime8_hits')
 if res in rec['lastop'][:4]: hits.append('rrr3_lastop4_hits')
 if res in rec['lastop'][:8]: hits.append('rrr3_lastop8_hits')
+# ONE ROW PICK (fix 2026-11-14: hits were never counted): PICK line + any line
+_ol = rec.get('one_row', {}).get('lines', {})
+if any(k.startswith('PICK') and v == res for k, v in _ol.items()): hits.append('rrr3_onerow_hits')
+if res in _ol.values(): hits.append('rrr3_onerow5_hits')
 # *xy / *yx columns + outer-op move (on test from S27, 2026-11-04)
 import io, contextlib, sys
 sys.path.insert(0, '.')

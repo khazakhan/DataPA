@@ -291,4 +291,5 @@
 {"round": "AA31", "dataset": "rrr_datasets/aa30.txt", "root": 95, "oma": [52, 0, 45, 3, 46, 96, 1, 35, 44, 7, 24, 26, 29, 53, 57, 58, 15, 22, 23, 25], "result": 4}
 {"round": "AA32", "dataset": "rrr_datasets/aa31.txt", "root": 9, "oma": [18, 50, 90, 98, 11, 69, 8, 89, 13, 52, 56, 57, 58, 59, 63, 68, 77, 79, 84, 85], "result": 58}
 {"round": "AA33", "dataset": "rrr_datasets/aa32.txt", "root": 5, "oma": [5, 3, 14, 90, 4, 9, 73, 0, 1, 2, 6, 7, 15, 20, 21, 23, 45, 68, 78, 54], "result": 35}
-{"round": "AA34", "dataset": "rrr_datasets/aa33.txt", "root": 26, "oma": [56, 6, 19, 26, 88, 8, 20, 45, 78, 79, 80, 81, 83, 85, 87, 89, 97, 98, 99, 32]}
+{"round": "AA34", "dataset": "rrr_datasets/aa33.txt", "root": 26, "oma": [56, 6, 19, 26, 88, 8, 20, 45, 78, 79, 80, 81, 83, 85, 87, 89, 97, 98, 99, 32], "result": 63}
+{"round": "AA35", "dataset": "rrr_datasets/aa34.txt", "root": 1, "oma": [48, 27, 31, 75, 18, 42, 8, 11, 15, 17, 13, 16, 19, 23, 32, 36, 71, 74, 82, 90]}

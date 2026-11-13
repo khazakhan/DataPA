@@ -48,4 +48,5 @@
 {"round": "AA29", "digits": [3, 4, 5], "result": 59}
 {"round": "AA30", "digits": [3, 8, 9], "result": 71}
 {"round": "AA31", "digits": [7, 8, 9], "result": 4}
-{"round": "AA32", "digits": [4, 5, 7]}
+{"round": "AA32", "digits": [4, 5, 7], "result": 58}
+{"round": "AA33", "digits": [1, 6, 9]}

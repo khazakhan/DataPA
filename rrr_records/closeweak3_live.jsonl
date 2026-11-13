@@ -20,4 +20,5 @@
 {"round": "Z94", "digits": [0, 1, 8]}
 {"round": "AA2", "digits": [0, 1, 9], "result": 67}
 {"round": "AA3", "digits": [1, 2, 7], "result": 11}
-{"round": "AA4", "digits": [2, 7, 9]}
+{"round": "AA4", "digits": [2, 7, 9], "result": 43}
+{"round": "AA5", "digits": [0, 3, 5]}

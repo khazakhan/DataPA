@@ -97,4 +97,5 @@
 {"round": "AA27", "nums": [74, 3, 49, 94], "result": 30}
 {"round": "AA28", "nums": [18, 98, 8, 25], "result": 1}
 {"round": "AA29", "nums": [97, 92, 42, 47], "result": 59}
-{"round": "AA30", "nums": [20, 75, 25, 1]}
+{"round": "AA30", "nums": [20, 75, 25, 1], "result": 71}
+{"round": "AA31", "nums": [0, 46, 90, 7]}

@@ -122,4 +122,5 @@
 {"round": "AA59", "master": 1, "nums": [1, 6, 10, 15, 60, 65], "result": 44}
 {"round": "AA60", "master": 19, "nums": [14, 19, 64, 69, 91, 96], "result": 7}
 {"round": "AA61", "master": 15, "nums": [10, 15, 51, 56, 60, 65], "result": 26}
-{"round": "AA62", "master": 41, "nums": [14, 19, 41, 46, 64, 69, 91, 96]}
+{"round": "AA62", "master": 41, "nums": [14, 19, 41, 46, 64, 69, 91, 96], "result": 52}
+{"round": "AA63", "master": 5, "nums": [5, 16, 27, 38, 49, 61, 72, 83, 94]}

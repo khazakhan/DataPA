@@ -75,4 +75,5 @@
 {"round": "AA56", "digits": [1, 5, 9], "result": 32}
 {"round": "AA57", "digits": [3, 4, 8], "result": 63}
 {"round": "AA58", "digits": [9, 0, 5], "result": 56}
-{"round": "AA59", "digits": [0, 2, 9]}
+{"round": "AA59", "digits": [0, 2, 9], "result": 44}
+{"round": "AA60", "digits": [5, 6, 8]}

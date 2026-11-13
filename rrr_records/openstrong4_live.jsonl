@@ -88,4 +88,5 @@
 {"round": "AA56", "nums": [0, 2, 4, 6], "result": 32}
 {"round": "AA57", "nums": [80, 82, 84, 85], "result": 63}
 {"round": "AA58", "nums": [11, 17, 18, 19], "result": 56}
-{"round": "AA59", "nums": [1, 8, 0, 2]}
+{"round": "AA59", "nums": [1, 8, 0, 2], "result": 44}
+{"round": "AA60", "nums": [90, 92, 94, 93]}

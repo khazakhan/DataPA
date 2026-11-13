@@ -107,4 +107,5 @@
 {"round": "AA35", "colour": "\ud83d\udfe6", "family": "34-family", "members": [34, 39, 43, 48, 84, 89, 93, 98], "times": 11, "result": 19}
 {"round": "AA36", "colour": "\ud83d\udfe8", "family": "23-family", "members": [23, 28, 32, 37, 73, 78, 82, 87], "times": 15, "result": 70}
 {"round": "AA37", "colour": "\ud83d\udfe5", "family": "13-family", "members": [13, 18, 31, 36, 63, 68, 81, 86], "times": 12, "result": 10}
-{"round": "AA38", "colour": "\ud83d\udfe6", "family": "45-family", "members": [4, 9, 40, 45, 54, 59, 90, 95], "times": 17}
+{"round": "AA38", "colour": "\ud83d\udfe6", "family": "45-family", "members": [4, 9, 40, 45, 54, 59, 90, 95], "times": 17, "result": 66}
+{"round": "AA39", "colour": "\ud83d\udfe6", "family": "34-family", "members": [34, 39, 43, 48, 84, 89, 93, 98], "times": 15}

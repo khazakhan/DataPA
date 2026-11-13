@@ -70,4 +70,5 @@
 {"round": "AA38", "nums": [62, 63, 64, 65], "result": 66}
 {"round": "AA39", "nums": [10, 13, 18, 11], "result": 53}
 {"round": "AA40", "nums": [9, 1, 5, 6], "result": 96}
-{"round": "AA41", "nums": [44, 48, 40, 41]}
+{"round": "AA41", "nums": [44, 48, 40, 41], "result": 31}
+{"round": "AA42", "nums": [86, 83, 84, 85]}

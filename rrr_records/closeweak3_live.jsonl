@@ -177,4 +177,5 @@
 {"round": "AB83", "digits": [6, 8, 9]}
 {"round": "AC2", "digits": [2, 3, 6], "result": 91}
 {"round": "AC3", "digits": [5, 6, 8], "result": 67}
-{"round": "AC4", "digits": [4, 8, 9]}
+{"round": "AC4", "digits": [4, 8, 9], "result": 8}
+{"round": "AC5", "digits": [5, 8, 9]}

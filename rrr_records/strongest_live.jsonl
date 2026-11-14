@@ -177,4 +177,5 @@
 {"round": "AB32", "nums": [46, 55, 91, 0], "result": 22}
 {"round": "AB33", "nums": [27, 77, 67, 21], "result": 76}
 {"round": "AB34", "nums": [6, 16, 18, 26], "result": 6}
-{"round": "AB35", "nums": [50, 0, 7, 60]}
+{"round": "AB35", "nums": [50, 0, 7, 60], "result": 70}
+{"round": "AB36", "nums": [57, 66, 4, 48]}

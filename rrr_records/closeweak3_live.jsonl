@@ -110,4 +110,5 @@
 {"round": "AB16", "digits": [3, 6, 9], "result": 25}
 {"round": "AB17", "digits": [6, 1, 7], "result": 30}
 {"round": "AB18", "digits": [1, 2, 9], "result": 6}
-{"round": "AB19", "digits": [6, 8, 9]}
+{"round": "AB19", "digits": [6, 8, 9], "result": 82}
+{"round": "AB20", "digits": [5, 7, 8]}

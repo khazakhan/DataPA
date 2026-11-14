@@ -173,4 +173,5 @@
 {"round": "AB79", "digits": [2, 8, 9], "result": 51}
 {"round": "AB80", "digits": [2, 8, 1], "result": 15}
 {"round": "AB81", "digits": [5, 7, 9], "result": 66}
-{"round": "AB82", "digits": [5, 6, 9]}
+{"round": "AB82", "digits": [5, 6, 9], "result": 29}
+{"round": "AB83", "digits": [6, 8, 9]}

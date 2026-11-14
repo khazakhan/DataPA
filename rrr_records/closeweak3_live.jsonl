@@ -201,4 +201,5 @@
 {"round": "AC25", "digits": [1, 4, 9], "result": 62}
 {"round": "AC26", "digits": [6, 7, 8], "result": 22}
 {"round": "AC27", "digits": [7, 8, 9], "result": 54}
-{"round": "AC28", "digits": [8, 3, 5]}
+{"round": "AC28", "digits": [8, 3, 5], "result": 34}
+{"round": "AC29", "digits": [4, 7, 9]}

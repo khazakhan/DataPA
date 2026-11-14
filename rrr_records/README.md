@@ -134,3 +134,11 @@ LAST/prev re-rank: 28 vs 29 (lost). Booster recipes held-out: 4 → 13 (chance 1
 
 ## Chat view for local runs (2026-11-02)
 User asked that a local run shows the same tables as the chat. The page keeps everything it had (ROUND SUMMARY box included) and now ends with a CHAT VIEW: table 4, CROSSED options + NUMBERS FORMED, rule 28 picks, LAST-OP 4 table, the question, PRIME, PLAY LADDER, OCJP FINAL 4 — each headed "after NN (prev→NN op), EP". `python3 DataProcessing.py --chat` (or RRR_CHAT=1) prints only the chat view.
+
+## Frozen walk-forward test of FINAL 4 feeds (2026-11-15, after AB82, tools/walkforward_feed_study.py)
+597 live-logged rounds (P..AB). 25 sources of exactly 4 numbers each (chance 4%). Table-4 columns rebuilt from the logged rows.
+- FINAL 4 35 (5.9%, z 2.3), PRIME 4 35, best fixed column *xy 37 (6.2%) - but it is the best of 22, which luck alone gives.
+- Walk-forward pickers (choose from earlier rounds only): WF-BEST 33 (5.5%), WF-VOTE 30 (5.0%) -> both BELOW FINAL 4.
+- SHADOW live 22 of 277 (7.9%, z 3.3; FINAL 4 16 on the same rounds) but on whole charts 4.0% (ab82), 4.5% (aa75), 4.8% (z93), 5.8% (y55) -> not dependable.
+- 7-round blocks with 4+ hits: 0 of 79 for EVERY source; best block 3 of 7.
+Decision: no switch; FINAL 4 stays. The 4-of-7 gate needs ~50% per round; every feed is 4-6%.

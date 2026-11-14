@@ -237,4 +237,5 @@
 {"round": "AC10", "nums": [16, 43, 11, 23], "result": 45}
 {"round": "AC11", "nums": [46, 70, 91, 37], "result": 73}
 {"round": "AC12", "nums": [40, 61, 68, 25], "result": 91}
-{"round": "AC13", "nums": [87, 32, 14, 69]}
+{"round": "AC13", "nums": [87, 32, 14, 69], "result": 21}
+{"round": "AC14", "nums": [22, 42, 79, 18]}

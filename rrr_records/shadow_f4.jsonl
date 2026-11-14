@@ -207,4 +207,5 @@
 {"round": "AB9", "pick": [26, 56, 16, 66], "result": 56}
 {"round": "AB10", "pick": [1, 71, 61, 11], "result": 9}
 {"round": "AB11", "pick": [54, 24, 14, 64], "result": 2}
-{"round": "AB12", "pick": [57, 27, 17, 67], "result": null}
+{"round": "AB12", "pick": [57, 27, 17, 67], "result": 48}
+{"round": "AB13", "pick": [93, 63, 53, 3], "result": null}

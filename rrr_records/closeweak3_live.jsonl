@@ -194,4 +194,5 @@
 {"round": "AC18", "digits": [3, 5, 6], "result": 15}
 {"round": "AC19", "digits": [4, 6, 7], "result": 96}
 {"round": "AC20", "digits": [8, 6, 1], "result": 94}
-{"round": "AC21", "digits": [6, 8, 9]}
+{"round": "AC21", "digits": [6, 8, 9], "result": 55}
+{"round": "AC22", "digits": [7, 2, 6]}

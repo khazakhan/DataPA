@@ -124,4 +124,5 @@
 {"round": "AB30", "digits": [0, 3, 5], "result": 25}
 {"round": "AB31", "digits": [2, 4, 9], "result": 54}
 {"round": "AB32", "digits": [2, 7, 8], "result": 22}
-{"round": "AB33", "digits": [1, 3, 9]}
+{"round": "AB33", "digits": [1, 3, 9], "result": 76}
+{"round": "AB34", "digits": [2, 5, 7]}

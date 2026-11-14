@@ -146,4 +146,5 @@
 {"round": "AB52", "digits": [4, 7, 8], "result": 71}
 {"round": "AB53", "digits": [1, 4, 9], "result": 9}
 {"round": "AB54", "digits": [5, 6, 7], "result": 23}
-{"round": "AB55", "digits": [2, 3, 8]}
+{"round": "AB55", "digits": [2, 3, 8], "result": 79}
+{"round": "AB56", "digits": [1, 6, 9]}

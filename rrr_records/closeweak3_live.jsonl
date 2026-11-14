@@ -118,4 +118,5 @@
 {"round": "AB24", "digits": [1, 5, 7], "result": 21}
 {"round": "AB25", "digits": [1, 6, 9], "result": 39}
 {"round": "AB26", "digits": [4, 5, 6], "result": 28}
-{"round": "AB27", "digits": [1, 2, 8]}
+{"round": "AB27", "digits": [1, 2, 8], "result": 81}
+{"round": "AB28", "digits": [0, 2, 3]}

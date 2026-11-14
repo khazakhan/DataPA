@@ -548,3 +548,4 @@
 {"round": "AC4", "ep": 15, "result": 8, "x_op": "-1", "y_op": "c-2", "last": {"pos": 18, "src": "85->15", "old": ["c-2", "nc"], "new": ["cut", "c+2"]}, "x_from": [], "y_from": ["new y sign flipped", "old x as is"], "check": true}
 {"round": "AC5", "ep": 13, "result": 8, "x_op": "-1", "y_op": "cut", "last": {"pos": 38, "src": "80->13", "old": ["c-2", "c-2"], "new": ["+2", "c+2"]}, "x_from": [], "y_from": [], "check": true}
 {"round": "AC6", "ep": 8, "result": 75, "x_op": "c+2", "y_op": "c+2", "last": {"pos": 39, "src": "13->08", "old": ["-1", "cut"], "new": ["nc", "c-2"]}, "x_from": ["new y sign flipped"], "y_from": ["new y sign flipped"], "check": true}
+{"round": "AC7", "ep": 22, "result": 42, "x_op": "+2", "y_op": "nc", "last": {"pos": 25, "src": "33->22", "old": ["-1", "-1"], "new": ["c+1", "c-2"]}, "x_from": [], "y_from": [], "check": true}

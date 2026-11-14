@@ -231,4 +231,5 @@
 {"round": "AC4", "nums": [35, 80, 17, 37], "result": 8}
 {"round": "AC5", "nums": [6, 54, 3, 27], "result": 8}
 {"round": "AC6", "nums": [55, 38, 1, 6], "result": 75}
-{"round": "AC7", "nums": [45, 26, 54, 99]}
+{"round": "AC7", "nums": [45, 26, 54, 99], "result": 42}
+{"round": "AC8", "nums": [97, 6, 8, 51]}

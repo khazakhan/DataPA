@@ -180,4 +180,5 @@
 {"round": "AC4", "digits": [4, 8, 9], "result": 8}
 {"round": "AC5", "digits": [5, 8, 9], "result": 8}
 {"round": "AC6", "digits": [4, 2, 7], "result": 75}
-{"round": "AC7", "digits": [1, 4, 8]}
+{"round": "AC7", "digits": [1, 4, 8], "result": 42}
+{"round": "AC8", "digits": [0, 4, 9]}

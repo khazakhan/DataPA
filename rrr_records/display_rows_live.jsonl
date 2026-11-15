@@ -364,3 +364,4 @@
 {"round": "AC30", "result": 96, "held": {"step": false, "trf4": false, "tryx": true, "fcut": true}, "sizes": {"step": 16, "trf4": 4, "tryx": 4, "fcut": 8}}
 {"round": "AC31", "result": 36, "held": {"step": false, "trf4": false, "tryx": false, "fcut": false}, "sizes": {"step": 13, "trf4": 3, "tryx": 4, "fcut": 5}}
 {"round": "AC32", "result": 30, "held": {"step": false, "trf4": false, "tryx": false, "fcut": false}, "sizes": {"step": 15, "trf4": 2, "tryx": 3, "fcut": 6}}
+{"round": "AC33", "result": 19, "held": {"step": false, "trf4": false, "tryx": true, "fcut": false}, "sizes": {"step": 16, "trf4": 3, "tryx": 4, "fcut": 6}}

@@ -308,4 +308,5 @@
 {"round": "AC28", "pick": [70, 79, 72, 75], "result": 34}
 {"round": "AC29", "pick": [50, 59, 52, 55], "result": 34}
 {"round": "AC30", "pick": [50, 59, 52, 55], "result": 96}
-{"round": "AC31", "pick": [12, 11, 14, 17], "result": null}
+{"round": "AC31", "pick": [12, 11, 14, 17], "result": 36}
+{"round": "AC32", "pick": [52, 51, 54, 57], "result": null}

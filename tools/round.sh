@@ -31,6 +31,7 @@ res=$((10#$res)); printf '%02d\n' "$res" >> "$cur"
 # chart BEFORE this result (no-op if already logged), then score it
 python3 tools/shadow_f4.py predict "$prev" "$R" >/dev/null
 python3 tools/shadow_f4.py score "$R" "$res"
+python3 tools/final10.py score "$R" "$res" 2>/dev/null || true
 
 # result op on the ROOT (x/y), needed by last_move.py
 ops=$(python3 - "$prev" "$res" <<'PY'
@@ -52,3 +53,4 @@ python3 tools/oma.py --result "$R" "$res" | tail -1
 CHAT_PAGE_ROUND="$R" CHAT_PAGE_MD="rrr_outputs/${s}$((n + 1)).md" python3 DataProcessing.py < "$cur" 2>/dev/null | tee "rrr_outputs/${s}$((n + 1))_full.txt"
 python3 tools/oma.py "$cur" --score "$next" | tail -n +2
 python3 tools/shadow_f4.py predict "$cur" "$next"
+python3 tools/final10.py predict "$next" "rrr_outputs/${s}$((n + 1)).md"

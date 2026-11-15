@@ -247,6 +247,46 @@ def op_on(root, res):
     return f"{D.OP_ABBREV[D.find_op(r // 10, x // 10)]}/{D.OP_ABBREV[D.find_op(r % 10, x % 10)]}"
 
 
+def shadow_pick(seq, k=4):
+    """Same rule as tools/shadow_f4.py pick(): chart digit-step statistics."""
+    import collections
+    S = list(zip(seq, seq[1:]))
+    t = collections.Counter((b // 10 - a // 10) % 10 for a, b in S)
+    u = collections.Counter((b % 10 - a % 10) % 10 for a, b in S)
+    rep = t[0] / max(len(S), 1)
+    e = seq[-1]
+    sc = {n: (t[(n // 10 - e // 10) % 10] + 1) * (u[(n % 10 - e % 10) % 10] + 1) for n in range(100)
+          if not (rep < 0.06 and n // 10 == e // 10)}
+    return sorted(sc, key=lambda n: (-sc[n], n))[:k]
+
+
+def final10_section(P, text):
+    """OCJP FINAL 10 = FINAL 4 + their yx partners + SHADOW, topped up from 'Ascending, all'
+    (same rule as tools/final10.py; history 54 of 329 = 16.4% vs chance 10%)."""
+    seq = [int(x) for x in text.split() if x.isdigit()]
+    f4 = [int(d['n']) for d in P['f4']]
+    yx = [int(m.group(1)) for d in P['f4'] for m in [NUMOP.search(d['yx'])] if m]
+    sh = shadow_pick(seq)
+    allv = [int(x) for x in P.get('all') or []]
+    src, out = {}, []
+    for lab, L in (('FINAL 4', f4), ('yx partner', yx), ('SHADOW', sh), ('top-up', allv)):
+        for v in L:
+            if len(out) < 10 and v not in out:
+                out.append(v); src[v] = lab
+    yxof = {int(m.group(1)): int(d['n']) for d in P['f4'] for m in [NUMOP.search(d['yx'])] if m}
+    rows = [['#', 'Number', f"Op on ROOT {P['root']} ({P['rootop']})", 'Source']]
+    for k, v in enumerate(out, 1):
+        s = src[v] + (f" of {yxof[v]:02d}" if src[v] == 'yx partner' and v in yxof else '')
+        rows.append([('1 MASTER' if k == 1 else str(k)), f'**{v:02d}**', op_on(P['root'], v), s])
+    lf = os.path.join(HERE, 'rrr_records', 'final10_live.jsonl')
+    done = [json.loads(l) for l in open(lf)] if os.path.exists(lf) else []
+    done = [r for r in done if r.get('result') is not None]
+    h = sum(r['result'] in r['pick'] for r in done)
+    return (f"### OCJP FINAL 10 with operations: EP {P['ep']} ({P['epop']}), ROOT {P['root']} ({P['rootop']})\n"
+            + mk(rows) + f"\n\n**OCJP FINAL 10:** {' · '.join(f'{v:02d}' for v in out)} "
+            f"(live {h} of {len(done)}, chance 10%; history 54 of 329 = 16.4%). No hit is promised.\n")
+
+
 def mk(rows):
     return '\n'.join('| ' + ' | '.join(str(c) for c in r) + ' |' if k != 1 else
                      '|' + '---|' * len(rows[0]) for k, r in enumerate([rows[0], None] + rows[1:]))
@@ -1020,7 +1060,15 @@ def main():
     for k, (p, _) in enumerate(jobs):
         p.stdin.write(_feed(prev_text) if k < 2 else _feed(text)); p.stdin.close()
     prevL, prevD, curL, curD = [_finish(p, j) for p, j in jobs]
-    md = build(label, parse(prevL), prevD, parse(curL), res, curD)
+    curP = parse(curL)
+    md = build(label, parse(prevL), prevD, curP, res, curD)
+    # OCJP FINAL 10 with operations (user 2026-11-15: same window in local runs as in chat)
+    try:
+        f10 = final10_section(curP, text)
+        i = md.find('\n### FINAL 8 / Count 2+')
+        md = md[:i] + '\n' + f10 + md[i:] if i >= 0 else md + '\n' + f10
+    except Exception:
+        pass
     # red rings on the previous page's numbers that matched / were one step from the result
     # (local runs too: the previous page is rrr_outputs/<round>.md of the result's round)
     prev_md = prev_lab = None

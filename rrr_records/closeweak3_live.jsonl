@@ -248,4 +248,5 @@
 {"round": "AC72", "digits": [2, 5, 6], "result": 57}
 {"round": "AC73", "digits": [6, 8, 9], "result": 47}
 {"round": "AC74", "digits": [0, 1, 9], "result": 40}
-{"round": "AC75", "digits": [4, 6, 7]}
+{"round": "AC75", "digits": [4, 6, 7], "result": 81}
+{"round": "AC76", "digits": [6, 7, 8]}

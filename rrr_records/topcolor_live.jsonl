@@ -260,4 +260,5 @@
 {"round": "AC31", "colour": "\ud83d\udfe8", "family": "13-family", "members": [13, 18, 31, 36, 63, 68, 81, 86], "times": 21, "result": 36}
 {"round": "AC32", "colour": "\ud83d\udfe8", "family": "half-cut", "members": [5, 16, 27, 38, 49, 50, 61, 72, 83, 94], "times": 14, "result": 30}
 {"round": "AC33", "colour": "\ud83d\udfea", "family": "half-cut", "members": [5, 16, 27, 38, 49, 50, 61, 72, 83, 94], "times": 16, "result": 19}
-{"round": "AC34", "colour": "\ud83d\udfe6", "family": "half-cut", "members": [5, 16, 27, 38, 49, 50, 61, 72, 83, 94], "times": 18}
+{"round": "AC34", "colour": "\ud83d\udfe6", "family": "half-cut", "members": [5, 16, 27, 38, 49, 50, 61, 72, 83, 94], "times": 18, "result": 85}
+{"round": "AC35", "colour": "\ud83d\udfe5", "family": "15-family", "members": [1, 6, 10, 15, 51, 56, 60, 65], "times": 20}

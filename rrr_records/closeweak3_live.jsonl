@@ -217,4 +217,5 @@
 {"round": "AC41", "digits": [4, 5, 8], "result": 50}
 {"round": "AC42", "digits": [0, 2, 9], "result": 23}
 {"round": "AC43", "digits": [0, 1, 5], "result": 93}
-{"round": "AC44", "digits": [3, 7, 8]}
+{"round": "AC44", "digits": [3, 7, 8], "result": 2}
+{"round": "AC45", "digits": [3, 5, 6]}

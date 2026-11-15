@@ -270,4 +270,5 @@
 {"round": "AC43", "nums": [73, 28, 8, 23], "result": 93}
 {"round": "AC44", "nums": [21, 65, 22, 26], "result": 2}
 {"round": "AC45", "nums": [7, 6, 10, 16], "result": 38}
-{"round": "AC46", "nums": [6, 27, 2, 4]}
+{"round": "AC46", "nums": [6, 27, 2, 4], "result": 45}
+{"round": "AC47", "nums": [34, 6, 1, 84]}

@@ -35,6 +35,19 @@ if cmd == 'predict':
     if not any(r['round'] == rnd for r in R):
         with open(LOG, 'a') as fh: fh.write(json.dumps({'round': rnd, 'pick': out, 'result': None}) + '\n')
     print('OCJP FINAL 10', rnd, ' '.join(f'{v:02d}' for v in out))
+    m = re.search(r'### OCJP FINAL 4: EP (\d\d).*?ROOT (\d\d)', open(md).read())
+    if m:
+        import io, contextlib
+        sys.path.insert(0, '.')
+        with contextlib.redirect_stdout(io.StringIO()):
+            import DataProcessing as D
+        root = int(m.group(2))
+        src = {v: 'FINAL 4' for v in f4}
+        for v in yx: src.setdefault(v, 'yx partner')
+        for v in sh: src.setdefault(v, 'SHADOW')
+        for v in out:
+            o = f"{D.OP_ABBREV[D.find_op(root // 10, v // 10)]}/{D.OP_ABBREV[D.find_op(root % 10, v % 10)]}"
+            print(f'  {v:02d} ({o} on ROOT {root:02d})  {src.get(v, "top-up")}')
 elif cmd == 'score':
     R = rows()
     for r in R:

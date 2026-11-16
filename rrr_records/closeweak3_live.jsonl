@@ -275,4 +275,5 @@
 {"round": "AC99", "digits": [2, 6, 1], "result": 89}
 {"round": "AC100", "digits": [7, 8, 9], "result": 55}
 {"round": "AC101", "digits": [6, 1, 8], "result": 74}
-{"round": "AC102", "digits": [3, 4, 7]}
+{"round": "AC102", "digits": [3, 4, 7], "result": 34}
+{"round": "AC103", "digits": [3, 5, 9]}

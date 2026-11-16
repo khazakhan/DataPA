@@ -293,4 +293,5 @@
 {"round": "AC117", "digits": [3, 4, 8], "result": 98}
 {"round": "AC118", "digits": [2, 8, 9], "result": 43}
 {"round": "AC119", "digits": [7, 8, 9], "result": 76}
-{"round": "AC120", "digits": [6, 1, 9]}
+{"round": "AC120", "digits": [6, 1, 9], "result": 24}
+{"round": "AC121", "digits": [6, 7, 8]}

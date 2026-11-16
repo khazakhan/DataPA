@@ -1,0 +1,181 @@
+<title>RRR Prediction Audit</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+/* Layout: single reading column, report sections, data tables in scroll boxes */
+:root{
+  --bg:#f6f7f9; --panel:#ffffff; --fg:#1b2230; --muted:#5b6575; --line:#dde1e8;
+  --accent:#2457c5; --good:#1f7a4d; --bad:#b3372e; --warn:#9a6a00;
+  --display:"Space Grotesk",system-ui,sans-serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12161d; --panel:#1a2029; --fg:#e4e8ef; --muted:#9aa4b4; --line:#2c3440;
+  --accent:#7aa2ff; --good:#5cc595; --bad:#ff8a80; --warn:#e3b649; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12161d; --panel:#1a2029; --fg:#e4e8ef; --muted:#9aa4b4; --line:#2c3440;
+  --accent:#7aa2ff; --good:#5cc595; --bad:#ff8a80; --warn:#e3b649; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:16px/1.6 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 64px}
+main{max-width:860px;margin:0 auto;display:grid;gap:36px}
+h1,h2{font-family:var(--display);text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:2rem}
+h2{font-size:1.3rem;padding-bottom:6px;border-bottom:1px solid var(--line)}
+p{margin:0;max-width:68ch}
+section{display:grid;gap:14px}
+.eyebrow{font:500 .75rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.verdict{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:6px;padding:18px 20px;display:grid;gap:10px}
+.tbl{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:6px}
+table{border-collapse:collapse;width:100%;font-size:.92rem;font-variant-numeric:tabular-nums}
+th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-weight:600;color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.04em}
+tr:last-child td{border-bottom:none}
+td.n{text-align:right;font-family:var(--mono)}
+.good{color:var(--good);font-weight:600}.bad{color:var(--bad);font-weight:600}.warn{color:var(--warn);font-weight:600}
+code{font-family:var(--mono);font-size:.88em;background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:1px 5px}
+ul{margin:0;padding-left:1.2em;display:grid;gap:6px;max-width:68ch}
+.note{color:var(--muted);font-size:.9rem}
+</style>
+<main>
+<header style="display:grid;gap:8px">
+  <div class="eyebrow">DataScinceAnal · RRR live loop · audit of 17 Nov 2026 (after round AC122)</div>
+  <h1>RRR Prediction Audit</h1>
+  <p class="note">This audit asks whether the RRR method, its matched-fire lists, or any rule learned from the history of operations can predict the next result. It uses the live records, all 29 charts, and a check that the scanner itself works.</p>
+</header>
+
+<section class="verdict">
+  <div class="eyebrow">Verdict</div>
+  <p><strong>The results behave like random draws.</strong> The best part of the method, the ranked FINAL 4, beats chance by a small margin: <strong>41 of 718 live rounds = 5.7% against 4%</strong> (z = 2.3). No list, no agreement of lists, and no rule learned from the operations history gives more than that. A run of 7 hits in 7 rounds is out of reach for any list shorter than nearly all 100 numbers.</p>
+</section>
+
+<section>
+  <h2>1. Live scoreboard (each prediction logged before its result)</h2>
+  <div class="tbl"><table>
+    <tr><th>List</th><th>Size</th><th>Hits</th><th>Rounds</th><th>Rate</th><th>Chance</th><th>Reading</th></tr>
+    <tr><td>OCJP FINAL 4 (live records)</td><td class="n">4</td><td class="n">41</td><td class="n">718</td><td class="n">5.7%</td><td class="n">4%</td><td class="warn">×1.43, small edge</td></tr>
+    <tr><td>OCJP FINAL 4, series AC only</td><td class="n">4</td><td class="n">6</td><td class="n">121</td><td class="n">5.0%</td><td class="n">4%</td><td class="warn">near chance</td></tr>
+    <tr><td>OCJP FINAL 4 (all-time page counter)</td><td class="n">4</td><td class="n">75</td><td class="n">1305</td><td class="n">5.7%</td><td class="n">4%</td><td class="warn">×1.44</td></tr>
+    <tr><td>FINAL 8</td><td class="n">8</td><td class="n">38</td><td class="n">351</td><td class="n">10.8%</td><td class="n">8%</td><td class="warn">×1.35</td></tr>
+    <tr><td>OCJP FINAL 10 (live from AC54)</td><td class="n">10</td><td class="n">8</td><td class="n">69</td><td class="n">11.6%</td><td class="n">10%</td><td class="bad">at chance (history had 16.4%)</td></tr>
+    <tr><td>SHADOW FINAL 4 (pre-registered challenger)</td><td class="n">4</td><td class="n">28</td><td class="n">398</td><td class="n">7.0%</td><td class="n">4%</td><td class="warn">×1.76, small sample</td></tr>
+    <tr><td>80-number list</td><td class="n">80</td><td class="n">443</td><td class="n">540</td><td class="n">82.0%</td><td class="n">80%</td><td class="bad">at chance</td></tr>
+  </table></div>
+  <p class="note">FINAL 4 by series (live records): P 3/31, Q 1/47, R 5/41, S 2/81, T 2/26, U 3/27, V 0/8, X 2/35, Y 4/54, Z 3/92, AA 5/74, AB 5/81, AC 6/121.</p>
+</section>
+
+<section>
+  <h2>2. Blocks of 7 rounds, series AC</h2>
+  <div class="tbl"><table>
+    <tr><th>FINAL 4 hits in a block of 7</th><th>Blocks</th><th>Expected if random (4%)</th></tr>
+    <tr><td>0 of 7</td><td class="n">13</td><td class="n">12.8</td></tr>
+    <tr><td>1 of 7</td><td class="n">2</td><td class="n">3.7</td></tr>
+    <tr><td>2 of 7</td><td class="n">2</td><td class="n">0.5</td></tr>
+    <tr><td>3 or more of 7</td><td class="n">0</td><td class="n">0.05</td></tr>
+  </table></div>
+  <p>Seventeen full blocks match what random picks would give. The submission target of 4 of 7 has not happened once.</p>
+</section>
+
+<section>
+  <h2>3. Matched fires: does agreement between lists help?</h2>
+  <p>For every round and every number, the scan counted how many of the 8 main lists fired on it (STRONG 20, RECOMMENDED, yx, wide, NC special, RRR table, chart row, hot), then checked how often that number became the result.</p>
+  <div class="tbl"><table>
+    <tr><th>Lists agreeing</th><th>Number-rounds</th><th>Became result</th><th>Rate</th><th>Chance</th></tr>
+    <tr><td>0</td><td class="n">17,357</td><td class="n">172</td><td class="n">0.99%</td><td class="n">1%</td></tr>
+    <tr><td>1</td><td class="n">29,069</td><td class="n">291</td><td class="n">1.00%</td><td class="n">1%</td></tr>
+    <tr><td>2</td><td class="n">18,640</td><td class="n">181</td><td class="n">0.97%</td><td class="n">1%</td></tr>
+    <tr><td>3</td><td class="n">5,791</td><td class="n">64</td><td class="n">1.11%</td><td class="n">1%</td></tr>
+    <tr><td>4</td><td class="n">875</td><td class="n">10</td><td class="n">1.14%</td><td class="n">1%</td></tr>
+    <tr><td>5 or more</td><td class="n">68</td><td class="n">0</td><td class="n">0%</td><td class="n">1%</td></tr>
+  </table></div>
+  <p>Agreement adds almost nothing. A number fired by 4 lists comes up about as often as a number fired by none.</p>
+</section>
+
+<section>
+  <h2>4. Each fired list on its own (718 live rounds)</h2>
+  <div class="tbl"><table>
+    <tr><th>List</th><th>Avg size</th><th>Hits</th><th>Expected</th><th>Lift</th></tr>
+    <tr><td>Ranked top 4 (core of FINAL 4)</td><td class="n">4.0</td><td class="n">42</td><td class="n">28.7</td><td class="n good">1.46</td></tr>
+    <tr><td>Rule 2 (shares 3.8 of 4 numbers with top 4)</td><td class="n">4.0</td><td class="n">33</td><td class="n">20.7</td><td class="n good">1.59</td></tr>
+    <tr><td>STRONG 20</td><td class="n">20.0</td><td class="n">166</td><td class="n">143.6</td><td class="n">1.16</td></tr>
+    <tr><td>Wide list</td><td class="n">10.3</td><td class="n">77</td><td class="n">68.8</td><td class="n">1.12</td></tr>
+    <tr><td>Ranked top 10</td><td class="n">10.0</td><td class="n">77</td><td class="n">71.8</td><td class="n">1.07</td></tr>
+    <tr><td>Hot list</td><td class="n">20.0</td><td class="n">151</td><td class="n">143.6</td><td class="n">1.05</td></tr>
+    <tr><td>RECOMMENDED</td><td class="n">31.2</td><td class="n">230</td><td class="n">224.1</td><td class="n">1.03</td></tr>
+    <tr><td>RRR table</td><td class="n">8.8</td><td class="n">61</td><td class="n">63.4</td><td class="n bad">0.96</td></tr>
+    <tr><td>yx list</td><td class="n">12.3</td><td class="n">80</td><td class="n">88.4</td><td class="n bad">0.91</td></tr>
+    <tr><td>Chart row</td><td class="n">17.9</td><td class="n">104</td><td class="n">128.5</td><td class="n bad">0.81</td></tr>
+  </table></div>
+  <p class="note">Single-number rules with 0 to 2 hits are left out; samples that small say nothing.</p>
+</section>
+
+<section>
+  <h2>5. Strict operations-history scan, all 29 charts</h2>
+  <p>Each chart is read in order. Every move is an operation (tens step, units step, mod 10, where cut = 5). At each position from the 100th number on, five learners see only the past, predict the next number, and are scored on the real one: <strong>66,020 walk-forward predictions</strong>.</p>
+  <div class="tbl"><table>
+    <tr><th>Learner</th><th>What it learns</th><th>Top 4</th><th>Top 10</th></tr>
+    <tr><td>M0</td><td>Most common op in the chart</td><td class="n">4.30%</td><td class="n">10.54%</td></tr>
+    <tr><td>M1</td><td>Op that most often followed the last op</td><td class="n">4.11%</td><td class="n">10.37%</td></tr>
+    <tr><td>M2</td><td>Op that most often followed the last two ops</td><td class="n">4.35%</td><td class="n">10.59%</td></tr>
+    <tr><td>M3</td><td>Where each tens and units digit usually moves next</td><td class="n">4.26%</td><td class="n">10.55%</td></tr>
+    <tr><td>M4</td><td>Number that most often followed this number</td><td class="n">3.93%</td><td class="n">10.04%</td></tr>
+    <tr><td><strong>Chance</strong></td><td>Random picks</td><td class="n"><strong>4%</strong></td><td class="n"><strong>10%</strong></td></tr>
+  </table></div>
+</section>
+
+<section>
+  <h2>6. Audit of the scanner: can it find a pattern that is there?</h2>
+  <p>Fake charts were built with a hidden rule planted in part of the moves ("after op A comes op B"). The same M1 scanner was run on them.</p>
+  <div class="tbl"><table>
+    <tr><th>Planted rule present in</th><th>Scanner top-4 hit rate</th><th>Chance</th></tr>
+    <tr><td>0% of moves (pure random)</td><td class="n">3.55%</td><td class="n">4%</td></tr>
+    <tr><td>10% of moves</td><td class="n good">8.91%</td><td class="n">4%</td></tr>
+    <tr><td>20% of moves</td><td class="n good">19.55%</td><td class="n">4%</td></tr>
+    <tr><td>30% of moves</td><td class="n good">27.82%</td><td class="n">4%</td></tr>
+  </table></div>
+  <p>The scanner finds even a weak planted rule and more than doubles its hit rate. On the real charts it finds nothing, so the real operation history carries no repeating rule of that kind.</p>
+</section>
+
+<section>
+  <h2>7. Script changes in this session and their live tallies</h2>
+  <div class="tbl"><table>
+    <tr><th>Change</th><th>Added after</th><th>Evidence when added</th><th>Live since</th></tr>
+    <tr><td>EP repeat, FINAL 4 slot #4</td><td>AC96</td><td>Result = EP in 17 of 692 rounds; replay 18 → 24 of 325</td><td class="bad">net −1 (gained AC98, lost AC97 and AC120); judged at AC126</td></tr>
+    <tr><td>EP full cut, FINAL 4 slot #3</td><td>AC118</td><td>14 of 714 rounds; replay 19 → 24 of 347</td><td>net 0 after 4 rounds</td></tr>
+    <tr><td>SAME-OP row (display only)</td><td>AC91</td><td>History 7 of 316 vs 3.2</td><td class="bad">0 of 31 live</td></tr>
+  </table></div>
+  <p>Both slot changes looked good on replay and are flat or negative live. Gains found on replay usually shrink once the rounds are new.</p>
+</section>
+
+<section>
+  <h2>8. Why 7 of 7 cannot be reached</h2>
+  <div class="tbl"><table>
+    <tr><th>Numbers in list</th><th>Chance per round</th><th>Expected hits in 7</th><th>Chance of 7 of 7</th></tr>
+    <tr><td>4</td><td class="n">4–6%</td><td class="n">0.3</td><td class="n">about 1 in 3 billion</td></tr>
+    <tr><td>10</td><td class="n">10–12%</td><td class="n">0.8</td><td class="n">about 1 in 10 million</td></tr>
+    <tr><td>20</td><td class="n">20%</td><td class="n">1.4</td><td class="n">about 1 in 78,000</td></tr>
+    <tr><td>50</td><td class="n">50%</td><td class="n">3.5</td><td class="n">about 1 in 128</td></tr>
+    <tr><td>80</td><td class="n">80%</td><td class="n">5.6</td><td class="n">about 1 in 5</td></tr>
+    <tr><td>99</td><td class="n">99%</td><td class="n">6.9</td><td class="n">about 93%</td></tr>
+  </table></div>
+</section>
+
+<section>
+  <h2>9. Conclusions for the project</h2>
+  <ul>
+    <li>Across 718 live rounds and 66,020 walk-forward steps, no method predicts the next number much better than chance.</li>
+    <li>The ranked FINAL 4 has a small edge (about ×1.4). It is real enough to keep but far from reliable.</li>
+    <li>Agreement between lists, wider lists, and rules learned from the operations history do not add accuracy.</li>
+    <li>The scanner's planted-pattern test shows the method would detect a rule if one existed, so the negative result is meaningful.</li>
+    <li>For the university submission, the defensible finding is this measured, walk-forward result with its honest range: FINAL 4 about 5–6% against 4% by chance.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>10. How to reproduce</h2>
+  <ul>
+    <li><code>python3 tools/list_lift_audit.py</code>: list lift and matched-fire agreement (sections 3 and 4)</li>
+    <li><code>python3 tools/op_history_walkforward.py</code>: strict operations-history scan (section 5)</li>
+    <li>Live logs: <code>rrr_records/live.jsonl</code>, <code>final10_live.jsonl</code>, <code>shadow_f4.jsonl</code></li>
+    <li>Repository commits: c00ce79 (audit tool), 846c0ea (op-history scan)</li>
+  </ul>
+</section>
+</main>

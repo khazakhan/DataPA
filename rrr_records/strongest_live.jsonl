@@ -318,4 +318,5 @@
 {"round": "AC91", "nums": [9, 73, 91, 54], "result": 59}
 {"round": "AC92", "nums": [4, 9, 54, 59], "result": 5}
 {"round": "AC93", "nums": [21, 8, 80, 26], "result": 40}
-{"round": "AC94", "nums": [1, 83, 49, 22]}
+{"round": "AC94", "nums": [1, 83, 49, 22], "result": 47}
+{"round": "AC95", "nums": [6, 42, 60, 65]}

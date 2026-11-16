@@ -416,4 +416,5 @@
 {"round": "AC136", "pick": [15, 17, 14, 10], "result": 11}
 {"round": "AC137", "pick": [37, 39, 36, 32], "result": 79}
 {"round": "AC138", "pick": [95, 97, 94, 90], "result": 52}
-{"round": "AC139", "pick": [78, 70, 77, 73], "result": null}
+{"round": "AC139", "pick": [78, 70, 77, 73], "result": 90}
+{"round": "AC140", "pick": [16, 18, 15, 11], "result": null}

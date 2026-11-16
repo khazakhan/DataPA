@@ -322,4 +322,5 @@
 {"round": "AC146", "digits": [3, 5, 9], "result": 93}
 {"round": "AC147", "digits": [6, 7, 9], "result": 45}
 {"round": "AC148", "digits": [8, 2, 4], "result": 32}
-{"round": "AC149", "digits": [1, 7, 9]}
+{"round": "AC149", "digits": [1, 7, 9], "result": 86}
+{"round": "AC150", "digits": [3, 4, 6]}

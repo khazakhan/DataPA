@@ -311,4 +311,5 @@
 {"round": "AC135", "digits": [2, 7, 9], "result": 99}
 {"round": "AC136", "digits": [7, 4, 9], "result": 11}
 {"round": "AC137", "digits": [3, 8, 9], "result": 79}
-{"round": "AC138", "digits": [7, 2, 4]}
+{"round": "AC138", "digits": [7, 2, 4], "result": 52}
+{"round": "AC139", "digits": [3, 0, 9]}

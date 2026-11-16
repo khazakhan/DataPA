@@ -41,12 +41,14 @@ hits += [f'rrr3_lad_{k}_hits' for k, v in rec['ladder'].items() if res in v]
 up['rrr3_twostar_rounds'] = 1
 up['rrr3_f4yx_rounds'] = 1
 _e = rec['ep']; _f4yx = set()
-for v in rec['ranked'][:4]:
+# FINAL 4 as declared (from AC97 slot 4 can be the EP, so ranked[:4] is not FINAL 4)
+F4 = (rec.get('final8') or [])[:4] or rec['ranked'][:4]
+for v in F4:
     _xo, _yo = D.find_op(_e // 10, v // 10), D.find_op(_e % 10, v % 10)
     _f4yx.add(D.apply_op(_e // 10, _yo) * 10 + D.apply_op(_e % 10, _xo))
 if res in _f4yx: hits.append('rrr3_f4yx_hits')
 if res in rec['ranked'][:2]: hits.append('rrr3_twostar_hits')
-if res in rec['ranked'][:4]: hits.append('rrr3_final4_hits')
+if res in F4: hits.append('rrr3_final4_hits')
 if rec['ranked'][:1] == [res]: hits.append('rrr3_master_hits')
 if res in rec['prime10'][:4]: hits.append('rrr3_prime4_hits')
 if res in rec['prime10'][:8]: hits.append('rrr3_prime8_hits')
@@ -91,15 +93,15 @@ up['rrr3_sflip_rounds'] = 1
 if res in sfl: hits.append('rrr3_sflip_hits')
 # FINAL 4 BOOSTER (user 2026-11-05, live from S58): cut removed / added, signs flipped, steps +-1
 up['rrr3_booster_rounds'] = 1
-if res in D._f4_booster_set(ep, rec['ranked'][:4]): hits.append('rrr3_booster_hits')
+if res in D._f4_booster_set(ep, F4): hits.append('rrr3_booster_hits')
 # ALL COMBINED (FINAL 4 + yx + booster, dedup with counts), live from S58
-_cb = dict(D._f4_combined_counts(ep, rec['ranked'][:4]))
+_cb = dict(D._f4_combined_counts(ep, F4))
 up['rrr3_comb_rounds'] = 1; up['rrr3_comb2_rounds'] = 1
 if res in _cb: hits.append('rrr3_comb_hits')
 if _cb.get(res, 0) >= 2: hits.append('rrr3_comb2_hits')
 # ALL + booster of booster (user 2026-11-05, live from S61)
 up['rrr3_allbb_rounds'] = 1
-if res in D._f4_all_bb(ep, rec['ranked'][:4]): hits.append('rrr3_allbb_hits')
+if res in D._f4_all_bb(ep, F4): hits.append('rrr3_allbb_hits')
 # BEST FORMS (user 2026-11-07, live from T6): 4 best xy/yx forms, old ops on ROOT
 _AB = {v: k for k, v in D.OP_ABBREV.items()}
 up['rrr3_bestform_rounds'] = 1
@@ -108,7 +110,7 @@ if res in [n for n, *_ in D._best_forms(ep, [(r_['pos'], _AB[r_['old'][0]], _AB[
 # FINAL 8 (user 2026-11-07, live from U4): FINAL 4 + PRIME 8 adds, filled by ranking
 up['rrr3_final8_rounds'] = 1
 _flat = [int(x) for x in open(rec['dataset']).read().split() if x.isdigit()]
-_f8 = rec.get('final8') or D._final8(rec['ranked'][:4], rec['prime10'], rec['ranked'], _flat, ocs=rec.get('ocs4', []))
+_f8 = rec.get('final8') or D._final8(F4, rec['prime10'], rec['ranked'], _flat, ocs=rec.get('ocs4', []))
 if res in _f8: hits.append('rrr3_final8_hits')
 # OC-STRONG 4 (deep dive 2026-11-10, live from Z19): only rounds where it was shown
 if rec.get('ocs4'):
@@ -137,7 +139,7 @@ if len(_tg) >= 2:
     if res in [v for v, *_ in D._eprootgen(_tg[-2], _tg[-1], ep)]: hits.append('rrr3_eprootgen_hits')
 # 80-NUMBER NET (user 2026-11-05, live from S61)
 up['rrr3_net80_rounds'] = 1
-if res in (rec.get('net80') or D._f4_net80(ep, rec['ranked'][:4], rec['ranked'])): hits.append('rrr3_net80_hits')
+if res in (rec.get('net80') or D._f4_net80(ep, F4, rec['ranked'])): hits.append('rrr3_net80_hits')
 # after·LAST old xy (user origin-op idea 2026-11-05, live from S54)
 _tk = [int(x) for x in open(rec['dataset']).read().split() if x.isdigit()]
 _lr = [row for row in rec['rows'] if row['last']]

@@ -325,4 +325,5 @@
 {"round": "AC149", "digits": [1, 7, 9], "result": 86}
 {"round": "AC150", "digits": [3, 4, 6], "result": 62}
 {"round": "AC151", "digits": [9, 5, 7], "result": 70}
-{"round": "AC152", "digits": [3, 6, 7]}
+{"round": "AC152", "digits": [3, 6, 7], "result": 11}
+{"round": "AC153", "digits": [4, 6, 8]}

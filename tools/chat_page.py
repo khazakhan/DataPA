@@ -358,6 +358,20 @@ def fullcut_list(P):
         return []
 
 
+def sameop_list(P):
+    """SAME-OP ROW (user round AC91 = 59, 2026-11-16): an RRR row whose new x op equals its
+    new y op (e.g. cut/cut) gives one number, its xy = yx.  Live records 687 rounds: 249 had
+    such a row, 7 of 316 numbers held the result (expected 3.2); none of the 7 was in FINAL 4.
+    Small sample, found after looking -> display only, live record from AC92."""
+    out = []
+    for r in P.get('t1', []):
+        if len(r) > 6 and r[4] == r[5] and r[4]:
+            m = NUMOP.search(r[6])
+            if m and m.group(1) not in [n for n, _ in out]:
+                out.append((m.group(1), m.group(2)))
+    return out
+
+
 LIVE_ROWS = os.path.join(HERE, 'rrr_records', 'display_rows_live.jsonl')
 
 
@@ -368,7 +382,8 @@ def row_live(series_round, res, prevP):
     held = {'step': R in [f'{n:02d}' for n, _ in prevP['step']],
             'trf4': R in [f'{n:02d}' for n, _ in prevP['trf4']],
             'tryx': R in [f'{n:02d}' for n, _ in prevP['tryx']],
-            'fcut': R in [f'{n:02d}' for n, _ in prevP['fcut']]}
+            'fcut': R in [f'{n:02d}' for n, _ in prevP['fcut']],
+            'same': R in [n for n, _ in prevP['same']]}
     sizes = {k: len(prevP[k]) for k in held}
     recs = []
     if os.path.exists(LIVE_ROWS):
@@ -389,6 +404,7 @@ def build(series_round, prevP, prevD, P, res, curD=None):
     prevP['step'] = step_list(prevP); P['step'] = step_list(P)
     prevP['trf4'], prevP['tryx'] = turned_lists(prevP); P['trf4'], P['tryx'] = turned_lists(P)
     prevP['fcut'] = fullcut_list(prevP); P['fcut'] = fullcut_list(P)
+    prevP['same'] = sameop_list(prevP); P['same'] = sameop_list(P)
     LV = row_live(series_round, res, prevP)
     op = op_on(prevP['root'], res)
     ck = lambda b: '✓' if b else '✗'
@@ -429,6 +445,7 @@ def build(series_round, prevP, prevD, P, res, curD=None):
     cells = lambda rows, cols: {m for r in rows for c in cols if c < len(r) for m in re.findall(r'\b\d\d\b', r[c])}
     note('the ~ / ± / * numbers', R in (prevP['tl'] + ' ' + prevP['pm'] + ' ' + prevP['st']).split()
          or R in cells(prevP['t1'], (8, 9, 10, 11)) or R in cells(prevP['t2'], (6, 7)))
+    note('SAME-OP ROW (test)', R in [n for n, _ in prevP['same']])
     note('FULL CUT (both digits) of FINAL 4 / yx', R in [f'{n:02d}' for n, _ in prevP['fcut']])
     note('FINAL 4 digits turned', R in [f'{n:02d}' for n, _ in prevP['trf4']])
     note('yx column digits turned', R in [f'{n:02d}' for n, _ in prevP['tryx']])
@@ -491,6 +508,7 @@ def build(series_round, prevP, prevD, P, res, curD=None):
           [f"RRR yx list ({' '.join(yxl)})", ck(R in yxl), '—'],
           [f"RRR table ({' '.join(tbl)})", ck(R in tbl), '—'],
           [f"FULL CUT of FINAL 4 + yx ({' '.join(f'{n:02d}' for n, _ in prevP['fcut'])})", ck(R in [f'{n:02d}' for n, _ in prevP['fcut']]), 'test 114 vs 94.7'],
+          [f"SAME-OP ROW, test ({' '.join(n for n, _ in prevP['same']) or '—'})", ck(R in [n for n, _ in prevP['same']]), LV['same']],
           [f"CROSSED grid ({len(prevP['grid'])} numbers)", ck(R in prevP['grid']), P['grid_live']],
           [f"ONE ROW PICK ({prevP['orp'][0] if prevP['orp'] else '—'})", ck(bool(prevP['orp']) and R == prevP['orp'][0]), P['orp'][2] if P['orp'] else '—'],
           ['80-number list' + (f' ({R} left out)' if R in prevP['left'] else ''), ck(R not in prevP['left']), P['net_live']]]))
@@ -531,6 +549,8 @@ def build(series_round, prevP, prevD, P, res, curD=None):
         rows.append(['ONE ROW PICK', f"{P['orp'][0]} ({P['orp'][1]})", P['orp'][2]])
     rows.append(['FULL CUT, both digits, of FINAL 4 + yx (display only)', ' · '.join(f'{n:02d} ({o})' for n, o in P['fcut']) or '—',
                  f"history 114 vs 94.7; {LV['fcut']}"])
+    rows.append(['SAME-OP ROW, new x op = new y op (test)', ' · '.join(f'{n} ({o})' for n, o in P['same']) or '— (no such row)',
+                 f"history 7 of 316 vs 3.2; {LV['same']}"])
     rows.append(['FINAL 4 digits turned (display only)', ' · '.join(f'{n:02d} ({o})' for n, o in P['trf4']) or '—',
                  f"history 54 vs 44.6; {LV['trf4']}"])
     rows.append(['yx column digits turned (display only)', ' · '.join(f'{n:02d} ({o})' for n, o in P['tryx']) or '—',

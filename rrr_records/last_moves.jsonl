@@ -659,3 +659,4 @@
 {"round": "AC115", "ep": 75, "result": 15, "x_op": "c-1", "y_op": "nc", "last": {"pos": 31, "src": "62->75", "old": ["+1", "c-2"], "new": ["+2", "cut"]}, "x_from": ["old y step switched"], "y_from": ["new y cut switched"], "check": true}
 {"round": "AC116", "ep": 56, "result": 20, "x_op": "c+2", "y_op": "c-1", "last": {"pos": 40, "src": "65->56", "old": ["-1", "+1"], "new": ["c-1", "c-2"]}, "x_from": ["new y sign flipped"], "y_from": ["new x as is", "new y step switched", "old x cut switched"], "check": true}
 {"round": "AC117", "ep": 77, "result": 98, "x_op": "+2", "y_op": "+1", "last": {"pos": 54, "src": "73->77", "old": ["nc", "c-1"], "new": ["+1", "c-1"]}, "x_from": ["new x step switched"], "y_from": ["new x as is"], "check": true}
+{"round": "AC118", "ep": 95, "result": 43, "x_op": "cut", "y_op": "-2", "last": {"pos": 27, "src": "21->95", "old": ["c+2", "c-1"], "new": ["+1", "+1"]}, "x_from": [], "y_from": [], "check": true}

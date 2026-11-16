@@ -277,4 +277,5 @@
 {"round": "AC101", "digits": [6, 1, 8], "result": 74}
 {"round": "AC102", "digits": [3, 4, 7], "result": 34}
 {"round": "AC103", "digits": [3, 5, 9], "result": 0}
-{"round": "AC104", "digits": [3, 5, 8]}
+{"round": "AC104", "digits": [3, 5, 8], "result": 46}
+{"round": "AC105", "digits": [4, 5, 6]}

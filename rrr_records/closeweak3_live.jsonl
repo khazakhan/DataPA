@@ -409,4 +409,5 @@
 {"round": "AD71", "digits": [1, 5, 6], "result": 51}
 {"round": "AD72", "digits": [0, 1, 5], "result": 68}
 {"round": "AD73", "digits": [6, 7, 9], "result": 42}
-{"round": "AD74", "digits": [3, 5, 6]}
+{"round": "AD74", "digits": [3, 5, 6], "result": 15}
+{"round": "AD75", "digits": [3, 7, 9]}

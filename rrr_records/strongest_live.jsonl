@@ -390,4 +390,5 @@
 {"round": "AC163", "nums": [9, 78, 1, 25]}
 {"round": "AD2", "nums": [81, 23, 78, 36], "result": 0}
 {"round": "AD3", "nums": [60, 7, 34, 9], "result": 18}
-{"round": "AD4", "nums": [51, 79, 13, 46]}
+{"round": "AD4", "nums": [51, 79, 13, 46], "result": 42}
+{"round": "AD5", "nums": [5, 1, 6, 50]}

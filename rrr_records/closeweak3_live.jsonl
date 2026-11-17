@@ -339,4 +339,5 @@
 {"round": "AC163", "digits": [4, 7, 9]}
 {"round": "AD2", "digits": [6, 8, 2], "result": 0}
 {"round": "AD3", "digits": [2, 6, 8], "result": 18}
-{"round": "AD4", "digits": [0, 2, 7]}
+{"round": "AD4", "digits": [0, 2, 7], "result": 42}
+{"round": "AD5", "digits": [2, 7, 8]}

@@ -425,4 +425,5 @@
 {"round": "AD36", "nums": [74, 8, 34, 35], "result": 67}
 {"round": "AD37", "nums": [1, 47, 26, 97], "result": 9}
 {"round": "AD38", "nums": [72, 2, 68, 91], "result": 75}
-{"round": "AD39", "nums": [37, 4, 20, 11]}
+{"round": "AD39", "nums": [37, 4, 20, 11], "result": 72}
+{"round": "AD40", "nums": [2, 11, 18, 16]}

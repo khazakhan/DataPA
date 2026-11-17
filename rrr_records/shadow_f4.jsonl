@@ -456,4 +456,5 @@
 {"round": "AD14", "pick": [26, 86, 6, 46], "result": 44}
 {"round": "AD15", "pick": [43, 3, 23, 63], "result": 10}
 {"round": "AD16", "pick": [19, 79, 99, 39], "result": 2}
-{"round": "AD17", "pick": [1, 61, 81, 21], "result": null}
+{"round": "AD17", "pick": [1, 61, 81, 21], "result": 66}
+{"round": "AD18", "pick": [65, 25, 45, 85], "result": null}

@@ -403,4 +403,5 @@
 {"round": "AD14", "nums": [5, 0, 3, 9], "result": 44}
 {"round": "AD15", "nums": [99, 15, 43, 2], "result": 10}
 {"round": "AD16", "nums": [12, 19, 30, 3], "result": 2}
-{"round": "AD17", "nums": [54, 10, 27, 9]}
+{"round": "AD17", "nums": [54, 10, 27, 9], "result": 66}
+{"round": "AD18", "nums": [36, 81, 31, 51]}

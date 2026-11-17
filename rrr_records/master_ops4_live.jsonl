@@ -1,3 +1,4 @@
 {"round": "AD10", "root": 73, "master": 79, "pick": [33, 69, 88, 29], "result": 46}
 {"round": "AD11", "root": 67, "master": 30, "pick": [94, 20, 49, 10], "result": 97}
-{"round": "AD12", "root": 50, "master": 77, "pick": [22, 67, 77, 7], "result": null}
+{"round": "AD12", "root": 50, "master": 77, "pick": [22, 67, 77, 7], "result": 35}
+{"round": "AD13", "root": 97, "master": 72, "pick": [45, 62, 90, 42], "result": null}

@@ -455,4 +455,5 @@
 {"round": "AD64", "colour": "\ud83d\udfe6", "family": "25-family", "members": [2, 7, 20, 25, 52, 57, 70, 75], "times": 15, "result": 0}
 {"round": "AD65", "colour": "\ud83d\udfe6", "family": "half-cut", "members": [5, 16, 27, 38, 49, 50, 61, 72, 83, 94], "times": 19, "result": 85}
 {"round": "AD66", "colour": "\ud83d\udfe5", "family": "35-family", "members": [3, 8, 30, 35, 53, 58, 80, 85], "times": 32, "result": 86}
-{"round": "AD67", "colour": "\ud83d\udfe9", "family": "35-family", "members": [3, 8, 30, 35, 53, 58, 80, 85], "times": 21}
+{"round": "AD67", "colour": "\ud83d\udfe9", "family": "35-family", "members": [3, 8, 30, 35, 53, 58, 80, 85], "times": 21, "result": 13}
+{"round": "AD68", "colour": "\ud83d\udfea", "family": "25-family", "members": [2, 7, 20, 25, 52, 57, 70, 75], "times": 21}

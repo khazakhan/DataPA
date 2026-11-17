@@ -645,7 +645,7 @@ def watch_section(P, curD):
     out = [f"### Watch lines (display only; FINAL 4 is not changed by them)",
            mk([['Line', 'Numbers', 'Live'],
                ['ARROW (EP repeat, one number)', f"**{E:02d}**", 'about 2.6% as one number'],
-               ['STRONG 20 #1 (one number)', f"**{list((curD or {}).get('strong', [0]))[0]:02d}**", 'all live 10 of 842 (1.2%); series AD 4 of 84'],
+               ['STRONG 20 #1 (one number)', f"**{list((curD or {}).get('strong', [0]))[0]:02d}**", 'no history (records store STRONG 20 ascending); page shows it at #1 for AD78 43 and AD85 05'],
                [f"MASTER CHANGED OPS 4 (MASTER {f4[0]:02d})", ' · '.join(f'{v:02d} ({k})' for v, k in mo), lv('master_ops4_live.jsonl') + ' (chance 4%)'],
                ['HUNTER 20 (FINAL 4 + yx + STRONG 20)', ' '.join(f'{v:02d}' for v in h20), lv('hunter20_live.jsonl') + ' (tested 26% vs 20%)'],
                [f"MASTER {f4[0]:02d} family", ' '.join(f'{v:02d}' for v in mem), 'watch']]), '']

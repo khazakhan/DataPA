@@ -363,4 +363,5 @@
 {"round": "AD25", "digits": [0, 1, 2], "result": 40}
 {"round": "AD26", "digits": [2, 3, 9], "result": 14}
 {"round": "AD27", "digits": [3, 7, 9], "result": 93}
-{"round": "AD28", "digits": [5, 8, 9]}
+{"round": "AD28", "digits": [5, 8, 9], "result": 60}
+{"round": "AD29", "digits": [1, 8, 9]}

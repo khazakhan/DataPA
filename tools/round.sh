@@ -64,3 +64,6 @@ print(m.group(1), m.group(2) if m else '')
 PY
 )
 python3 tools/master_changed_ops.py predict "$next" $mc | tail -1
+# HUNTER 20 (2026-11-17, user request; FINAL 4 + yx + STRONG 20 fill; display only, live ~26% vs 20%)
+python3 tools/hunter20.py score "$R" "$res" 2>/dev/null | tail -1 || true
+python3 tools/hunter20.py predict "$next" "$cur" "rrr_outputs/${s}$((n + 1)).md" | tail -1

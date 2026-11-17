@@ -356,4 +356,5 @@
 {"round": "AD18", "digits": [7, 8, 0], "result": 80}
 {"round": "AD19", "digits": [6, 8, 9], "result": 96}
 {"round": "AD20", "digits": [5, 0, 1], "result": 96}
-{"round": "AD21", "digits": [1, 4, 7]}
+{"round": "AD21", "digits": [1, 4, 7], "result": 5}
+{"round": "AD22", "digits": [2, 5, 8]}

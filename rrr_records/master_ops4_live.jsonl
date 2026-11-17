@@ -63,4 +63,5 @@
 {"round": "AD72", "root": 45, "master": 36, "pick": [54, 26, 9, 96], "result": 68}
 {"round": "AD73", "root": 40, "master": 12, "pick": [67, 2, 12, 92], "result": 42}
 {"round": "AD74", "root": 29, "master": 70, "pick": [34, 60, 89, 70], "result": 15}
-{"round": "AD75", "root": 75, "master": 36, "pick": [81, 26, 36, 26], "result": null}
+{"round": "AD75", "root": 75, "master": 36, "pick": [81, 26, 36, 26], "result": 25}
+{"round": "AD76", "root": 74, "master": 24, "pick": [79, 14, 24, 24], "result": null}

@@ -32,6 +32,9 @@ res=$((10#$res)); printf '%02d\n' "$res" >> "$cur"
 python3 tools/shadow_f4.py predict "$prev" "$R" >/dev/null
 python3 tools/shadow_f4.py score "$R" "$res"
 python3 tools/final10.py score "$R" "$res" 2>/dev/null || true
+# score the watch lines before the page is built, so the page shows current live counts
+python3 tools/master_changed_ops.py score "$R" "$res" >/dev/null 2>&1 || true
+python3 tools/hunter20.py score "$R" "$res" >/dev/null 2>&1 || true
 
 # result op on the ROOT (x/y), needed by last_move.py
 ops=$(python3 - "$prev" "$res" <<'PY'

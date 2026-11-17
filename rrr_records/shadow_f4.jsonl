@@ -505,4 +505,5 @@
 {"round": "AD63", "pick": [17, 77, 37, 97], "result": 37}
 {"round": "AD64", "pick": [36, 96, 56, 16], "result": 0}
 {"round": "AD65", "pick": [9, 69, 29, 89], "result": 85}
-{"round": "AD66", "pick": [84, 44, 4, 64], "result": null}
+{"round": "AD66", "pick": [84, 44, 4, 64], "result": 86}
+{"round": "AD67", "pick": [85, 45, 5, 65], "result": null}

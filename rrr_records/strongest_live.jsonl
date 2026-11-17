@@ -477,4 +477,5 @@
 {"round": "AD88", "nums": [53, 71, 13, 23], "result": 4}
 {"round": "AD89", "nums": [10, 22, 40, 1], "result": 94}
 {"round": "AD90", "nums": [79, 93, 13, 33], "result": 57}
-{"round": "AD91", "nums": [4, 52, 77, 39]}
+{"round": "AD91", "nums": [4, 52, 77, 39], "result": 48}
+{"round": "AD92", "nums": [1, 24, 79, 33]}

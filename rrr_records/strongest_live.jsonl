@@ -410,4 +410,5 @@
 {"round": "AD21", "nums": [41, 29, 23, 46], "result": 5}
 {"round": "AD22", "nums": [14, 64, 69, 53], "result": 57}
 {"round": "AD23", "nums": [39, 2, 21, 76], "result": 26}
-{"round": "AD24", "nums": [19, 18, 32, 92]}
+{"round": "AD24", "nums": [19, 18, 32, 92], "result": 41}
+{"round": "AD25", "nums": [88, 14, 33, 42]}

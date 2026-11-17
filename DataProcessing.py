@@ -3889,23 +3889,23 @@ def _rrr_frame(body):
 # 2026-10-03): the only change that beat chance is the running value's tens
 # digit getting cut. Update these counts when more results are recorded.
 RRR_LIVE = {
-    'results': 1989, 'tens_cut': 140, 'short_list': 198,
-    'table_rounds': 1979, 'table_hits': 214, 'table_chance': 33, 'declared': 1944, 'declared_hits': 19,
+    'results': 1990, 'tens_cut': 140, 'short_list': 198,
+    'table_rounds': 1980, 'table_hits': 214, 'table_chance': 33, 'declared': 1945, 'declared_hits': 19,
     'band_hits': 92, 'units_hits': 88, 'second_hits': 20,
     'same_tens': 26,
-    'rrr3_rounds': 1675, 'rrr3_hits': 55, 'rrr3_rec_rounds': 1676, 'rrr3_rec_hits': 560,
-    'rrr3_same_rounds': 1648, 'rrr3_same_hits': 19, 'rrr3_wide_rounds': 1635, 'rrr3_wide_hits': 185, 'rrr3_yx_rounds': 1630, 'rrr3_yx_hits': 184,
-    'rrr3_strong_rounds': 1626, 'rrr3_strong_hits': 350, 'rrr3_same2_rounds': 1623, 'rrr3_same2_hits': 12,
-    'rrr3_turn_rounds': 1630, 'rrr3_turn_hits': 14, 'rrr3_sameyx_rounds': 1630, 'rrr3_sameyx_hits': 7,
-    'power_rounds': 1565, 'power_hits': 562,
+    'rrr3_rounds': 1676, 'rrr3_hits': 55, 'rrr3_rec_rounds': 1677, 'rrr3_rec_hits': 561,
+    'rrr3_same_rounds': 1649, 'rrr3_same_hits': 19, 'rrr3_wide_rounds': 1636, 'rrr3_wide_hits': 185, 'rrr3_yx_rounds': 1631, 'rrr3_yx_hits': 184,
+    'rrr3_strong_rounds': 1627, 'rrr3_strong_hits': 351, 'rrr3_same2_rounds': 1624, 'rrr3_same2_hits': 12,
+    'rrr3_turn_rounds': 1631, 'rrr3_turn_hits': 14, 'rrr3_sameyx_rounds': 1631, 'rrr3_sameyx_hits': 7,
+    'power_rounds': 1566, 'power_hits': 562,
     # live records shown in the bottom FINAL 4 box (user, 2026-10-26); the
     # user's rules 1-5 stay on test and never feed FINAL 4
-    'rrr3_final4_rounds': 1406, 'rrr3_final4_hits': 76, 'rrr3_master_rounds': 1352, 'rrr3_master_hits': 16,
-    'rrr3_star1_rounds': 1019, 'rrr3_star1_hits': 4,
-    'rrr3_rule1_rounds': 806, 'rrr3_rule1_hits': 31, 'rrr3_rule2_rounds': 652, 'rrr3_rule2_hits': 44,
+    'rrr3_final4_rounds': 1407, 'rrr3_final4_hits': 76, 'rrr3_master_rounds': 1353, 'rrr3_master_hits': 16,
+    'rrr3_star1_rounds': 1020, 'rrr3_star1_hits': 4,
+    'rrr3_rule1_rounds': 807, 'rrr3_rule1_hits': 31, 'rrr3_rule2_rounds': 652, 'rrr3_rule2_hits': 44,
     'rrr3_rule3_rounds': 599, 'rrr3_rule3_hits': 24, 'rrr3_rule4_rounds': 529, 'rrr3_rule4_hits': 6,
     'rrr3_rule5_rounds': 443, 'rrr3_rule5_hits': 128, 'rrr3_rule6_rounds': 71, 'rrr3_rule6_hits': 1,
-    'rrr3_rule7_rounds': 146, 'rrr3_rule7_hits': 3, 'rrr3_rule8_rounds': 138, 'rrr3_rule8_hits': 4, 'rrr3_rule9_rounds': 67, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 46, 'rrr3_rule10_hits': 2, 'rrr3_rule11_rounds': 6, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 70, 'rrr3_rule12_hits': 2, 'rrr3_rule13_rounds': 18, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 14, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 117, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 17, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 42, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 183, 'rrr3_rule18_hits': 6, 'rrr3_rule19_rounds': 38, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 42, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 36, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 159, 'rrr3_rule22_hits': 5, 'rrr3_rule23_rounds': 40, 'rrr3_rule23_hits': 0, 'rrr3_rule24_rounds': 13, 'rrr3_lastop4_rounds': 759, 'rrr3_lastop4_hits': 27, 'rrr3_lastop8_rounds': 759, 'rrr3_lastop8_hits': 59, 'rrr3_rule28_rounds': 691, 'rrr3_rule28_hits': 17, 'rrr3_rule27_rounds': 119, 'rrr3_rule27_hits': 1, 'rrr3_rule26_rounds': 32, 'rrr3_rule26_hits': 1, 'rrr3_rule25_rounds': 25, 'rrr3_rule25_hits': 0, 'rrr3_rule24_hits': 1, 'rrr3_onerow_rounds': 810, 'rrr3_onerow_hits': 10, 'rrr3_onerow5_rounds': 810, 'rrr3_prime4fam_rounds': 805, 'rrr3_prime4fam_hits': 131, 'rrr3_prime4rev_rounds': 797, 'rrr3_crossgrid_rounds': 767, 'rrr3_crossgrid_hits': 40, 'rrr3_lad_prime4_rounds': 792, 'rrr3_lad_prime4_hits': 41, 'rrr3_lad_prime8_rounds': 792, 'rrr3_lad_prime8_hits': 77, 'rrr3_lad_prime10_rounds': 792, 'rrr3_lad_prime10_hits': 92, 'rrr3_lad_prime4family_rounds': 792, 'rrr3_lad_prime4family_hits': 159, 'rrr3_lad_reversed_rounds': 792, 'rrr3_lad_reversed_hits': 221, 'rrr3_lad_prime10family_rounds': 792, 'rrr3_lad_prime10family_hits': 262, 'rrr3_prime4rev_hits': 77, 'rrr3_onerow5_hits': 42, 'rrr3_finder_rounds': 847, 'rrr3_finder_hits': 37, 'rrr3_prime4_rounds': 849, 'rrr3_prime4_hits': 44, 'rrr3_prime10_rounds': 849, 'rrr3_prime10_hits': 100, 'rrr3_prime8_rounds': 819, 'rrr3_starcol_rounds': 675, 'rrr3_starcol_hits': 57, 'rrr3_f4yx_rounds': 667, 'rrr3_f4yx_hits': 40, 'rrr3_twostar_rounds': 669, 'rrr3_twostar_hits': 20, 'rrr3_tilde_rounds': 669, 'rrr3_tilde_hits': 68, 'rrr3_oflip_rounds': 672, 'rrr3_oflip_hits': 8, 'rrr3_eprow_rounds': 123, 'rrr3_eprow_hits': 2, 'rrr3_outer_rounds': 675, 'rrr3_outer_hits': 5, 'rrr3_sflip_rounds': 660, 'rrr3_sflip_hits': 65, 'rrr3_oldcols_rounds': 664, 'rrr3_oldcols_hits': 73, 'rrr3_afterold_rounds': 648, 'rrr3_afterold_hits': 8, 'rrr3_booster_rounds': 644, 'rrr3_booster_hits': 158, 'rrr3_comb_rounds': 644, 'rrr3_comb_hits': 209, 'rrr3_comb2_rounds': 644, 'rrr3_comb2_hits': 98, 'rrr3_allbb_rounds': 641, 'rrr3_allbb_hits': 363, 'rrr3_net80_rounds': 641, 'rrr3_net80_hits': 527, 'rrr3_bestform_rounds': 615, 'rrr3_bestform_hits': 113, 'rrr3_final8_rounds': 591, 'rrr3_final8_hits': 58, 'rrr3_eprootgen_rounds': 580, 'rrr3_eprootgen_hits': 106, 'rrr3_open1_rounds': 580, 'rrr3_open1_hits': 77, 'rrr3_open3_hits': 189, 'rrr3_close1_rounds': 580, 'rrr3_close1_hits': 63, 'rrr3_close3_hits': 185, 'rrr3_prime8_hits': 82, 'rrr3_ocs4_rounds': 149, 'rrr3_ocs4_hits': 6, 'rrr3_ocgrid_rounds': 444, 'rrr3_ocgrid_hits': 45,
+    'rrr3_rule7_rounds': 146, 'rrr3_rule7_hits': 3, 'rrr3_rule8_rounds': 138, 'rrr3_rule8_hits': 4, 'rrr3_rule9_rounds': 67, 'rrr3_rule9_hits': 1, 'rrr3_rule10_rounds': 46, 'rrr3_rule10_hits': 2, 'rrr3_rule11_rounds': 6, 'rrr3_rule11_hits': 1, 'rrr3_rule12_rounds': 70, 'rrr3_rule12_hits': 2, 'rrr3_rule13_rounds': 18, 'rrr3_rule13_hits': 1, 'rrr3_rule14_rounds': 14, 'rrr3_rule14_hits': 0, 'rrr3_rule15_rounds': 117, 'rrr3_rule15_hits': 1, 'rrr3_rule16_rounds': 17, 'rrr3_rule16_hits': 0, 'rrr3_rule17_rounds': 42, 'rrr3_rule17_hits': 1, 'rrr3_rule18_rounds': 183, 'rrr3_rule18_hits': 6, 'rrr3_rule19_rounds': 38, 'rrr3_rule19_hits': 1, 'rrr3_rule20_rounds': 42, 'rrr3_rule20_hits': 1, 'rrr3_rule21_rounds': 36, 'rrr3_rule21_hits': 0, 'rrr3_rule22_rounds': 159, 'rrr3_rule22_hits': 5, 'rrr3_rule23_rounds': 40, 'rrr3_rule23_hits': 0, 'rrr3_rule24_rounds': 13, 'rrr3_lastop4_rounds': 760, 'rrr3_lastop4_hits': 27, 'rrr3_lastop8_rounds': 760, 'rrr3_lastop8_hits': 59, 'rrr3_rule28_rounds': 692, 'rrr3_rule28_hits': 17, 'rrr3_rule27_rounds': 119, 'rrr3_rule27_hits': 1, 'rrr3_rule26_rounds': 32, 'rrr3_rule26_hits': 1, 'rrr3_rule25_rounds': 25, 'rrr3_rule25_hits': 0, 'rrr3_rule24_hits': 1, 'rrr3_onerow_rounds': 811, 'rrr3_onerow_hits': 10, 'rrr3_onerow5_rounds': 811, 'rrr3_prime4fam_rounds': 806, 'rrr3_prime4fam_hits': 131, 'rrr3_prime4rev_rounds': 798, 'rrr3_crossgrid_rounds': 768, 'rrr3_crossgrid_hits': 40, 'rrr3_lad_prime4_rounds': 793, 'rrr3_lad_prime4_hits': 41, 'rrr3_lad_prime8_rounds': 793, 'rrr3_lad_prime8_hits': 77, 'rrr3_lad_prime10_rounds': 793, 'rrr3_lad_prime10_hits': 92, 'rrr3_lad_prime4family_rounds': 793, 'rrr3_lad_prime4family_hits': 159, 'rrr3_lad_reversed_rounds': 793, 'rrr3_lad_reversed_hits': 221, 'rrr3_lad_prime10family_rounds': 793, 'rrr3_lad_prime10family_hits': 262, 'rrr3_prime4rev_hits': 77, 'rrr3_onerow5_hits': 42, 'rrr3_finder_rounds': 848, 'rrr3_finder_hits': 37, 'rrr3_prime4_rounds': 850, 'rrr3_prime4_hits': 44, 'rrr3_prime10_rounds': 850, 'rrr3_prime10_hits': 100, 'rrr3_prime8_rounds': 820, 'rrr3_starcol_rounds': 676, 'rrr3_starcol_hits': 57, 'rrr3_f4yx_rounds': 668, 'rrr3_f4yx_hits': 40, 'rrr3_twostar_rounds': 670, 'rrr3_twostar_hits': 20, 'rrr3_tilde_rounds': 670, 'rrr3_tilde_hits': 68, 'rrr3_oflip_rounds': 673, 'rrr3_oflip_hits': 8, 'rrr3_eprow_rounds': 123, 'rrr3_eprow_hits': 2, 'rrr3_outer_rounds': 676, 'rrr3_outer_hits': 5, 'rrr3_sflip_rounds': 661, 'rrr3_sflip_hits': 65, 'rrr3_oldcols_rounds': 665, 'rrr3_oldcols_hits': 74, 'rrr3_afterold_rounds': 649, 'rrr3_afterold_hits': 8, 'rrr3_booster_rounds': 645, 'rrr3_booster_hits': 158, 'rrr3_comb_rounds': 645, 'rrr3_comb_hits': 209, 'rrr3_comb2_rounds': 645, 'rrr3_comb2_hits': 98, 'rrr3_allbb_rounds': 642, 'rrr3_allbb_hits': 363, 'rrr3_net80_rounds': 642, 'rrr3_net80_hits': 528, 'rrr3_bestform_rounds': 616, 'rrr3_bestform_hits': 114, 'rrr3_final8_rounds': 592, 'rrr3_final8_hits': 59, 'rrr3_eprootgen_rounds': 581, 'rrr3_eprootgen_hits': 106, 'rrr3_open1_rounds': 581, 'rrr3_open1_hits': 77, 'rrr3_open3_hits': 190, 'rrr3_close1_rounds': 581, 'rrr3_close1_hits': 63, 'rrr3_close3_hits': 185, 'rrr3_prime8_hits': 82, 'rrr3_ocs4_rounds': 149, 'rrr3_ocs4_hits': 6, 'rrr3_ocgrid_rounds': 445, 'rrr3_ocgrid_hits': 45,
 }
 
 
@@ -4173,7 +4173,7 @@ def _rrr_ocjp_samecut(ep, lab, place=0):
     return out
 
 
-def _rrr_final4(cands, lists, tie_lists, place):
+def _rrr_final4(cands, lists, tie_lists, place, root=None):
     """OCJP FINAL 4 (2026-10-15): among the OCJP numbers, the 4 that the
     most of the never-repaired lists also hold (RECOMMENDED, RRR table,
     same op again, 3RRR RESULT; WIDE and yx until 2026-10-26); ties: more of the other lists
@@ -4188,7 +4188,21 @@ def _rrr_final4(cands, lists, tie_lists, place):
         return sum(v in l_ for l_ in tie_lists)
     # low-repeat chart: numbers with the EP's tens digit go last (_tens_avoid)
     av = _tens_avoid()
-    top = sorted(cands, key=lambda v: (av is not None and v // 10 == av, -len(votes(v)), -tie(v), v))[:4]
+    order_ = sorted(cands, key=lambda v: (av is not None and v // 10 == av, -len(votes(v)), -tie(v), v))
+    if root is None:
+        top = order_[:4]
+    else:
+        # NO yx DUPLICATE (2026-11-17, user after AD63: '34 and 61 duplicate, show the next
+        # strong one instead'): skip a number whose yx (ops swapped on ROOT) is already in.
+        # Replay on 816 live rounds: 45 vs 44 hits (neutral), series AD 4 vs 3.
+        top = []
+        for v in order_:
+            y_ = ((root // 10 + (v % 10 - root % 10)) % 10) * 10 + (root % 10 + (v // 10 - root // 10)) % 10
+            if y_ != v and y_ in top:
+                continue
+            top.append(v)
+            if len(top) == 4:
+                break
     return [(v, votes(v)) for v in top]
 
 
@@ -7946,7 +7960,7 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                     f4_place.setdefault(x_[0], k_)
             ocjp_final4 = _rrr_final4(o_uniq, f4_lists,
                                       [strong, [v for v, _ in fam_seats], [v for _, _, l_ in nc_spec for v, _ in l_]],
-                                      f4_place)
+                                      f4_place, root=ep)
             # EP REPEAT in slot 4 (2026-11-16, AC96 = 86 after EP 86, AC91 = 59 after
             # EP 59): live records 692 rounds, result == EP 17 times (2.5% for one
             # number vs 1%); in the 325 rounds with FINAL 4 logged, slot 4 held 3 and

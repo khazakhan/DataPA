@@ -449,4 +449,5 @@
 {"round": "AD60", "nums": [75, 10, 11, 53], "result": 0}
 {"round": "AD61", "nums": [34, 45, 55, 70], "result": 57}
 {"round": "AD62", "nums": [10, 2, 76, 7], "result": 18}
-{"round": "AD63", "nums": [34, 45, 61, 72]}
+{"round": "AD63", "nums": [34, 45, 61, 72], "result": 37}
+{"round": "AD64", "nums": [60, 2, 18, 54]}

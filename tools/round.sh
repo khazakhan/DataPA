@@ -54,3 +54,13 @@ CHAT_PAGE_ROUND="$R" CHAT_PAGE_MD="rrr_outputs/${s}$((n + 1)).md" python3 DataPr
 python3 tools/oma.py "$cur" --score "$next" | tail -n +2
 python3 tools/shadow_f4.py predict "$cur" "$next"
 python3 tools/final10.py predict "$next" "rrr_outputs/${s}$((n + 1)).md"
+# MASTER CHANGED OPS 4 watch line (2026-11-17, user request after AD9; display only, at chance in study)
+python3 tools/master_changed_ops.py score "$R" "$res" 2>/dev/null | tail -1 || true
+mc=$(python3 - "rrr_outputs/${s}$((n + 1)).md" <<'PY'
+import re, sys
+t = open(sys.argv[1]).read()
+m = re.search(r'### OCJP FINAL 4: EP \d\d.*?ROOT (\d\d).*?\n\|.*\n\|.*\n\| \*\*MASTER[^|]*\| \*\*(\d\d)\*\*', t)
+print(m.group(1), m.group(2) if m else '')
+PY
+)
+python3 tools/master_changed_ops.py predict "$next" $mc | tail -1

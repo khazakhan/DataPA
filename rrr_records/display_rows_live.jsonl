@@ -522,3 +522,4 @@
 {"round": "AD26", "result": 14, "held": {"step": false, "trf4": false, "tryx": false, "fcut": false, "same": false}, "sizes": {"step": 14, "trf4": 4, "tryx": 0, "fcut": 7, "same": 2}}
 {"round": "AD27", "result": 93, "held": {"step": false, "trf4": false, "tryx": false, "fcut": false, "same": false}, "sizes": {"step": 14, "trf4": 4, "tryx": 4, "fcut": 6, "same": 0}}
 {"round": "AD28", "result": 60, "held": {"step": false, "trf4": false, "tryx": false, "fcut": false, "same": false}, "sizes": {"step": 14, "trf4": 4, "tryx": 4, "fcut": 6, "same": 0}}
+{"round": "AD29", "result": 38, "held": {"step": false, "trf4": false, "tryx": false, "fcut": false, "same": false}, "sizes": {"step": 15, "trf4": 3, "tryx": 4, "fcut": 6, "same": 0}}

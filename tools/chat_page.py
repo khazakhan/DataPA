@@ -789,7 +789,7 @@ def _scan(md):
                 continue
             if head is None:
                 head = cells; continue
-            if sec.startswith('Result check') or sec.startswith(RING):   # not a ⭕ section
+            if sec.startswith('Result check') or sec.startswith(RING) or sec.startswith('Watch lines'):   # not a ⭕ section
                 continue
             for i, c in enumerate(cells[1:], 1):
                 if head[i].lower().startswith(('live', 'votes', 'from which', 'source', 'op on', 'times', 'places')):

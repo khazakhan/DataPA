@@ -574,6 +574,10 @@ def build(series_round, prevP, prevD, P, res, curD=None):
         extra = sorted(set(cs) - set(P['oma_asc']))
         A(f"**STRONG 20** shares {20 - len(extra)} of 20 with ONE-MEN-ARMY"
           + (f"; STRONG 20 only: {' '.join(extra)}\n" if extra else " (same list this round)\n"))
+    try:
+        A(watch_section(P, curD))
+    except Exception:
+        pass
     A(f"## OCJP FINAL 4 with operations: {hd}\n")
     A(f"### OPEN / CLOSE digits: {hd}")
     A(mk([['', 'Strongest digit', 'Strongest 3', 'Full order (strong → weak)'],
@@ -610,6 +614,41 @@ def build(series_round, prevP, prevD, P, res, curD=None):
     A(f"FINAL 4 for the next round: **{', '.join(d['n'] for d in P['f4'])}** (live {P['f4_rec']}). Display of the script's own lists; no hit is promised.")
     return '\n'.join(out) + '\n'
 
+
+
+def watch_section(P, curD):
+    """Watch lines (user 2026-11-17: 'add watching also when run from local, same window'):
+    ARROW (EP repeat), MASTER CHANGED OPS 4, HUNTER 20 (FINAL 4 + yx + STRONG 20 fill), MASTER family.
+    Same numbers as tools/master_changed_ops.py and tools/hunter20.py; display only."""
+    import json as _j
+    R, E = int(P['root']), int(P['ep'])
+    f4 = [int(d['n']) for d in P['f4']]
+    op_ = lambda a, b: ((b // 10 - a // 10) % 10, (b % 10 - a % 10) % 10)
+    ap_ = lambda n, o: ((n // 10 + o[0]) % 10) * 10 + (n % 10 + o[1]) % 10
+    yx = lambda v: ap_(R, op_(R, v)[::-1])
+    x, y = op_(R, f4[0])
+    forms = [('swap (yx)', (y, x)), ('tens −1', ((x - 1) % 10, y)), ('swap + cut', ((y + 5) % 10, (x + 5) % 10)), ('tens set to cut', (5, y))]
+    mo = [(ap_(R, o), k) for k, o in forms]
+    h20 = list(f4)
+    for v in [yx(v) for v in f4] + list((curD or {}).get('strong', [])):
+        if len(h20) >= 20: break
+        if v not in h20: h20.append(v)
+    def lv(fn_):
+        try:
+            rows = [_j.loads(l) for l in open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'rrr_records', fn_))]
+            done = [r for r in rows if r.get('result') is not None]
+            return f"{sum(r['result'] in r['pick'] for r in done)} of {len(done)}"
+        except Exception:
+            return '—'
+    fam = FAMILY.get(f4[0], '')
+    mem = sorted(v for v, f in FAMILY.items() if f == fam)
+    out = [f"### Watch lines (display only; FINAL 4 is not changed by them)",
+           mk([['Line', 'Numbers', 'Live'],
+               ['ARROW (EP repeat, one number)', f"**{E:02d}**", 'about 2.6% as one number'],
+               [f"MASTER CHANGED OPS 4 (MASTER {f4[0]:02d})", ' · '.join(f'{v:02d} ({k})' for v, k in mo), lv('master_ops4_live.jsonl') + ' (chance 4%)'],
+               ['HUNTER 20 (FINAL 4 + yx + STRONG 20)', ' '.join(f'{v:02d}' for v in h20), lv('hunter20_live.jsonl') + ' (tested 26% vs 20%)'],
+               [f"MASTER {f4[0]:02d} family", ' '.join(f'{v:02d}' for v in mem), 'watch']]), '']
+    return '\n'.join(out)
 
 # ── terminal view of the markdown ────────────────────────────────────────────
 def _cols():

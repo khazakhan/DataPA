@@ -654,7 +654,7 @@ def watch_section(P, curD):
     out = [f"### Watch lines (display only; FINAL 4 is not changed by them)",
            mk([['Line', 'Numbers', 'Live'],
                ['ARROW (EP repeat, one number)', f"**{E:02d}**", 'about 2.6% as one number'],
-               ['STRONG 20 #1 (one number)', f"**{list((curD or {}).get('strong', [0]))[0]:02d}**", 'no history (records store STRONG 20 ascending); page shows it at #1 for AD78 43 and AD85 05'],
+               ['STRONG 20 #1 (one number)', f"**{list((curD or {}).get('strong', [0]))[0]:02d}**", lv('strong1_live.jsonl') + ' (chance 1%; logged from AD86)'],
                [f"MASTER CHANGED OPS 4 (MASTER {f4[0]:02d})", ' · '.join(f'{v:02d} ({k})' for v, k in mo), lv('master_ops4_live.jsonl') + ' (chance 4%)'],
                ['HUNTER 20 (FINAL 4 + yx + STRONG 20)', ' '.join(f'{v:02d}' for v in h20), lv('hunter20_live.jsonl') + ' (chance 20%; live is the only clean test)'],
                [f"STRONGEST FAMILY (most of FINAL 4 + yx: {' '.join(f'{v:02d}' for v in dict.fromkeys(sfam_in))})", ' '.join(f'{v:02d}' for v in sfam), 'tested 839 live: 39 and 43 per half vs 32.5 by chance (x1.25); exact member at chance'],

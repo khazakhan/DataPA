@@ -648,4 +648,5 @@
 {"round": "AE40", "pick": [61, 67, 62, 60], "result": 19}
 {"round": "AE41", "pick": [18, 14, 19, 16], "result": 71}
 {"round": "AE42", "pick": [70, 76, 71, 78], "result": 61}
-{"round": "AE43", "pick": [60, 66, 61, 68], "result": null}
+{"round": "AE43", "pick": [60, 66, 61, 68], "result": 70}
+{"round": "AE44", "pick": [79, 75, 70, 77], "result": null}

@@ -587,4 +587,5 @@
 {"round": "AE32", "nums": [1, 2, 20, 9], "result": 99}
 {"round": "AE33", "nums": [78, 98, 8, 41], "result": 80}
 {"round": "AE34", "nums": [2, 12, 32, 82], "result": 28}
-{"round": "AE35", "nums": [5, 50, 23, 33]}
+{"round": "AE35", "nums": [5, 50, 23, 33], "result": 27}
+{"round": "AE36", "nums": [60, 71, 72, 81]}

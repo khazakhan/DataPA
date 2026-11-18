@@ -538,4 +538,5 @@
 {"round": "AD96", "pick": [15, 55, 45, 75], "result": 76}
 {"round": "AD97", "pick": [35, 75, 95, 65], "result": 10}
 {"round": "AD98", "pick": [79, 19, 39, 9], "result": 40}
-{"round": "AD99", "pick": [9, 49, 69, 39], "result": null}
+{"round": "AD99", "pick": [9, 49, 69, 39], "result": 71}
+{"round": "AD100", "pick": [30, 70, 90, 60], "result": null}

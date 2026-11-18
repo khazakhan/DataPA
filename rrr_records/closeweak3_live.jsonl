@@ -473,4 +473,5 @@
 {"round": "AD135", "digits": [3, 6, 7], "result": 3}
 {"round": "AD136", "digits": [2, 5, 8], "result": 33}
 {"round": "AD137", "digits": [5, 6, 7], "result": 29}
-{"round": "AD138", "digits": [2, 6, 7]}
+{"round": "AD138", "digits": [2, 6, 7], "result": 10}
+{"round": "AD139", "digits": [3, 4, 7]}

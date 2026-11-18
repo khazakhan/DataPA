@@ -451,4 +451,5 @@
 {"round": "AD113", "digits": [5, 6, 7], "result": 69}
 {"round": "AD114", "digits": [4, 6, 7], "result": 66}
 {"round": "AD115", "digits": [5, 7, 9], "result": 27}
-{"round": "AD116", "digits": [3, 4, 7]}
+{"round": "AD116", "digits": [3, 4, 7], "result": 53}
+{"round": "AD117", "digits": [3, 5, 8]}

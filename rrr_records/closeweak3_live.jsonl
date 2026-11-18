@@ -542,4 +542,5 @@
 {"round": "AE38", "digits": [0, 5, 8], "result": 42}
 {"round": "AE39", "digits": [1, 3, 4], "result": 62}
 {"round": "AE40", "digits": [6, 5, 8], "result": 19}
-{"round": "AE41", "digits": [3, 6, 7]}
+{"round": "AE41", "digits": [3, 6, 7], "result": 71}
+{"round": "AE42", "digits": [0, 7, 9]}

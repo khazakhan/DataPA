@@ -587,6 +587,10 @@ def build(series_round, prevP, prevD, P, res, curD=None):
         A(f"\n**CLOSE weak 3** (the 3 weakest CLOSE digits, watch line): {' · '.join(P['close_full'][-3:])} (live {closeweak3_live(None)[1]})")
     if P.get('ocgrid'):
         A(f"\n**OPEN × CLOSE grid (9):** {' '.join(P['ocgrid'])} (live {P['ocgrid_live']}; chance 9%, logged X/Y/Z rounds 18 of 106)")
+    if P.get('open_full') and len(P.get('close_full') or []) >= 4:
+        oc14_ = [f"{P['open_full'][0]}{u}" for u in P['close_full'][:4]]
+        A(f"\n**OPEN 1 × CLOSE 4** (strongest OPEN digit with the 4 strongest CLOSE digits, user AE52): **{' · '.join(oc14_)}** "
+          f"(live {_lv_file('oc14_live.jsonl')}; tested 974 logged rounds 21 | 29 per half vs plain vote 29 | 22, chance 19.5 per half)")
     A('')
     if P.get('ocs'):
         A(f"**OC-STRONG 4** (STRONG 20 numbers inside OPEN × CLOSE; low tens-repeat charts only): "
@@ -632,6 +636,15 @@ def _yxcut(f4, yxs):
         for c in (((t + 5) % 10) * 10 + u, t * 10 + (u + 5) % 10, ((t + 5) % 10) * 10 + (u + 5) % 10):
             if c not in f4 and c not in yxs and c not in out: out.append(c)
     return out
+
+def _lv_file(fn_):
+    import json as _j
+    try:
+        rows = [_j.loads(l) for l in open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'rrr_records', fn_))]
+        done = [r for r in rows if r.get('result') is not None]
+        return f"{sum(r['result'] in r['pick'] for r in done)} of {len(done)}"
+    except Exception:
+        return '0 of 0'
 
 def _sh4():
     """SHADOW 4 for the next round, read from rrr_records/shadow_f4.jsonl (round.sh logs it before the page)."""

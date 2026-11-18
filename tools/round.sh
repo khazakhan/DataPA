@@ -38,6 +38,7 @@ python3 tools/hunter20.py score "$R" "$res" >/dev/null 2>&1 || true
 python3 tools/strong1.py score "$R" "$res" >/dev/null 2>&1 || true
 python3 tools/fullcut4.py score "$R" "$res" >/dev/null 2>&1 || true
 python3 tools/yxcut12.py score "$R" "$res" >/dev/null 2>&1 || true
+python3 tools/oc14.py score "$R" "$res" >/dev/null 2>&1 || true
 
 # result op on the ROOT (x/y), needed by last_move.py
 ops=$(python3 - "$prev" "$res" <<'PY'
@@ -80,5 +81,7 @@ python3 tools/strong1.py predict "$next" "rrr_outputs/${s}$((n + 1)).md" | tail 
 python3 tools/fullcut4.py predict "$next" "rrr_outputs/${s}$((n + 1)).md" | tail -1
 # yx CUT 12 watch line (2026-11-18, after AD165; x1.25 on 273 live)
 python3 tools/yxcut12.py predict "$next" "rrr_outputs/${s}$((n + 1)).md" | tail -1
+# OPEN 1 x CLOSE 4 line (2026-11-19, user AE52; level with plain vote on 974 logged rounds)
+python3 tools/oc14.py predict "$next" "rrr_outputs/${s}$((n + 1)).md" | tail -1
 # FINAL 4 yx-pair vs plain vote tally (from AD143)
 python3 tools/f4_yxpair_tally.py

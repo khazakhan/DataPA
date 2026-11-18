@@ -657,6 +657,7 @@ def watch_section(P, curD):
                ['STRONG 20 #1 (one number)', f"**{list((curD or {}).get('strong', [0]))[0]:02d}**", lv('strong1_live.jsonl') + ' (chance 1%; logged from AD86)'],
                [f"MASTER CHANGED OPS 4 (MASTER {f4[0]:02d})", ' · '.join(f'{v:02d} ({k})' for v, k in mo), lv('master_ops4_live.jsonl') + ' (chance 4%)'],
                ['HUNTER 20 (FINAL 4 + yx + STRONG 20)', ' '.join(f'{v:02d}' for v in h20), lv('hunter20_live.jsonl') + ' (chance 20%; live is the only clean test)'],
+               ['FULL CUT 4 (both digits cut of each FINAL 4 number)', ' · '.join(f'{(((v // 10) + 5) % 10) * 10 + ((v % 10) + 5) % 10:02d}' for v in f4), lv('fullcut4_live.jsonl') + ' (chance 4%; tested 878 live 23 and 19 per half vs 16.7, x1.26)'],
                [f"STRONGEST FAMILY (most of FINAL 4 + yx: {' '.join(f'{v:02d}' for v in dict.fromkeys(sfam_in))})", ' '.join(f'{v:02d}' for v in sfam), 'tested 839 live: 39 and 43 per half vs 32.5 by chance (x1.25); exact member at chance'],
                [f"MASTER {f4[0]:02d} family", ' '.join(f'{v:02d}' for v in mem), 'watch']]), '']
     return '\n'.join(out)

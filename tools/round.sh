@@ -36,6 +36,7 @@ python3 tools/final10.py score "$R" "$res" 2>/dev/null || true
 python3 tools/master_changed_ops.py score "$R" "$res" >/dev/null 2>&1 || true
 python3 tools/hunter20.py score "$R" "$res" >/dev/null 2>&1 || true
 python3 tools/strong1.py score "$R" "$res" >/dev/null 2>&1 || true
+python3 tools/fullcut4.py score "$R" "$res" >/dev/null 2>&1 || true
 
 # result op on the ROOT (x/y), needed by last_move.py
 ops=$(python3 - "$prev" "$res" <<'PY'
@@ -73,3 +74,5 @@ python3 tools/hunter20.py score "$R" "$res" 2>/dev/null | tail -1 || true
 python3 tools/hunter20.py predict "$next" "$cur" "rrr_outputs/${s}$((n + 1)).md" | tail -1
 # STRONG 20 #1 watch line (logged from AD86)
 python3 tools/strong1.py predict "$next" "rrr_outputs/${s}$((n + 1)).md" | tail -1
+# FULL CUT 4 watch line (2026-11-18, after AD122; x1.26 on 878 live)
+python3 tools/fullcut4.py predict "$next" "rrr_outputs/${s}$((n + 1)).md" | tail -1

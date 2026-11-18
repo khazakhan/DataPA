@@ -809,3 +809,4 @@
 {"round": "AD104", "ep": 65, "result": 10, "x_op": "cut", "y_op": "cut", "last": {"pos": 21, "src": "78->65", "old": ["-1", "c+2"], "new": ["-2", "c-2"]}, "x_from": [], "y_from": [], "check": true}
 {"round": "AD105", "ep": 40, "result": 96, "x_op": "cut", "y_op": "c+1", "last": {"pos": 31, "src": "02->40", "old": ["c-1", "-2"], "new": ["c+2", "-2"]}, "x_from": [], "y_from": ["new x step switched", "old x sign flipped"], "check": true}
 {"round": "AD106", "ep": 89, "result": 79, "x_op": "-1", "y_op": "nc", "last": {"pos": 23, "src": "05->89", "old": ["-2", "c-1"], "new": ["+1", "+2"]}, "x_from": ["new x sign flipped", "old x step switched", "old y cut switched"], "y_from": [], "check": true}
+{"round": "AD107", "ep": 0, "result": 16, "x_op": "+1", "y_op": "c+1", "last": {"pos": 21, "src": "03->00", "old": ["nc", "c+2"], "new": ["-2", "c-1"]}, "x_from": [], "y_from": ["new y sign flipped", "old y step switched"], "check": true}

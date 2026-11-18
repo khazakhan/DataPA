@@ -518,4 +518,5 @@
 {"round": "AD129", "nums": [49, 12, 3, 58], "result": 47}
 {"round": "AD130", "nums": [47, 74, 6, 29], "result": 59}
 {"round": "AD131", "nums": [22, 66, 4, 48], "result": 92}
-{"round": "AD132", "nums": [29, 10, 65, 15]}
+{"round": "AD132", "nums": [29, 10, 65, 15], "result": 53}
+{"round": "AD133", "nums": [20, 2, 75, 12]}

@@ -514,4 +514,5 @@
 {"round": "AE10", "digits": [0, 5, 7], "result": 83}
 {"round": "AE11", "digits": [3, 8, 9], "result": 47}
 {"round": "AE12", "digits": [6, 7, 8], "result": 85}
-{"round": "AE13", "digits": [0, 7, 9]}
+{"round": "AE13", "digits": [0, 7, 9], "result": 27}
+{"round": "AE14", "digits": [4, 7, 9]}

@@ -633,6 +633,22 @@ def _yxcut(f4, yxs):
             if c not in f4 and c not in yxs and c not in out: out.append(c)
     return out
 
+def _sh4():
+    """SHADOW 4 for the next round, read from rrr_records/shadow_f4.jsonl (round.sh logs it before the page)."""
+    import json as _j, re as _re
+    r = os.environ.get('CHAT_PAGE_ROUND', '')
+    if not r:
+        return []
+    nxt = _re.sub(r'\d+$', lambda m: str(int(m.group()) + 1), r)
+    try:
+        for l in open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'rrr_records', 'shadow_f4.jsonl')):
+            d = _j.loads(l)
+            if d['round'] == nxt:
+                return d['pick']
+    except Exception:
+        pass
+    return []
+
 def watch_section(P, curD):
     """Watch lines (user 2026-11-17: 'add watching also when run from local, same window'):
     ARROW (EP repeat), MASTER CHANGED OPS 4, HUNTER 20 (FINAL 4 + yx + STRONG 20 fill), MASTER family.
@@ -676,6 +692,7 @@ def watch_section(P, curD):
                ['STRONG 20 #1 (one number)', f"**{list((curD or {}).get('strong', [0]))[0]:02d}**", lv('strong1_live.jsonl') + ' (chance 1%; logged from AD86)'],
                [f"MASTER CHANGED OPS 10 (MASTER {f4[0]:02d})", ' · '.join(f'{v:02d} ({k})' for v, k in mo), lv('master_ops10_live.jsonl') + ' (from AD138; old 4-form line ended 8 of 128; 10 forms tested at chance)'],
                ['HUNTER 20 (FINAL 4 + yx + STRONG 20)', ' '.join(f'{v:02d}' for v in h20), lv('hunter20_live.jsonl') + ' (chance 20%; live is the only clean test)'],
+               ['SHADOW 4 (chart steps; was FINAL 4 AD158-AE49)', ' · '.join(f'{v:02d}' for v in _sh4()), lv('shadow_f4.jsonl') + ' (logged from 2026-11-09; AE 1 of 48 vs plain vote 4)'],
                ['FULL CUT 4 (both digits cut of each FINAL 4 number)', ' · '.join(f'{(((v // 10) + 5) % 10) * 10 + ((v % 10) + 5) % 10:02d}' for v in f4), lv('fullcut4_live.jsonl') + ' (chance 4%; tested 878 live 23 and 19 per half vs 16.7, x1.26)'],
                ['yx CUT 12 (tens cut, units cut, both cut of each yx partner)', ' '.join(f'{v:02d}' for v in _yxcut(f4, [yx(v) for v in f4])), lv('yxcut12_live.jsonl') + ' (from AD166; tested 273 live: 16 and 18 per half vs 12.9 and 14.0 by chance, x1.25)'],
                [f"STRONGEST FAMILY (most of FINAL 4 + yx: {' '.join(f'{v:02d}' for v in dict.fromkeys(sfam_in))})", ' '.join(f'{v:02d}' for v in sfam), 'tested 839 live: 39 and 43 per half vs 32.5 by chance (x1.25); exact member at chance'],

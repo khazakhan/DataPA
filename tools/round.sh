@@ -56,6 +56,7 @@ python3 tools/last_move.py "$R" "$prev" "$res" $ops | tail -1
 python3 tools/bump_live.py "$R" | grep -i 'missing\|bumped' || true
 unset OMA_OFF
 python3 tools/oma.py --result "$R" "$res" | tail -1
+python3 tools/shadow_f4.py predict "$cur" "$next" >/dev/null   # before the page: SHADOW 4 watch row reads it
 CHAT_PAGE_ROUND="$R" CHAT_PAGE_MD="rrr_outputs/${s}$((n + 1)).md" python3 DataProcessing.py < "$cur" 2>/dev/null | tee "rrr_outputs/${s}$((n + 1))_full.txt"
 python3 tools/oma.py "$cur" --score "$next" | tail -n +2
 python3 tools/shadow_f4.py predict "$cur" "$next"

@@ -1,10 +1,12 @@
-"""Block tally: FINAL 4 = SHADOW 4 (live from AD158; before: top 2 + yx pair AD143-157) vs the plain vote top 4 it replaced.
-Read from rrr_records/live.jsonl: plain = ranked[:4] (vote order), live FINAL 4 = final8[:4].
-Rule: drop the yx pair if it is behind the plain vote over a 7-round block.
+"""Block tally FINAL 4 candidates: SHADOW 4 (tools/shadow_f4.py log) vs plain vote top 4 (live.jsonl ranked[:4]).
+FINAL 4 = SHADOW AD158-AE49, plain vote again from AE50 (SHADOW behind in AE). Switch to whichever leads over a block.
   python3 tools/f4_yxpair_tally.py"""
 import json, os
 os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
-L = [json.loads(l) for l in open('rrr_records/live.jsonl')]
-L = [r for r in L if r.get('result') is not None and r['round'].startswith('AD') and int(r['round'][2:]) >= 158]
-a = sum(r['result'] in (r.get('final8') or [])[:4] for r in L); b = sum(r['result'] in r['ranked'][:4] for r in L)
-print(f"FINAL 4 SHADOW {a} vs plain vote {b} of {len(L)} (from AD158; the yx pair AD143-157 ended 0 vs 0 of 15)")
+L = {r['round']: r for r in map(json.loads, open('rrr_records/live.jsonl')) if r.get('result') is not None}
+S = {r['round']: r for r in map(json.loads, open('rrr_records/shadow_f4.jsonl')) if r.get('result') is not None}
+ae = sorted((k for k in L if k.startswith('AE') and k in S), key=lambda k: int(k[2:]))
+a = sum(S[k]['result'] in S[k]['pick'] for k in ae); b = sum(L[k]['result'] in L[k]['ranked'][:4] for k in ae)
+last = ae[-7:]
+a7 = sum(S[k]['result'] in S[k]['pick'] for k in last); b7 = sum(L[k]['result'] in L[k]['ranked'][:4] for k in last)
+print(f"FINAL 4 tally series AE: plain vote {b} vs SHADOW {a} of {len(ae)}; last 7: plain {b7} vs SHADOW {a7}")

@@ -640,6 +640,15 @@ def watch_section(P, curD):
             return f"{sum(r['result'] in r['pick'] for r in done)} of {len(done)}"
         except Exception:
             return '—'
+    from collections import Counter as _C
+    def _fam(n):
+        a_, b_ = n // 10, n % 10; s_ = set()
+        for x_ in (a_, (a_ + 5) % 10):
+            for y_ in (b_, (b_ + 5) % 10): s_ |= {x_ * 10 + y_, y_ * 10 + x_}
+        return frozenset(s_)
+    vs_ = f4 + [yx(v) for v in f4]; cnt_ = _C(_fam(v) for v in vs_); top_ = max(cnt_.values())
+    sfam = sorted(next(_fam(v) for v in vs_ if cnt_[_fam(v)] == top_))
+    sfam_in = [v for v in vs_ if v in sfam]
     fam = FAMILY.get(f4[0], '')
     mem = sorted(v for v, f in FAMILY.items() if f == fam)
     out = [f"### Watch lines (display only; FINAL 4 is not changed by them)",
@@ -648,6 +657,7 @@ def watch_section(P, curD):
                ['STRONG 20 #1 (one number)', f"**{list((curD or {}).get('strong', [0]))[0]:02d}**", 'no history (records store STRONG 20 ascending); page shows it at #1 for AD78 43 and AD85 05'],
                [f"MASTER CHANGED OPS 4 (MASTER {f4[0]:02d})", ' · '.join(f'{v:02d} ({k})' for v, k in mo), lv('master_ops4_live.jsonl') + ' (chance 4%)'],
                ['HUNTER 20 (FINAL 4 + yx + STRONG 20)', ' '.join(f'{v:02d}' for v in h20), lv('hunter20_live.jsonl') + ' (chance 20%; live is the only clean test)'],
+               [f"STRONGEST FAMILY (most of FINAL 4 + yx: {' '.join(f'{v:02d}' for v in dict.fromkeys(sfam_in))})", ' '.join(f'{v:02d}' for v in sfam), 'tested 839 live: 39 and 43 per half vs 32.5 by chance (x1.25); exact member at chance'],
                [f"MASTER {f4[0]:02d} family", ' '.join(f'{v:02d}' for v in mem), 'watch']]), '']
     return '\n'.join(out)
 

@@ -804,3 +804,4 @@
 {"round": "AD99", "ep": 14, "result": 71, "x_op": "c+1", "y_op": "c+2", "last": {"pos": 20, "src": "66->14", "old": ["cut", "-2"], "new": ["c+2", "-1"]}, "x_from": ["new x step switched"], "y_from": ["new x as is"], "check": true}
 {"round": "AD100", "ep": 37, "result": 8, "x_op": "c+2", "y_op": "+1", "last": {"pos": 23, "src": "67->37", "old": ["c+2", "nc"], "new": ["cut", "+1"]}, "x_from": ["old x as is"], "y_from": ["new y as is"], "check": true}
 {"round": "AD101", "ep": 94, "result": 74, "x_op": "-2", "y_op": "nc", "last": {"pos": 22, "src": "67->94", "old": ["c-2", "c+2"], "new": ["-2", "c+2"]}, "x_from": ["new x as is", "old x cut switched"], "y_from": [], "check": true}
+{"round": "AD102", "ep": 61, "result": 74, "x_op": "+1", "y_op": "c-2", "last": {"pos": 20, "src": "28->61", "old": ["c-1", "c-2"], "new": ["+2", "-2"]}, "x_from": ["new x step switched"], "y_from": ["new y cut switched", "old x step switched", "old y as is"], "check": true}

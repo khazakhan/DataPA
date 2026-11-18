@@ -105,4 +105,5 @@
 {"round": "AE24", "pick": [47], "result": 24}
 {"round": "AE25", "pick": [88], "result": 11}
 {"round": "AE26", "pick": [75], "result": 65}
-{"round": "AE27", "pick": [29], "result": null}
+{"round": "AE27", "pick": [29], "result": 57}
+{"round": "AE28", "pick": [11], "result": null}

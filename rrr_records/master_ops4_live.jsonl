@@ -106,4 +106,5 @@
 {"round": "AD115", "root": 80, "master": 81, "pick": [90, 71, 45, 31], "result": 27}
 {"round": "AD116", "root": 8, "master": 76, "pick": [85, 66, 30, 56], "result": 53}
 {"round": "AD117", "root": 87, "master": 6, "pick": [79, 96, 24, 36], "result": 25}
-{"round": "AD118", "root": 38, "master": 83, "pick": [83, 73, 38, 83], "result": null}
+{"round": "AD118", "root": 38, "master": 83, "pick": [83, 73, 38, 83], "result": 98}
+{"round": "AD119", "root": 83, "master": 27, "pick": [27, 17, 72, 37], "result": null}

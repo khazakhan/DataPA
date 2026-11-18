@@ -611,3 +611,4 @@
 {"round": "AD115", "result": 27, "held": {"step": false, "trf4": false, "tryx": false, "fcut": false, "same": false}, "sizes": {"step": 15, "trf4": 4, "tryx": 4, "fcut": 7, "same": 0}}
 {"round": "AD116", "result": 53, "held": {"step": false, "trf4": false, "tryx": false, "fcut": false, "same": false}, "sizes": {"step": 15, "trf4": 4, "tryx": 4, "fcut": 8, "same": 0}}
 {"round": "AD117", "result": 25, "held": {"step": true, "trf4": false, "tryx": false, "fcut": false, "same": false}, "sizes": {"step": 16, "trf4": 4, "tryx": 4, "fcut": 2, "same": 0}}
+{"round": "AD118", "result": 98, "held": {"step": false, "trf4": false, "tryx": false, "fcut": false, "same": false}, "sizes": {"step": 13, "trf4": 2, "tryx": 2, "fcut": 4, "same": 1}}

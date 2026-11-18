@@ -38,4 +38,5 @@
 {"round": "AD123", "pick": [82], "result": 1}
 {"round": "AD124", "pick": [65], "result": 45}
 {"round": "AD125", "pick": [9], "result": 43}
-{"round": "AD126", "pick": [7], "result": null}
+{"round": "AD126", "pick": [7], "result": 19}
+{"round": "AD127", "pick": [73], "result": null}

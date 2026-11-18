@@ -624,6 +624,15 @@ def build(series_round, prevP, prevD, P, res, curD=None):
 
 
 
+def _yxcut(f4, yxs):
+    """Cut forms (tens, units, both) of the yx partners, leaving out FINAL 4 and yx (user AD164 37 = full cut of 82, AD165 12 = tens cut of 62)."""
+    out = []
+    for v in yxs:
+        t, u = divmod(v, 10)
+        for c in (((t + 5) % 10) * 10 + u, t * 10 + (u + 5) % 10, ((t + 5) % 10) * 10 + (u + 5) % 10):
+            if c not in f4 and c not in yxs and c not in out: out.append(c)
+    return out
+
 def watch_section(P, curD):
     """Watch lines (user 2026-11-17: 'add watching also when run from local, same window'):
     ARROW (EP repeat), MASTER CHANGED OPS 4, HUNTER 20 (FINAL 4 + yx + STRONG 20 fill), MASTER family.
@@ -668,6 +677,7 @@ def watch_section(P, curD):
                [f"MASTER CHANGED OPS 10 (MASTER {f4[0]:02d})", ' · '.join(f'{v:02d} ({k})' for v, k in mo), lv('master_ops10_live.jsonl') + ' (from AD138; old 4-form line ended 8 of 128; 10 forms tested at chance)'],
                ['HUNTER 20 (FINAL 4 + yx + STRONG 20)', ' '.join(f'{v:02d}' for v in h20), lv('hunter20_live.jsonl') + ' (chance 20%; live is the only clean test)'],
                ['FULL CUT 4 (both digits cut of each FINAL 4 number)', ' · '.join(f'{(((v // 10) + 5) % 10) * 10 + ((v % 10) + 5) % 10:02d}' for v in f4), lv('fullcut4_live.jsonl') + ' (chance 4%; tested 878 live 23 and 19 per half vs 16.7, x1.26)'],
+               ['yx CUT 12 (tens cut, units cut, both cut of each yx partner)', ' '.join(f'{v:02d}' for v in _yxcut(f4, [yx(v) for v in f4])), lv('yxcut12_live.jsonl') + ' (from AD166; tested 273 live: 16 and 18 per half vs 12.9 and 14.0 by chance, x1.25)'],
                [f"STRONGEST FAMILY (most of FINAL 4 + yx: {' '.join(f'{v:02d}' for v in dict.fromkeys(sfam_in))})", ' '.join(f'{v:02d}' for v in sfam), 'tested 839 live: 39 and 43 per half vs 32.5 by chance (x1.25); exact member at chance'],
                [f"MASTER {f4[0]:02d} family", ' '.join(f'{v:02d}' for v in mem), 'watch']]), '']
     return '\n'.join(out)

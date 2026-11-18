@@ -29,4 +29,5 @@
 {"round": "AD151", "pick": [75, 73, 66, 46], "result": 55}
 {"round": "AD152", "pick": [67, 22, 21, 77], "result": 6}
 {"round": "AD153", "pick": [60, 79, 73, 82], "result": 40}
-{"round": "AD154", "pick": [94, 35, 12, 26], "result": null}
+{"round": "AD154", "pick": [94, 35, 12, 26], "result": 2}
+{"round": "AD155", "pick": [28, 55, 73, 46], "result": null}

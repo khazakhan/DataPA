@@ -576,4 +576,5 @@
 {"round": "AE19", "colour": "\ud83d\udfe5", "family": "14-family", "members": [14, 19, 41, 46, 64, 69, 91, 96], "times": 17, "result": 28}
 {"round": "AE20", "colour": "\ud83d\udfe9", "family": "23-family", "members": [23, 28, 32, 37, 73, 78, 82, 87], "times": 18, "result": 97}
 {"round": "AE21", "colour": "\ud83d\udfe5", "family": "12-family", "members": [12, 17, 21, 26, 62, 67, 71, 76], "times": 17, "result": 21}
-{"round": "AE22", "colour": "\ud83d\udfe5", "family": "double", "members": [0, 11, 22, 33, 44, 55, 66, 77, 88, 99], "times": 19}
+{"round": "AE22", "colour": "\ud83d\udfe5", "family": "double", "members": [0, 11, 22, 33, 44, 55, 66, 77, 88, 99], "times": 19, "result": 71}
+{"round": "AE23", "colour": "\ud83d\udfe5", "family": "13-family", "members": [13, 18, 31, 36, 63, 68, 81, 86], "times": 13}

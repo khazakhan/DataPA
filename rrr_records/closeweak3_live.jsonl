@@ -523,4 +523,5 @@
 {"round": "AE19", "digits": [1, 6, 7], "result": 28}
 {"round": "AE20", "digits": [6, 7, 8], "result": 97}
 {"round": "AE21", "digits": [6, 0, 3], "result": 21}
-{"round": "AE22", "digits": [5, 8, 9]}
+{"round": "AE22", "digits": [5, 8, 9], "result": 71}
+{"round": "AE23", "digits": [2, 5, 7]}

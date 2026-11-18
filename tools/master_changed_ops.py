@@ -44,15 +44,19 @@ a = test(best, L[h:]); print('best 4 on first half:', best, '-> second half', a[
 import sys
 WATCH = ['swap (yx)', 'x-1', 'swap+cut', 'x cut']
 LOG = 'rrr_records/master_ops4_live.jsonl'
+# widened to 10 after AD137 (user: 'widen MASTER CHANGED OPS upto 10'): the 10 forms with the
+# most live hits overall (894 rounds).  Walk-forward best 10: 37 vs 40.2 and 33 vs 37.8 -> chance.
+WATCH = ['x-1', 'swap (yx)', 'swap+cut', 'x cut', 'y+1', 'y cut', 'both cut sw', 'both flip', 'y-1', 'x cut sw+flip']
+LOG = 'rrr_records/master_ops10_live.jsonl'
 if len(sys.argv) > 1 and sys.argv[1] == 'predict':
     rnd, R, m = sys.argv[2], int(sys.argv[3]), int(sys.argv[4]); x, y = op(R, m)
     pick = [app(R, FORMS[k](x, y)) for k in WATCH]
     open(LOG, 'a').write(json.dumps({'round': rnd, 'root': R, 'master': m, 'pick': pick, 'result': None}) + '\n')
-    print('MASTER CHANGED OPS 4', rnd, ' · '.join(f'{v:02d} ({k})' for v, k in zip(pick, WATCH)))
+    print('MASTER CHANGED OPS 10', rnd, ' · '.join(f'{v:02d} ({k})' for v, k in zip(pick, WATCH)))
 if len(sys.argv) > 1 and sys.argv[1] == 'score':
     rows = [json.loads(l) for l in open(LOG)]
     for r in rows:
         if r['round'] == sys.argv[2]: r['result'] = int(sys.argv[3])
     open(LOG, 'w').writelines(json.dumps(r) + '\n' for r in rows)
     done = [r for r in rows if r['result'] is not None]
-    print('MASTER CHANGED OPS 4 live', sum(r['result'] in r['pick'] for r in done), 'of', len(done))
+    print('MASTER CHANGED OPS 10 live', sum(r['result'] in r['pick'] for r in done), 'of', len(done))

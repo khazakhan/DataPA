@@ -59,7 +59,7 @@ CHAT_PAGE_ROUND="$R" CHAT_PAGE_MD="rrr_outputs/${s}$((n + 1)).md" python3 DataPr
 python3 tools/oma.py "$cur" --score "$next" | tail -n +2
 python3 tools/shadow_f4.py predict "$cur" "$next"
 python3 tools/final10.py predict "$next" "rrr_outputs/${s}$((n + 1)).md"
-# MASTER CHANGED OPS 4 watch line (2026-11-17, user request after AD9; display only, at chance in study)
+# MASTER CHANGED OPS watch line (4 forms from AD10, widened to 10 after AD137; display only, at chance in study)
 python3 tools/master_changed_ops.py score "$R" "$res" 2>/dev/null | tail -1 || true
 mc=$(python3 - "rrr_outputs/${s}$((n + 1)).md" <<'PY'
 import re, sys

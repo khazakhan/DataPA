@@ -627,7 +627,9 @@ def watch_section(P, curD):
     ap_ = lambda n, o: ((n // 10 + o[0]) % 10) * 10 + (n % 10 + o[1]) % 10
     yx = lambda v: ap_(R, op_(R, v)[::-1])
     x, y = op_(R, f4[0])
-    forms = [('swap (yx)', (y, x)), ('tens −1', ((x - 1) % 10, y)), ('swap + cut', ((y + 5) % 10, (x + 5) % 10)), ('tens set to cut', (5, y))]
+    forms = [('tens −1', ((x - 1) % 10, y)), ('swap (yx)', (y, x)), ('swap + cut', ((y + 5) % 10, (x + 5) % 10)), ('tens set to cut', (5, y)),
+             ('units +1', (x, (y + 1) % 10)), ('units set to cut', (x, 5)), ('both cut', ((x + 5) % 10, (y + 5) % 10)),
+             ('both flip', ((-x) % 10, (-y) % 10)), ('units −1', (x, (y - 1) % 10)), ('tens cut+flip', ((5 - x) % 10, y))]
     mo = [(ap_(R, o), k) for k, o in forms]
     h20 = list(f4)
     for v in [yx(v) for v in f4] + list((curD or {}).get('strong', [])):
@@ -655,7 +657,7 @@ def watch_section(P, curD):
            mk([['Line', 'Numbers', 'Live'],
                ['ARROW (EP repeat, one number)', f"**{E:02d}**", 'about 2.6% as one number'],
                ['STRONG 20 #1 (one number)', f"**{list((curD or {}).get('strong', [0]))[0]:02d}**", lv('strong1_live.jsonl') + ' (chance 1%; logged from AD86)'],
-               [f"MASTER CHANGED OPS 4 (MASTER {f4[0]:02d})", ' · '.join(f'{v:02d} ({k})' for v, k in mo), lv('master_ops4_live.jsonl') + ' (chance 4%)'],
+               [f"MASTER CHANGED OPS 10 (MASTER {f4[0]:02d})", ' · '.join(f'{v:02d} ({k})' for v, k in mo), lv('master_ops10_live.jsonl') + ' (from AD138; old 4-form line ended 8 of 128; 10 forms tested at chance)'],
                ['HUNTER 20 (FINAL 4 + yx + STRONG 20)', ' '.join(f'{v:02d}' for v in h20), lv('hunter20_live.jsonl') + ' (chance 20%; live is the only clean test)'],
                ['FULL CUT 4 (both digits cut of each FINAL 4 number)', ' · '.join(f'{(((v // 10) + 5) % 10) * 10 + ((v % 10) + 5) % 10:02d}' for v in f4), lv('fullcut4_live.jsonl') + ' (chance 4%; tested 878 live 23 and 19 per half vs 16.7, x1.26)'],
                [f"STRONGEST FAMILY (most of FINAL 4 + yx: {' '.join(f'{v:02d}' for v in dict.fromkeys(sfam_in))})", ' '.join(f'{v:02d}' for v in sfam), 'tested 839 live: 39 and 43 per half vs 32.5 by chance (x1.25); exact member at chance'],

@@ -520,4 +520,5 @@
 {"round": "AE16", "digits": [1, 2, 6], "result": 38}
 {"round": "AE17", "digits": [0, 5, 1], "result": 87}
 {"round": "AE18", "digits": [5, 3, 7], "result": 19}
-{"round": "AE19", "digits": [1, 6, 7]}
+{"round": "AE19", "digits": [1, 6, 7], "result": 28}
+{"round": "AE20", "digits": [6, 7, 8]}

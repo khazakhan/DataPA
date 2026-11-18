@@ -74,4 +74,5 @@
 {"round": "AD159", "pick": [43], "result": 55}
 {"round": "AD160", "pick": [19], "result": 83}
 {"round": "AD161", "pick": [47], "result": 54}
-{"round": "AD162", "pick": [18], "result": null}
+{"round": "AD162", "pick": [18], "result": 6}
+{"round": "AD163", "pick": [60], "result": null}

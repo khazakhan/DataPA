@@ -499,4 +499,5 @@
 {"round": "AD161", "digits": [1, 4, 5], "result": 54}
 {"round": "AD162", "digits": [1, 3, 6], "result": 6}
 {"round": "AD163", "digits": [5, 7, 8], "result": 11}
-{"round": "AD164", "digits": [1, 8, 9]}
+{"round": "AD164", "digits": [1, 8, 9], "result": 37}
+{"round": "AD165", "digits": [0, 6, 9]}

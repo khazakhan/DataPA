@@ -547,4 +547,5 @@
 {"round": "AD158", "nums": [62, 67, 94, 44], "result": 67}
 {"round": "AD159", "nums": [2, 26, 8, 53], "result": 55}
 {"round": "AD160", "nums": [54, 87, 4, 14], "result": 83}
-{"round": "AD161", "nums": [26, 17, 79, 8]}
+{"round": "AD161", "nums": [26, 17, 79, 8], "result": 54}
+{"round": "AD162", "nums": [9, 0, 13, 60]}

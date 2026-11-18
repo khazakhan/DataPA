@@ -598,9 +598,17 @@ def build(series_round, prevP, prevD, P, res, curD=None):
           + f" (live {openstrong4_live(None)[1]}; logged Z rounds 7 of 60 vs chance 2.4, FINAL 4 1 of 60; X/Y 3 of 89 — not confirmed)\n")
     A(f"### OCJP FINAL 4: {hd}")
     rows = [['#', 'Number', f"Op on ROOT {P['root']} ({P['rootop']})", 'yx (op)', 'Booster xy / yx (first)', 'From which Op', 'Votes']]
+    f4n_ = [d['n'] for d in P['f4']]
     for d in P['f4']:
         rk = '**MASTER = 1**' if d['rank'].startswith('MASTER') else d['rank']
-        rows.append([rk, f"**{d['n']}**", d['op'], d['yx'], f"{d['bxy']} / {d['byx']}", d['src'], d['votes']])
+        # user AD155: a yx that is already a FINAL 4 number is marked, not shown as a second number
+        yxn_ = d['yx'][:2]
+        # AD155: show the family's strongest other member instead (full cut, the only family
+        # member above chance: 37 vs 30.8 in tools/family_member_study.py)
+        fc_ = f"{(int(d['n'][0]) + 5) % 10}{(int(d['n'][1]) + 5) % 10}"
+        yxc_ = (f"{fc_} (full cut; yx {yxn_} is already #{f4n_.index(yxn_) + 1})" if yxn_ in f4n_ and yxn_ != d['n'] and fc_ not in f4n_
+                else f"{yxn_} (= #{f4n_.index(yxn_) + 1}, already in FINAL 4)" if yxn_ in f4n_ and yxn_ != d['n'] else d['yx'])
+        rows.append([rk, f"**{d['n']}**", d['op'], yxc_, f"{d['bxy']} / {d['byx']}", d['src'], d['votes']])
     A(mk(rows))
     A(f"\n### FINAL 8 / Count 2+ / All / 80-number list: {hd}\n")
     A(f"**FINAL 8 (FINAL 4 + OPEN-STRONG / OC-STRONG / SHADOW):** " + ' · '.join(f'{n}' if k < 4 else f'**{n}** ({o})' for k, (n, o) in enumerate(P['f8'])))

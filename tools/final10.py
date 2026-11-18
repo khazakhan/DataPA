@@ -18,7 +18,9 @@ def page_lists(md):
     for l in sec:
         c = [x.strip() for x in l.strip('|').split('|')]
         if len(c) < 4: continue
-        f4.append(int(re.search(r'\d\d', c[1]).group())); yx.append(int(c[3][:2]))
+        f4.append(int(re.search(r'\d\d', c[1]).group()))
+        m_ = re.search(r'yx (\d\d) is already', c[3])          # AD155: duplicate yx shown as full cut
+        yx.append(int(m_.group(1)) if m_ else int(c[3][:2]))
     m = re.search(r'\*\*Ascending, all \(\d+\):\*\* ([\d ]+)', t)
     allv = [int(v) for v in m.group(1).split()] if m else []
     return f4, yx, allv

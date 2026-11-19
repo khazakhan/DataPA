@@ -704,7 +704,7 @@ def watch_section(P, curD):
     mem = sorted(v for v, f in FAMILY.items() if f == fam)
     out = [f"### Watch lines (display only; FINAL 4 is not changed by them)",
            mk([['Line', 'Numbers', 'Live'],
-               ['ARROW (EP repeat, one number)', f"**{E:02d}**", 'about 2.6% as one number'],
+               ['KING PICK = ARROW (EP repeat, one number; best single pick, tools/king_pick_study.py)', f"**{E:02d}**", '26 of 994 logged (11 and 15 per half vs MASTER 10 and 7, chance 5 per half)'],
                ['STRONG 20 #1 (one number)', f"**{list((curD or {}).get('strong', [0]))[0]:02d}**", lv('strong1_live.jsonl') + ' (chance 1%; logged from AD86)'],
                [f"MASTER CHANGED OPS 10 (MASTER {f4[0]:02d})", ' · '.join(f'{v:02d} ({k})' for v, k in mo), lv('master_ops10_live.jsonl') + ' (from AD138; old 4-form line ended 8 of 128; 10 forms tested at chance)'],
                ['HUNTER 20 (FINAL 4 + yx + STRONG 20)', ' '.join(f'{v:02d}' for v in h20), lv('hunter20_live.jsonl') + ' (chance 20%; live is the only clean test)'],

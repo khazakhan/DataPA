@@ -97,4 +97,5 @@
 {"round": "AE53", "pick": [63, 15, 19, 54], "result": 64}
 {"round": "AE54", "pick": [63, 17, 88, 13], "result": 64}
 {"round": "AE55", "pick": [19, 14, 65, 79], "result": 18}
-{"round": "AE56", "pick": [63, 54, 53, 19], "result": null}
+{"round": "AE56", "pick": [63, 54, 53, 19], "result": 33}
+{"round": "AE57", "pick": [36, 34, 39, 32], "result": null}

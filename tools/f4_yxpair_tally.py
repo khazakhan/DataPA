@@ -1,5 +1,5 @@
 """Block tally FINAL 4 candidates: SHADOW 4 (tools/shadow_f4.py log) vs plain vote top 4 (live.jsonl ranked[:4]).
-FINAL 4 = SHADOW AD158-AE49, plain vote AE50-AE56, OPEN 1 x CLOSE 4 from AE57 (user AE56). Switch to whichever leads over a block.
+FINAL 4 = SHADOW AD158-AE49, plain vote AE50-AE56, OPEN 1 x CLOSE 4 AE57-AE78 (user AE56), plain vote again from AE79 (block AE72-78 plain 2 vs 0). Switch to whichever leads over a block.
   python3 tools/f4_yxpair_tally.py"""
 import json, os
 os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
@@ -14,4 +14,4 @@ print(f"FINAL 4 tally series AE: plain vote {b} vs SHADOW {a} of {len(ae)}; last
 O = {r['round']: r for r in map(json.loads, open('rrr_records/oc14_live.jsonl')) if r.get('result') is not None}
 oc = sorted((k for k in O if k.startswith('AE') and k in L), key=lambda k: int(k[2:]))
 c = sum(O[k]['result'] in O[k]['pick'] for k in oc); d = sum(L[k]['result'] in L[k]['ranked'][:4] for k in oc)
-print(f"OPEN 1 x CLOSE 4 (FINAL 4 from AE57) {c} vs plain vote {d} of {len(oc)} (from AE52)")
+print(f"OPEN 1 x CLOSE 4 (was FINAL 4 AE57-78) {c} vs plain vote {d} of {len(oc)} (from AE52)")

@@ -558,4 +558,5 @@
 {"round": "AE54", "digits": [5, 7, 9], "result": 64}
 {"round": "AE55", "digits": [5, 7, 8], "result": 18}
 {"round": "AE56", "digits": [2, 3, 5], "result": 33}
-{"round": "AE57", "digits": [3, 6, 8]}
+{"round": "AE57", "digits": [3, 6, 8], "result": 14}
+{"round": "AE58", "digits": [6, 7, 9]}

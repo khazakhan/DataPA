@@ -591,6 +591,9 @@ def build(series_round, prevP, prevD, P, res, curD=None):
         oc14_ = [f"{P['open_full'][0]}{u}" for u in P['close_full'][:4]]
         A(f"\n**OPEN 1 × CLOSE 4** (strongest OPEN digit with the 4 strongest CLOSE digits, user AE52): **{' · '.join(oc14_)}** "
           f"(live {_lv_file('oc14_live.jsonl')}; tested 974 logged rounds 21 | 29 per half vs plain vote 29 | 22, chance 19.5 per half)")
+        occ_ = [f"{(int(P['open_full'][0]) + 5) % 10}{u}" for u in P['close_full'][:4]]
+        A(f"\n**OPEN CUT × CLOSE 4** (cut of the OPEN digit with the same 4 CLOSE digits, user AE58: 04 came, FINAL 4 had 54; watch line): **{' · '.join(occ_)}** "
+          f"(live {_lv_file('occut4_live.jsonl')}; tested 980 logged rounds 22 | 21 per half, chance 19.6: at chance, display only)")
     A('')
     if P.get('ocs'):
         A(f"**OC-STRONG 4** (STRONG 20 numbers inside OPEN × CLOSE; low tens-repeat charts only): "

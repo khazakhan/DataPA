@@ -109,3 +109,4 @@
 {"round": "AE80", "root": 42, "master": 6, "pick": [96, 88, 33, 96, 7, 7, 51, 88, 5, 36], "result": 63}
 {"round": "AE81", "root": 54, "master": 19, "pick": [9, 0, 55, 9, 10, 19, 64, 99, 18, 49], "result": 5}
 {"round": "AE82", "root": 35, "master": 7, "pick": [97, 52, 7, 87, 8, 0, 52, 63, 6, 17], "result": null}
+{"round": "AE82", "root": 35, "master": 7, "pick": [97, 52, 7, 87, 8, 0, 52, 63, 6, 17], "result": null}

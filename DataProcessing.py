@@ -7971,7 +7971,11 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             # Full chart histories repeat less (0.1-1.3%), so watch it live.
             # DROPPED 2026-11-17 after block 18 (AC120-AC126): live tally net -1
             # (gained AC98, lost AC97 and AC120), per the rule set when it was added.
-            if False and len(ocjp_final4) == 4 and grid_ep not in [v_ for v_, _ in ocjp_final4]:
+            # RE-ADOPTED 2026-11-20 after AE81 (tools/final4_search.py, user 'search until found'):
+            # on 1006 logged rounds plain top 3 + EP repeat held 37 | 35 per half vs plain top 4
+            # 30 | 26 (AE 11 vs 9 of 80).  The earlier drops (AC96, AD62) came from single 7-round
+            # blocks (about 0.3 expected hits each) - judge it over 50+ rounds, not one block.
+            if len(ocjp_final4) == 4 and grid_ep not in [v_ for v_, _ in ocjp_final4]:
                 ocjp_final4[3] = (grid_ep, ['EP repeat'])
             # EP FULL CUT in slot 3 (2026-11-17, AC112 = 77 = full cut of EP 22, user's
             # idea; AC118 = 43 = full cut of EP 98): live records 14 of 714 (1.96% vs

@@ -618,4 +618,5 @@
 {"round": "AF16", "digits": [1, 6, 8], "result": 33}
 {"round": "AF17", "digits": [2, 6, 0], "result": 92}
 {"round": "AF18", "digits": [8, 0, 5], "result": 18}
-{"round": "AF19", "digits": [4, 5, 7]}
+{"round": "AF19", "digits": [4, 5, 7], "result": 94}
+{"round": "AF20", "digits": [2, 5, 8]}

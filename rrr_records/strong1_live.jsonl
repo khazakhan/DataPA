@@ -203,4 +203,5 @@
 {"round": "AF24", "pick": [88], "result": 90}
 {"round": "AF25", "pick": [54], "result": 28}
 {"round": "AF26", "pick": [12], "result": 12}
-{"round": "AF27", "pick": [43], "result": null}
+{"round": "AF27", "pick": [43], "result": 43}
+{"round": "AF28", "pick": [2], "result": null}

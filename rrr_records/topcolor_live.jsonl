@@ -654,3 +654,4 @@
 {"round": "AE97", "colour": "\ud83d\udfeb", "family": "35-family", "members": [3, 8, 30, 35, 53, 58, 80, 85], "times": 19, "result": 41}
 {"round": "AE98", "colour": "\ud83d\udfe5", "family": "double", "members": [0, 11, 22, 33, 44, 55, 66, 77, 88, 99], "times": 16, "result": 72}
 {"round": "AE99", "colour": "\ud83d\udfe5", "family": "half-cut", "members": [5, 16, 27, 38, 49, 50, 61, 72, 83, 94], "times": 18}
+{"round": "AF2", "colour": "\ud83d\udfe5", "family": "half-cut", "members": [5, 16, 27, 38, 49, 50, 61, 72, 83, 94], "times": 10}

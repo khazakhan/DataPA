@@ -621,4 +621,5 @@
 {"round": "AF19", "digits": [4, 5, 7], "result": 94}
 {"round": "AF20", "digits": [2, 5, 8], "result": 87}
 {"round": "AF21", "digits": [7, 8, 9], "result": 76}
-{"round": "AF22", "digits": [6, 7, 8]}
+{"round": "AF22", "digits": [6, 7, 8], "result": 94}
+{"round": "AF23", "digits": [0, 5, 9]}

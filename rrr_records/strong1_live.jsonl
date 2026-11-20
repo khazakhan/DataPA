@@ -207,4 +207,5 @@
 {"round": "AF28", "pick": [2], "result": 2}
 {"round": "AF29", "pick": [75], "result": 75}
 {"round": "AF30", "pick": [58], "result": 12}
-{"round": "AF31", "pick": [76], "result": null}
+{"round": "AF31", "pick": [76], "result": 41}
+{"round": "AF32", "pick": [5], "result": null}

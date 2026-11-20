@@ -967,3 +967,4 @@
 {"round": "AE97", "ep": 77, "result": 41, "x_op": "c+2", "y_op": "c-1", "last": {"pos": 27, "src": "62->77", "old": ["+1", "cut"], "new": ["nc", "cut"]}, "x_from": [], "y_from": [], "check": true}
 {"round": "AE98", "ep": 57, "result": 72, "x_op": "+2", "y_op": "cut", "last": {"pos": 35, "src": "95->57", "old": ["c+1", "+2"], "new": ["c-2", "nc"]}, "x_from": ["old y as is"], "y_from": ["new y cut switched"], "check": true}
 {"round": "AF2", "ep": 6, "result": 24, "x_op": "+2", "y_op": "-2", "last": {"pos": 2, "src": "30->06", "old": ["c+2", "c+1"], "new": ["-1", "+1"]}, "x_from": ["new y step switched", "old x cut switched"], "y_from": ["new x step switched"], "check": true}
+{"round": "AF3", "ep": 6, "result": 90, "x_op": "-1", "y_op": "c-1", "last": {"pos": 21, "src": "99->06", "old": ["+1", "c+2"], "new": ["-2", "cut"]}, "x_from": ["new x step switched", "old x sign flipped"], "y_from": [], "check": true}

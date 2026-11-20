@@ -682,4 +682,5 @@
 {"round": "AF29", "nums": [48, 52, 53, 75], "result": 75}
 {"round": "AF30", "nums": [20, 9, 29, 58], "result": 12}
 {"round": "AF31", "nums": [43, 98, 7, 48], "result": 41}
-{"round": "AF32", "nums": [5, 15, 60, 6]}
+{"round": "AF32", "nums": [5, 15, 60, 6], "result": 9}
+{"round": "AF33", "nums": [38, 9, 33, 42]}

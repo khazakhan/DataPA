@@ -665,6 +665,32 @@ def _sh4():
         pass
     return []
 
+def _dop(r, e):
+    """digit op r -> e as (cut, step): e = r + 5*cut + step (mod 10), step in -2..2."""
+    d = (e - r) % 10
+    return (0, {0: 0, 1: 1, 2: 2, 9: -1, 8: -2}[d]) if d in (0, 1, 2, 8, 9) else (1, {5: 0, 6: 1, 7: 2, 4: -1, 3: -2}[d])
+
+def _ops(o):
+    c, st = o
+    return ('c' if c else '') + ({0: 'nc' if not c else 'ut', 1: '+1', 2: '+2', -1: '-1', -2: '-2'}[st])
+
+def _bop(R, E):
+    return f"{_ops(_dop(R // 10, E // 10))}/{_ops(_dop(R % 10, E % 10))}"
+
+def bull8(R, E):
+    """User AF33/AF34: the bull pick (EP repeat) op on the ROOT put on the EP itself,
+    in xy order and yx order (tens takes the units op), each with signs as is / tens
+    changed / units changed / both changed.  AF31 = 41 (xy, tens sign), AF34 = 17 (yx, both)."""
+    ox, oy = _dop(R // 10, E // 10), _dop(R % 10, E % 10)
+    fl = lambda o: (o[0], -o[1])
+    out = []
+    for nm, (a, b) in (('xy', (ox, oy)), ('yx', (oy, ox))):
+        for k, (aa, bb) in (('', (a, b)), (' tens sign', (fl(a), b)), (' units sign', (a, fl(b))), (' both signs', (fl(a), fl(b)))):
+            v = ((E // 10 + 5 * aa[0] + aa[1]) % 10) * 10 + (E % 10 + 5 * bb[0] + bb[1]) % 10
+            if v not in [w for w, _ in out]:
+                out.append((v, nm + k))
+    return out
+
 def watch_section(P, curD):
     """Watch lines (user 2026-11-17: 'add watching also when run from local, same window'):
     ARROW (EP repeat), MASTER CHANGED OPS 4, HUNTER 20 (FINAL 4 + yx + STRONG 20 fill), MASTER family.
@@ -680,6 +706,7 @@ def watch_section(P, curD):
              ('units +1', (x, (y + 1) % 10)), ('units set to cut', (x, 5)), ('both cut', ((x + 5) % 10, (y + 5) % 10)),
              ('both flip', ((-x) % 10, (-y) % 10)), ('units −1', (x, (y - 1) % 10)), ('tens cut+flip', ((5 - x) % 10, y))]
     mo = [(ap_(R, o), k) for k, o in forms]
+    b8 = bull8(R, E)
     h20 = list(f4)
     for v in [yx(v) for v in f4] + list((curD or {}).get('strong', [])):
         if len(h20) >= 20: break
@@ -711,6 +738,7 @@ def watch_section(P, curD):
                ['SHADOW 4 (chart steps; was FINAL 4 AD158-AE49)', ' · '.join(f'{v:02d}' for v in _sh4()), lv('shadow_f4.jsonl') + ' (logged from 2026-11-09; series AE tally: tools/f4_yxpair_tally.py)'],
                ['FULL CUT 4 (both digits cut of each FINAL 4 number)', ' · '.join(f'{(((v // 10) + 5) % 10) * 10 + ((v % 10) + 5) % 10:02d}' for v in f4), lv('fullcut4_live.jsonl') + ' (chance 4%; tested 878 live 23 and 19 per half vs 16.7, x1.26)'],
                ['yx CUT 12 (tens cut, units cut, both cut of each yx partner)', ' '.join(f'{v:02d}' for v in _yxcut(f4, [yx(v) for v in f4])), lv('yxcut12_live.jsonl') + ' (from AD166; tested 273 live: 16 and 18 per half vs 12.9 and 14.0 by chance, x1.25)'],
+               [f"BULL PICK OPS ON EP 8 (bull pick op on ROOT {_bop(R, E)} put on EP {E:02d}: xy and yx, signs as is / changed)", ' · '.join(f'{v:02d} ({k})' for v, k in b8), lv('bullop8_live.jsonl') + ' (user AF33/AF34; tested 71,362 chart positions: 8 forms 1901 and 2225 per half vs chance 1971 and 2185, at chance; display only)'],
                [f"STRONGEST FAMILY (most of FINAL 4 + yx: {' '.join(f'{v:02d}' for v in dict.fromkeys(sfam_in))})", ' '.join(f'{v:02d}' for v in sfam), 'tested 839 live: 39 and 43 per half vs 32.5 by chance (x1.25); exact member at chance'],
                [f"MASTER {f4[0]:02d} family", ' '.join(f'{v:02d}' for v in mem), 'watch']]), '']
     return '\n'.join(out)
@@ -1199,6 +1227,7 @@ def all_lists_section(md, P):
              ('HUNTER 20', row('HUNTER 20')),
              ('FULL CUT 4', row('FULL CUT 4')),
              ('yx CUT 12', row('yx CUT 12')),
+             ('BULL PICK OPS ON EP 8', row('BULL PICK OPS ON EP 8')),
              ('STRONGEST FAMILY', row('STRONGEST FAMILY')),
              ('MASTER CHANGED OPS 10', row('MASTER CHANGED OPS 10')),
              ('FINAL 10', line('**OCJP FINAL 10:**')),

@@ -119,8 +119,8 @@ def nums(s):
 def parse(L):
     P = {}
     s4 = last_idx(L, '■ 4. RRR: NEXT OPERATION')
-    m = re.search(r'EP (\d+) \(([^)]*)\), ROOT (\d+) \(([^)]*)\)', L[s4])
-    P['ep'], P['epop'], P['root'], P['rootop'] = m.group(1), m.group(2), m.group(3), m.group(4)
+    m = re.search(r'EP (\d+) \(([^)]*)\), ROOT (\d+)(?: \(([^)]*)\))?', L[s4])
+    P['ep'], P['epop'], P['root'], P['rootop'] = m.group(1), m.group(2), m.group(3), m.group(4) or 'no earlier op'
     t1, e1 = box_after(L, s4)
     P['t1'] = [r[:12] for r in t1[1:]]
     P['stars'] = [(r[13], r[14], r[15]) for r in t1[1:] if len(r) > 15 and r[13] in ('MegaStar', 'PowerStar')]

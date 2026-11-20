@@ -674,4 +674,5 @@
 {"round": "AF21", "nums": [31, 75, 86, 32], "result": 76}
 {"round": "AF22", "nums": [10, 76, 0, 19], "result": 94}
 {"round": "AF23", "nums": [27, 81, 18, 33], "result": 24}
-{"round": "AF24", "nums": [37, 16, 31, 33]}
+{"round": "AF24", "nums": [37, 16, 31, 33], "result": 90}
+{"round": "AF25", "nums": [28, 48, 11, 75]}

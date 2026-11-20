@@ -1168,6 +1168,74 @@ def _label_from_datasets(text):
     return ''
 
 
+def all_lists_section(md, P):
+    """ALL LISTS, UNIQUE (user AE93): every number of FINAL 4, the OPEN/CLOSE lines, KING PICK,
+    SHADOW 4, the watch lines, FINAL 10 and FINAL 8, each once, with its op on the ROOT and how
+    many of those lists hold it; strongest (most lists) first. Display only, put right under
+    the OCJP FINAL 4 table."""
+    def two(s):
+        return re.findall(r'(?<!\d)\d\d(?!\d)', s)
+
+    def line(prefix):
+        L = next((s for s in md.split('\n') if s.startswith(prefix)), None)
+        if L is None:
+            return []
+        body = L.split(':** ', 1)[1] if ':** ' in L else ''
+        if re.match(r'\d\d', body):   # plain list after the label (FINAL 10, FINAL 8, grid)
+            return two(re.sub(r'\([^)]*\)', '', body.split('(live')[0]))
+        b = re.findall(r'\*\*([\d · ]+)\*\*', L)
+        return two(b[-1]) if b else []
+
+    def row(prefix):
+        m = re.search(r'^\| ' + re.escape(prefix) + r'[^|]*\| ([^|]*)\|', md, re.M)
+        return two(re.sub(r'\([^)]*\)', '', m.group(1))) if m else []
+
+    lists = [('FINAL 4', [d['n'] for d in P['f4']]),
+             ('Grid', line('**OPEN × CLOSE grid (9):**')),
+             ('OPEN 1 × CLOSE 4', line('**OPEN 1 × CLOSE 4**')),
+             ('OPEN CUT × CLOSE 4', line('**OPEN CUT × CLOSE 4**')),
+             ('KING PICK', row('KING PICK')),
+             ('SHADOW 4', row('SHADOW 4')),
+             ('HUNTER 20', row('HUNTER 20')),
+             ('FULL CUT 4', row('FULL CUT 4')),
+             ('yx CUT 12', row('yx CUT 12')),
+             ('STRONGEST FAMILY', row('STRONGEST FAMILY')),
+             ('MASTER CHANGED OPS 10', row('MASTER CHANGED OPS 10')),
+             ('FINAL 10', line('**OCJP FINAL 10:**')),
+             ('FINAL 8', line('**FINAL 8 (FINAL 4'))]
+    lists = [(n, L) for n, L in lists if L]
+    order, cnt = [], {}
+    for _, L in lists:
+        for v in dict.fromkeys(L):
+            if v not in cnt:
+                order.append(v); cnt[v] = 0
+            cnt[v] += 1
+    if not order:
+        return md
+    order.sort(key=lambda v: -cnt[v])   # stable: same count keeps first-seen order
+    root = P['root']
+    out = [f"### ALL LISTS, UNIQUE: {len(order)} numbers from {len(lists)} lists (FINAL 4, grid, OPEN 1 / CUT × CLOSE 4, "
+           f"KING, SHADOW, watch lines, FINAL 10, FINAL 8), op on ROOT {root}, most lists first",
+           f"**Total: {len(order)} unique numbers** ({sum(len(set(L)) for _, L in lists)} list places). "
+           + ' · '.join(f"{n} {len(set(L))}" for n, L in lists) + "\n"]
+    # one table, one border (user AE93): blocks of 10 stacked as Number / Op / Lists rows
+    rows_ = []
+    for i in range(0, len(order), 10):
+        ch = order[i:i + 10]
+        pad = [''] * (10 - len(ch))
+        rows_ += [['Number'] + [f"**{v}**" for v in ch] + pad,
+                  [f'Op on ROOT {root}'] + [op_on(root, v) for v in ch] + pad,
+                  ['Lists'] + [str(cnt[v]) for v in ch] + pad]
+    out.append(mk(rows_) + '\n')
+    out.append("Display only: a number on many lists is not more likely to come (tested: triple-star 1.7% vs 1.2% per number, "
+               "no FINAL 4 gain). No hit is promised.\n")
+    sec = '\n'.join(out)
+    k = md.find('\n### OCJP FINAL 10 with operations')
+    if k < 0:
+        k = md.find('\n### FINAL 8 / Count 2+')
+    return md[:k] + '\n' + sec + md[k:] if k >= 0 else md + '\n' + sec
+
+
 def main():
     a = sys.argv[1:]
     if not a:
@@ -1299,6 +1367,10 @@ def main():
             masterfam_live(None, entry={'round': cur_lab, 'master': mv, 'nums': mem})
     k = md.find('\n## OCJP FINAL 4 with operations')
     md = md[:k] + '\n' + sec + md[k:] if k >= 0 else md + sec
+    try:
+        md = all_lists_section(md, curP)
+    except Exception:
+        pass
     if md_out:
         with open(md_out, 'w') as fh:
             fh.write(md)

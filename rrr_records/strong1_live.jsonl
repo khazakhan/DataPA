@@ -192,4 +192,5 @@
 {"round": "AF13", "pick": [81], "result": 46}
 {"round": "AF14", "pick": [45], "result": 60}
 {"round": "AF15", "pick": [17], "result": 11}
-{"round": "AF16", "pick": [75], "result": null}
+{"round": "AF16", "pick": [75], "result": 33}
+{"round": "AF17", "pick": [74], "result": null}

@@ -668,4 +668,5 @@
 {"round": "AF15", "nums": [31, 86, 36, 4], "result": 11}
 {"round": "AF16", "nums": [40, 30, 9, 93], "result": 33}
 {"round": "AF17", "nums": [79, 33, 97, 36], "result": 92}
-{"round": "AF18", "nums": [14, 69, 87, 32]}
+{"round": "AF18", "nums": [14, 69, 87, 32], "result": 18}
+{"round": "AF19", "nums": [68, 99, 8, 95]}

@@ -175,4 +175,5 @@
 {"round": "AE94", "pick": [65], "result": 32}
 {"round": "AE95", "pick": [16], "result": 40}
 {"round": "AE96", "pick": [4], "result": 53}
-{"round": "AE97", "pick": [35], "result": null}
+{"round": "AE97", "pick": [35], "result": 41}
+{"round": "AE98", "pick": [15], "result": null}

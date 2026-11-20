@@ -729,4 +729,5 @@
 {"round": "AF23", "pick": [13, 23, 18, 53], "result": 24}
 {"round": "AF24", "pick": [43, 53, 48, 83], "result": 90}
 {"round": "AF25", "pick": [19, 29, 14, 16], "result": 28}
-{"round": "AF26", "pick": [47, 57, 42, 44], "result": null}
+{"round": "AF26", "pick": [47, 57, 42, 44], "result": 12}
+{"round": "AF27", "pick": [31, 41, 36, 38], "result": null}

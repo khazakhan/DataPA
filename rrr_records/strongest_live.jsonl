@@ -676,4 +676,5 @@
 {"round": "AF23", "nums": [27, 81, 18, 33], "result": 24}
 {"round": "AF24", "nums": [37, 16, 31, 33], "result": 90}
 {"round": "AF25", "nums": [28, 48, 11, 75], "result": 28}
-{"round": "AF26", "nums": [12, 16, 52, 2]}
+{"round": "AF26", "nums": [12, 16, 52, 2], "result": 12}
+{"round": "AF27", "nums": [43, 61, 36, 63]}

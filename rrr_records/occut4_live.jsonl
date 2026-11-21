@@ -81,4 +81,5 @@
 {"round": "AF41", "pick": [74, 78, 75, 77], "result": 69}
 {"round": "AF42", "pick": [24, 28, 23, 29], "result": 92}
 {"round": "AF43", "pick": [60, 65, 68, 66], "result": 37}
-{"round": "AF44", "pick": [82, 81, 85, 80], "result": null}
+{"round": "AF44", "pick": [82, 81, 85, 80], "result": 56}
+{"round": "AF45", "pick": [76, 78, 70, 77], "result": null}

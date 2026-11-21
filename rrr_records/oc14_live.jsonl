@@ -137,4 +137,5 @@
 {"round": "AF91", "pick": [81, 80, 85, 84], "result": 55}
 {"round": "AF92", "pick": [23, 29, 22, 24], "result": 26}
 {"round": "AF93", "pick": [31, 38, 34, 32], "result": 43}
-{"round": "AF94", "pick": [37, 38, 35, 33], "result": null}
+{"round": "AF94", "pick": [37, 38, 35, 33], "result": 72}
+{"round": "AF95", "pick": [29, 25, 20, 22], "result": null}

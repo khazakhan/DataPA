@@ -224,4 +224,5 @@
 {"round": "AF45", "pick": [10], "result": 95}
 {"round": "AF46", "pick": [59], "result": 14}
 {"round": "AF47", "pick": [78], "result": 2}
-{"round": "AF48", "pick": [66], "result": null}
+{"round": "AF48", "pick": [66], "result": 30}
+{"round": "AF49", "pick": [44], "result": null}

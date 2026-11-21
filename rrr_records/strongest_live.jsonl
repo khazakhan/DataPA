@@ -700,4 +700,5 @@
 {"round": "AF47", "nums": [5, 8, 14, 23], "result": 2}
 {"round": "AF48", "nums": [75, 19, 20, 31], "result": 30}
 {"round": "AF49", "nums": [60, 79, 30, 15], "result": 53}
-{"round": "AF50", "nums": [22, 13, 23, 72]}
+{"round": "AF50", "nums": [22, 13, 23, 72], "result": 9}
+{"round": "AF51", "nums": [9, 22, 40, 18]}

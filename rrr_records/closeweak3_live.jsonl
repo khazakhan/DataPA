@@ -664,4 +664,5 @@
 {"round": "AF62", "digits": [4, 5, 9], "result": 1}
 {"round": "AF63", "digits": [4, 5, 9], "result": 60}
 {"round": "AF64", "digits": [2, 7, 8], "result": 94}
-{"round": "AF65", "digits": [1, 8, 9]}
+{"round": "AF65", "digits": [1, 8, 9], "result": 43}
+{"round": "AF66", "digits": [0, 4, 8]}

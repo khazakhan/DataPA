@@ -651,4 +651,5 @@
 {"round": "AF49", "digits": [2, 3, 5], "result": 53}
 {"round": "AF50", "digits": [6, 7, 8], "result": 9}
 {"round": "AF51", "digits": [1, 4, 7], "result": 25}
-{"round": "AF52", "digits": [0, 3, 9]}
+{"round": "AF52", "digits": [0, 3, 9], "result": 49}
+{"round": "AF53", "digits": [1, 8, 9]}

@@ -728,4 +728,5 @@
 {"round": "AF75", "nums": [9, 28, 23, 27], "result": 42}
 {"round": "AF76", "nums": [59, 22, 42, 6], "result": 3}
 {"round": "AF77", "nums": [44, 51, 0, 15], "result": 7}
-{"round": "AF78", "nums": [5, 3, 7, 15]}
+{"round": "AF78", "nums": [5, 3, 7, 15], "result": 71}
+{"round": "AF79", "nums": [19, 95, 23, 29]}

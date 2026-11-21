@@ -695,4 +695,5 @@
 {"round": "AF93", "digits": [0, 3, 7], "result": 43}
 {"round": "AF94", "digits": [2, 4, 6], "result": 72}
 {"round": "AF95", "digits": [4, 7, 8], "result": 39}
-{"round": "AF96", "digits": [5, 6, 8]}
+{"round": "AF96", "digits": [5, 6, 8], "result": 59}
+{"round": "AF97", "digits": [2, 5, 8]}

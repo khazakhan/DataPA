@@ -124,17 +124,22 @@ def state():
 
 TRI = ('🟧', '⬜', '🟩')   # saffron / white / green
 def section(rk, sc, rnd, live):
-    star = rk[:5]; top = sorted(rk[:K])
-    third = [sorted(rk[:20]), sorted(rk[20:40]), sorted(rk[40:K])]
+    """Each band gets its own STAR 5 (its 5 best-ranked numbers), shown ●bold like the saffron STAR 5 (user AF150)."""
+    top = sorted(rk[:K])
+    bands = [rk[:20], rk[20:40], rk[40:K]]
+    stars = [b[:5] for b in bands]
+    allstar = set(x for st in stars for x in st)
     out = [f'\n## 🟧⬜🟩 BHARAT BUILDER {K}: every list on this page votes, each list weighted by its own past record (for {rnd})']
-    out.append(f'**STAR 5 pickers:** ' + ' · '.join(f'●**{x:02d}**' for x in star))
+    out.append(f'**STAR 5 pickers:** ' + ' · '.join(f'●**{x:02d}**' for x in stars[0]))
+    for c, nm, st in zip(TRI[1:], ('White', 'Green'), stars[1:]):
+        out.append(f'**{c} {nm} STAR 5:** ' + ' · '.join(f'●**{x:02d}**' for x in st))
     out.append('\n| Band | Numbers |\n|---|---|')
-    for i, (c, band) in enumerate(zip(TRI, third)):
+    for i, (c, band) in enumerate(zip(TRI, bands)):
         name = ('🟧 Saffron: rank 1-20 (strongest)', '⬜ White: rank 21-40', f'🟩 Green: rank 41-{K}')[i]
-        out.append(f'| {name} | ' + ' '.join((f'●**{x:02d}**' if x in star else f'{c}{x:02d}') for x in band) + ' |')
+        out.append(f'| {name} | ' + ' '.join((f'{c}●**{x:02d}**' if x in allstar else f'{c}{x:02d}') for x in sorted(band)) + ' |')
     out.append(f'\n**BUILDER {K} ascending:** ' + ' '.join(f'{x:02d}' for x in top))
     out.append(f'**Left out ({100 - K}):** ' + ' '.join(f'{x:02d}' for x in range(100) if x not in rk[:K]))
-    out.append(f'\nBuilder {K} = {K} of 100 numbers, so chance alone is {K}%. ' + live + ' It cannot reach 600 of 1000 with fewer numbers: the lists only beat chance by a little. No hit is promised.')
+    out.append(f'\nBuilder {K} = {K} of 100 numbers, so chance alone is {K}%. Each STAR 5 = 5 numbers (chance 5%). ' + live + ' It cannot reach 600 of 1000 with fewer numbers: the lists only beat chance by a little. No hit is promised.')
     return '\n'.join(out) + '\n'
 
 if __name__ == '__main__':
@@ -145,13 +150,14 @@ if __name__ == '__main__':
         t = open(a[2]).read(); L = lists(t); rk, sc, w = rank(L, state())
         rows = [json.loads(l) for l in open(LOG)] if os.path.exists(LOG) else []
         if not any(r['round'] == a[1] for r in rows):
-            open(LOG, 'a').write(json.dumps({'round': a[1], 'builder': rk[:K], 'star5': rk[:5]}) + '\n')
+            open(LOG, 'a').write(json.dumps({'round': a[1], 'builder': rk[:K], 'star5': rk[:5], 'white5': rk[20:25], 'green5': rk[40:45]}) + '\n')
             rows.append({'round': a[1]})
         done = [r for r in rows if 'result' in r]
-        live = (f"Live: builder {sum(r['result'] in r['builder'] for r in done)} of {len(done)}, STAR 5 {sum(r['result'] in r['star5'] for r in done)} of {len(done)}."
+        live = (f"Live: builder {sum(r['result'] in r['builder'] for r in done)} of {len(done)}, STAR 5 {sum(r['result'] in r['star5'] for r in done)} of {len(done)}" + (f"; White STAR 5 {sum(r['result'] in r['white5'] for r in W)} of {len(W)}, Green STAR 5 {sum(r['result'] in r['green5'] for r in W)} of {len(W)}" if (W := [r for r in done if 'white5' in r]) else '') + "."
                 if done else 'Live tally starts this round.')
-        if '## 🟧⬜🟩 BHARAT BUILDER' not in t:
-            open(a[2], 'a').write(section(rk, sc, a[1], live))
+        i = t.find('\n## 🟧⬜🟩 BHARAT BUILDER')
+        if i >= 0: t = t[:i]
+        open(a[2], 'w').write(t.rstrip('\n') + '\n' + section(rk, sc, a[1], live))
         print(f'BHARAT BUILDER {a[1]} STAR 5', ' '.join(f'{x:02d}' for x in rk[:5]))
     elif a[0] == 'score':
         rows = [json.loads(l) for l in open(LOG)] if os.path.exists(LOG) else []
@@ -159,4 +165,5 @@ if __name__ == '__main__':
             if r['round'] == a[1] and 'result' not in r: r['result'] = int(a[2])
         open(LOG, 'w').write(''.join(json.dumps(r) + '\n' for r in rows))
         done = [r for r in rows if 'result' in r]
-        print(f"BHARAT BUILDER live {sum(r['result'] in r['builder'] for r in done)} of {len(done)}; STAR 5 {sum(r['result'] in r['star5'] for r in done)} of {len(done)}")
+        W = [r for r in done if 'white5' in r]
+        print(f"BHARAT BUILDER live {sum(r['result'] in r['builder'] for r in done)} of {len(done)}; STAR 5 {sum(r['result'] in r['star5'] for r in done)} of {len(done)}; White STAR 5 {sum(r['result'] in r['white5'] for r in W)} of {len(W)}; Green STAR 5 {sum(r['result'] in r['green5'] for r in W)} of {len(W)}")

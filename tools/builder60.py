@@ -185,6 +185,14 @@ def count_table(stars, bands, sup, head, root):
     out.append(f"| **All 15 STARs** | | | | | | **{grand[0]}** | **{grand[1]}** | **{grand[0] + grand[1]}** |")
     return '\n'.join(out) + '\n'
 
+def bracket_set(rk, L):
+    """every number shown in the [ ] and ( ) of the 3 STAR rows (logged so the idea can be tested live)"""
+    bands = [rk[:20], rk[20:40], rk[40:K]]; sup = supports(L); out = set()
+    for bd in bands:
+        for x in bd[:5]:
+            out |= {v for v in set(bd) | sup if v != x and FAMILY[v] == FAMILY[x]}
+    return sorted(out)
+
 def supports(L):
     """numbers of the Other lists table (O:) and the Watch lines (W:) of the page"""
     return {x for k, ns in (L or {}).items() if k.startswith(('O:', 'W:')) for x in ns}
@@ -233,7 +241,7 @@ if __name__ == '__main__':
         t = open(a[2]).read(); L = lists(t); rk, sc, w = rank(L, state())
         rows = [json.loads(l) for l in open(LOG)] if os.path.exists(LOG) else []
         if not any(r['round'] == a[1] for r in rows):
-            open(LOG, 'a').write(json.dumps({'round': a[1], 'builder': rk[:K], 'star5': rk[:5], 'white5': rk[20:25], 'green5': rk[40:45]}) + '\n')
+            open(LOG, 'a').write(json.dumps({'round': a[1], 'builder': rk[:K], 'star5': rk[:5], 'white5': rk[20:25], 'green5': rk[40:45], 'brackets': bracket_set(rk, L)}) + '\n')
             rows.append({'round': a[1]})
         done = [r for r in rows if 'result' in r]
         live = (f"Live: builder {sum(r['result'] in r['builder'] for r in done)} of {len(done)}, STAR 5 {sum(r['result'] in r['star5'] for r in done)} of {len(done)}" + (f"; White STAR 5 {sum(r['result'] in r['white5'] for r in W)} of {len(W)}, Green STAR 5 {sum(r['result'] in r['green5'] for r in W)} of {len(W)}" if (W := [r for r in done if 'white5' in r]) else '') + "."
@@ -250,3 +258,5 @@ if __name__ == '__main__':
         done = [r for r in rows if 'result' in r]
         W = [r for r in done if 'white5' in r]
         print(f"BHARAT BUILDER live {sum(r['result'] in r['builder'] for r in done)} of {len(done)}; STAR 5 {sum(r['result'] in r['star5'] for r in done)} of {len(done)}; White STAR 5 {sum(r['result'] in r['white5'] for r in W)} of {len(W)}; Green STAR 5 {sum(r['result'] in r['green5'] for r in W)} of {len(W)}")
+        B = [r for r in done if 'brackets' in r]
+        if B: print(f"STAR brackets [ ] + ( ) held {sum(r['result'] in r['brackets'] for r in B)} of {len(B)} (chance {sum(len(r['brackets']) for r in B) / 100:.1f})")

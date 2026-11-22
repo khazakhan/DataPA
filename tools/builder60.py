@@ -122,6 +122,24 @@ def state():
     for p, L, r in pages(): learn(ST, L, r)
     return ST
 
+def _family_map():
+    """same families as tools/chat_page.py: 10 cut-pair families (15 = 1/6 x 5/0), half-cut (d, cut d), double (dd)."""
+    fam, cut = {}, lambda d: (d + 5) % 10
+    for i in range(1, 6):
+        for j in range(i + 1, 6):
+            for a in (i, cut(i)):
+                for b in (j, cut(j)):
+                    fam[a * 10 + b] = fam[b * 10 + a] = f"{i}{j}"
+    for d in range(10):
+        fam.setdefault(d * 10 + cut(d), 'half-cut')
+        fam[d * 10 + d] = 'double'
+    return fam
+FAMILY = _family_map()
+
+def star_row(st):
+    """●**65** [15] · ... (user AF154: family of every STAR number in square brackets)."""
+    return ' · '.join(f'●**{x:02d}** [{FAMILY[x]}]' for x in st)
+
 TRI = ('🟧', '⬜', '🟩')   # saffron / white / green
 def section(rk, sc, rnd, live):
     """Each band gets its own STAR 5 (its 5 best-ranked numbers), shown ●bold like the saffron STAR 5 (user AF150)."""
@@ -130,9 +148,9 @@ def section(rk, sc, rnd, live):
     stars = [b[:5] for b in bands]
     allstar = set(x for st in stars for x in st)
     out = [f'\n## 🟧⬜🟩 BHARAT BUILDER {K}: every list on this page votes, each list weighted by its own past record (for {rnd})']
-    out.append(f'**STAR 5 pickers:** ' + ' · '.join(f'●**{x:02d}**' for x in stars[0]))
+    out.append(f'**STAR 5 pickers:** ' + star_row(stars[0]))
     for c, nm, st in zip(TRI[1:], ('White', 'Green'), stars[1:]):
-        out.append(f'**{c} {nm} STAR 5:** ' + ' · '.join(f'●**{x:02d}**' for x in st))
+        out.append(f'**{c} {nm} STAR 5:** ' + star_row(st))
     out.append('\n| Band | Numbers |\n|---|---|')
     for i, (c, band) in enumerate(zip(TRI, bands)):
         name = ('🟧 Saffron: rank 1-20 (strongest)', '⬜ White: rank 21-40', f'🟩 Green: rank 41-{K}')[i]

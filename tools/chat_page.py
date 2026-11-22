@@ -1407,6 +1407,16 @@ def main():
         md = all_lists_section(md, curP)
     except Exception:
         pass
+    # 🟧⬜🟩 BHARAT BUILDER 60 + Saffron / White / Green STAR 5 at the very end (user AF146/AF150; local runs too)
+    try:
+        import builder60
+        _cwd = os.getcwd(); os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+        try:
+            md = md.rstrip('\n') + '\n' + builder60.page_section(md, cur_lab)
+        finally:
+            os.chdir(_cwd)
+    except Exception as e:
+        md += f"\n(BHARAT BUILDER not available: {e})\n"
     if md_out:
         with open(md_out, 'w') as fh:
             fh.write(md)

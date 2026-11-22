@@ -142,6 +142,19 @@ def section(rk, sc, rnd, live):
     out.append(f'\nBuilder {K} = {K} of 100 numbers, so chance alone is {K}%. Each STAR 5 = 5 numbers (chance 5%). ' + live + ' It cannot reach 600 of 1000 with fewer numbers: the lists only beat chance by a little. No hit is promised.')
     return '\n'.join(out) + '\n'
 
+def live_line():
+    rows = [json.loads(l) for l in open(LOG)] if os.path.exists(LOG) else []
+    done = [r for r in rows if 'result' in r]
+    if not done: return 'Live tally starts this round.'
+    W = [r for r in done if 'white5' in r]
+    return (f"Live: builder {sum(r['result'] in r['builder'] for r in done)} of {len(done)}, STAR 5 {sum(r['result'] in r['star5'] for r in done)} of {len(done)}"
+            + (f"; White STAR 5 {sum(r['result'] in r['white5'] for r in W)} of {len(W)}, Green STAR 5 {sum(r['result'] in r['green5'] for r in W)} of {len(W)}" if W else '') + '.')
+
+def page_section(md, rnd):
+    """Display only (local terminal runs, tools/chat_page.py): same section, nothing logged."""
+    rk, sc, w = rank(lists(md), state())
+    return section(rk, sc, rnd, live_line())
+
 if __name__ == '__main__':
     os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
     a = sys.argv[1:]

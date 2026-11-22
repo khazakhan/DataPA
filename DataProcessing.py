@@ -9602,12 +9602,29 @@ def show_chat_page():
         with open(tmp, 'w') as fh:
             fh.write(''.join(l if l.endswith('\n') else l + '\n' for l in lines))
         cmd = [sys.executable, os.path.join(here, 'tools', 'chat_page.py'), tmp]
-        if os.environ.get('CHAT_PAGE_ROUND'):
-            cmd += ['--round', os.environ['CHAT_PAGE_ROUND']]
+        rnd = os.environ.get('CHAT_PAGE_ROUND')
+        if not rnd:
+            # local terminal run: name the round from the matching rrr_datasets/<series><N>.txt so the page
+            # (SHADOW 4, live lines, BHARAT BUILDER) is the same as the chat page (user AF150)
+            import glob as _g
+            want = [l.split() for l in lines if l.strip()]
+            for f in sorted(_g.glob(os.path.join(here, 'rrr_datasets', '*.txt')), key=os.path.getmtime, reverse=True):
+                if not re.match(r'[a-z]+\d+\.txt$', os.path.basename(f)):
+                    continue
+                try:
+                    if [l.split() for l in open(f) if l.strip()] == want:
+                        rnd = os.path.basename(f)[:-4].upper()
+                        break
+                except Exception:
+                    pass
+        env = dict(os.environ)
+        if rnd:
+            cmd += ['--round', rnd]
+            env['CHAT_PAGE_ROUND'] = rnd
         if os.environ.get('CHAT_PAGE_MD'):
             cmd += ['--md', os.environ['CHAT_PAGE_MD']]
         sys.stdout.flush()
-        subprocess.run(cmd, cwd=here)
+        subprocess.run(cmd, cwd=here, env=env)
     except Exception as e:
         print(f"\n  CHAT PAGE: not available ({e})")
     finally:

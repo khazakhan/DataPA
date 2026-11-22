@@ -38,7 +38,7 @@ def lists(t):
             if c: L[key] = (uniq(two(head)), c)
     for key, pat in (('KING PICK', r'\| KING PICK[^|]*\| (.*?) \| (.*?) \|'), ('STRONG 20 #1', r'\| STRONG 20 #1[^|]*\| (.*?) \| (.*?) \|'),
                      ('MASTER CHANGED OPS 10', r'\| MASTER CHANGED OPS 10[^|]*\| (.*?) \| (.*?) \|'), ('HUNTER 20', r'\| HUNTER 20[^|]*\| (.*?) \| (.*?) \|'),
-                     ('SHADOW 4', r'\| SHADOW 4[^|]*\| (.*?) \| (.*?) \|'), ('FULL CUT 4', r'\| FULL CUT 4[^|]*\| (.*?) \| (.*?) \|'),
+                     ('SHADOW 4', r'\| SHADOW 4[^|]*\| (.*?) \| (.*?) \|'), ('FULL CUT 4', r'\| FULL CUT 4[^|]*\| (.*?) \| (.*?) \|'), ('LAST-OP FULL CUT 4', r'\| LAST-OP FULL CUT 4[^|]*\| (.*?) \| (.*?) \|'),
                      ('yx CUT 12', r'\| yx CUT 12[^|]*\| (.*?) \| (.*?) \|'), ('BULL PICK OPS ON EP 8', r'\| BULL PICK OPS ON EP 8[^|]*\| (.*?) \| (.*?) \|'),
                      ('STRONGEST FAMILY', r'\| STRONGEST FAMILY[^|]*\| (.*?) \| (.*?) \|')):
         m = re.search(pat, t)

@@ -37,6 +37,7 @@ python3 tools/master_changed_ops.py score "$R" "$res" >/dev/null 2>&1 || true
 python3 tools/hunter20.py score "$R" "$res" >/dev/null 2>&1 || true
 python3 tools/strong1.py score "$R" "$res" >/dev/null 2>&1 || true
 python3 tools/fullcut4.py score "$R" "$res" >/dev/null 2>&1 || true
+python3 tools/lofc4.py score "$R" "$res" >/dev/null 2>&1 || true
 python3 tools/yxcut12.py score "$R" "$res" >/dev/null 2>&1 || true
 python3 tools/oc14.py score "$R" "$res" >/dev/null 2>&1 || true
 python3 tools/occut4.py score "$R" "$res" >/dev/null 2>&1 || true
@@ -82,6 +83,8 @@ python3 tools/hunter20.py predict "$next" "$cur" "rrr_outputs/${s}$((n + 1)).md"
 python3 tools/strong1.py predict "$next" "rrr_outputs/${s}$((n + 1)).md" | tail -1
 # FULL CUT 4 watch line (2026-11-18, after AD122; x1.26 on 878 live)
 python3 tools/fullcut4.py predict "$next" "rrr_outputs/${s}$((n + 1)).md" | tail -1
+# LAST-OP FULL CUT 4 watch line (2026-11-22, user AF108 14 -> 69; x1.28 on 1067 logged rounds)
+python3 tools/lofc4.py predict "$next" "rrr_outputs/${s}$((n + 1)).md" | tail -1
 # yx CUT 12 watch line (2026-11-18, after AD165; x1.25 on 273 live)
 python3 tools/yxcut12.py predict "$next" "rrr_outputs/${s}$((n + 1)).md" | tail -1
 # OPEN 1 x CLOSE 4 line (2026-11-19, user AE52; level with plain vote on 974 logged rounds)

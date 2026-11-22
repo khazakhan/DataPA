@@ -244,4 +244,5 @@
 {"round": "AF116", "root": 9, "master": 89, "pick": [79, 7, 52, 59, 80, 84, 34, 29, 88, 79], "result": 2}
 {"round": "AF117", "root": 42, "master": 10, "pick": [0, 29, 74, 90, 11, 17, 65, 74, 19, 20], "result": 53}
 {"round": "AF118", "root": 9, "master": 9, "pick": [99, 9, 54, 59, 0, 4, 54, 9, 8, 59], "result": 31}
-{"round": "AF119", "root": 88, "master": 10, "pick": [0, 1, 56, 30, 11, 13, 65, 56, 19, 0], "result": null}
+{"round": "AF119", "root": 88, "master": 10, "pick": [0, 1, 56, 30, 11, 13, 65, 56, 19, 0], "result": 61}
+{"round": "AF120", "root": 55, "master": 14, "pick": [4, 41, 96, 4, 15, 10, 69, 96, 13, 44], "result": null}

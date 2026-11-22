@@ -294,4 +294,5 @@
 {"round": "AF152", "pick": [69, 5, 9, 35], "result": 41}
 {"round": "AF153", "pick": [71, 67, 62, 96], "result": 69}
 {"round": "AF154", "pick": [10, 73, 95, 14], "result": 57}
-{"round": "AF155", "pick": [65, 29, 11, 2], "result": null}
+{"round": "AF155", "pick": [65, 29, 11, 2], "result": 72}
+{"round": "AF156", "pick": [72, 8, 0, 27], "result": null}

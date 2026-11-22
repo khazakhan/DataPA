@@ -615,6 +615,12 @@ def build(series_round, prevP, prevD, P, res, curD=None):
         fc_ = f"{(int(d['n'][0]) + 5) % 10}{(int(d['n'][1]) + 5) % 10}"
         yxc_ = (f"{fc_} (full cut; yx {yxn_} is already #{f4n_.index(yxn_) + 1})" if yxn_ in f4n_ and yxn_ != d['n'] and fc_ not in f4n_
                 else f"{yxn_} (= #{f4n_.index(yxn_) + 1}, already in FINAL 4)" if yxn_ in f4n_ and yxn_ != d['n'] else d['yx'])
+        # user AF106 (13 -> 18): a yx that is the number itself is not shown again; show its CLOSE cut
+        # (then OPEN cut) instead. Display only: on 1125 logged rounds CLOSE cut 0 | 4 per half vs 2.0 | 2.1 (at chance).
+        if yxn_ == d['n']:
+            cc_ = f"{d['n'][0]}{(int(d['n'][1]) + 5) % 10}"; oc_ = f"{(int(d['n'][0]) + 5) % 10}{d['n'][1]}"
+            rel_ = cc_ if cc_ not in f4n_ else oc_ if oc_ not in f4n_ else None
+            if rel_: yxc_ = f"{rel_} ({'CLOSE' if rel_ == cc_ else 'OPEN'} cut; yx is {yxn_} itself)
         rows.append([rk, f"**{d['n']}**", d['op'], yxc_, f"{d['bxy']} / {d['byx']}", d['src'], d['votes']])
     A(mk(rows))
     A(f"\n### FINAL 8 / Count 2+ / All / 80-number list: {hd}\n")

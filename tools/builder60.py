@@ -193,6 +193,27 @@ def bracket_set(rk, L):
             out |= {v for v in set(bd) | sup if v != x and FAMILY[v] == FAMILY[x]}
     return sorted(out)
 
+BIG = {'80-number list', 'OPEN set 3', 'CLOSE set 3', 'CLOSE weak 3', 'OPEN digit', 'CLOSE digit'}
+def gap8(rk, L):
+    """GAP FILL 8 (user AF166: 44 was left out of the builder but stood on Rule 28 / STRONGEST FAMILY / yx CUT 12):
+    the 8 numbers the builder leaves out that stand on the most page lists (2 or more; the big digit lists and the
+    80-number list not counted).  Walk-forward 938 pages: 86 vs 73.2 by chance (42 vs 35.9 and 44 vs 37.4 per half). Display only."""
+    out = set(rk[K:]) if rk else set()
+    where = {x: [k.split(':', 1)[-1] for k, ns in (L or {}).items() if k not in BIG and x in ns] for x in out}
+    g = [x for x in out if len(where[x]) >= 2]
+    g = sorted(g, key=lambda x: (-len(where[x]), rk.index(x)))[:8]
+    return [(x, where[x]) for x in g]
+
+def gap_table(g, head, root):
+    if not g: return ''
+    out = [f'\n### 🔳 GAP FILL 8: left out of the builder but on 2+ lists' + (f': {head}' if head else ''),
+           f'| # | Number | Op on ROOT{f" {root:02d}" if root is not None else ""} | Family | Lists | Where |', '|---|---|---|---|---|---|']
+    for i, (x, w) in enumerate(g, 1):
+        fam = FAMILY[x] + ('-family' if FAMILY[x][0].isdigit() else '')
+        out.append(f"| {i} | 🔳**{x:02d}** | {op_on(root, x) if root is not None else '—'} | {fam} | {len(w)} | {' · '.join(w)} |")
+    out.append(f"\n**GAP FILL 8:** " + ' '.join(f'🔳{x:02d}' for x, _ in g) + " (display only; walk-forward 938 pages held 86 vs 73.2 by chance; nothing above is changed by it)")
+    return '\n'.join(out) + '\n'
+
 def supports(L):
     """numbers of the Other lists table (O:) and the Watch lines (W:) of the page"""
     return {x for k, ns in (L or {}).items() if k.startswith(('O:', 'W:')) for x in ns}
@@ -215,6 +236,7 @@ def section(rk, sc, rnd, live, L=None, t=''):
     for i, (c, band) in enumerate(zip(TRI, bands)):
         name = ('🟧 Saffron: rank 1-20 (strongest)', '⬜ White: rank 21-40', f'🟩 Green: rank 41-{K}')[i]
         out.append(f'| {name} | ' + ' '.join((f'{c}●**{x:02d}**' if x in allstar else f'{c}{x:02d}') for x in sorted(band)) + ' |')
+    out.append(gap_table(gap8(rk, L), head, root))
     out.append(f'\n**BUILDER {K} ascending:** ' + ' '.join(f'{x:02d}' for x in top))
     out.append(f'**Left out ({100 - K}):** ' + ' '.join(f'{x:02d}' for x in range(100) if x not in rk[:K]))
     out.append(f'\nBuilder {K} = {K} of 100 numbers, so chance alone is {K}%. Each STAR 5 = 5 numbers (chance 5%). ' + live + ' It cannot reach 600 of 1000 with fewer numbers: the lists only beat chance by a little. No hit is promised.')
@@ -241,7 +263,7 @@ if __name__ == '__main__':
         t = open(a[2]).read(); L = lists(t); rk, sc, w = rank(L, state())
         rows = [json.loads(l) for l in open(LOG)] if os.path.exists(LOG) else []
         if not any(r['round'] == a[1] for r in rows):
-            open(LOG, 'a').write(json.dumps({'round': a[1], 'builder': rk[:K], 'star5': rk[:5], 'white5': rk[20:25], 'green5': rk[40:45], 'brackets': bracket_set(rk, L)}) + '\n')
+            open(LOG, 'a').write(json.dumps({'round': a[1], 'builder': rk[:K], 'star5': rk[:5], 'white5': rk[20:25], 'green5': rk[40:45], 'brackets': bracket_set(rk, L), 'gap8': [x for x, _ in gap8(rk, L)]}) + '\n')
             rows.append({'round': a[1]})
         done = [r for r in rows if 'result' in r]
         live = (f"Live: builder {sum(r['result'] in r['builder'] for r in done)} of {len(done)}, STAR 5 {sum(r['result'] in r['star5'] for r in done)} of {len(done)}" + (f"; White STAR 5 {sum(r['result'] in r['white5'] for r in W)} of {len(W)}, Green STAR 5 {sum(r['result'] in r['green5'] for r in W)} of {len(W)}" if (W := [r for r in done if 'white5' in r]) else '') + "."
@@ -259,4 +281,6 @@ if __name__ == '__main__':
         W = [r for r in done if 'white5' in r]
         print(f"BHARAT BUILDER live {sum(r['result'] in r['builder'] for r in done)} of {len(done)}; STAR 5 {sum(r['result'] in r['star5'] for r in done)} of {len(done)}; White STAR 5 {sum(r['result'] in r['white5'] for r in W)} of {len(W)}; Green STAR 5 {sum(r['result'] in r['green5'] for r in W)} of {len(W)}")
         B = [r for r in done if 'brackets' in r]
+        G = [r for r in done if 'gap8' in r]
+        if G: print(f"GAP FILL 8 held {sum(r['result'] in r['gap8'] for r in G)} of {len(G)} (chance {sum(len(r['gap8']) for r in G) / 100:.1f})")
         if B: print(f"STAR brackets [ ] + ( ) held {sum(r['result'] in r['brackets'] for r in B)} of {len(B)} (chance {sum(len(r['brackets']) for r in B) / 100:.1f})")

@@ -701,4 +701,5 @@
 {"round": "AF99", "digits": [0, 1, 3], "result": 42}
 {"round": "AF100", "digits": [1, 2, 8], "result": 58}
 {"round": "AF101", "digits": [2, 3, 5], "result": 28}
-{"round": "AF102", "digits": [2, 7, 8]}
+{"round": "AF102", "digits": [2, 7, 8], "result": 34}
+{"round": "AF103", "digits": [2, 4, 9]}

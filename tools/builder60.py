@@ -136,25 +136,36 @@ def _family_map():
     return fam
 FAMILY = _family_map()
 
-def star_row(st, band):
-    """●**65** [15] · ●**25** [57] ... (user AF154): in brackets, the other members of the number's family
-    that stand in the same band (Saffron / White / Green); [—] when none."""
-    def mates(x):
-        m = sorted(v for v in band if v != x and FAMILY[v] == FAMILY[x])
-        return ' '.join(f'{v:02d}' for v in m) if m else '—'
-    return ' · '.join(f'●**{x:02d}** [{mates(x)}]' for x in st)
+def star_row(st, band, sup=(), col=''):
+    """●**65** [15] (🟧10 🟧60) ... (user AF154/AF160):
+    [ ] = other members of the number's family standing in the same band (Saffron / White / Green);
+    ( ) = family members found in the Other lists table and the Watch lines (supports), in the row's colour."""
+    def mates(x, pool):
+        return sorted(v for v in set(pool) if v != x and FAMILY[v] == FAMILY[x])
+    out = []
+    for x in st:
+        b = mates(x, band); s_ = mates(x, sup)
+        t = f'●**{x:02d}** [' + (' '.join(f'{v:02d}' for v in b) if b else '—') + ']'
+        t += ' (' + (' '.join(f'{col}{v:02d}' for v in s_) if s_ else '—') + ')'
+        out.append(t)
+    return ' · '.join(out)
+
+def supports(L):
+    """numbers of the Other lists table (O:) and the Watch lines (W:) of the page"""
+    return {x for k, ns in (L or {}).items() if k.startswith(('O:', 'W:')) for x in ns}
 
 TRI = ('🟧', '⬜', '🟩')   # saffron / white / green
-def section(rk, sc, rnd, live):
+def section(rk, sc, rnd, live, L=None):
     """Each band gets its own STAR 5 (its 5 best-ranked numbers), shown ●bold like the saffron STAR 5 (user AF150)."""
     top = sorted(rk[:K])
     bands = [rk[:20], rk[20:40], rk[40:K]]
     stars = [b[:5] for b in bands]
     allstar = set(x for st in stars for x in st)
     out = [f'\n## 🟧⬜🟩 BHARAT BUILDER {K}: every list on this page votes, each list weighted by its own past record (for {rnd})']
-    out.append(f'**STAR 5 pickers:** ' + star_row(stars[0], bands[0]))
+    sup = supports(L)
+    out.append(f'**STAR 5 pickers:** ' + star_row(stars[0], bands[0], sup, TRI[0]))
     for c, nm, st, bd in zip(TRI[1:], ('White', 'Green'), stars[1:], bands[1:]):
-        out.append(f'**{c} {nm} STAR 5:** ' + star_row(st, bd))
+        out.append(f'**{c} {nm} STAR 5:** ' + star_row(st, bd, sup, c))
     out.append('\n| Band | Numbers |\n|---|---|')
     for i, (c, band) in enumerate(zip(TRI, bands)):
         name = ('🟧 Saffron: rank 1-20 (strongest)', '⬜ White: rank 21-40', f'🟩 Green: rank 41-{K}')[i]
@@ -174,8 +185,8 @@ def live_line():
 
 def page_section(md, rnd):
     """Display only (local terminal runs, tools/chat_page.py): same section, nothing logged."""
-    rk, sc, w = rank(lists(md), state())
-    return section(rk, sc, rnd, live_line())
+    L = lists(md); rk, sc, w = rank(L, state())
+    return section(rk, sc, rnd, live_line(), L)
 
 if __name__ == '__main__':
     os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
@@ -192,7 +203,7 @@ if __name__ == '__main__':
                 if done else 'Live tally starts this round.')
         i = t.find('\n## 🟧⬜🟩 BHARAT BUILDER')
         if i >= 0: t = t[:i]
-        open(a[2], 'w').write(t.rstrip('\n') + '\n' + section(rk, sc, a[1], live))
+        open(a[2], 'w').write(t.rstrip('\n') + '\n' + section(rk, sc, a[1], live, L))
         print(f'BHARAT BUILDER {a[1]} STAR 5', ' '.join(f'{x:02d}' for x in rk[:5]))
     elif a[0] == 'score':
         rows = [json.loads(l) for l in open(LOG)] if os.path.exists(LOG) else []

@@ -136,9 +136,13 @@ def _family_map():
     return fam
 FAMILY = _family_map()
 
-def star_row(st):
-    """●**65** [15] · ... (user AF154: family of every STAR number in square brackets)."""
-    return ' · '.join(f'●**{x:02d}** [{FAMILY[x]}]' for x in st)
+def star_row(st, band):
+    """●**65** [15] · ●**25** [57] ... (user AF154): in brackets, the other members of the number's family
+    that stand in the same band (Saffron / White / Green); [—] when none."""
+    def mates(x):
+        m = sorted(v for v in band if v != x and FAMILY[v] == FAMILY[x])
+        return ' '.join(f'{v:02d}' for v in m) if m else '—'
+    return ' · '.join(f'●**{x:02d}** [{mates(x)}]' for x in st)
 
 TRI = ('🟧', '⬜', '🟩')   # saffron / white / green
 def section(rk, sc, rnd, live):
@@ -148,9 +152,9 @@ def section(rk, sc, rnd, live):
     stars = [b[:5] for b in bands]
     allstar = set(x for st in stars for x in st)
     out = [f'\n## 🟧⬜🟩 BHARAT BUILDER {K}: every list on this page votes, each list weighted by its own past record (for {rnd})']
-    out.append(f'**STAR 5 pickers:** ' + star_row(stars[0]))
-    for c, nm, st in zip(TRI[1:], ('White', 'Green'), stars[1:]):
-        out.append(f'**{c} {nm} STAR 5:** ' + star_row(st))
+    out.append(f'**STAR 5 pickers:** ' + star_row(stars[0], bands[0]))
+    for c, nm, st, bd in zip(TRI[1:], ('White', 'Green'), stars[1:], bands[1:]):
+        out.append(f'**{c} {nm} STAR 5:** ' + star_row(st, bd))
     out.append('\n| Band | Numbers |\n|---|---|')
     for i, (c, band) in enumerate(zip(TRI, bands)):
         name = ('🟧 Saffron: rank 1-20 (strongest)', '⬜ White: rank 21-40', f'🟩 Green: rank 41-{K}')[i]

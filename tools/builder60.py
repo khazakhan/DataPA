@@ -136,17 +136,7 @@ def _family_map():
     return fam
 FAMILY = _family_map()
 
-def star_reps(stars):
-    """{ } (user AF176): for each STAR, the other STARs of all 15 (any band) in the same family, as (band index, number)."""
-    flat = [(i, x) for i, st in enumerate(stars) for x in st]
-    return {x: [(j, v) for j, v in flat if v != x and FAMILY[v] == FAMILY[x]] for _, x in flat}
-
-def sup_text(x, s_, col, rep):
-    """( ) supports; written { } instead when the STAR's family repeats among the 15 STARs (user AF176: 04 and 95)"""
-    o, c = ('{', '}') if rep and rep.get(x) else ('(', ')')
-    return o + (' '.join(f'{col}{v:02d}' for v in s_) if s_ else '—') + c
-
-def star_row(st, band, sup=(), col='', rep=None):
+def star_row(st, band, sup=(), col=''):
     """●**65** [15] (🟧10 🟧60) ... (user AF154/AF160):
     [ ] = other members of the number's family standing in the same band (Saffron / White / Green);
     ( ) = family members found in the Other lists table and the Watch lines (supports), in the row's colour."""
@@ -156,7 +146,7 @@ def star_row(st, band, sup=(), col='', rep=None):
     for x in st:
         b = mates(x, band); s_ = mates(x, sup)
         t = f'●**{x:02d}** [' + (' '.join(f'{v:02d}' for v in b) if b else '—') + ']'
-        t += ' ' + sup_text(x, s_, col, rep)
+        t += ' (' + (' '.join(f'{col}{v:02d}' for v in s_) if s_ else '—') + ')'
         out.append(t)
     return ' · '.join(out)
 
@@ -176,9 +166,8 @@ def ep_root(t):
 def count_table(stars, bands, sup, head, root):
     """STAR 5 family count table (user AF160): op on ROOT, family, [ ] band mates, ( ) supports, counts."""
     lab = ('🟧 Saffron', '⬜ White', '🟩 Green')
-    rep = star_reps(stars)
     out = [f'\n### 🟧⬜🟩 STAR 5 family count' + (f': {head}' if head else ''),
-           f'| Band | STAR | Op on ROOT{f" {root:02d}" if root is not None else ""} | Family | [ ] same band | ( ) Other lists + Watch lines ({{ }} = family repeats among the STARs) | [ ] | ( ) | Total |',
+           f'| Band | STAR | Op on ROOT{f" {root:02d}" if root is not None else ""} | Family | [ ] same band | ( ) Other lists + Watch lines | [ ] | ( ) | Total |',
            '|---|---|---|---|---|---|---|---|---|']
     grand = [0, 0]
     for i, (st, bd) in enumerate(zip(stars, bands)):
@@ -188,9 +177,8 @@ def count_table(stars, bands, sup, head, root):
             u = sorted(v for v in set(sup) if v != x and FAMILY[v] == FAMILY[x])
             sub[0] += len(b); sub[1] += len(u)
             fam = FAMILY[x] + ('-family' if FAMILY[x][0].isdigit() else '')
-            st_ = sup_text(x, u, TRI[i], rep)
             out.append(f"| {lab[i]} | ●**{x:02d}** | {op_on(root, x) if root is not None else '—'} | {fam} | "
-                       f"{' '.join(f'{v:02d}' for v in b) or '—'} | {st_ if rep.get(x) else (st_[1:-1])} | "
+                       f"{' '.join(f'{v:02d}' for v in b) or '—'} | {' '.join(f'{TRI[i]}{v:02d}' for v in u) or '—'} | "
                        f"{len(b)} | {len(u)} | **{len(b) + len(u)}** |")
         out.append(f"| **{lab[i]} total** | | | | | | **{sub[0]}** | **{sub[1]}** | **{sub[0] + sub[1]}** |")
         grand[0] += sub[0]; grand[1] += sub[1]
@@ -239,9 +227,10 @@ def section(rk, sc, rnd, live, L=None, t=''):
     allstar = set(x for st in stars for x in st)
     head, root = ep_root(t)
     out = [f'\n## 🟧⬜🟩 BHARAT BUILDER {K}: every list on this page votes, each list weighted by its own past record (for {rnd})' + (f': {head}' if head else '')]
-    sup = supports(L); rep = star_reps(stars)
-    for c, nm, st, bd in zip(TRI, ('Saffron', 'White', 'Green'), stars, bands):
-        out.append(f'**{c} {nm} STAR 5:** ' + star_row(st, bd, sup, c, rep))
+    sup = supports(L)
+    out.append(f'**STAR 5 pickers:** ' + star_row(stars[0], bands[0], sup, TRI[0]))
+    for c, nm, st, bd in zip(TRI[1:], ('White', 'Green'), stars[1:], bands[1:]):
+        out.append(f'**{c} {nm} STAR 5:** ' + star_row(st, bd, sup, c))
     out.append(count_table(stars, bands, sup, head, root))
     out.append('\n| Band | Numbers |\n|---|---|')
     for i, (c, band) in enumerate(zip(TRI, bands)):

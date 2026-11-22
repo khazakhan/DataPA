@@ -170,6 +170,9 @@ def count_table(stars, bands, sup, head, root):
            f'| Band | STAR | Op on ROOT{f" {root:02d}" if root is not None else ""} | Family | [ ] same band | ( ) Other lists + Watch lines | [ ] | ( ) | Total |',
            '|---|---|---|---|---|---|---|---|---|']
     grand = [0, 0]
+    # user AF176: a STAR whose family is shared by another of the 15 STARs gets a green dot 🟢 instead of ●
+    fams = [FAMILY[x] for st in stars for x in st]
+    dot = lambda x: '🟢' if fams.count(FAMILY[x]) > 1 else '●'
     for i, (st, bd) in enumerate(zip(stars, bands)):
         sub = [0, 0]
         for x in st:
@@ -177,7 +180,7 @@ def count_table(stars, bands, sup, head, root):
             u = sorted(v for v in set(sup) if v != x and FAMILY[v] == FAMILY[x])
             sub[0] += len(b); sub[1] += len(u)
             fam = FAMILY[x] + ('-family' if FAMILY[x][0].isdigit() else '')
-            out.append(f"| {lab[i]} | ●**{x:02d}** | {op_on(root, x) if root is not None else '—'} | {fam} | "
+            out.append(f"| {lab[i]} | {dot(x)}**{x:02d}** | {op_on(root, x) if root is not None else '—'} | {fam} | "
                        f"{' '.join(f'{v:02d}' for v in b) or '—'} | {' '.join(f'{TRI[i]}{v:02d}' for v in u) or '—'} | "
                        f"{len(b)} | {len(u)} | **{len(b) + len(u)}** |")
         out.append(f"| **{lab[i]} total** | | | | | | **{sub[0]}** | **{sub[1]}** | **{sub[0] + sub[1]}** |")

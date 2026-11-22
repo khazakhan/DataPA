@@ -47,7 +47,11 @@ def lists(t):
         c = lof(m.group(2))
         if key == 'STRONGEST FAMILY':
             h = re.search(r'(\d+) and (\d+) per half vs ([\d.]+)', m.group(2)); n = re.search(r'tested (\d+)', m.group(2))
-            if h and n: c = (int(h.group(1)) + int(h.group(2)), int(n.group(1)))
+            if h and n:
+                c = (int(h.group(1)) + int(h.group(2)), int(n.group(1)))
+                # the tested count is for the family's own (varying) size: use its tested chance, not this round's size
+                if ns: L[key] = (ns, c, 2 * float(h.group(3)))
+                continue
         if key == 'MASTER CHANGED OPS 10' and m.group(1).count('·') == 0: continue
         if ns and c: L[key] = (ns, c)
     m = re.search(r'## ONE-MEN-ARMY: .*?\(live (\d+) of (\d+)\)\n\*\*Ascending:\*\* (.*)', t)
@@ -55,12 +59,13 @@ def lists(t):
     return L
 def weigh(L):
     W = {}
-    for k, (ns, (h, n)) in L.items():
-        e = n * len(ns) / 100.0
+    for k, v in L.items():
+        ns, (h, n) = v[0], v[1]
+        e = v[2] if len(v) > 2 else n * len(ns) / 100.0
         W[k] = ((h + A) / (e + A), h, n, len(ns))
     S = {}
-    for k, (ns, _) in L.items():
-        for x in ns:
+    for k, v in L.items():
+        for x in v[0]:
             S.setdefault(x, []).append(k)
     rank = sorted(S, key=lambda x: (-max(W[k][0] for k in S[x]), -sum(1 for k in S[x] if W[k][0] > 1), x))
     return W, S, rank
@@ -69,7 +74,7 @@ def show(p):
     print('| List | Numbers | Live | Per number vs 1% | Weight (lift) |\n|---|---|---|---|---|')
     for k in sorted(W, key=lambda k: -W[k][0]):
         l, h, n, sz = W[k]
-        print(f'| {k} | {sz} | {h} of {n} | {100*h/max(n*sz,1):.2f}% | x{l:.2f} |')
+        print(f'| {k} | {sz} | {h} of {n} | {100*h/max(n*sz,1):.2f}% | x{l:.2f} |' if k != 'STRONGEST FAMILY' else f'| {k} | {sz} | {h} of {n} | tested, size varies | x{l:.2f} |')
     print('\n| # | Number | Weight (best list) | Lists with weight > 1 | All lists |\n|---|---|---|---|---|')
     for i, x in enumerate(rank[:10], 1):
         best = max(S[x], key=lambda k: W[k][0])

@@ -43,6 +43,8 @@ python3 tools/oc14.py score "$R" "$res" >/dev/null 2>&1 || true
 python3 tools/occut4.py score "$R" "$res" >/dev/null 2>&1 || true
 python3 tools/bullop8.py score "$R" "$res" >/dev/null 2>&1 || true
 python3 tools/weightage.py score "$R" "$res" 2>/dev/null || true
+# BHARAT BUILDER 60 + STAR 5 (user AF146; walk-forward 918 pages: top 60 held 577 = 62.9% vs 60% chance)
+python3 tools/builder60.py score "$R" "$res" 2>/dev/null || true
 
 # result op on the ROOT (x/y), needed by last_move.py
 ops=$(python3 - "$prev" "$res" <<'PY'
@@ -96,5 +98,6 @@ python3 tools/bullop8.py predict "$next" "rrr_outputs/${s}$((n + 1)).md" | tail 
 # WEIGHTAGE (2026-11-22, user AF100; best live lift per number; backtest AD/AE/AF pages 15 vs FINAL 4 15 of 262: display + live tally only)
 python3 tools/weightage.py predict "$next" "rrr_outputs/${s}$((n + 1)).md" | tail -1
 python3 tools/weightage.py show "rrr_outputs/${s}$((n + 1)).md"
+python3 tools/builder60.py predict "$next" "rrr_outputs/${s}$((n + 1)).md" | tail -1
 # FINAL 4 yx-pair vs plain vote tally (from AD143)
 python3 tools/f4_yxpair_tally.py

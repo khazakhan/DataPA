@@ -141,9 +141,10 @@ def star_reps(stars):
     flat = [(i, x) for i, st in enumerate(stars) for x in st]
     return {x: [(j, v) for j, v in flat if v != x and FAMILY[v] == FAMILY[x]] for _, x in flat}
 
-def star_mark(x, rep):
-    """●**x**, or {●**x**} when its family repeats among the 15 STARs"""
-    return f'{{●**{x:02d}**}}' if rep and rep.get(x) else f'●**{x:02d}**'
+def sup_text(x, s_, col, rep):
+    """( ) supports; written { } instead when the STAR's family repeats among the 15 STARs (user AF176: 04 and 95)"""
+    o, c = ('{', '}') if rep and rep.get(x) else ('(', ')')
+    return o + (' '.join(f'{col}{v:02d}' for v in s_) if s_ else '—') + c
 
 def star_row(st, band, sup=(), col='', rep=None):
     """●**65** [15] (🟧10 🟧60) ... (user AF154/AF160):
@@ -154,8 +155,8 @@ def star_row(st, band, sup=(), col='', rep=None):
     out = []
     for x in st:
         b = mates(x, band); s_ = mates(x, sup)
-        t = star_mark(x, rep) + ' [' + (' '.join(f'{v:02d}' for v in b) if b else '—') + ']'
-        t += ' (' + (' '.join(f'{col}{v:02d}' for v in s_) if s_ else '—') + ')'
+        t = f'●**{x:02d}** [' + (' '.join(f'{v:02d}' for v in b) if b else '—') + ']'
+        t += ' ' + sup_text(x, s_, col, rep)
         out.append(t)
     return ' · '.join(out)
 
@@ -177,24 +178,23 @@ def count_table(stars, bands, sup, head, root):
     lab = ('🟧 Saffron', '⬜ White', '🟩 Green')
     rep = star_reps(stars)
     out = [f'\n### 🟧⬜🟩 STAR 5 family count' + (f': {head}' if head else ''),
-           f'| Band | STAR | Op on ROOT{f" {root:02d}" if root is not None else ""} | Family | [ ] same band | ( ) Other lists + Watch lines | {{ }} same family STARs | [ ] | ( ) | {{ }} | Total |',
-           '|---|---|---|---|---|---|---|---|---|---|---|']
-    grand = [0, 0, 0]
+           f'| Band | STAR | Op on ROOT{f" {root:02d}" if root is not None else ""} | Family | [ ] same band | ( ) Other lists + Watch lines ({{ }} = family repeats among the STARs) | [ ] | ( ) | Total |',
+           '|---|---|---|---|---|---|---|---|---|']
+    grand = [0, 0]
     for i, (st, bd) in enumerate(zip(stars, bands)):
-        sub = [0, 0, 0]
+        sub = [0, 0]
         for x in st:
             b = sorted(v for v in set(bd) if v != x and FAMILY[v] == FAMILY[x])
             u = sorted(v for v in set(sup) if v != x and FAMILY[v] == FAMILY[x])
-            r = rep[x]
-            sub[0] += len(b); sub[1] += len(u); sub[2] += len(r)
+            sub[0] += len(b); sub[1] += len(u)
             fam = FAMILY[x] + ('-family' if FAMILY[x][0].isdigit() else '')
-            out.append(f"| {lab[i]} | {star_mark(x, rep)} | {op_on(root, x) if root is not None else '—'} | {fam} | "
-                       f"{' '.join(f'{v:02d}' for v in b) or '—'} | {' '.join(f'{TRI[i]}{v:02d}' for v in u) or '—'} | "
-                       f"{('{' + ' '.join(f'{TRI[j]}{v:02d}' for j, v in r) + '}') if r else '—'} | "
-                       f"{len(b)} | {len(u)} | {len(r)} | **{len(b) + len(u) + len(r)}** |")
-        out.append(f"| **{lab[i]} total** | | | | | | | **{sub[0]}** | **{sub[1]}** | **{sub[2]}** | **{sum(sub)}** |")
-        grand = [g + v for g, v in zip(grand, sub)]
-    out.append(f"| **All 15 STARs** | | | | | | | **{grand[0]}** | **{grand[1]}** | **{grand[2]}** | **{sum(grand)}** |")
+            st_ = sup_text(x, u, TRI[i], rep)
+            out.append(f"| {lab[i]} | ●**{x:02d}** | {op_on(root, x) if root is not None else '—'} | {fam} | "
+                       f"{' '.join(f'{v:02d}' for v in b) or '—'} | {st_ if rep.get(x) else (st_[1:-1])} | "
+                       f"{len(b)} | {len(u)} | **{len(b) + len(u)}** |")
+        out.append(f"| **{lab[i]} total** | | | | | | **{sub[0]}** | **{sub[1]}** | **{sub[0] + sub[1]}** |")
+        grand[0] += sub[0]; grand[1] += sub[1]
+    out.append(f"| **All 15 STARs** | | | | | | **{grand[0]}** | **{grand[1]}** | **{grand[0] + grand[1]}** |")
     return '\n'.join(out) + '\n'
 
 def bracket_set(rk, L):

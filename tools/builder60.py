@@ -150,22 +150,59 @@ def star_row(st, band, sup=(), col=''):
         out.append(t)
     return ' · '.join(out)
 
+OPN = {0: 'nc', 1: '+1', 2: '+2', 9: '-1', 8: '-2', 5: 'cut', 6: 'c+1', 7: 'c+2', 4: 'c-1', 3: 'c-2'}
+def op_on(r, x):
+    """digit op from ROOT r to x, tens/units, e.g. 65 -> 63 = nc/-2"""
+    return f"{OPN[(x // 10 - r // 10) % 10]}/{OPN[(x % 10 - r % 10) % 10]}"
+
+def ep_root(t):
+    """('EP 15 (56→15 c+1/-1), ROOT 65 (15→65 cut/nc)', 65) from the page's OCJP FINAL 4 heading"""
+    m = None
+    for m in re.finditer(r'EP (\d\d) \(([^)]*)\), ROOT (\d\d) \(([^)]*)\)', t):
+        pass
+    if not m: return '', None
+    return m.group(0), int(m.group(3))
+
+def count_table(stars, bands, sup, head, root):
+    """STAR 5 family count table (user AF160): op on ROOT, family, [ ] band mates, ( ) supports, counts."""
+    lab = ('🟧 Saffron', '⬜ White', '🟩 Green')
+    out = [f'\n### 🟧⬜🟩 STAR 5 family count' + (f': {head}' if head else ''),
+           f'| Band | STAR | Op on ROOT{f" {root:02d}" if root is not None else ""} | Family | [ ] same band | ( ) Other lists + Watch lines | [ ] | ( ) | Total |',
+           '|---|---|---|---|---|---|---|---|---|']
+    grand = [0, 0]
+    for i, (st, bd) in enumerate(zip(stars, bands)):
+        sub = [0, 0]
+        for x in st:
+            b = sorted(v for v in set(bd) if v != x and FAMILY[v] == FAMILY[x])
+            u = sorted(v for v in set(sup) if v != x and FAMILY[v] == FAMILY[x])
+            sub[0] += len(b); sub[1] += len(u)
+            fam = FAMILY[x] + ('-family' if FAMILY[x][0].isdigit() else '')
+            out.append(f"| {lab[i]} | ●**{x:02d}** | {op_on(root, x) if root is not None else '—'} | {fam} | "
+                       f"{' '.join(f'{v:02d}' for v in b) or '—'} | {' '.join(f'{TRI[i]}{v:02d}' for v in u) or '—'} | "
+                       f"{len(b)} | {len(u)} | **{len(b) + len(u)}** |")
+        out.append(f"| **{lab[i]} total** | | | | | | **{sub[0]}** | **{sub[1]}** | **{sub[0] + sub[1]}** |")
+        grand[0] += sub[0]; grand[1] += sub[1]
+    out.append(f"| **All 15 STARs** | | | | | | **{grand[0]}** | **{grand[1]}** | **{grand[0] + grand[1]}** |")
+    return '\n'.join(out) + '\n'
+
 def supports(L):
     """numbers of the Other lists table (O:) and the Watch lines (W:) of the page"""
     return {x for k, ns in (L or {}).items() if k.startswith(('O:', 'W:')) for x in ns}
 
 TRI = ('🟧', '⬜', '🟩')   # saffron / white / green
-def section(rk, sc, rnd, live, L=None):
+def section(rk, sc, rnd, live, L=None, t=''):
     """Each band gets its own STAR 5 (its 5 best-ranked numbers), shown ●bold like the saffron STAR 5 (user AF150)."""
     top = sorted(rk[:K])
     bands = [rk[:20], rk[20:40], rk[40:K]]
     stars = [b[:5] for b in bands]
     allstar = set(x for st in stars for x in st)
-    out = [f'\n## 🟧⬜🟩 BHARAT BUILDER {K}: every list on this page votes, each list weighted by its own past record (for {rnd})']
+    head, root = ep_root(t)
+    out = [f'\n## 🟧⬜🟩 BHARAT BUILDER {K}: every list on this page votes, each list weighted by its own past record (for {rnd})' + (f': {head}' if head else '')]
     sup = supports(L)
     out.append(f'**STAR 5 pickers:** ' + star_row(stars[0], bands[0], sup, TRI[0]))
     for c, nm, st, bd in zip(TRI[1:], ('White', 'Green'), stars[1:], bands[1:]):
         out.append(f'**{c} {nm} STAR 5:** ' + star_row(st, bd, sup, c))
+    out.append(count_table(stars, bands, sup, head, root))
     out.append('\n| Band | Numbers |\n|---|---|')
     for i, (c, band) in enumerate(zip(TRI, bands)):
         name = ('🟧 Saffron: rank 1-20 (strongest)', '⬜ White: rank 21-40', f'🟩 Green: rank 41-{K}')[i]
@@ -186,7 +223,7 @@ def live_line():
 def page_section(md, rnd):
     """Display only (local terminal runs, tools/chat_page.py): same section, nothing logged."""
     L = lists(md); rk, sc, w = rank(L, state())
-    return section(rk, sc, rnd, live_line(), L)
+    return section(rk, sc, rnd, live_line(), L, md)
 
 if __name__ == '__main__':
     os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
@@ -203,7 +240,7 @@ if __name__ == '__main__':
                 if done else 'Live tally starts this round.')
         i = t.find('\n## 🟧⬜🟩 BHARAT BUILDER')
         if i >= 0: t = t[:i]
-        open(a[2], 'w').write(t.rstrip('\n') + '\n' + section(rk, sc, a[1], live, L))
+        open(a[2], 'w').write(t.rstrip('\n') + '\n' + section(rk, sc, a[1], live, L, t))
         print(f'BHARAT BUILDER {a[1]} STAR 5', ' '.join(f'{x:02d}' for x in rk[:5]))
     elif a[0] == 'score':
         rows = [json.loads(l) for l in open(LOG)] if os.path.exists(LOG) else []

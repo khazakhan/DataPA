@@ -150,7 +150,7 @@ if __name__ == '__main__':
         done = [r for r in rows if 'result' in r]
         live = (f"Live: builder {sum(r['result'] in r['builder'] for r in done)} of {len(done)}, STAR 5 {sum(r['result'] in r['star5'] for r in done)} of {len(done)}."
                 if done else 'Live tally starts this round.')
-        if 'BHARAT BUILDER' not in t:
+        if '## 🟧⬜🟩 BHARAT BUILDER' not in t:
             open(a[2], 'a').write(section(rk, sc, a[1], live))
         print(f'BHARAT BUILDER {a[1]} STAR 5', ' '.join(f'{x:02d}' for x in rk[:5]))
     elif a[0] == 'score':

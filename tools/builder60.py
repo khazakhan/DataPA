@@ -169,12 +169,31 @@ def count_table(stars, bands, sup, head, root):
     """STAR 5 family count table (user AF160): op on ROOT, family, [ ] band mates, ( ) supports, counts."""
     lab = ('🟧 Saffron', '⬜ White', '🟩 Green')
     out = [f'\n### 🟧⬜🟩 STAR 5 family count' + (f': {head}' if head else ''),
-           f'| Band | STAR | Op on ROOT{f" {root:02d}" if root is not None else ""} | Family | [ ] same band | ( ) Other lists + Watch lines | [ ] | ( ) | Total |',
-           '|---|---|---|---|---|---|---|---|---|']
+           f'| Band | Link | STAR | Op on ROOT{f" {root:02d}" if root is not None else ""} | Family | [ ] same band | ( ) Other lists + Watch lines | [ ] | ( ) | Total |',
+           '|---|---|---|---|---|---|---|---|---|---|']
     grand = [0, 0]
     # user AF176: a STAR whose family is shared by another of the 15 STARs gets a green dot 🟢 instead of ●
     fams = [FAMILY[x] for st in stars for x in st]
     dot = lambda x: '🟢' if fams.count(FAMILY[x]) > 1 else '●'
+    # user AF207 screenshot: a Link column joins the STARs of the same family with a line (one lane per repeated family)
+    order = [FAMILY[x] for st in stars for x in st]
+    rows = []                                   # row sequence incl. the 3 band total rows (None)
+    for st in stars: rows += [FAMILY[x] for x in st] + [None]
+    lanes = [f for f in dict.fromkeys(order) if order.count(f) > 1]
+    B = '\u2800'                                # blank of one cell width (markdown keeps it)
+    def link(r):
+        cell = ''; hit = False                  # after the STAR's own lane the line runs on to the STAR (crossing others)
+        for f in lanes:
+            idx = [j for j, g in enumerate(rows) if g == f]
+            mid = idx[0] < r < idx[-1]
+            if rows[r] == f: cell += ('┌─' if r == idx[0] else '└─' if r == idx[-1] else '├─'); hit = True
+            elif hit: cell += '┼─' if mid else '──'
+            elif mid: cell += '│' + B
+            else: cell += B + B
+        return cell.rstrip(B) or '—'
+    ri = [0]
+    def nxt():
+        r = ri[0]; ri[0] += 1; return link(r)
     for i, (st, bd) in enumerate(zip(stars, bands)):
         sub = [0, 0]
         for x in st:
@@ -182,12 +201,14 @@ def count_table(stars, bands, sup, head, root):
             u = sorted(v for v in set(sup) if v != x and FAMILY[v] == FAMILY[x])
             sub[0] += len(b); sub[1] += len(u)
             fam = FAMILY[x] + ('-family' if FAMILY[x][0].isdigit() else '')
-            out.append(f"| {lab[i]} | {dot(x)}**{x:02d}** | {op_on(root, x) if root is not None else '—'} | {fam} | "
+            out.append(f"| {lab[i]} | {nxt()} | {dot(x)}**{x:02d}** | {op_on(root, x) if root is not None else '—'} | {fam} | "
                        f"{' '.join(f'{v:02d}' for v in b) or '—'} | {' '.join(f'{TRI[i]}{v:02d}' for v in u) or '—'} | "
                        f"{len(b)} | {len(u)} | **{len(b) + len(u)}** |")
-        out.append(f"| **{lab[i]} total** | | | | | | **{sub[0]}** | **{sub[1]}** | **{sub[0] + sub[1]}** |")
+        out.append(f"| **{lab[i]} total** | {nxt()} | | | | | | **{sub[0]}** | **{sub[1]}** | **{sub[0] + sub[1]}** |")
         grand[0] += sub[0]; grand[1] += sub[1]
-    out.append(f"| **All 15 STARs** | | | | | | **{grand[0]}** | **{grand[1]}** | **{grand[0] + grand[1]}** |")
+    out.append(f"| **All 15 STARs** | | | | | | | **{grand[0]}** | **{grand[1]}** | **{grand[0] + grand[1]}** |")
+    if lanes:
+        out.append('\n**Link (same family):** ' + ' · '.join(f"{f}{'-family' if f[0].isdigit() else ''} " + '-'.join(f'{x:02d}' for st in stars for x in st if FAMILY[x] == f) for f in lanes))
     return '\n'.join(out) + '\n'
 
 def bracket_set(rk, L):

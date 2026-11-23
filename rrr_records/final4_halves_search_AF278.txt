@@ -1,0 +1,44 @@
+logged rounds with the shown FINAL 4: 929 (Z19 .. AF277); half 1 = 464, half 2 = 465
+12720 candidate rules; chance 4% = 18.6 per half
+today's FINAL 4: half 1 20 | half 2 24  total 44 (4.7%)
+
+best 10 on half 1 (picked on half 1, then checked on half 2):
+   35 |  20           EP repeat top 1 + yx of final4 top 2 + lastop top 4
+   35 |  21           EP repeat top 1 + lastop top 1 + yx of final4 top 4
+   35 |  21           EP repeat top 2 + lastop top 1 + yx of final4 top 4
+   35 |  20           yx of final4 top 2 + EP repeat top 1 + lastop top 4
+   35 |  20           yx of final4 top 2 + lastop top 1 + EP repeat top 4
+   35 |  21           lastop top 1 + EP repeat top 1 + yx of final4 top 4
+   35 |  21           lastop top 1 + EP repeat top 2 + yx of final4 top 4
+   35 |  20           lastop top 1 + yx of final4 top 2 + EP repeat top 4
+   35 |  24           lastop top 2 + rule2 top 1 + EP repeat top 4
+   35 |  24           rule2 top 1 + lastop top 2 + EP repeat top 4
+
+reverse check, best 10 on half 2 (then checked on half 1):
+   22 |  38  WIN both final8 tail top 3 + ROOT repeat top 4
+   25 |  38  WIN both final8 tail top 3 + prime10 top 4
+   21 |  37  WIN both ROOT repeat top 1 + final8 tail top 4
+   21 |  37  WIN both ROOT repeat top 2 + final8 tail top 4
+   21 |  37  WIN both ROOT repeat top 3 + final8 tail top 4
+   25 |  37  WIN both final8 tail top 3 + ranked top 4
+   25 |  37  WIN both prime10 top 1 + final8 tail top 4
+   22 |  36  WIN both final8 tail top 3 + list vote top 4
+   22 |  36  WIN both list vote top 1 + final8 tail top 4
+   26 |  36  WIN both r28 top 1 + EP repeat top 4
+
+rules that beat today's FINAL 4 on both halves: 4999 of 12720
+for scale: 200 random 4-number picks on half 2 average 18.1, best 29
+   34 |  32  total 66 (7.1%)  prime4rev top 2 + EP repeat top 4
+   34 |  32  total 66 (7.1%)  prime10 top 1 + EP repeat top 1 + lastop top 4
+   34 |  32  total 66 (7.1%)  prime10 top 1 + EP repeat top 2 + lastop top 4
+   33 |  33  total 66 (7.1%)  prime10 top 1 + lastop top 2 + EP repeat top 4
+   34 |  32  total 66 (7.1%)  EP repeat top 1 + prime10 top 1 + lastop top 4
+   34 |  32  total 66 (7.1%)  EP repeat top 2 + prime10 top 1 + lastop top 4
+   33 |  33  total 66 (7.1%)  EP repeat top 1 + lastop top 2 + prime10 top 4
+   33 |  33  total 66 (7.1%)  lastop top 2 + prime10 top 1 + EP repeat top 4
+   33 |  33  total 66 (7.1%)  lastop top 2 + EP repeat top 1 + prime10 top 4
+   33 |  32  total 65 (7.0%)  final8 tail top 2 + EP repeat top 4
+
+rolling walk-forward on rounds 200-929 (729 rounds, chance 29.2):
+  rule picked from the past each block: 33 (4.5%)  per block [0, 5, 1, 2, 1, 1, 2, 3, 5, 5, 1, 1, 1, 5, 0]
+  today's FINAL 4 on the same rounds:   32 (4.4%)  per block [1, 2, 4, 1, 0, 0, 1, 1, 4, 5, 5, 1, 2, 5, 0]

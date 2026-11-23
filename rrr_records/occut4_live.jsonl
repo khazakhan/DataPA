@@ -287,4 +287,5 @@
 {"round": "AF247", "pick": [55, 56, 50, 53], "result": 5}
 {"round": "AF248", "pick": [89, 84, 87, 82], "result": 18}
 {"round": "AF249", "pick": [25, 21, 20, 22], "result": 46}
-{"round": "AF250", "pick": [93, 97, 95, 91], "result": null}
+{"round": "AF250", "pick": [93, 97, 95, 91], "result": 15}
+{"round": "AF251", "pick": [79, 71, 70, 74], "result": null}

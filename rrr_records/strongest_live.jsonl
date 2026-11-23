@@ -856,4 +856,5 @@
 {"round": "AF203", "nums": [60, 69, 65, 10], "result": 0}
 {"round": "AF204", "nums": [32, 43, 69, 85], "result": 59}
 {"round": "AF205", "nums": [4, 30, 92, 98], "result": 99}
-{"round": "AF206", "nums": [33, 54, 45, 55]}
+{"round": "AF206", "nums": [33, 54, 45, 55], "result": 37}
+{"round": "AF207", "nums": [0, 55, 1, 38]}

@@ -1009,3 +1009,4 @@
 {"round": "AF248", "result": 18, "held": {"step": false, "trf4": false, "tryx": false, "fcut": false, "same": false}, "sizes": {"step": 15, "trf4": 4, "tryx": 4, "fcut": 6, "same": 0}}
 {"round": "AF249", "result": 46, "held": {"step": false, "trf4": false, "tryx": false, "fcut": false, "same": false}, "sizes": {"step": 16, "trf4": 4, "tryx": 4, "fcut": 6, "same": 1}}
 {"round": "AF250", "result": 15, "held": {"step": false, "trf4": false, "tryx": false, "fcut": false, "same": false}, "sizes": {"step": 14, "trf4": 4, "tryx": 4, "fcut": 6, "same": 1}}
+{"round": "AF251", "result": 79, "held": {"step": false, "trf4": false, "tryx": true, "fcut": false, "same": false}, "sizes": {"step": 14, "trf4": 2, "tryx": 4, "fcut": 7, "same": 1}}

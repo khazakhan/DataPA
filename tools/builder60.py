@@ -245,6 +245,41 @@ def supports(L):
     return {x for k, ns in (L or {}).items() if k.startswith(('O:', 'W:')) for x in ns}
 
 TRI = ('🟧', '⬜', '🟩')   # saffron / white / green
+MKS = 'rrr_records/mks4_live.jsonl'
+def mks4(t):
+    """FINAL 4 TEST (user AF239, display only): MASTER + KING PICK + STRONG 20 #1 + FINAL 4 #2, filled from FINAL 10.
+    Tested on 415 logged rounds: 30 (20|10) vs current FINAL 4 23 (10|13); 2nd half lost, so it is only watched live."""
+    m10 = re.search(r'\*\*OCJP FINAL 10:\*\* ([\d · ]+)', t)
+    mk = re.search(r'\| KING PICK = ARROW[^|]*\| \*\*(\d\d)\*\*', t)
+    ms = re.search(r'\| STRONG 20 #1 \(one number\) \| \*\*(\d\d)\*\*', t)
+    if not (m10 and mk and ms): return None
+    f10 = [int(x) for x in re.findall(r'\d\d', m10.group(1))]
+    if len(f10) < 2: return None
+    src = [(f10[0], 'MASTER'), (int(mk.group(1)), 'KING PICK'), (int(ms.group(1)), 'STRONG 20 #1'), (f10[1], 'FINAL 4 #2')]
+    src += [(x, f'FINAL 10 #{i + 1}') for i, x in enumerate(f10)]
+    out = []
+    for x, why in src:
+        if len(out) == 4: break
+        if x not in [y for y, _ in out]: out.append((x, why))
+    return out
+
+def mks4_live():
+    rows = [json.loads(l) for l in open(MKS)] if os.path.exists(MKS) else []
+    d = [r for r in rows if r.get('result') is not None]
+    return sum(r['result'] in r['pick'] for r in d), len(d)
+
+def mks4_section(t):
+    p = mks4(t)
+    if not p: return ''
+    head, root = ep_root(t)
+    h, n = mks4_live()
+    out = [f'\n### 🧪 FINAL 4 TEST: MASTER + KING PICK + STRONG 20 #1 + #2 (display only)' + (f': {head}' if head else ''),
+           f'| # | Number | Op on ROOT{f" {root:02d}" if root is not None else ""} | From |', '|---|---|---|---|']
+    for i, (x, why) in enumerate(p, 1):
+        out.append(f'| {i} | **{x:02d}** | {op_on(root, x) if root is not None else "—"} | {why} |')
+    out.append(f'\n**FINAL 4 TEST:** ' + ' · '.join(f'{x:02d}' for x, _ in p) + f' (live {h} of {n}; tested 415 logged rounds: 30 vs current FINAL 4 23, but lost the 2nd half 10 vs 13, so watched live before any switch; FINAL 4 is not changed by it)')
+    return '\n'.join(out) + '\n'
+
 def section(rk, sc, rnd, live, L=None, t=''):
     """Each band gets its own STAR 5 (its 5 best-ranked numbers), shown ●bold like the saffron STAR 5 (user AF150)."""
     top = sorted(rk[:K])
@@ -252,7 +287,7 @@ def section(rk, sc, rnd, live, L=None, t=''):
     stars = [b[:5] for b in bands]
     allstar = set(x for st in stars for x in st)
     head, root = ep_root(t)
-    out = [f'\n## 🟧⬜🟩 BHARAT BUILDER {K}: every list on this page votes, each list weighted by its own past record (for {rnd})' + (f': {head}' if head else '')]
+    out = [mks4_section(t) + f'\n## 🟧⬜🟩 BHARAT BUILDER {K}: every list on this page votes, each list weighted by its own past record (for {rnd})' + (f': {head}' if head else '')]
     sup = supports(L)
     out.append(f'**STAR 5 pickers:** ' + star_row(stars[0], bands[0], sup, TRI[0]))
     for c, nm, st, bd in zip(TRI[1:], ('White', 'Green'), stars[1:], bands[1:]):
@@ -294,7 +329,13 @@ if __name__ == '__main__':
         done = [r for r in rows if 'result' in r]
         live = (f"Live: builder {sum(r['result'] in r['builder'] for r in done)} of {len(done)}, STAR 5 {sum(r['result'] in r['star5'] for r in done)} of {len(done)}" + (f"; White STAR 5 {sum(r['result'] in r['white5'] for r in W)} of {len(W)}, Green STAR 5 {sum(r['result'] in r['green5'] for r in W)} of {len(W)}" if (W := [r for r in done if 'white5' in r]) else '') + "."
                 if done else 'Live tally starts this round.')
-        i = t.find('\n## 🟧⬜🟩 BHARAT BUILDER')
+        mp = mks4(t)
+        if mp:
+            M = [json.loads(l) for l in open(MKS)] if os.path.exists(MKS) else []
+            M = [r for r in M if r['round'] != a[1]] + [{'round': a[1], 'pick': [x for x, _ in mp], 'result': None}]
+            open(MKS, 'w').write(''.join(json.dumps(r) + '\n' for r in M))
+        i = t.find('\n### 🧪 FINAL 4 TEST')
+        if i < 0: i = t.find('\n## 🟧⬜🟩 BHARAT BUILDER')
         if i >= 0: t = t[:i]
         open(a[2], 'w').write(t.rstrip('\n') + '\n' + section(rk, sc, a[1], live, L, t))
         print(f'BHARAT BUILDER {a[1]} STAR 5', ' '.join(f'{x:02d}' for x in rk[:5]))
@@ -303,6 +344,12 @@ if __name__ == '__main__':
         for r in rows:
             if r['round'] == a[1] and 'result' not in r: r['result'] = int(a[2])
         open(LOG, 'w').write(''.join(json.dumps(r) + '\n' for r in rows))
+        if os.path.exists(MKS):
+            M = [json.loads(l) for l in open(MKS)]
+            for r in M:
+                if r['round'] == a[1] and r.get('result') is None: r['result'] = int(a[2])
+            open(MKS, 'w').write(''.join(json.dumps(r) + '\n' for r in M))
+            print('FINAL 4 TEST live %d of %d' % mks4_live())
         done = [r for r in rows if 'result' in r]
         W = [r for r in done if 'white5' in r]
         print(f"BHARAT BUILDER live {sum(r['result'] in r['builder'] for r in done)} of {len(done)}; STAR 5 {sum(r['result'] in r['star5'] for r in done)} of {len(done)}; White STAR 5 {sum(r['result'] in r['white5'] for r in W)} of {len(W)}; Green STAR 5 {sum(r['result'] in r['green5'] for r in W)} of {len(W)}")

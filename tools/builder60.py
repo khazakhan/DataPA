@@ -165,13 +165,15 @@ def ep_root(t):
     if not m: return '', None
     return m.group(0), int(m.group(3))
 
-def count_table(stars, bands, sup, head, root):
+def count_table(stars, bands, sup, head, root, f4=(), test=()):
     """STAR 5 family count table (user AF160): op on ROOT, family, [ ] band mates, ( ) supports, counts."""
     lab = ('🟧 Saffron', '⬜ White', '🟩 Green')
     out = [f'\n### 🟧⬜🟩 STAR 5 family count' + (f': {head}' if head else ''),
            f'| Band | Link | STAR | Op on ROOT{f" {root:02d}" if root is not None else ""} | Family | [ ] same band | ( ) Other lists + Watch lines | [ ] | ( ) | Total |',
            '|---|---|---|---|---|---|---|---|---|---|']
     grand = [0, 0]
+    # user AF246 screenshot: mark the OCJP FINAL 4 numbers ⭕ and the FINAL 4 TEST-only numbers 🔥 inside [ ] and ( )
+    mk = lambda v: (f'⭕**{v:02d}**' if v in f4 else f'🔥**{v:02d}**' if v in test else f'{v:02d}')
     # user AF176: a STAR whose family is shared by another of the 15 STARs gets a green dot 🟢 instead of ●
     fams = [FAMILY[x] for st in stars for x in st]
     dot = lambda x: '🟢' if fams.count(FAMILY[x]) > 1 else '●'
@@ -202,11 +204,13 @@ def count_table(stars, bands, sup, head, root):
             sub[0] += len(b); sub[1] += len(u)
             fam = FAMILY[x] + ('-family' if FAMILY[x][0].isdigit() else '')
             out.append(f"| {lab[i]} | {nxt()} | {dot(x)}**{x:02d}** | {op_on(root, x) if root is not None else '—'} | {fam} | "
-                       f"{' '.join(f'{v:02d}' for v in b) or '—'} | {' '.join(f'{TRI[i]}{v:02d}' for v in u) or '—'} | "
+                       f"{' '.join(mk(v) for v in b) or '—'} | {' '.join(f'{TRI[i]}{mk(v)}' for v in u) or '—'} | "
                        f"{len(b)} | {len(u)} | **{len(b) + len(u)}** |")
         out.append(f"| **{lab[i]} total** | {nxt()} | | | | | | **{sub[0]}** | **{sub[1]}** | **{sub[0] + sub[1]}** |")
         grand[0] += sub[0]; grand[1] += sub[1]
     out.append(f"| **All 15 STARs** | | | | | | | **{grand[0]}** | **{grand[1]}** | **{grand[0] + grand[1]}** |")
+    if f4 or test:
+        out.append('\n**Marks in [ ] and ( ):** ⭕ = OCJP FINAL 4 (' + ' '.join(f'{x:02d}' for x in f4) + ')' + (' · 🔥 = FINAL 4 TEST only (' + ' '.join(f'{x:02d}' for x in test if x not in f4) + ')' if [x for x in test if x not in f4] else ''))
     if lanes:
         out.append('\n**Link (same family):** ' + ' · '.join(f"{f}{'-family' if f[0].isdigit() else ''} " + '-'.join(f'{x:02d}' for st in stars for x in st if FAMILY[x] == f) for f in lanes))
     return '\n'.join(out) + '\n'
@@ -292,7 +296,10 @@ def section(rk, sc, rnd, live, L=None, t=''):
     out.append(f'**STAR 5 pickers:** ' + star_row(stars[0], bands[0], sup, TRI[0]))
     for c, nm, st, bd in zip(TRI[1:], ('White', 'Green'), stars[1:], bands[1:]):
         out.append(f'**{c} {nm} STAR 5:** ' + star_row(st, bd, sup, c))
-    out.append(count_table(stars, bands, sup, head, root))
+    m10 = re.search(r'\*\*OCJP FINAL 10:\*\* ([\d · ]+)', t or '')
+    f4 = [int(x) for x in re.findall(r'\d\d', m10.group(1))][:4] if m10 else []
+    tp = mks4(t) if t else None
+    out.append(count_table(stars, bands, sup, head, root, f4, [x for x, _ in tp] if tp else []))
     out.append('\n| Band | Numbers |\n|---|---|')
     for i, (c, band) in enumerate(zip(TRI, bands)):
         name = ('🟧 Saffron: rank 1-20 (strongest)', '⬜ White: rank 21-40', f'🟩 Green: rank 41-{K}')[i]

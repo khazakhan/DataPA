@@ -10,6 +10,7 @@ pages (walk-forward, nothing from the round being scored).  Numbers are ranked b
 import re, sys, json, os, glob, math
 K = 60           # builder size, set from the backtest (see backtest output)
 A = 20.0         # shrink toward chance
+DECAY = 0.99     # recent pages count more (user AF199 'make stronger'): walk-forward top 4 43->52, STAR 5 55->61, top 60 607->619 of 971; 0.985-0.992 all gain
 LOG = 'rrr_records/builder60_live.jsonl'
 SKIP = {'Number', 'List', 'Line', 'Pick', 'Where', 'Model', '#'}
 
@@ -99,6 +100,7 @@ def rank(L, ST):
     return sorted(range(100), key=lambda x: (-sc[x], -cnt[x], x)), sc, w
 
 def learn(ST, L, r):
+    for k in list(ST): ST[k] = (ST[k][0] * DECAY, ST[k][1] * DECAY)
     for k, ns in L.items():
         h, e = ST.get(k, (0, 0.0)); ST[k] = (h + (r in ns), e + len(ns))
 
@@ -200,7 +202,7 @@ BIG = {'80-number list', 'OPEN set 3', 'CLOSE set 3', 'CLOSE weak 3', 'OPEN digi
 def gap8(rk, L):
     """GAP FILL 8 (user AF166: 44 was left out of the builder but stood on Rule 28 / STRONGEST FAMILY / yx CUT 12):
     the 8 numbers the builder leaves out that stand on the most page lists (2 or more; the big digit lists and the
-    80-number list not counted).  Walk-forward 938 pages: 86 vs 73.2 by chance (42 vs 35.9 and 44 vs 37.4 per half). Display only."""
+    80-number list not counted).  Walk-forward 971 pages (with DECAY 0.99 ranking): 80 vs 76.7 by chance (42 vs 37.9 and 38 vs 38.8 per half) - at chance. Old 938-page test without decay: 86 vs 73.2. Display only."""
     out = set(rk[K:]) if rk else set()
     where = {x: [k.split(':', 1)[-1] for k, ns in (L or {}).items() if k not in BIG and x in ns] for x in out}
     g = [x for x in out if len(where[x]) >= 2]
@@ -214,7 +216,7 @@ def gap_table(g, head, root):
     for i, (x, w) in enumerate(g, 1):
         fam = FAMILY[x] + ('-family' if FAMILY[x][0].isdigit() else '')
         out.append(f"| {i} | 🔳**{x:02d}** | {op_on(root, x) if root is not None else '—'} | {fam} | {len(w)} | {' · '.join(w)} |")
-    out.append(f"\n**GAP FILL 8:** " + ' '.join(f'🔳{x:02d}' for x, _ in g) + " (display only; walk-forward 938 pages held 86 vs 73.2 by chance; nothing above is changed by it)")
+    out.append(f"\n**GAP FILL 8:** " + ' '.join(f'🔳{x:02d}' for x, _ in g) + " (display only; walk-forward 971 pages held 80 vs 76.7 by chance, at chance; nothing above is changed by it)")
     return '\n'.join(out) + '\n'
 
 def supports(L):

@@ -1180,3 +1180,4 @@
 {"round": "AF213", "ep": 51, "result": 51, "x_op": "nc", "y_op": "nc", "last": {"pos": 8, "src": "85->51", "old": ["c+2", "c+1"], "new": ["-1", "+1"]}, "x_from": [], "y_from": [], "check": true}
 {"round": "AF214", "ep": 14, "result": 13, "x_op": "nc", "y_op": "-1", "last": {"pos": 2, "src": "78->14", "old": ["c-1", "c+1"], "new": ["-1", "-2"]}, "x_from": [], "y_from": ["new x as is", "new y step switched", "old x cut switched"], "check": true}
 {"round": "AF215", "ep": 11, "result": 8, "x_op": "-1", "y_op": "c+2", "last": {"pos": 2, "src": "64->11", "old": ["cut", "c+2"], "new": ["-2", "-1"]}, "x_from": ["new x step switched", "new y as is"], "y_from": ["old y as is"], "check": true}
+{"round": "AF216", "ep": 39, "result": 13, "x_op": "-2", "y_op": "c-1", "last": {"pos": 5, "src": "21->39", "old": ["+1", "-2"], "new": ["c+2", "cut"]}, "x_from": ["old y as is"], "y_from": [], "check": true}

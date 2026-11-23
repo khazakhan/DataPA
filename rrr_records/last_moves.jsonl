@@ -1183,3 +1183,4 @@
 {"round": "AF216", "ep": 39, "result": 13, "x_op": "-2", "y_op": "c-1", "last": {"pos": 5, "src": "21->39", "old": ["+1", "-2"], "new": ["c+2", "cut"]}, "x_from": ["old y as is"], "y_from": [], "check": true}
 {"round": "AF217", "ep": 8, "result": 49, "x_op": "c-1", "y_op": "+1", "last": {"pos": 3, "src": "11->08", "old": ["-1", "c+2"], "new": ["-2", "c-2"]}, "x_from": ["new y step switched", "old x cut switched"], "y_from": ["old x sign flipped"], "check": true}
 {"round": "AF218", "ep": 86, "result": 28, "x_op": "c-1", "y_op": "+2", "last": {"pos": 2, "src": "53->86", "old": ["c-2", "c-2"], "new": ["+2", "c+2"]}, "x_from": ["old x step switched", "old y step switched"], "y_from": ["new x as is", "new y cut switched"], "check": true}
+{"round": "AF219", "ep": 34, "result": 63, "x_op": "c-2", "y_op": "-1", "last": {"pos": 8, "src": "11->34", "old": ["+2", "c-2"], "new": ["+2", "c+1"]}, "x_from": ["old y as is"], "y_from": [], "check": true}

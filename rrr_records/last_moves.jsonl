@@ -1269,3 +1269,4 @@
 {"round": "AF302", "ep": 2, "result": 90, "x_op": "-1", "y_op": "-2", "last": {"pos": 3, "src": "85->02", "old": ["+2", "c+2"], "new": ["-2", "c+1"]}, "x_from": ["new x step switched"], "y_from": ["new x as is", "old x sign flipped"], "check": true}
 {"round": "AF303", "ep": 57, "result": 50, "x_op": "nc", "y_op": "c-2", "last": {"pos": 5, "src": "26->57", "old": ["c-2", "+1"], "new": ["c-1", "c+2"]}, "x_from": [], "y_from": ["new x step switched", "new y sign flipped", "old x as is"], "check": true}
 {"round": "AF304", "ep": 83, "result": 23, "x_op": "c-1", "y_op": "nc", "last": {"pos": 2, "src": "09->83", "old": ["-2", "c-1"], "new": ["+1", "+2"]}, "x_from": ["old y as is"], "y_from": [], "check": true}
+{"round": "AF305", "ep": 59, "result": 54, "x_op": "nc", "y_op": "cut", "last": {"pos": 8, "src": "37->59", "old": ["+2", "+2"], "new": ["c-2", "c+1"]}, "x_from": [], "y_from": [], "check": true}

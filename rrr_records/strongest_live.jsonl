@@ -964,4 +964,5 @@
 {"round": "AF311", "nums": [8, 3, 99, 49], "result": 50}
 {"round": "AF312", "nums": [16, 52, 5, 0], "result": 96}
 {"round": "AF313", "nums": [2, 82, 87, 48], "result": 41}
-{"round": "AF314", "nums": [87, 41, 46, 37]}
+{"round": "AF314", "nums": [87, 41, 46, 37], "result": 80}
+{"round": "AF315", "nums": [35, 7, 53, 62]}

@@ -480,4 +480,5 @@
 {"round": "AF301", "pick": [42], "result": 66}
 {"round": "AF302", "pick": [20], "result": 90}
 {"round": "AF303", "pick": [54], "result": 50}
-{"round": "AF304", "pick": [14], "result": null}
+{"round": "AF304", "pick": [14], "result": 23}
+{"round": "AF305", "pick": [87], "result": null}

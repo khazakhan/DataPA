@@ -918,4 +918,5 @@
 {"round": "AF316", "digits": [1, 7, 9], "result": 31}
 {"round": "AF317", "digits": [4, 5, 9], "result": 69}
 {"round": "AF318", "digits": [2, 4, 5], "result": 8}
-{"round": "AF319", "digits": [2, 4, 9]}
+{"round": "AF319", "digits": [2, 4, 9], "result": 12}
+{"round": "AF320", "digits": [4, 7, 9]}

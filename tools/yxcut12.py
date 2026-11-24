@@ -11,7 +11,7 @@ if sys.argv[1] == 'score':
     for r in L:
         if r['round'] == sys.argv[2]: r['result'] = int(sys.argv[3])
 else:
-    m = re.search(r'\| yx CUT 12 \(tens cut, units cut, both cut of each yx partner\) \| ([\d ·]+) \|', open(sys.argv[3]).read())
+    m = re.search(r'\| yx CUT 12 \(tens cut, units cut, both cut of each yx partner\) \| ([\d ·]*) \|', open(sys.argv[3]).read())
     L = [r for r in L if r['round'] != sys.argv[2]] + [dict(round=sys.argv[2], pick=[int(x) for x in re.findall(r'\d\d', m.group(1))], result=None)]
 open(P, 'w').write(''.join(json.dumps(r) + '\n' for r in L))
 d = [r for r in L if r['result'] is not None]

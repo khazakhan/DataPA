@@ -1208,6 +1208,21 @@ def _open_close(rk, N=10, k=3):
     # 13.0% W, 3 digits 35-37%, vs chance 10/30% and the old OPEN 8 of 96 live);
     # the EP's tens digit goes last.  CLOSE: units steps are flat -> unchanged.
     av = _tens_avoid()
+    # OPEN on normal charts (user AF297 "OPEN also trustworthy", 2026-11-24; tools/open_step_study.py):
+    # the chart's own tens steps (how often the tens digit moved by +0..+9 from one number to the
+    # next) put on the last number's tens digit, ties broken by the OCJP top-10 vote.  1,025 logged
+    # normal-chart rounds: top 1 58|59 vs old 57|47 per half, top 3 163|175 vs old 157|155 (chance
+    # 51 / 154 per half); chart-only walk-forward 60,683 predictions on 23 normal charts 10.8% / 30.9%
+    # vs chance 10 / 30 (old OCJP vote 10.1% / 30.4% on logged rounds).  Small edge, never strong.
+    # CLOSE unchanged (no method beat the OCJP vote in both halves).
+    _fl = _RRR3_PREV.get('flat') or []
+    if av is None and len(_fl) >= 100:
+        _ts = [0] * 10
+        for a, b in zip(_fl, _fl[1:]):
+            _ts[(b // 10 - a // 10) % 10] += 1
+        _e = _fl[-1] // 10
+        _vo = {d: i for i, d in enumerate(out[0])}
+        out[0] = sorted(range(10), key=lambda d: (-_ts[(d - _e) % 10], _vo.get(d, 10 + d)))
     if av is not None:
         flat = _RRR3_PREV.get('flat') or []
         ts = {}
@@ -1729,7 +1744,7 @@ def show_final_box():
            f"      live OPEN {RRR_LIVE.get('rrr3_open1_hits', 0)}/{RRR_LIVE.get('rrr3_open3_hits', 0)} of {RRR_LIVE.get('rrr3_open1_rounds', 0)}, "
            f"CLOSE {RRR_LIVE.get('rrr3_close1_hits', 0)}/{RRR_LIVE.get('rrr3_close3_hits', 0)} of {RRR_LIVE.get('rrr3_close1_rounds', 0)} (1 digit / 3 digits);"
            + (" OPEN from the chart's tens steps, EP tens last (walk-forward 12.7-16.2% / 35-37%);"
-              if _tens_avoid() is not None else " OPEN history 1293 rounds 12.9% / 33.8%;")
+              if _tens_avoid() is not None else " OPEN from the chart's tens steps (from AF297; 1,025 logged rounds 11.4% / 33.0%);")
            + " CLOSE history 13.1% / 34.1% (chance 10% / 30%). Display only.",
            f"  OPEN full order: {' '.join(map(str, _ocf[0]))}      CLOSE full order: {' '.join(map(str, _ocf[1]))}",
            f"  OPEN x CLOSE grid (9): {' '.join(f'{n:02d}' for n in _ocg)}   live {RRR_LIVE.get('rrr3_ocgrid_hits', 0)} of {RRR_LIVE.get('rrr3_ocgrid_rounds', 0)}"

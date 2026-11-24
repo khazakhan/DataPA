@@ -1,7 +1,7 @@
 """Frozen 7-round holdout test for one data set (user AF338: 24 data sets).
 
 The last K numbers of the set are hidden. For each of them the unchanged
-script is run on everything BEFORE it (a local run, so no live record changes)
+script is run on everything BEFORE it (in a throwaway sandbox copy, so no live record changes)
 and its picks are compared with the hidden number.
 Pass = OCJP FINAL 4 holds the number in >= 4 of the 7 rounds.
 
@@ -11,6 +11,8 @@ Result is also appended to holdout_sets/results.jsonl.
 import json
 import os
 import re
+import shutil
+import tempfile
 import subprocess
 import sys
 
@@ -35,10 +37,35 @@ def truncate(lines, drop):
     return '\n'.join(out) + '\n'
 
 
+REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+LINKED = {'.git', 'rrr_outputs', 'rrr_datasets', 'holdout_sets'}
+
+
+def sandbox():
+    """Fresh throwaway copy of the project: the script may log to its own
+    rrr_records there, the real live records are never touched, and every
+    round starts from the same frozen records."""
+    d = tempfile.mkdtemp(prefix='holdout_')
+    for name in os.listdir(REPO):
+        src = os.path.join(REPO, name)
+        if name in LINKED:
+            if name != '.git':
+                os.symlink(src, os.path.join(d, name))
+        elif os.path.isdir(src):
+            shutil.copytree(src, os.path.join(d, name), symlinks=True)
+        else:
+            shutil.copy2(src, d)
+    return d
+
+
 def picks(text):
     env = {k: v for k, v in os.environ.items() if k != 'CHAT_PAGE_ROUND'}
-    p = subprocess.run([sys.executable, 'DataProcessing.py'], input=text + 'END\n',
-                       capture_output=True, text=True, env=env)
+    box = sandbox()
+    try:
+        p = subprocess.run([sys.executable, 'DataProcessing.py'], input=text + 'END\n',
+                           capture_output=True, text=True, env=env, cwd=box)
+    finally:
+        shutil.rmtree(box, ignore_errors=True)
     o = ANSI.sub('', p.stdout)
     nums = lambda s: [int(x) for x in re.findall(r'\b\d{2}\b', s)]
     f4 = re.search(r'FINAL 4 for the next round: ([\d, ]+)', o)

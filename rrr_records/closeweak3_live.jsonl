@@ -910,4 +910,5 @@
 {"round": "AF308", "digits": [4, 6, 7], "result": 13}
 {"round": "AF309", "digits": [2, 3, 6], "result": 68}
 {"round": "AF310", "digits": [6, 8, 9], "result": 49}
-{"round": "AF311", "digits": [3, 4, 7]}
+{"round": "AF311", "digits": [3, 4, 7], "result": 50}
+{"round": "AF312", "digits": [4, 5, 9]}

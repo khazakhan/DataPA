@@ -8103,6 +8103,46 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                 _nm4 = dict(ocjp_final4)
                 ocjp_final4 = [(v_, ['OPEN 1 x CLOSE 4'] + (_nm4.get(v_) or [k_ for k_, l_ in f4_lists.items() if v_ in l_]))
                                for v_ in (_of[0] * 10 + u_ for u_ in _cf[:4])]
+            # ADAPTIVE RECENT 4 (2026-11-25, tools/adapt_recent.py, user: 'implement the hit logic,
+            # then test the improvement on new sets'): RECENT 4 = the 4 most recently seen numbers
+            # other than the EP.  On THIS chart's last 400 logged rounds, if RECENT 4 held the result
+            # more often than OCJP FINAL 4, FINAL 4 = RECENT 4 this round; else FINAL 4 unchanged.
+            # Learned on Sets 1-5 (410 -> 473 hits), frozen, then first unseen test Set 6:
+            # 129 -> 149 (halves 59|70 -> 78|71).  OFF until Sets 7+8 confirm; switch on with
+            # RRR3_ADAPT_RECENT=1.  Needs the round name (CHAT_PAGE_ROUND) and >= 100 logged rounds
+            # whose results line up with the chart's last numbers, otherwise it does nothing.
+            _flat_ar = _RRR3_PREV.get('flat') or []
+            def _recent4(seq):
+                out_ = []
+                for v_ in reversed(seq):
+                    if v_ != seq[-1] and v_ not in out_:
+                        out_.append(v_)
+                    if len(out_) == 4:
+                        break
+                return out_
+            _rnd_ar = re.match(r'[A-Z]+', os.environ.get('CHAT_PAGE_ROUND', '').upper())
+            if (os.environ.get('RRR3_ADAPT_RECENT') and _rnd_ar and len(ocjp_final4) == 4
+                    and os.path.exists('rrr_records/live.jsonl')):
+                import json as _json_ar
+                _recs_ar = []
+                for l_ in open('rrr_records/live.jsonl'):
+                    try:
+                        r_ = _json_ar.loads(l_)
+                    except ValueError:
+                        continue
+                    if (re.fullmatch(_rnd_ar.group() + r'\d+', str(r_.get('round', '')))
+                            and r_.get('result') is not None and len(r_.get('final8') or []) >= 4):
+                        _recs_ar.append(r_)
+                _recs_ar = _recs_ar[-400:]
+                _n_ar = len(_recs_ar)
+                if _n_ar >= 100 and [r_['result'] for r_ in _recs_ar] == _flat_ar[-_n_ar:]:
+                    _base_ar = len(_flat_ar) - _n_ar
+                    _rh = sum(r_['result'] in _recent4(_flat_ar[:_base_ar + i_])
+                              for i_, r_ in enumerate(_recs_ar))
+                    _fh = sum(r_['result'] in r_['final8'][:4] for r_ in _recs_ar)
+                    if _rh > _fh:
+                        ocjp_final4 = [(v_, [f'RECENT 4 (last {_n_ar}: {_rh} vs FINAL 4 {_fh})'])
+                                       for v_ in _recent4(_flat_ar)]
             if os.environ.get('RRR3_F4DUMP'):
                 # audit dump (2026-11-05): the FINAL 4 inputs, for tools/final4_audit.py
                 import json

@@ -30,7 +30,9 @@ def f4_for(text):
     try:
         dump = os.path.join(box, 'f4.json')
         env = {k: v for k, v in os.environ.items() if k != 'CHAT_PAGE_ROUND'}
-        env.update(CHAT_PAGE_OFF='1', RRR3_F4DUMP=dump)
+        # OMA_OFF: the ONE-MEN-ARMY box re-runs the script in the real repo (tools/replay_collect.py) and
+        # that inner run wrote the dump last; FINAL 4 identical without it (4 of 4 Set 6 rounds), 7 s -> 3 s
+        env.update(CHAT_PAGE_OFF='1', OMA_OFF='1', RRR3_F4DUMP=dump)
         subprocess.run([sys.executable, 'DataProcessing.py'], input=text + 'END\n',
                        capture_output=True, text=True, env=env, cwd=box, timeout=600)
         if not os.path.exists(dump):

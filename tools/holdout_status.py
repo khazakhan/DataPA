@@ -3,7 +3,8 @@ Per set: rounds done / to do, FINAL 4 hits so far, and whether a test process is
 Usage: python3 tools/holdout_status.py"""
 import json, os, subprocess
 START = {'24': 574}
-run = subprocess.run(['pgrep', '-af', 'python3 tools/allrounds.py holdout_sets/set'], capture_output=True, text=True).stdout
+run = '\n'.join(l for l in subprocess.run(['pgrep', '-af', 'allrounds.py holdout_sets/set'], capture_output=True, text=True).stdout.splitlines()
+                if l.split(None, 1)[1].startswith('python3 tools/allrounds.py'))   # real runs, not queue waiters
 print('| Set | Done | Total | FINAL 4 hits | Rate | State |\n|---|---|---|---|---|---|')
 for n in range(1, 25):
     s = f'{n:02d}'; src = f'holdout_sets/set{s}.txt'
@@ -19,5 +20,5 @@ for n in range(1, 25):
             except ValueError: pass
     sc = [r for r in rows if r.get('result') is not None and r.get('final4')]
     hits = sum(r['result'] in r['final4'] for r in sc)
-    state = 'RUNNING' if f'set{s}.txt' in run else ('done' if len({r['pos'] for r in rows}) >= total else ('waiting' if not rows else 'PART'))
+    state = 'RUNNING' if f'set{s}.txt' in run else ('done' if len({r['pos'] for r in rows}) >= total else ('queued' if not rows else 'PART'))
     print(f'| {s} | {len({r["pos"] for r in rows})} | {total} | {hits} | {100*hits/max(len(sc),1):.2f}% | {state} |')

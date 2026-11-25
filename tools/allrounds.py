@@ -43,8 +43,20 @@ def f4_for(text):
         shutil.rmtree(box, ignore_errors=True)
 
 
+def _rows(out):
+    # tolerant read: a line cut short by a shutdown/kill is skipped (that round is simply re-run)
+    rows = []
+    if os.path.exists(out):
+        for l in open(out):
+            try:
+                rows.append(json.loads(l))
+            except ValueError:
+                pass
+    return rows
+
+
 def report(out, name):
-    rows = [json.loads(l) for l in open(out)] if os.path.exists(out) else []
+    rows = _rows(out)
     rows = sorted((r for r in rows if r['result'] is not None and r['final4']), key=lambda r: r['pos'])
     n = len(rows)
     if not n:
@@ -81,7 +93,7 @@ def main():
         report(out, name); return
     lines = open(a.path).readlines()
     toks = [t for l in lines for t in l.split()]
-    done = {json.loads(l)['pos'] for l in open(out)} if os.path.exists(out) else set()
+    done = {r['pos'] for r in _rows(out)}
     todo = [p for p in range(a.start, len(toks)) if p not in done]
     print(f'{name}: {len(toks)} numbers, rounds {a.start}..{len(toks) - 1}, {len(done)} done, {len(todo)} to go',
           flush=True)

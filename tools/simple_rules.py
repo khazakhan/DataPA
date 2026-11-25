@@ -20,14 +20,15 @@ def rules(h):
     out['cold100'] = sorted(range(100), key=lambda v: (Counter(h[-100:])[v], v))[:4]
     return out
 
-tot = Counter(); N = 0
-for n in sys.argv[1:]:
-    vals = [int(t) for t in open(f'holdout_sets/{n}.txt').read().split() if t.isdigit()]
-    hit = Counter(); cnt = 0
-    for p in range(100, len(vals)):
-        for k, pk in rules(vals[:p]).items():
-            hit[k] += vals[p] in pk
-        cnt += 1
-    N += cnt; tot.update(hit)
-    print(n, cnt, ' '.join(f'{k}={hit[k]} ({100*hit[k]/cnt:.1f}%)' for k in sorted(hit)))
-print('ALL', N, ' '.join(f'{k}={tot[k]} ({100*tot[k]/N:.2f}%)' for k in sorted(tot)))
+if __name__ == '__main__':
+    tot = Counter(); N = 0
+    for n in sys.argv[1:]:
+        vals = [int(t) for t in open(f'holdout_sets/{n}.txt').read().split() if t.isdigit()]
+        hit = Counter(); cnt = 0
+        for p in range(100, len(vals)):
+            for k, pk in rules(vals[:p]).items():
+                hit[k] += vals[p] in pk
+            cnt += 1
+        N += cnt; tot.update(hit)
+        print(n, cnt, ' '.join(f'{k}={hit[k]} ({100*hit[k]/cnt:.1f}%)' for k in sorted(hit)))
+    print('ALL', N, ' '.join(f'{k}={tot[k]} ({100*tot[k]/N:.2f}%)' for k in sorted(tot)))

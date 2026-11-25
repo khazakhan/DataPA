@@ -34,9 +34,9 @@ def f4_for(text):
         subprocess.run([sys.executable, 'DataProcessing.py'], input=text + 'END\n',
                        capture_output=True, text=True, env=env, cwd=box, timeout=600)
         if not os.path.exists(dump):
-            return None, None
+            return None, None, {}
         j = json.load(open(dump))
-        return j['final4'], j.get('rank12')
+        return j['final4'], j.get('rank12'), {k: j[k] for k in ('rank_all', 'strong') if k in j}
     finally:
         shutil.rmtree(box, ignore_errors=True)
 
@@ -90,9 +90,9 @@ def main():
         drop = len(toks) - pos          # hide toks[pos:] -> chart ends at toks[pos-1]
         hidden = toks[pos]
         prev = next((t for t in reversed(toks[:pos]) if t.isdigit()), None)
-        f4, rank12 = f4_for(truncate(lines, drop))
+        f4, rank12, extra = f4_for(truncate(lines, drop))
         rec = {'pos': pos, 'result': int(hidden) if hidden.isdigit() else None,
-               'final4': f4, 'king': int(prev) if prev else None, 'rank12': rank12}
+               'final4': f4, 'king': int(prev) if prev else None, 'rank12': rank12, **extra}
         with lock:
             with open(out, 'a') as fh:
                 fh.write(json.dumps(rec) + '\n')

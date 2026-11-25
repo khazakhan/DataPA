@@ -8101,7 +8101,15 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                                'lists': {k: list(v) for k, v in f4_lists.items()},
                                'tie': [list(strong), [v for v, _ in fam_seats], [v for _, _, l_ in nc_spec for v, _ in l_]],
                                'place': {str(k): v for k, v in f4_place.items()},
-                               'final4': [v for v, _ in ocjp_final4]}, fh)
+                               'final4': [v for v, _ in ocjp_final4],
+                               # test-only (tools/allrounds.py, 2026-11-25): the next-ranked numbers
+                               # in _rrr_final4's own order, to study slot-4 alternatives offline
+                               'rank12': sorted(o_uniq, key=lambda v: (
+                                   _tens_avoid() is not None and v // 10 == _tens_avoid(),
+                                   -sum(v in l_ for l_ in f4_lists.values()),
+                                   -sum(v in l_ for l_ in [strong, [v2 for v2, _ in fam_seats],
+                                                            [v2 for _, _, l2 in nc_spec for v2, _ in l2]]),
+                                   v))[:12]}, fh)
             f4_body = [f"★  OCJP FINAL 4  —  EP {grid_ep:02d}, ROOT={_root_op(ep)}  ★", ""]
             for k_, (v_, nm_) in enumerate(ocjp_final4):
                 f4_body.append(f"{k_ + 1}. {v_:02d} ({OP_ABBREV[find_op(ep // 10, v_ // 10)]}/{OP_ABBREV[find_op(ep % 10, v_ % 10)]})"

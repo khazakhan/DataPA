@@ -33,7 +33,10 @@ def f4_for(text):
         env.update(CHAT_PAGE_OFF='1', RRR3_F4DUMP=dump)
         subprocess.run([sys.executable, 'DataProcessing.py'], input=text + 'END\n',
                        capture_output=True, text=True, env=env, cwd=box, timeout=600)
-        return json.load(open(dump))['final4'] if os.path.exists(dump) else None
+        if not os.path.exists(dump):
+            return None, None
+        j = json.load(open(dump))
+        return j['final4'], j.get('rank12')
     finally:
         shutil.rmtree(box, ignore_errors=True)
 
@@ -68,9 +71,10 @@ def main():
     ap.add_argument('--start', type=int, default=100, help='first round = number index (needs history before it)')
     ap.add_argument('--jobs', type=int, default=4)
     ap.add_argument('--report', action='store_true')
+    ap.add_argument('--out', default=None, help='output jsonl (default holdout_sets/<set>_all.jsonl)')
     a = ap.parse_args()
     name = os.path.basename(a.path)[:-4]
-    out = f'holdout_sets/{name}_all.jsonl'
+    out = a.out or f'holdout_sets/{name}_all.jsonl'
     if a.report:
         report(out, name); return
     lines = open(a.path).readlines()
@@ -86,9 +90,9 @@ def main():
         drop = len(toks) - pos          # hide toks[pos:] -> chart ends at toks[pos-1]
         hidden = toks[pos]
         prev = next((t for t in reversed(toks[:pos]) if t.isdigit()), None)
-        f4 = f4_for(truncate(lines, drop))
+        f4, rank12 = f4_for(truncate(lines, drop))
         rec = {'pos': pos, 'result': int(hidden) if hidden.isdigit() else None,
-               'final4': f4, 'king': int(prev) if prev else None}
+               'final4': f4, 'king': int(prev) if prev else None, 'rank12': rank12}
         with lock:
             with open(out, 'a') as fh:
                 fh.write(json.dumps(rec) + '\n')

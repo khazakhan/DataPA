@@ -7996,7 +7996,17 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             # on 1006 logged rounds plain top 3 + EP repeat held 37 | 35 per half vs plain top 4
             # 30 | 26 (AE 11 vs 9 of 80).  The earlier drops (AC96, AD62) came from single 7-round
             # blocks (about 0.3 expected hits each) - judge it over 50+ rounds, not one block.
-            if len(ocjp_final4) == 4 and grid_ep not in [v_ for v_, _ in ocjp_final4]:
+            # SLOT-4 BY REPEAT RATE (2026-11-25, tools/slot4_study.py, user 'implement the hit logic
+            # for various data sets'): all-rounds walk-forward on 4 uploaded sets (7,455 rounds):
+            # EP repeat always 293 hits (3.93%); EP repeat only when the chart's own repeat rate
+            # (next == previous number) is >= 1.0%, else the plain vote #4: 322 (4.32%), no set
+            # worse, both halves up.  OFF by default until new sets (5+) confirm it; switch on
+            # with RRR3_SLOT4_T=0.010.  The live AF chart repeats 0.9%, so it would drop the EP.
+            _s4t = os.environ.get('RRR3_SLOT4_T')
+            _flat = _RRR3_PREV.get('flat') or []
+            _rep = (sum(a == b for a, b in zip(_flat, _flat[1:])) / max(len(_flat) - 1, 1)) if _flat else 1.0
+            if (len(ocjp_final4) == 4 and grid_ep not in [v_ for v_, _ in ocjp_final4]
+                    and not (_s4t and _rep < float(_s4t))):
                 ocjp_final4[3] = (grid_ep, ['EP repeat'])
             # ROOT AGAIN in slot 3 (2026-11-21, after AF29: ROOT repeated 6 rounds running
             # AF24-AF29 and the vote dropped the ROOT for AF30).  When the last result was

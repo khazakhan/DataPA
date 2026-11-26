@@ -9841,7 +9841,7 @@ def main():
         if root is None:
             continue
 
-        while True:
+        while os.environ.get('RRR_ASK'):   # result / operation questions only with RRR_ASK=1 (user 2026-11-26)
             result = prompt_result(root)
             if result is None:
                 break
@@ -9853,6 +9853,9 @@ def main():
             show_operation_result(root, ux, uy)
 
         print()
+        if not os.environ.get('RRR_ASK'):
+            print("\n  Done. (Run again for new data.)\n")
+            break
         try:
             again = input("  Load new data? (yes / no): ").strip().lower()
         except (EOFError, KeyboardInterrupt):

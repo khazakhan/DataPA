@@ -287,6 +287,41 @@ def final10_section(P, text):
             f"(live {h} of {len(done)}, chance 10%; history 54 of 329 = 16.4%). No hit is promised.\n")
 
 
+def vote40_section(P, D):
+    """NEW FINAL 4 + VOTE 40 in one table (user 2026-11-27: 'first New Final 4, under that Vote 40',
+    same in local and chat, EP and ROOT with operations).  VOTE 40 = top 40 of the script's own
+    vote ranking (DataProcessing dump 'vote40').  24-set test: 41.4% of rounds vs 40% chance;
+    7-round rows with 4+ hits 30.6% vs 29.0% (low-repeat charts 35%)."""
+    v40 = [int(v) for v in (D or {}).get('vote40') or []]
+    if not v40 or os.environ.get('VOTE40_OFF'):
+        return ''
+    f4 = [int(d['n']) for d in P['f4']]
+    ep, root = P['ep'], P['root']
+    hd = f"EP {ep} ({P['epop']}), ROOT {root} ({P['rootop']})"
+    ops = lambda v: f"{op_on(ep, v)} · {op_on(root, v)}"
+    out = [f"### 🆕 NEW FINAL 4 + VOTE 40: {hd}", "",
+           f"**1. NEW FINAL 4** (live; slot 4 = EP repeat only when the chart repeats ≥ 1%, else vote #4; "
+           f"24 sets: 2,416 of 54,709 = 4.42% vs 4% chance)", ""]
+    rows = [['#', 'Number', f'Op on EP {ep}', f'Op on ROOT {root}']]
+    for k, v in enumerate(f4, 1):
+        rows.append([str(k), f'**{v:02d}**', op_on(ep, v), op_on(root, v)])
+    out += [mk(rows), "",
+            f"**2. VOTE 40** (top 40 of the vote ranking; ⭕ = also in NEW FINAL 4; each cell = number "
+            f"(op on EP {ep} · op on ROOT {root}); 24 sets: 41.4% of rounds vs 40% chance, "
+            f"rows with 4+ of 7: 30.6% vs 29.0%)", ""]
+    rows = [['Rank'] + [f'+{c}' for c in range(1, 5)]]
+    for r in range(10):
+        cells = []
+        for c in range(4):
+            v = v40[r * 4 + c] if r * 4 + c < len(v40) else None
+            cells.append('' if v is None else (f"⭕**{v:02d}**" if v in f4 else f"**{v:02d}**") + f" ({ops(v)})")
+        rows.append([f"{r * 4 + 1}-{r * 4 + 4}"] + cells)
+    out += [mk(rows), "",
+            f"**VOTE 40 ascending:** {' '.join(f'{v:02d}' for v in sorted(v40))}", "",
+            "No hit is promised: NEW FINAL 4 is the main pick; VOTE 40 is the wide net (display only)."]
+    return '\n'.join(out) + '\n'
+
+
 def mk(rows):
     return '\n'.join('| ' + ' | '.join(str(c) for c in r) + ' |' if k != 1 else
                      '|' + '---|' * len(rows[0]) for k, r in enumerate([rows[0], None] + rows[1:]))
@@ -623,6 +658,9 @@ def build(series_round, prevP, prevD, P, res, curD=None):
             if rel_: yxc_ = f"{rel_} ({'CLOSE' if rel_ == cc_ else 'OPEN'} cut; yx is {yxn_} itself)"
         rows.append([rk, f"**{d['n']}**", d['op'], yxc_, f"{d['bxy']} / {d['byx']}", d['src'], d['votes']])
     A(mk(rows))
+    v40 = vote40_section(P, curD)
+    if v40:
+        A(v40)
     A(f"\n### FINAL 8 / Count 2+ / All / 80-number list: {hd}\n")
     A(f"**FINAL 8 (FINAL 4 + OPEN-STRONG / OC-STRONG / SHADOW):** " + ' · '.join(f'{n}' if k < 4 else f'**{n}** ({o})' for k, (n, o) in enumerate(P['f8'])))
     A(f"**FINAL 8 ascending:** {' '.join(sorted(n for n, _ in P['f8']))} (live {P['f8_live']})\n")
@@ -890,6 +928,8 @@ def _scan(md):
                 head = cells; continue
             if sec.startswith('Result check') or sec.startswith(RING) or sec.startswith('Watch lines'):   # not a ⭕ section
                 continue
+            if sec.startswith('🆕 NEW FINAL 4'):   # display of FINAL 4 + VOTE 40: not a list of its own, no votes
+                continue
             for i, c in enumerate(cells[1:], 1):
                 if head[i].lower().startswith(('live', 'votes', 'from which', 'source', 'op on', 'times', 'places')):
                     continue
@@ -897,7 +937,7 @@ def _scan(md):
                 pre = '' if sec.startswith('Other lists') else re.sub(r' with operations$', '', sec) + ' · '
                 for v, t, op in grab(c, bool(re.fullmatch(r'[\d\s·*]+', strip_marks(c.replace('**', ''))))):
                     yield pre + lab, v, t, op
-        elif ln.startswith('**') and ':**' in ln and not ln.startswith('**Colour count'):
+        elif ln.startswith('**') and ':**' in ln and not ln.startswith('**Colour count') and not sec.startswith('🆕 NEW FINAL 4'):
             name, rest = ln.split(':**', 1)
             rest = re.sub(r'\(live[^)]*\)', '', rest)
             nm = name.strip('*')

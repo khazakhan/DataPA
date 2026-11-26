@@ -8184,6 +8184,24 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                                                             [v2 for _, _, l2 in nc_spec for v2, _ in l2]]),
                                    v)),
                                'strong': list(strong)}, fh)
+            # VOTE 40 (user 2026-11-27: page shows NEW FINAL 4 and under it VOTE 40, local + chat, with
+            # EP / ROOT ops): the top 40 of the same vote ranking as rank_all above.  24-set test: 41.4%
+            # of rounds vs 40% chance, 30.6% of 7-round rows reach 4 of 7 vs 29.0% (low-repeat charts 35%).
+            _vote40 = sorted(o_uniq, key=lambda v: (
+                _tens_avoid() is not None and v // 10 == _tens_avoid(),
+                -sum(v in l_ for l_ in f4_lists.values()),
+                -sum(v in l_ for l_ in [strong, [v2 for v2, _ in fam_seats],
+                                         [v2 for _, _, l2 in nc_spec for v2, _ in l2]]),
+                v))[:40]
+            _RRR3_PREV['vote40'] = _vote40
+            if os.environ.get('RRR3_DUMP2') and os.path.exists(os.environ['RRR3_DUMP2']):
+                import json as _json_v40
+                with open(os.environ['RRR3_DUMP2']) as fh:
+                    _d_v40 = _json_v40.load(fh)
+                _d_v40['vote40'] = _vote40
+                _d_v40['final4_new'] = [v for v, _ in ocjp_final4]
+                with open(os.environ['RRR3_DUMP2'], 'w') as fh:
+                    _json_v40.dump(_d_v40, fh)
             f4_body = [f"★  OCJP FINAL 4  —  EP {grid_ep:02d}, ROOT={_root_op(ep)}  ★", ""]
             for k_, (v_, nm_) in enumerate(ocjp_final4):
                 f4_body.append(f"{k_ + 1}. {v_:02d} ({OP_ABBREV[find_op(ep // 10, v_ // 10)]}/{OP_ABBREV[find_op(ep % 10, v_ % 10)]})"

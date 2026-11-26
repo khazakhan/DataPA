@@ -9768,6 +9768,8 @@ def show_chat_page():
             env['CHAT_PAGE_ROUND'] = rnd
         if os.environ.get('CHAT_PAGE_MD'):
             cmd += ['--md', os.environ['CHAT_PAGE_MD']]
+        print("\n  ⏳ Building the final page (OCJP FINAL 4, 🆕 NEW FINAL 4 + VOTE 40 + FINAL 2, BHARAT BUILDER) ..."
+              "\n     This takes about 30 seconds to a few minutes with no output. Please wait - do not press Ctrl+C.\n")
         sys.stdout.flush()
         subprocess.run(cmd, cwd=here, env=env)
     except Exception as e:

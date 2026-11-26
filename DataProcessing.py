@@ -8002,7 +8002,13 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             # (next == previous number) is >= 1.0%, else the plain vote #4: 322 (4.32%), no set
             # worse, both halves up.  OFF by default until new sets (5+) confirm it; switch on
             # with RRR3_SLOT4_T=0.010.  The live AF chart repeats 0.9%, so it would drop the EP.
-            _s4t = os.environ.get('RRR3_SLOT4_T')
+            # SWITCHED ON 2026-11-27 (agreed 4-set decision, 24-set test): unseen Sets 13-16 rule
+            # 386 v 366, both halves up (187 v 182, 199 v 184); unseen Sets 5-16 rounds where only
+            # one hit: rule 107 v EP repeat 67 (z 3.0).  Default T = 0.010; RRR3_SLOT4_T=0 turns it
+            # off.  Test runs (RRR3_F4DUMP set) keep the old FINAL 4 so Sets 17-24 stay comparable;
+            # the rule is scored offline there (tools/slot4_study.py).  Remove if Sets 17-24 turn it
+            # negative.
+            _s4t = os.environ.get('RRR3_SLOT4_T', '' if os.environ.get('RRR3_F4DUMP') else '0.010')
             _flat = _RRR3_PREV.get('flat') or []
             _rep = (sum(a == b for a, b in zip(_flat, _flat[1:])) / max(len(_flat) - 1, 1)) if _flat else 1.0
             if (len(ocjp_final4) == 4 and grid_ep not in [v_ for v_, _ in ocjp_final4]

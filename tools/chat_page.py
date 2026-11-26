@@ -309,6 +309,26 @@ def oc_final2_section(P, D):
     return '\n'.join(out) + '\n'
 
 
+F4FAM_CTX = []      # [ep, root, vote40] of the families table, for the BHARAT BUILDER fill-in
+
+
+def fill_builder_families(md):
+    """Families table: add the family members that BHARAT BUILDER 60 holds but VOTE 40 does not
+    (user 2026-11-27: 'append from bharat builder also remaining').  Display only."""
+    m = re.search(r'\*\*BUILDER \d+ ascending:\*\* ([\d ]+)', md)
+    b60 = [int(x) for x in m.group(1).split()] if m else []
+    if not F4FAM_CTX:
+        return re.sub(r'⟪B60N?:[^⟫]*⟫', '-', md)
+    ep, root, v40 = F4FAM_CTX
+    def cell(mm):
+        fam, cnt = mm.group(2), mm.group(1) == 'N'
+        rest = [v for v in sorted(b60) if FAMILY[v] == fam and v not in v40]
+        if cnt:
+            return str(len(rest)) if m else '-'
+        return '  '.join(f"**{v:02d}** ({op_on(ep, v)} · {op_on(root, v)})" for v in rest) or '-'
+    return re.sub(r'⟪B60(N?):([^⟫]*)⟫', cell, md)
+
+
 def vote40_section(P, D):
     """NEW FINAL 4 + VOTE 40 in one table (user 2026-11-27: 'first New Final 4, under that Vote 40',
     same in local and chat, EP and ROOT with operations).  VOTE 40 = top 40 of the script's own
@@ -347,14 +367,16 @@ def vote40_section(P, D):
             cells.append('' if v is None else colv(v) + (f"⭕**{v:02d}**" if v in f4 else f"**{v:02d}**") + f" ({ops(v)})")
         rows.append([f"{r * 4 + 1}-{r * 4 + 4}"] + cells)
     fl = lambda f: f"{f}-family" if f[0].isdigit() else f
-    frows = [['Colour', 'NEW FINAL 4', 'Family', 'In VOTE 40 (ascending, op on EP · op on ROOT)', 'Count']]
+    frows = [['Colour', 'NEW FINAL 4', 'Family', 'In VOTE 40 (ascending, op on EP · op on ROOT)', 'Count',
+              '+ BHARAT BUILDER 60, not in VOTE 40 (ascending, op on EP · op on ROOT)', 'Count']]
+    F4FAM_CTX[:] = [ep, root, list(v40)]
     for k, v in enumerate(f4[:4]):
         fam = FAMILY[v]
         inv = [m for m in sorted(v40) if FAMILY[m] == fam]
         same = next((f"{u:02d}" for u in f4[:k] if FAMILY[u] == fam), None)
         frows.append([fcol[fam], f"**{v:02d}**" + (f" (same family as {same})" if same else ''), fl(fam),
                       '  '.join(f"{'⭕' if m in f4 else ''}**{m:02d}** ({ops(m)})" for m in inv) or '-',
-                      str(len(inv))])
+                      str(len(inv)), f"⟪B60:{fam}⟫", f"⟪B60N:{fam}⟫"])
     out += [mk(rows), "",
             f"**VOTE 40 ascending:** {' '.join(colv(v) + f'{v:02d}' for v in sorted(v40))}", "",
             "**NEW FINAL 4 families in VOTE 40** (one colour per NEW FINAL 4 number; the same colour marks its "
@@ -1501,6 +1523,10 @@ def main():
             os.chdir(_cwd)
     except Exception as e:
         md += f"\n(BHARAT BUILDER not available: {e})\n"
+    try:
+        md = fill_builder_families(md)
+    except Exception:
+        md = re.sub(r'⟪B60N?:[^⟫]*⟫', '-', md)
     if md_out:
         with open(md_out, 'w') as fh:
             fh.write(md)

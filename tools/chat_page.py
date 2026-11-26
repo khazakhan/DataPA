@@ -296,7 +296,7 @@ def oc_final2_section(P, D):
         return ''
     ep, root = P['ep'], P['root']
     o2, c2 = oc['open'][:2], oc['close'][:2]
-    out = [f"### 🎯 FINAL 2 OPEN / CLOSE: EP {ep} ({P['epop']}), ROOT {root} ({P['rootop']})", "",
+    out = ["**3. 🎯 FINAL 2 OPEN / CLOSE** (best 2 tens and units digits, display only)", "",
            "| | FINAL 2 | Full order (strong → weak) | Rule | 24 sets (chance 20%) |",
            "|---|---|---|---|---|",
            f"| **OPEN (tens)** | **{o2[0]} · {o2[1]}** | {' '.join(map(str, oc['open']))} | chart tens steps on the last tens digit "
@@ -321,7 +321,7 @@ def vote40_section(P, D):
     ep, root = P['ep'], P['root']
     hd = f"EP {ep} ({P['epop']}), ROOT {root} ({P['rootop']})"
     ops = lambda v: f"{op_on(ep, v)} · {op_on(root, v)}"
-    out = [f"### 🆕 NEW FINAL 4 + VOTE 40: {hd}", "",
+    out = [f"### 🆕 NEW FINAL 4 + VOTE 40 + FINAL 2 OPEN / CLOSE: {hd}", "",
            f"**1. NEW FINAL 4** (live; slot 4 = EP repeat only when the chart repeats ≥ 1%, else vote #4; "
            f"24 sets: 2,416 of 54,709 = 4.42% vs 4% chance)", ""]
     rows = [['#', 'Number', f'Op on EP {ep}', f'Op on ROOT {root}']]
@@ -340,7 +340,9 @@ def vote40_section(P, D):
         rows.append([f"{r * 4 + 1}-{r * 4 + 4}"] + cells)
     out += [mk(rows), "",
             f"**VOTE 40 ascending:** {' '.join(f'{v:02d}' for v in sorted(v40))}", "",
-            "No hit is promised: NEW FINAL 4 is the main pick; VOTE 40 is the wide net (display only)."]
+            oc_final2_section(P, D).rstrip('\n'), "",
+            "No hit is promised: NEW FINAL 4 is the main pick; VOTE 40 is the wide net; FINAL 2 OPEN / CLOSE "
+            "is a small digit edge (all display only)."]
     return '\n'.join(out) + '\n'
 
 
@@ -680,9 +682,6 @@ def build(series_round, prevP, prevD, P, res, curD=None):
             if rel_: yxc_ = f"{rel_} ({'CLOSE' if rel_ == cc_ else 'OPEN'} cut; yx is {yxn_} itself)"
         rows.append([rk, f"**{d['n']}**", d['op'], yxc_, f"{d['bxy']} / {d['byx']}", d['src'], d['votes']])
     A(mk(rows))
-    oc2 = oc_final2_section(P, curD)
-    if oc2:
-        A(oc2)
     v40 = vote40_section(P, curD)
     if v40:
         A(v40)

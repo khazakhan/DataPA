@@ -9669,6 +9669,9 @@ def rrr_ask_ops():
         open('/dev/tty').close()
     except OSError:
         return          # no terminal (a piped or background run): nothing to ask
+    if os.environ.get('CHAT_PAGE_OFF'):
+        return          # inner run made by tools/chat_page.py: only the main run asks (user 2026-11-26:
+                        # the inner runs asked 4 more times, so the local page seemed stuck on old output)
     # 1. an Op number from the table
     while True:
         raw = _tty_input(f"\n  Enter the Op number to execute ({', '.join(by_pos)}; Enter = next step): ")

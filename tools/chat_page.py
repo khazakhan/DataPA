@@ -318,8 +318,18 @@ def fill_builder_families(md):
     m = re.search(r'\*\*BUILDER \d+ ascending:\*\* ([\d ]+)', md)
     b60 = [int(x) for x in m.group(1).split()] if m else []
     if not F4FAM_CTX:
-        return re.sub(r'⟪B60N?:[^⟫]*⟫', '-', md)
-    ep, root, v40 = F4FAM_CTX
+        return re.sub(r'⟪B60(N?:[^⟫]*|ALL)⟫', '-', md)
+    ep, root, v40, fcol = F4FAM_CTX
+    # all numbers of the table (VOTE 40 + BHARAT BUILDER members of the NEW FINAL 4 families) in sequence,
+    # 4 per group (user 2026-11-27: 'below this table show all numbers in sequence order group by 4')
+    alln = sorted(v for v in set(v40) | set(b60) if FAMILY[v] in fcol)
+    grp = [alln[i:i + 4] for i in range(0, len(alln), 4)]
+    rows = [['Group', '1', '2', '3', '4']] + [
+        [str(k + 1)] + [f"{fcol[FAMILY[v]]}**{v:02d}** ({op_on(ep, v)} · {op_on(root, v)})" for v in g] + [''] * (4 - len(g))
+        for k, g in enumerate(grp)]
+    allsec = (f"**All {len(alln)} family numbers above (VOTE 40 + BHARAT BUILDER 60), in sequence, 4 per group** "
+              f"(op on EP {ep} · op on ROOT {root}):\n\n" + mk(rows) if alln else '-')
+    md = md.replace('⟪B60ALL⟫', allsec)
     def cell(mm):
         fam, cnt = mm.group(2), mm.group(1) == 'N'
         rest = [v for v in sorted(b60) if FAMILY[v] == fam and v not in v40]
@@ -369,7 +379,7 @@ def vote40_section(P, D):
     fl = lambda f: f"{f}-family" if f[0].isdigit() else f
     frows = [['Colour', 'NEW FINAL 4', 'Family', 'In VOTE 40 (ascending, op on EP · op on ROOT)', 'Count',
               '+ BHARAT BUILDER 60, not in VOTE 40 (ascending, op on EP · op on ROOT)', 'Count']]
-    F4FAM_CTX[:] = [ep, root, list(v40)]
+    F4FAM_CTX[:] = [ep, root, list(v40), dict(fcol)]
     for k, v in enumerate(f4[:4]):
         fam = FAMILY[v]
         inv = [m for m in sorted(v40) if FAMILY[m] == fam]
@@ -381,7 +391,7 @@ def vote40_section(P, D):
             f"**VOTE 40 ascending:** {' '.join(colv(v) + f'{v:02d}' for v in sorted(v40))}", "",
             "**NEW FINAL 4 families in VOTE 40** (one colour per NEW FINAL 4 number; the same colour marks its "
             "family in the grid and the ascending line above; display only)", "",
-            mk(frows), "",
+            mk(frows), "", "⟪B60ALL⟫", "",
             oc_final2_section(P, D).rstrip('\n'), "",
             "No hit is promised: NEW FINAL 4 is the main pick; VOTE 40 is the wide net; FINAL 2 OPEN / CLOSE "
             "is a small digit edge (all display only)."]
@@ -1526,7 +1536,7 @@ def main():
     try:
         md = fill_builder_families(md)
     except Exception:
-        md = re.sub(r'⟪B60N?:[^⟫]*⟫', '-', md)
+        md = re.sub(r'⟪B60(N?:[^⟫]*|ALL)⟫', '-', md)
     if md_out:
         with open(md_out, 'w') as fh:
             fh.write(md)

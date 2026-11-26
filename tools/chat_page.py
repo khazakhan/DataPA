@@ -287,6 +287,28 @@ def final10_section(P, text):
             f"(live {h} of {len(done)}, chance 10%; history 54 of 329 = 16.4%). No hit is promised.\n")
 
 
+def oc_final2_section(P, D):
+    """🎯 FINAL 2 OPEN / CLOSE (user 2026-11-27, display only, local + chat): best 2 tens and units
+    digits from tools/openclose_study.py (24 sets, every round, chance 20%): OPEN = chart tens steps
+    21.53%; CLOSE = units steps + avoid the vote's bottom-30 units 20.67%."""
+    oc = (D or {}).get('oc_final2') or {}
+    if not oc.get('open') or not oc.get('close'):
+        return ''
+    ep, root = P['ep'], P['root']
+    o2, c2 = oc['open'][:2], oc['close'][:2]
+    out = [f"### 🎯 FINAL 2 OPEN / CLOSE: EP {ep} ({P['epop']}), ROOT {root} ({P['rootop']})", "",
+           "| | FINAL 2 | Full order (strong → weak) | Rule | 24 sets (chance 20%) |",
+           "|---|---|---|---|---|",
+           f"| **OPEN (tens)** | **{o2[0]} · {o2[1]}** | {' '.join(map(str, oc['open']))} | chart tens steps on the last tens digit "
+           f"| 21.53% (proof sets 21.34%, both halves up) |",
+           f"| **CLOSE (units)** | **{c2[0]} · {c2[1]}** | {' '.join(map(str, oc['close']))} | units steps + avoid the vote's bottom-30 units "
+           f"| 20.67% (proof sets 20.71%, both halves up) |", "",
+           f"OPEN {o2[0]}·{o2[1]} × CLOSE {c2[0]}·{c2[1]} (4 numbers, op on EP {ep} · op on ROOT {root}): "
+           + ' · '.join(f"**{o}{c}** ({op_on(ep, o * 10 + c)} · {op_on(root, o * 10 + c)})" for o in o2 for c in c2)
+           + " (about 4.4% per round, the same level as FINAL 4). Small edge; no hit is promised.", ""]
+    return '\n'.join(out) + '\n'
+
+
 def vote40_section(P, D):
     """NEW FINAL 4 + VOTE 40 in one table (user 2026-11-27: 'first New Final 4, under that Vote 40',
     same in local and chat, EP and ROOT with operations).  VOTE 40 = top 40 of the script's own
@@ -658,6 +680,9 @@ def build(series_round, prevP, prevD, P, res, curD=None):
             if rel_: yxc_ = f"{rel_} ({'CLOSE' if rel_ == cc_ else 'OPEN'} cut; yx is {yxn_} itself)"
         rows.append([rk, f"**{d['n']}**", d['op'], yxc_, f"{d['bxy']} / {d['byx']}", d['src'], d['votes']])
     A(mk(rows))
+    oc2 = oc_final2_section(P, curD)
+    if oc2:
+        A(oc2)
     v40 = vote40_section(P, curD)
     if v40:
         A(v40)
@@ -928,7 +953,7 @@ def _scan(md):
                 head = cells; continue
             if sec.startswith('Result check') or sec.startswith(RING) or sec.startswith('Watch lines'):   # not a ⭕ section
                 continue
-            if sec.startswith('🆕 NEW FINAL 4'):   # display of FINAL 4 + VOTE 40: not a list of its own, no votes
+            if sec.startswith(('🆕 NEW FINAL 4', '🎯 FINAL 2')):   # display only: not a list of its own, no votes
                 continue
             for i, c in enumerate(cells[1:], 1):
                 if head[i].lower().startswith(('live', 'votes', 'from which', 'source', 'op on', 'times', 'places')):
@@ -937,7 +962,7 @@ def _scan(md):
                 pre = '' if sec.startswith('Other lists') else re.sub(r' with operations$', '', sec) + ' · '
                 for v, t, op in grab(c, bool(re.fullmatch(r'[\d\s·*]+', strip_marks(c.replace('**', ''))))):
                     yield pre + lab, v, t, op
-        elif ln.startswith('**') and ':**' in ln and not ln.startswith('**Colour count') and not sec.startswith('🆕 NEW FINAL 4'):
+        elif ln.startswith('**') and ':**' in ln and not ln.startswith('**Colour count') and not sec.startswith(('🆕 NEW FINAL 4', '🎯 FINAL 2')):
             name, rest = ln.split(':**', 1)
             rest = re.sub(r'\(live[^)]*\)', '', rest)
             nm = name.strip('*')

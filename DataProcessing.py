@@ -8187,18 +8187,44 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             # VOTE 40 (user 2026-11-27: page shows NEW FINAL 4 and under it VOTE 40, local + chat, with
             # EP / ROOT ops): the top 40 of the same vote ranking as rank_all above.  24-set test: 41.4%
             # of rounds vs 40% chance, 30.6% of 7-round rows reach 4 of 7 vs 29.0% (low-repeat charts 35%).
-            _vote40 = sorted(o_uniq, key=lambda v: (
+            _vote_all = sorted(o_uniq, key=lambda v: (
                 _tens_avoid() is not None and v // 10 == _tens_avoid(),
                 -sum(v in l_ for l_ in f4_lists.values()),
                 -sum(v in l_ for l_ in [strong, [v2 for v2, _ in fam_seats],
                                          [v2 for _, _, l2 in nc_spec for v2, _ in l2]]),
-                v))[:40]
+                v))
+            _vote40 = _vote_all[:40]
             _RRR3_PREV['vote40'] = _vote40
+            # FINAL 2 OPEN / CLOSE (user 2026-11-27 'OPEN and CLOSE best of best ... final 2', display only;
+            # tools/openclose_study.py, every round of the 24 sets, learn 1-12 / prove 13-24, chance 20%):
+            # OPEN = the chart's own tens steps put on the last tens digit (21.53%, prove 21.34% both halves);
+            # CLOSE = units steps the same way, Borda with 'avoid the units common in the vote's bottom 30'
+            # (20.67%, prove 20.71% both halves; the page's CLOSE line = 20.09%).
+            _fl2 = [v for v in (_RRR3_PREV.get('flat') or []) if v is not None]
+            _oc2 = {}
+            if len(_fl2) >= 50:
+                for _side, _dg in (('open', lambda v: v // 10), ('close', lambda v: v % 10)):
+                    _D = [_dg(v) for v in _fl2]
+                    _st = [0] * 10
+                    for a_, b_ in zip(_D, _D[1:]):
+                        _st[(b_ - a_) % 10] += 1
+                    _so = sorted(range(10), key=lambda d: (-_st[(d - _D[-1]) % 10], d))
+                    if _side == 'open':
+                        _oc2['open'] = _so
+                    else:
+                        _cb = [0] * 10
+                        for v in _vote_all[-30:]:
+                            _cb[_dg(v)] += 1
+                        _av = sorted(range(10), key=lambda d: (_cb[d], d))
+                        _bs = {d: -(_so.index(d) + _av.index(d)) for d in range(10)}
+                        _oc2['close'] = sorted(range(10), key=lambda d: (-_bs[d], d))
+            _RRR3_PREV['oc_final2'] = _oc2
             if os.environ.get('RRR3_DUMP2') and os.path.exists(os.environ['RRR3_DUMP2']):
                 import json as _json_v40
                 with open(os.environ['RRR3_DUMP2']) as fh:
                     _d_v40 = _json_v40.load(fh)
                 _d_v40['vote40'] = _vote40
+                _d_v40['oc_final2'] = _oc2
                 _d_v40['final4_new'] = [v for v, _ in ocjp_final4]
                 with open(os.environ['RRR3_DUMP2'], 'w') as fh:
                     _json_v40.dump(_d_v40, fh)

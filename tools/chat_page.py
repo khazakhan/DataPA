@@ -331,15 +331,36 @@ def vote40_section(P, D):
             f"**2. VOTE 40** (top 40 of the vote ranking; ⭕ = also in NEW FINAL 4; each cell = number "
             f"(op on EP {ep} · op on ROOT {root}); 24 sets: 41.4% of rounds vs 40% chance, "
             f"rows with 4+ of 7: 30.6% vs 29.0%)", ""]
+    # families of the 4 NEW FINAL 4 numbers, one colour each (user 2026-11-27: 'families of new final 4
+    # from vote 40 by marking with four different colour, ascending'); two FINAL 4 numbers of one family share
+    # the first one's colour.  Family = the script's cut-pair family (FAMILY map).  Display only.
+    F4COL = ['\U0001f7e5', '\U0001f7e6', '\U0001f7e9', '\U0001f7e8']     # 🟥 🟦 🟩 🟨
+    fcol = {}
+    for k, v in enumerate(f4[:4]):
+        fcol.setdefault(FAMILY[v], F4COL[k])
+    colv = lambda v: fcol.get(FAMILY[v], '')
     rows = [['Rank'] + [f'+{c}' for c in range(1, 5)]]
     for r in range(10):
         cells = []
         for c in range(4):
             v = v40[r * 4 + c] if r * 4 + c < len(v40) else None
-            cells.append('' if v is None else (f"⭕**{v:02d}**" if v in f4 else f"**{v:02d}**") + f" ({ops(v)})")
+            cells.append('' if v is None else colv(v) + (f"⭕**{v:02d}**" if v in f4 else f"**{v:02d}**") + f" ({ops(v)})")
         rows.append([f"{r * 4 + 1}-{r * 4 + 4}"] + cells)
+    fl = lambda f: f"{f}-family" if f[0].isdigit() else f
+    frows = [['Colour', 'NEW FINAL 4', 'Family', 'In VOTE 40 (ascending, op on EP · op on ROOT)', 'In VOTE 40', 'Whole family']]
+    for k, v in enumerate(f4[:4]):
+        fam = FAMILY[v]
+        mem = sorted(m for m, f in FAMILY.items() if f == fam)
+        inv = [m for m in sorted(v40) if FAMILY[m] == fam]
+        same = next((f"{u:02d}" for u in f4[:k] if FAMILY[u] == fam), None)
+        frows.append([fcol[fam], f"**{v:02d}**" + (f" (same family as {same})" if same else ''), fl(fam),
+                      '  '.join(f"{'⭕' if m in f4 else ''}**{m:02d}** ({ops(m)})" for m in inv) or '-',
+                      f"{len(inv)} of {len(mem)}", ' '.join(f"{m:02d}" for m in mem)])
     out += [mk(rows), "",
-            f"**VOTE 40 ascending:** {' '.join(f'{v:02d}' for v in sorted(v40))}", "",
+            f"**VOTE 40 ascending:** {' '.join(colv(v) + f'{v:02d}' for v in sorted(v40))}", "",
+            "**NEW FINAL 4 families in VOTE 40** (one colour per NEW FINAL 4 number; the same colour marks its "
+            "family in the grid and the ascending line above; display only)", "",
+            mk(frows), "",
             oc_final2_section(P, D).rstrip('\n'), "",
             "No hit is promised: NEW FINAL 4 is the main pick; VOTE 40 is the wide net; FINAL 2 OPEN / CLOSE "
             "is a small digit edge (all display only)."]

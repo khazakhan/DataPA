@@ -8012,7 +8012,12 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             # halves 256 v 249 and 194 v 211 -> negative, so removed.  Its gain comes only from charts
             # repeating < 0.5% (Sets 7, 9, 10, 13, 16); on charts near 1% (live AF ~0.9%) it is level or
             # worse.  Unset = EP repeat in slot 4 as before; RRR3_SLOT4_T=0.010 still tests it.
-            _s4t = os.environ.get('RRR3_SLOT4_T')
+            # LIVE AGAIN 2026-11-27 after ALL 24 sets (user: 'which one is best ... move to live'):
+            # 54,709 rounds, EP repeat 2332 (4.26%) v rule 2416 (4.42%), halves 1191 v 1227 and
+            # 1141 v 1189; on sets 5-24 (unseen when T=0.010 was frozen) rule-only 186 v EP-only 131,
+            # z 3.1.  Sets above 4%: 16 of 24 -> 19 of 24.  T=0.010 kept (frozen before the test,
+            # most hits); RRR3_SLOT4_T=0 turns it off; test dumps (RRR3_F4DUMP) keep the old FINAL 4.
+            _s4t = os.environ.get('RRR3_SLOT4_T', '' if os.environ.get('RRR3_F4DUMP') else '0.010')
             _flat = _RRR3_PREV.get('flat') or []
             _rep = (sum(a == b for a, b in zip(_flat, _flat[1:])) / max(len(_flat) - 1, 1)) if _flat else 1.0
             if (len(ocjp_final4) == 4 and grid_ep not in [v_ for v_, _ in ocjp_final4]

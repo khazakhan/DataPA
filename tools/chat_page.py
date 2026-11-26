@@ -347,15 +347,14 @@ def vote40_section(P, D):
             cells.append('' if v is None else colv(v) + (f"⭕**{v:02d}**" if v in f4 else f"**{v:02d}**") + f" ({ops(v)})")
         rows.append([f"{r * 4 + 1}-{r * 4 + 4}"] + cells)
     fl = lambda f: f"{f}-family" if f[0].isdigit() else f
-    frows = [['Colour', 'NEW FINAL 4', 'Family', 'In VOTE 40 (ascending, op on EP · op on ROOT)', 'In VOTE 40', 'Whole family']]
+    frows = [['Colour', 'NEW FINAL 4', 'Family', 'In VOTE 40 (ascending, op on EP · op on ROOT)', 'Count']]
     for k, v in enumerate(f4[:4]):
         fam = FAMILY[v]
-        mem = sorted(m for m, f in FAMILY.items() if f == fam)
         inv = [m for m in sorted(v40) if FAMILY[m] == fam]
         same = next((f"{u:02d}" for u in f4[:k] if FAMILY[u] == fam), None)
         frows.append([fcol[fam], f"**{v:02d}**" + (f" (same family as {same})" if same else ''), fl(fam),
                       '  '.join(f"{'⭕' if m in f4 else ''}**{m:02d}** ({ops(m)})" for m in inv) or '-',
-                      f"{len(inv)} of {len(mem)}", ' '.join(f"{m:02d}" for m in mem)])
+                      str(len(inv))])
     out += [mk(rows), "",
             f"**VOTE 40 ascending:** {' '.join(colv(v) + f'{v:02d}' for v in sorted(v40))}", "",
             "**NEW FINAL 4 families in VOTE 40** (one colour per NEW FINAL 4 number; the same colour marks its "

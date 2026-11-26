@@ -8008,7 +8008,11 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
             # off.  Test runs (RRR3_F4DUMP set) keep the old FINAL 4 so Sets 17-24 stay comparable;
             # the rule is scored offline there (tools/slot4_study.py).  Remove if Sets 17-24 turn it
             # negative.
-            _s4t = os.environ.get('RRR3_SLOT4_T', '' if os.environ.get('RRR3_F4DUMP') else '0.010')
+            # SWITCHED OFF 2026-11-27 after Sets 17-20 (agreed confirm step): rule 450 v EP repeat 460,
+            # halves 256 v 249 and 194 v 211 -> negative, so removed.  Its gain comes only from charts
+            # repeating < 0.5% (Sets 7, 9, 10, 13, 16); on charts near 1% (live AF ~0.9%) it is level or
+            # worse.  Unset = EP repeat in slot 4 as before; RRR3_SLOT4_T=0.010 still tests it.
+            _s4t = os.environ.get('RRR3_SLOT4_T')
             _flat = _RRR3_PREV.get('flat') or []
             _rep = (sum(a == b for a, b in zip(_flat, _flat[1:])) / max(len(_flat) - 1, 1)) if _flat else 1.0
             if (len(ocjp_final4) == 4 and grid_ep not in [v_ for v_, _ in ocjp_final4]

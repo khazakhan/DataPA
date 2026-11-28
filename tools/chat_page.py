@@ -318,17 +318,23 @@ def fill_builder_families(md):
     m = re.search(r'\*\*BUILDER \d+ ascending:\*\* ([\d ]+)', md)
     b60 = [int(x) for x in m.group(1).split()] if m else []
     if not F4FAM_CTX:
-        return re.sub(r'⟪B60(N?:[^⟫]*|ALL)⟫', '-', md)
-    ep, root, v40, fcol = F4FAM_CTX
+        return re.sub(r'⟪(?:B60|L80)(N?:[^⟫]*|ALL)⟫', '-', md)
+    ep, root, v40, fcol, left = F4FAM_CTX
+    # 80-number list = all 100 minus its 20 left out (user 2026-11-28: 'similarly add from 80 numbers table
+    # also ... remaining family numbers'): family members in neither VOTE 40 nor BUILDER 60
+    l80 = sorted(set(range(100)) - set(left)) if left else []
+    s1 = set(v40) | set(b60)
     # all numbers of the table (VOTE 40 + BHARAT BUILDER members of the NEW FINAL 4 families) in sequence,
     # 4 per group (user 2026-11-27: 'below this table show all numbers in sequence order group by 4')
-    alln = sorted(v for v in set(v40) | set(b60) if FAMILY[v] in fcol)
+    alln = sorted(v for v in s1 | set(l80) if FAMILY[v] in fcol)
+    src = lambda v: '' if v in v40 else ('ᴮ' if v in b60 else 'ᴸ')
     grp = [alln[i:i + 4] for i in range(0, len(alln), 4)]
     rows = [['Group', '1', '2', '3', '4']] + [
-        [str(k + 1)] + [f"{fcol[FAMILY[v]]}**{v:02d}** ({op_on(ep, v)} · {op_on(root, v)})" for v in g] + [''] * (4 - len(g))
+        [str(k + 1)] + [f"{fcol[FAMILY[v]]}**{v:02d}**{src(v)} ({op_on(ep, v)} · {op_on(root, v)})" for v in g] + [''] * (4 - len(g))
         for k, g in enumerate(grp)]
-    allsec = (f"**All {len(alln)} family numbers above (VOTE 40 + BHARAT BUILDER 60), in sequence, 4 per group** "
-              f"(op on EP {ep} · op on ROOT {root}):\n\n" + mk(rows) if alln else '-')
+    allsec = (f"**All {len(alln)} family numbers above (VOTE 40 + BHARAT BUILDER 60 + 80-number list), in sequence, "
+              f"4 per group** (no mark = VOTE 40, ᴮ = BHARAT BUILDER 60, ᴸ = 80-number list; "
+              f"op on EP {ep} · op on ROOT {root}):\n\n" + mk(rows) if alln else '-')
     md = md.replace('⟪B60ALL⟫', allsec)
     def cell(mm):
         fam, cnt = mm.group(2), mm.group(1) == 'N'
@@ -336,6 +342,13 @@ def fill_builder_families(md):
         if cnt:
             return str(len(rest)) if m else '-'
         return '  '.join(f"**{v:02d}** ({op_on(ep, v)} · {op_on(root, v)})" for v in rest) or '-'
+    def cell80(mm):
+        fam, cnt = mm.group(2), mm.group(1) == 'N'
+        rest = [v for v in l80 if FAMILY[v] == fam and v not in s1]
+        if cnt:
+            return str(len(rest)) if l80 else '-'
+        return '  '.join(f"**{v:02d}** ({op_on(ep, v)} · {op_on(root, v)})" for v in rest) or '-'
+    md = re.sub(r'⟪L80(N?):([^⟫]*)⟫', cell80, md)
     return re.sub(r'⟪B60(N?):([^⟫]*)⟫', cell, md)
 
 
@@ -378,15 +391,16 @@ def vote40_section(P, D):
         rows.append([f"{r * 4 + 1}-{r * 4 + 4}"] + cells)
     fl = lambda f: f"{f}-family" if f[0].isdigit() else f
     frows = [['Colour', 'NEW FINAL 4', 'Family', 'In VOTE 40 (ascending, op on EP · op on ROOT)', 'Count',
-              '+ BHARAT BUILDER 60, not in VOTE 40 (ascending, op on EP · op on ROOT)', 'Count']]
-    F4FAM_CTX[:] = [ep, root, list(v40), dict(fcol)]
+              '+ BHARAT BUILDER 60, not in VOTE 40 (ascending, op on EP · op on ROOT)', 'Count',
+              '+ 80-number list, not in VOTE 40 or BUILDER 60 (ascending, op on EP · op on ROOT)', 'Count']]
+    F4FAM_CTX[:] = [ep, root, list(v40), dict(fcol), [int(x) for x in P.get('left') or []]]
     for k, v in enumerate(f4[:4]):
         fam = FAMILY[v]
         inv = [m for m in sorted(v40) if FAMILY[m] == fam]
         same = next((f"{u:02d}" for u in f4[:k] if FAMILY[u] == fam), None)
         frows.append([fcol[fam], f"**{v:02d}**" + (f" (same family as {same})" if same else ''), fl(fam),
                       '  '.join(f"{'⭕' if m in f4 else ''}**{m:02d}** ({ops(m)})" for m in inv) or '-',
-                      str(len(inv)), f"⟪B60:{fam}⟫", f"⟪B60N:{fam}⟫"])
+                      str(len(inv)), f"⟪B60:{fam}⟫", f"⟪B60N:{fam}⟫", f"⟪L80:{fam}⟫", f"⟪L80N:{fam}⟫"])
     out += [mk(rows), "",
             f"**VOTE 40 ascending:** {' '.join(colv(v) + f'{v:02d}' for v in sorted(v40))}", "",
             "**NEW FINAL 4 families in VOTE 40** (one colour per NEW FINAL 4 number; the same colour marks its "
@@ -1536,7 +1550,7 @@ def main():
     try:
         md = fill_builder_families(md)
     except Exception:
-        md = re.sub(r'⟪B60(N?:[^⟫]*|ALL)⟫', '-', md)
+        md = re.sub(r'⟪(?:B60|L80)(N?:[^⟫]*|ALL)⟫', '-', md)
     if md_out:
         with open(md_out, 'w') as fh:
             fh.write(md)

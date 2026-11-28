@@ -175,7 +175,18 @@ def count_table(stars, bands, sup, head, root, f4=(), test=(), cnt=None):
     # user AF246 screenshot: mark the OCJP FINAL 4 numbers ⭕ and the FINAL 4 TEST-only numbers 🔥 inside [ ] and ( )
     cnt = cnt or {}
     big = lambda v: v not in f4 and v not in test and cnt.get(v, 0) >= 3   # user AF248: strong support (3+ lists)
-    mk = lambda v: (f'⭕**{v:02d}**' if v in f4 else f'🔥**{v:02d}**' if v in test else f'💥**{v:02d}**' if big(v) else f'{v:02d}')
+    # user 2026-11-28 (Set 05 result 49, '... mark some more strong and big flame'): 🔥🔥 BIG FLAME = a number that is
+    # not a STAR, sits in the [ ] / ( ) of 2+ STAR rows AND is in the Saffron band (builder rank 1-20).
+    # Walk-forward 1,112 pages (each page only learns from earlier pages): 63 held vs 52.1 by chance (31 vs 23.6 | 32 vs 28.5
+    # per half), about 4.7 numbers per page; best of ~40 rules tried, so a weak edge.  Display only, no hit is promised.
+    allst = {x for st in stars for x in st}
+    nrow = {}
+    for st, bd in zip(stars, bands):
+        for x in st:
+            for v in set(bd) | set(sup):
+                if v != x and FAMILY[v] == FAMILY[x]: nrow[v] = nrow.get(v, 0) + 1
+    flame = {v for v, c in nrow.items() if c >= 2 and v not in allst and v in set(bands[0])}
+    mk = lambda v: (f'⭕**{v:02d}**' if v in f4 else f'🔥🔥**{v:02d}**' if v in flame else f'🔥**{v:02d}**' if v in test else f'💥**{v:02d}**' if big(v) else f'{v:02d}')
     # user AF176: a STAR whose family is shared by another of the 15 STARs gets a green dot 🟢 instead of ●
     fams = [FAMILY[x] for st in stars for x in st]
     dot = lambda x: '🟢' if fams.count(FAMILY[x]) > 1 else '●'
@@ -211,17 +222,21 @@ def count_table(stars, bands, sup, head, root, f4=(), test=(), cnt=None):
         out.append(f"| **{lab[i]} total** | {nxt()} | | | | | | **{sub[0]}** | **{sub[1]}** | **{sub[0] + sub[1]}** |")
         grand[0] += sub[0]; grand[1] += sub[1]
     out.append(f"| **All 15 STARs** | | | | | | | **{grand[0]}** | **{grand[1]}** | **{grand[0] + grand[1]}** |")
+    if flame:
+        out.append('\n**🔥🔥 BIG FLAME** (not a STAR, in the [ ] / ( ) of 2+ STAR rows and in the Saffron band rank 1-20): ' + ' · '.join(
+            f"🔥🔥**{v:02d}** ({op_on(root, v) if root is not None else '—'}, {nrow[v]} STAR rows)" for v in sorted(flame))
+            + ' — walk-forward 1,112 pages: 63 held vs 52.1 by chance (both halves up); weak edge, display only, no hit is promised')
     if f4 or test:
-        out.append('\n**Marks in [ ] and ( ):** ⭕ = OCJP FINAL 4 (' + ' '.join(f'{x:02d}' for x in f4) + ')' + (' · 🔥 = FINAL 4 TEST only (' + ' '.join(f'{x:02d}' for x in test if x not in f4) + ')' if [x for x in test if x not in f4] else '') + ' · 💥 = strong support: on 3+ lists of the page')
+        out.append('\n**Marks in [ ] and ( ):** ⭕ = OCJP FINAL 4 (' + ' '.join(f'{x:02d}' for x in f4) + ')' + (' · 🔥 = FINAL 4 TEST only (' + ' '.join(f'{x:02d}' for x in test if x not in f4) + ')' if [x for x in test if x not in f4] else '') + ' · 🔥🔥 = BIG FLAME (2+ STAR rows + Saffron band) · 💥 = strong support: on 3+ lists of the page')
         allstar = set(x for st in stars for x in st)
         inbr = set()
         for st, bd in zip(stars, bands):
             for x in st:
                 inbr |= {v for v in set(bd) | set(sup) if v != x and FAMILY[v] == FAMILY[x]}
-        picks = sorted((v for v in inbr - allstar if v in f4 or v in test or big(v)), key=lambda v: (v not in f4, v not in test, -cnt.get(v, 0), v))
+        picks = sorted((v for v in inbr - allstar if v in f4 or v in flame or v in test or big(v)), key=lambda v: (v not in f4, v not in flame, v not in test, -cnt.get(v, 0), v))
         if picks:
             out.append('\n**🎯 Bracket picks** (marked numbers inside the STAR families that are not STARs themselves, each once): ' + ' · '.join(
-                f"{'⭕' if v in f4 else '🔥' if v in test else '💥'}**{v:02d}** ({op_on(root, v) if root is not None else '—'}, {cnt.get(v, 0)} lists)" for v in picks)
+                f"{'⭕' if v in f4 else '🔥🔥' if v in flame else '🔥' if v in test else '💥'}**{v:02d}** ({op_on(root, v) if root is not None else '—'}, {cnt.get(v, 0)} lists)" for v in picks)
                 + ' — 💥 tested on 509 pages: 21 held vs 15.3 by chance (11|10 per half); display only, no hit is promised')
     if lanes:
         out.append('\n**Link (same family):** ' + ' · '.join(f"{f}{'-family' if f[0].isdigit() else ''} " + '-'.join(f'{x:02d}' for st in stars for x in st if FAMILY[x] == f) for f in lanes))

@@ -304,7 +304,10 @@ def oc_final2_section(P, D):
            f"| **OPEN 4 (tens)** | **{' · '.join(map(str, oc['open'][:4]))}** | {' '.join(map(str, oc['open']))} | the same ROBUST OPEN order, first 4 digits "
            f"(user 2026-11-28 'add two more') | chance 40%: learn 42.58%, proof sets 42.30% (42.33 / 42.26 per half, 11 of 12 sets above chance; old step-only 41.28%) |",
            f"| **CLOSE (units)** | **{c2[0]} · {c2[1]}** | {' '.join(map(str, oc['close']))} | units steps + avoid the vote's bottom-30 units "
-           f"| 20.67% (proof sets 20.71%, both halves up) |", "",
+           f"| 20.67% (proof sets 20.71%, both halves up) |",
+           f"| **CLOSE 4 (units)** | **{' · '.join(map(str, oc['close'][:4]))}** | {' '.join(map(str, oc['close']))} | the same CLOSE order, first 4 digits "
+           f"(user 2026-11-28; new CLOSE rules tested, none beat it on the proof sets) | chance 40%: learn 40.80%, proof sets 41.24% "
+           f"(41.70 / 40.78 per half, 10 of 12 sets above chance) |", "",
            f"OPEN {o2[0]}·{o2[1]} × CLOSE {c2[0]}·{c2[1]} (4 numbers, op on EP {ep} · op on ROOT {root}): "
            + ' · '.join(f"**{o}{c}** ({op_on(ep, o * 10 + c)} · {op_on(root, o * 10 + c)})" for o in o2 for c in c2)
            + " (about 4.4% per round, the same level as FINAL 4). Small edge; no hit is promised.", ""]

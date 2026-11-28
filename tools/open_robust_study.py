@@ -2,14 +2,16 @@
 tools/openclose_study.py (every round of the 24 sets, each rule sees only earlier numbers, top 2 tens digits,
 chance 20%; learn = Sets 1-12, prove = Sets 13-24).  Adds new rule families: chart column (7 columns),
 2-step memory, cross digit (last units -> next tens), step on ROOT, recency-weighted step, and Borda mixes.
-Usage: python3 tools/open_robust_study.py [--top 4]"""
+Usage: python3 tools/open_robust_study.py [--top 4] [--side close]"""
 import sys, json, os, itertools
 from collections import Counter
 sys.path.insert(0, 'tools')
 from slot4_study import load
 from openclose_study import rank_all_of, seq_of
 
-T = lambda v: v // 10
+SIDE = sys.argv[sys.argv.index('--side') + 1] if '--side' in sys.argv else 'open'
+T = (lambda v: v // 10) if SIDE == 'open' else (lambda v: v % 10)
+OTHER = (lambda v: v % 10) if SIDE == 'open' else (lambda v: v // 10)
 
 
 def scores(S, pos, r):
@@ -32,7 +34,7 @@ def scores(S, pos, r):
     sr = Counter((c - a) % 10 for a, c in zip(D, D[2:]))
     out['step from ROOT'] = [sr[(d - D[-2]) % 10] for d in range(10)]
     # cross digit: last units -> next tens
-    U = [v % 10 for v in h]
+    U = [OTHER(v) for v in h]
     cx = Counter((D[j + 1] - U[j]) % 10 for j in range(len(D) - 1))
     out['cross units->tens'] = [cx[(d - U[-1]) % 10] for d in range(10)]
     # chart column (7 columns: position in row)
@@ -56,6 +58,9 @@ def scores(S, pos, r):
         out['vote bottom 30 avoided'] = [-c[d] for d in range(10)]
         c = Counter(T(v) for v in ra[:12])
         out['vote top 12'] = [c[d] for d in range(10)]
+        # current page CLOSE (step + avoid, Borda) as one rule, so mixes can build on it
+        b1 = borda(out['step all (now)']); b2 = borda(out['vote bottom 30 avoided'])
+        out['current CLOSE (step+avoid)'] = [b1[d] + b2[d] + 0.001 * b1[d] for d in range(10)]
     return out
 
 
@@ -77,7 +82,7 @@ def main():
         R = load(f'set{k:02d}'); rank_all_of(k, R); S = seq_of(k); h_ = len(R) // 2
         for i, r in enumerate(R):
             if sum(v is not None for v in S[:r['pos']]) < 50: continue
-            sc = scores(S, r['pos'], r); tgt = r['result'] // 10
+            sc = scores(S, r['pos'], r); tgt = T(r['result'])
             B = {n: borda(s) for n, s in sc.items()}
             picks = {n: top2(s) for n, s in sc.items()}
             names = sorted(B)

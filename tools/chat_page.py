@@ -299,8 +299,8 @@ def oc_final2_section(P, D):
     out = ["**3. 🎯 FINAL 2 OPEN / CLOSE** (best 2 tens and units digits, display only)", "",
            "| | FINAL 2 | Full order (strong → weak) | Rule | 24 sets (chance 20%) |",
            "|---|---|---|---|---|",
-           f"| **OPEN (tens)** | **{o2[0]} · {o2[1]}** | {' '.join(map(str, oc['open']))} | chart tens steps on the last tens digit "
-           f"| 21.53% (proof sets 21.34%, both halves up) |",
+           f"| **OPEN (tens)** | **{o2[0]} · {o2[1]}** | {' '.join(map(str, oc['open']))} | ROBUST OPEN: tens steps + step after the same step "
+           f"+ avoid the vote's bottom-30 tens | learn 21.89%, proof sets 21.72% (both halves up, 12 of 12 sets above chance) |",
            f"| **CLOSE (units)** | **{c2[0]} · {c2[1]}** | {' '.join(map(str, oc['close']))} | units steps + avoid the vote's bottom-30 units "
            f"| 20.67% (proof sets 20.71%, both halves up) |", "",
            f"OPEN {o2[0]}·{o2[1]} × CLOSE {c2[0]}·{c2[1]} (4 numbers, op on EP {ep} · op on ROOT {root}): "

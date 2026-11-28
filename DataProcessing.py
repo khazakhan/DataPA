@@ -8210,7 +8210,25 @@ def _rrr_box(sequence, entries, ep, pos_prefix, grid_ep=None):
                         _st[(b_ - a_) % 10] += 1
                     _so = sorted(range(10), key=lambda d: (-_st[(d - _D[-1]) % 10], d))
                     if _side == 'open':
-                        _oc2['open'] = _so
+                        # ROBUST OPEN (user 2026-11-28 'make me robust and strong in OPEN'; tools/open_robust_study.py):
+                        # Borda of 3 orders - tens steps on the last tens digit, the step that came after the same
+                        # previous step, and avoiding the tens common in the vote's bottom 30.  Learn 1-12 21.89%,
+                        # prove 13-24 21.72% (21.63 / 21.80 per half), above chance on 12 of 12 proof sets;
+                        # old step-only OPEN: prove 21.34%, 9 of 12.  Chance 20%; a small edge only.
+                        _bd = lambda sc: {d: 10 - i for i, d in enumerate(sorted(range(10), key=lambda d: (-sc[d], d)))}
+                        _sa = [_st[(d - _D[-1]) % 10] for d in range(10)]
+                        _pst = (_D[-1] - _D[-2]) % 10
+                        _s2 = [0] * 10
+                        for a_, b_, c_ in zip(_D, _D[1:], _D[2:]):
+                            if (b_ - a_) % 10 == _pst:
+                                _s2[(c_ - b_) % 10] += 1
+                        _sas = [_s2[(d - _D[-1]) % 10] + 0.01 * _sa[d] for d in range(10)]
+                        _ob = [0] * 10
+                        for v in _vote_all[-30:]:
+                            _ob[_dg(v)] += 1
+                        _B1, _B2, _B3 = _bd(_sa), _bd(_sas), _bd([-_ob[d] for d in range(10)])
+                        _tot = [_B1[d] + _B2[d] + _B3[d] + 0.01 * _B1[d] for d in range(10)] if len(_vote_all) >= 30 else _sa
+                        _oc2['open'] = sorted(range(10), key=lambda d: (-_tot[d], d))
                     else:
                         _cb = [0] * 10
                         for v in _vote_all[-30:]:

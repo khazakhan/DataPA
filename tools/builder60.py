@@ -222,6 +222,23 @@ def count_table(stars, bands, sup, head, root, f4=(), test=(), cnt=None):
         out.append(f"| **{lab[i]} total** | {nxt()} | | | | | | **{sub[0]}** | **{sub[1]}** | **{sub[0] + sub[1]}** |")
         grand[0] += sub[0]; grand[1] += sub[1]
     out.append(f"| **All 15 STARs** | | | | | | | **{grand[0]}** | **{grand[1]}** | **{grand[0] + grand[1]}** |")
+    # user 2026-11-28 screenshot: 'all marked as red circle and flame number keep it beside this table with dedup by
+    # beautiful bordered table' - every ⭕ / 🔥🔥 / 🔥 number shown in the [ ] and ( ) cells above, each once
+    shown = set()
+    for st, bd in zip(stars, bands):
+        for x in st:
+            shown |= {v for v in set(bd) | set(sup) if v != x and FAMILY[v] == FAMILY[x]}
+    marked = sorted((v for v in shown if v in f4 or v in flame or v in test),
+                    key=lambda v: (0 if v in f4 else 1 if v in flame else 2, v))
+    if marked:
+        out.append(f"\n### ⭕🔥 Marked numbers of the table above, each once ({len(marked)})" + (f': {head}' if head else ''))
+        out.append(f'| # | Mark | Number | Op on ROOT{f" {root:02d}" if root is not None else ""} | Family | STAR rows | Lists | Why |')
+        out.append('|---|---|---|---|---|---|---|---|')
+        for i, v in enumerate(marked, 1):
+            m_ = '⭕' if v in f4 else '🔥🔥' if v in flame else '🔥'
+            why = ' + '.join(w for w, c in (('OCJP FINAL 4', v in f4), ('BIG FLAME', v in flame), ('FINAL 4 TEST', v in test)) if c)
+            fam = FAMILY[v] + ('-family' if FAMILY[v][0].isdigit() else '')
+            out.append(f"| {i} | {m_} | **{v:02d}** | {op_on(root, v) if root is not None else '—'} | {fam} | {nrow.get(v, 0)} | {cnt.get(v, 0)} | {why} |")
     if flame:
         out.append('\n**🔥🔥 BIG FLAME** (not a STAR, in the [ ] / ( ) of 2+ STAR rows and in the Saffron band rank 1-20): ' + ' · '.join(
             f"🔥🔥**{v:02d}** ({op_on(root, v) if root is not None else '—'}, {nrow[v]} STAR rows)" for v in sorted(flame))

@@ -2,7 +2,7 @@
 tools/openclose_study.py (every round of the 24 sets, each rule sees only earlier numbers, top 2 tens digits,
 chance 20%; learn = Sets 1-12, prove = Sets 13-24).  Adds new rule families: chart column (7 columns),
 2-step memory, cross digit (last units -> next tens), step on ROOT, recency-weighted step, and Borda mixes.
-Usage: python3 tools/open_robust_study.py"""
+Usage: python3 tools/open_robust_study.py [--top 4]"""
 import sys, json, os, itertools
 from collections import Counter
 sys.path.insert(0, 'tools')
@@ -65,7 +65,10 @@ def borda(sc):
     return b
 
 
-def top2(sc): return sorted(range(10), key=lambda d: (-sc[d], d))[:2]
+TOP = int(sys.argv[sys.argv.index('--top') + 1]) if '--top' in sys.argv else 2
+
+
+def top2(sc): return sorted(range(10), key=lambda d: (-sc[d], d))[:TOP]
 
 
 def main():
@@ -92,10 +95,10 @@ def main():
         ag = lambda ks: [sum(per[k][j] for k in ks if k in per) for j in range(4)]
         L, P = ag(range(1, 13)), ag(range(13, 25))
         pc = lambda a, b: 100 * a / max(b, 1)
-        above = sum(1 for k in range(13, 25) if k in per and (per[k][0] + per[k][2]) / max(per[k][1] + per[k][3], 1) > 0.2)
+        above = sum(1 for k in range(13, 25) if k in per and (per[k][0] + per[k][2]) / max(per[k][1] + per[k][3], 1) > TOP / 10)
         rows.append((pc(L[0] + L[2], L[1] + L[3]), n, L[1] + L[3], pc(P[0] + P[2], P[1] + P[3]), pc(P[0], P[1]), pc(P[2], P[3]), above, P[1] + P[3]))
     rows.sort(reverse=True)
-    print('| Rule | Learn 1-12 | Prove 13-24 | Prove halves | Proof sets above 20% |\n|---|---|---|---|---|')
+    print('| Rule | Learn 1-12 | Prove 13-24 | Prove halves | Proof sets above chance |\n|---|---|---|---|---|')
     for lp, n, ln, pp, p1, p2, ab, pn in rows[:40]:
         print(f'| {n} | {lp:.2f}% ({ln}) | {pp:.2f}% ({pn}) | {p1:.2f}% / {p2:.2f}% | {ab} of 12 |')
     for lp, n, ln, pp, p1, p2, ab, pn in rows:
